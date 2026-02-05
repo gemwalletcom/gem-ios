@@ -15,6 +15,7 @@ import ActivityService
 @Observable
 @MainActor
 final class PerpetualsSceneViewModel {
+    private let observerService: any PerpetualObservable<HyperliquidSubscription>
     let perpetualService: PerpetualServiceable
     let activityService: ActivityService
 
@@ -43,12 +44,14 @@ final class PerpetualsSceneViewModel {
     init(
         wallet: Wallet,
         perpetualService: PerpetualServiceable,
+        observerService: any PerpetualObservable<HyperliquidSubscription>,
         activityService: ActivityService,
         onSelectAssetType: ((SelectAssetType) -> Void)? = nil,
         onSelectAsset: ((Asset) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.perpetualService = perpetualService
+        self.observerService = observerService
         self.activityService = activityService
         self.onSelectAssetType = onSelectAssetType
         self.onSelectAsset = onSelectAsset
@@ -86,6 +89,7 @@ final class PerpetualsSceneViewModel {
             balance: walletBalance
         )
     }
+    
 }
 
 // MARK: - Businesss Logic
@@ -93,15 +97,21 @@ final class PerpetualsSceneViewModel {
 extension PerpetualsSceneViewModel {
     func fetch() async {
         await updateMarkets()
-        await updatePositions()
     }
 
-    private func updatePositions() async {
-        guard let address = wallet.perpetualAddress else { return }
+    func onAppear() async {
         do {
-            try await perpetualService.updatePositions(address: address, walletId: wallet.walletId)
+            try await observerService.subscribe(.allMids)
         } catch {
-            debugLog("Failed to update positions: \(error)")
+            debugLog("AllMids subscribe failed: \(error)")
+        }
+    }
+
+    func onDisappear() async {
+        do {
+            try await observerService.unsubscribe(.allMids)
+        } catch {
+            debugLog("AllMids unsubscribe failed: \(error)")
         }
     }
 

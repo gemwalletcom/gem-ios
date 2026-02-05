@@ -56,7 +56,7 @@ struct ImportWalletScene: View {
                                 }
                             }
                         }
-                        .padding(.top, .small + .tiny)
+                        .padding(.top, .space12)
                         
                         if let nameRecordViewModel = model.nameRecordViewModel, model.importType == .address {
                             NameRecordView(

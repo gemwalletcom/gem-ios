@@ -124,16 +124,6 @@ public struct BalanceStore: Sendable {
     }
     
     @discardableResult
-    public func getEnabledAssetIds() throws -> [AssetId] {
-        try db.read { db in
-            return try BalanceRecord
-                .filter(BalanceRecord.Columns.isEnabled == true)
-                .fetchAll(db)
-                .compactMap { $0.assetId }
-        }
-    }
-    
-    @discardableResult
     public func getBalances(walletId: WalletId, assetIds: [AssetId]) throws -> [AssetBalance] {
         try db.read { db in
             return try BalanceRecord

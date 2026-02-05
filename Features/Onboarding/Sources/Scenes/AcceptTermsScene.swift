@@ -30,14 +30,12 @@ struct AcceptTermsScene: View {
                 }
             }
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: Localized.Onboarding.AcceptTerms.continue,
                 type: .primary(model.state),
                 action: { model.onNext?() }
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))

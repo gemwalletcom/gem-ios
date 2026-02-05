@@ -45,10 +45,6 @@ public final class AssetsService: Sendable {
         try assetStore.getAssets()
     }
 
-    func getEnabledAssets() throws -> [AssetId] {
-        try balanceStore.getEnabledAssetIds()
-    }
-
     func getAsset(for assetId: AssetId) throws -> Asset {
         if let asset = try assetStore.getAssets(for: [assetId.identifier]).first {
             return asset

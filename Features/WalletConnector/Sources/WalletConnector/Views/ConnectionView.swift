@@ -20,12 +20,12 @@ struct ConnectionView: View {
             VStack(alignment: .leading) {
                 Text(model.nameText)
                     .font(.body)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                     .lineLimit(2)
                 if let host = model.hostText {
                     Text(host)
                         .font(.callout)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
             }

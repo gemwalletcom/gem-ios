@@ -13,6 +13,7 @@ import PriceService
 import RewardsService
 import InAppNotifications
 import NotificationService
+import Support
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -33,6 +34,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.walletConnectorManager) private var walletConnectorManager
     @Environment(\.rewardsService) private var rewardsService
     @Environment(\.inAppNotificationService) private var inAppNotificationService
+    @Environment(\.supportService) private var supportService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -72,7 +74,8 @@ struct SettingsNavigationStack: View {
                     observablePrefereces: observablePreferences
                 ),
                 isPresentingWallets: $isPresentingWallets,
-                isPresentingSupport: $isPresentingSupport
+                isPresentingSupport: $isPresentingSupport,
+                supportService: supportService
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in

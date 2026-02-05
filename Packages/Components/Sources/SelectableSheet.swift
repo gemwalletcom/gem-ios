@@ -35,38 +35,27 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
 
     public var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottom) {
-                Group {
-                    if model.isSearchable {
-                        SearchableSelectableListView(
-                            model: $model,
-                            onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
-                            listContent: listContent
-                        )
-                    } else {
-                        SelectableListView(
-                            model: $model,
-                            onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
-                            listContent: listContent
-                        )
-                    }
-                }
-                .padding(.bottom, .scene.button.height)
-                
-                VStack(spacing: .small) {
-                    Divider()
-                        .frame(height: 1 / UIScreen.main.scale)
-                        .background(Colors.grayVeryLight)
-                    
-                    StateButton(
-                        text: model.confirmButtonTitle,
-                        action: onConfirm
+            Group {
+                if model.isSearchable {
+                    SearchableSelectableListView(
+                        model: $model,
+                        onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
+                        listContent: listContent
                     )
-                    .frame(maxWidth: .scene.button.maxWidth)
+                } else {
+                    SelectableListView(
+                        model: $model,
+                        onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
+                        listContent: listContent
+                    )
                 }
-                .background(Colors.grayBackground)
             }
-            .padding(.bottom, .scene.bottom)
+            .safeAreaButton {
+                StateButton(
+                    text: model.confirmButtonTitle,
+                    action: onConfirm
+                )
+            }
             .contentMargins(.top, .scene.top, for: .scrollContent)
             .background(Colors.grayBackground)
             .navigationTitle(model.title)

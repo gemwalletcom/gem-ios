@@ -48,20 +48,22 @@ public struct WalletSearchService: Sendable {
                 updatedAt: price.updatedAt
             )
         }
-        let searchKey = tag.map { query.isEmpty ? "tag:\($0.rawValue)" : query } ?? query
 
         try assetsService.addAssets(assets: response.assets)
         try priceStore.updatePrices(prices: prices, currency: preferences.currency)
-        try searchStore.add(type: .asset, query: searchKey, ids: response.assets.map { $0.asset.id.identifier })
-
         if tag == nil {
             try assetsService.addAssets(assets: response.perpetuals.map(\.assetBasic))
             try perpetualStore.upsertPerpetuals(response.perpetuals.map(\.perpetual))
-            try searchStore.add(type: .perpetual, query: searchKey, ids: response.perpetuals.map(\.perpetual.id))
         }
         try assetsService.addBalancesIfMissing(
             walletId: wallet.walletId,
             assetIds: response.assets.map { $0.asset.id }
         )
+
+        let searchKey = tag.map { query.isEmpty ? "tag:\($0.rawValue)" : query } ?? query
+        try searchStore.add(type: .asset, query: searchKey, ids: response.assets.map { $0.asset.id.identifier })
+        if tag == nil {
+            try searchStore.add(type: .perpetual, query: searchKey, ids: response.perpetuals.map(\.perpetual.id))
+        }
     }
 }

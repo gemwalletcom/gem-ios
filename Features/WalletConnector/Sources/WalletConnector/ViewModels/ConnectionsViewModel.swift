@@ -4,6 +4,7 @@ import Foundation
 import UIKit
 import Primitives
 import Store
+import ConnectionsService
 import Localization
 import PrimitivesComponents
 import Components

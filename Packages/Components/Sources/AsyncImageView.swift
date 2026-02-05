@@ -32,7 +32,7 @@ public struct AsyncImageView: View {
                 Text(String(character).capitalized)
                     .fontWeight(.semibold)
                     .frame(width: size, height: size)
-                    .foregroundColor(Colors.white)
+                    .foregroundStyle(Colors.white)
                     .background(Colors.grayLight)
             }
         }

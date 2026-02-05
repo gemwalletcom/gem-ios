@@ -77,8 +77,7 @@ public enum TransactionLoadMetadata: Sendable {
         transactionTreeRoot: String,
         parentHash: String,
         witnessAddress: String,
-        votes: [String: UInt64],
-        rawDataHex: String?
+        stakeData: TronStakeData
     )
     case sui(messageBytes: String)
     case hyperliquid(order: HyperliquidOrder?)
@@ -101,18 +100,18 @@ extension TransactionLoadMetadata {
             throw AnyError("Sequence not available for this metadata type")
         }
     }
-    
+
     public func getBlockNumber() throws -> UInt64 {
         switch self {
         case .polkadot(_, _, _, let blockNumber, _, _, _),
-             .tron(let blockNumber, _, _, _, _, _, _, _),
+             .tron(let blockNumber, _, _, _, _, _, _),
              .xrp(_, let blockNumber):
             return blockNumber
         default:
             throw AnyError("Block number not available for this metadata type")
         }
     }
-    
+
     public func getBlockHash() throws -> String {
         switch self {
         case .solana(_, _, _, let blockHash),
@@ -124,7 +123,7 @@ extension TransactionLoadMetadata {
             throw AnyError("Block hash not available for this metadata type")
         }
     }
-    
+
     public func getChainId() throws -> String {
         switch self {
         case .cosmos(_, _, let chainId):
@@ -137,7 +136,7 @@ extension TransactionLoadMetadata {
             throw AnyError("Chain ID not available for this metadata type")
         }
     }
-    
+
     public func getUtxos() throws -> [UTXO] {
         switch self {
         case .bitcoin(let utxos),
@@ -148,7 +147,7 @@ extension TransactionLoadMetadata {
             throw AnyError("UTXOs not available for this metadata type")
         }
     }
-    
+
     public func getIsDestinationAddressExist() throws -> Bool {
         switch self {
             case .stellar(_, let isDestinationAddressExist):
@@ -157,7 +156,7 @@ extension TransactionLoadMetadata {
             throw AnyError("Destination existence flag not available for this metadata type")
         }
     }
-    
+
     public func getAccountNumber() throws -> UInt64 {
         switch self {
         case .cosmos(let accountNumber, _, _):
@@ -166,7 +165,7 @@ extension TransactionLoadMetadata {
             throw AnyError("Account number not available for this metadata type")
         }
     }
-    
+
     public func getMessageBytes() throws -> String {
         switch self {
         case .sui(let messageBytes):
@@ -175,7 +174,7 @@ extension TransactionLoadMetadata {
             throw AnyError("Message bytes not available for this metadata type")
         }
     }
-    
+
     public func senderTokenAddress() throws -> String? {
         switch self {
         case .ton(let senderTokenAddress, _, _):
@@ -184,16 +183,7 @@ extension TransactionLoadMetadata {
             throw AnyError("Sender token address not available for this metadata type")
         }
     }
-    
-    public func getVotes() throws -> [String: UInt64] {
-        switch self {
-        case .tron(_, _, _, _, _, _, let votes, _):
-            return votes
-        default:
-            throw AnyError("Votes not available for this metadata type")
-        }
-    }
-    
+
     public func getData() throws -> String {
         let data: String? = switch self {
         case .aptos(_, let data): data
@@ -204,4 +194,5 @@ extension TransactionLoadMetadata {
         }
         return data
     }
+
 }

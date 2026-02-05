@@ -118,7 +118,7 @@ public struct CurrencyInputView: View {
             actionStyle.image
                 .resizable()
                 .frame(width: actionStyle.imageSize, height: actionStyle.imageSize)
-                .foregroundColor(Colors.gray)
+                .foregroundStyle(Colors.gray)
         }
     }
 

@@ -70,12 +70,12 @@ public struct AssetImageView: View {
                         }, elseContent: { view in
                             view
                                 .font(.system(size: diameter * 0.3, weight: .semibold))
-                                .padding(.horizontal, .tiny + .extraSmall)
+                                .padding(.horizontal, .space6)
                         })
                         .minimumScaleFactor(0.4)
                         .lineLimit(1)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                 }
             }
         } else {

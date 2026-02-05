@@ -42,3 +42,9 @@ extension Chain {
         StakeChain(rawValue: rawValue)
     }
 }
+
+extension Chain: Comparable {
+    public static func < (lhs: Chain, rhs: Chain) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+}

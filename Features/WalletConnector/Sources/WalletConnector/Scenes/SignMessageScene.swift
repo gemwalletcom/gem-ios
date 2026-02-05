@@ -66,13 +66,11 @@ public struct SignMessageScene: View {
                 }
             }
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: model.buttonTitle,
                 action: sign
             )
-            .padding(.bottom, .scene.bottom)
-            .frame(maxWidth: .scene.button.maxWidth)
         }
         .navigationTitle(Localized.SignMessage.title)
         .safariSheet(url: $model.isPresentingUrl)

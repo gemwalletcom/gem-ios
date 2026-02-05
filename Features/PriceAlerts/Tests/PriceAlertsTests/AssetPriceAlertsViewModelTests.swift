@@ -26,14 +26,14 @@ struct AssetPriceAlertsViewModelTests {
     }
     
     @Test
-    func emptyContentModel() {
+    func showEmptyState() {
         let model = AssetPriceAlertsViewModel.mock()
-        
-        #expect(model.emptyContentModel != nil)
-        
+
+        #expect(model.showEmptyState == true)
+
         model.priceAlerts = [PriceAlertData.mock()]
-        
-        #expect(model.emptyContentModel == nil)
+
+        #expect(model.showEmptyState == false)
     }
 }
 

@@ -54,6 +54,7 @@ public struct WalletSearchScene: View {
         .onChange(of: model.searchModel.searchableQuery, model.onChangeSearchQuery)
         .onChange(of: model.isSearching, model.onChangeFocus)
         .onChange(of: model.isSearchPresented, model.onChangeSearchPresented)
+        .onChange(of: model.isPerpetualEnabled, model.onChangePerpetualsEnabled)
         .onAppear {
             model.onAppear()
         }
@@ -63,9 +64,6 @@ public struct WalletSearchScene: View {
         .toast(message: $model.isPresentingToastMessage)
         .sheet(isPresented: $model.isPresentingRecents) {
             RecentsScene(model: model.recentsModel)
-        }
-        .sheet(isPresented: $model.isPresentingAssetsResults) {
-            AssetsResultsScene(model: model.assetsResultsModel)
         }
     }
 
@@ -113,7 +111,11 @@ public struct WalletSearchScene: View {
                 Section(
                     content: { perpetualItems(for: model.previewPerpetuals) },
                     header: {
-                        HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
+                        if model.hasMorePerpetuals {
+                            HeaderNavigationLinkView(title: model.perpetualsTitle, destination: Scenes.Perpetuals())
+                        } else {
+                            SectionHeaderView(title: model.perpetualsTitle)
+                        }
                     }
                 )
                 .listRowInsets(.assetListRowInsets)
@@ -123,10 +125,14 @@ public struct WalletSearchScene: View {
                 Section(
                     content: { assetItems(for: model.previewAssets) },
                     header: {
-                        SectionHeaderView(
-                            title: model.assetsTitle,
-                            action: model.hasMoreAssets ? { model.onSelectSeeAllAssets() } : nil
-                        )
+                        if model.hasMoreAssets {
+                            HeaderNavigationLinkView(
+                                title: model.assetsTitle,
+                                destination: model.assetsResultsDestination
+                            )
+                        } else {
+                            SectionHeaderView(title: model.assetsTitle)
+                        }
                     }
                 )
                 .listRowInsets(.assetListRowInsets)

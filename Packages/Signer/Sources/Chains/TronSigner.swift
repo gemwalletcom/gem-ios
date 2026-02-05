@@ -1,11 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-internal import BigInt
 import Foundation
 import Primitives
 import WalletCore
 
-public struct TronSigner: Signable {
+internal import BigInt
+
+struct TronSigner: Signable {
+
     func sign(
         input: SignerInput,
         contract: WalletCore.TronTransaction.OneOf_ContractOneof,
@@ -13,11 +15,11 @@ public struct TronSigner: Signable {
         memo: String? = .none,
         privateKey: Data
     ) throws -> String {
-        guard case let .tron(
-            blockNumber, blockVersion, blockTimestamp, transactionTreeRoot,
-            parentHash, witnessAddress, _, _) = input.metadata
+        guard case .tron(
+            let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot,
+            let parentHash, let witnessAddress, _) = input.metadata
         else {
-            throw AnyError("Missing ton metadata")
+            throw AnyError("Missing tron metadata")
         }
         let signingInput = try TronSigningInput.with {
             $0.transaction = try TronTransaction.with {
@@ -50,20 +52,20 @@ public struct TronSigner: Signable {
         return output.json
     }
 
-    private func createVoteWitnessContract(input: SignerInput, votes: [String: UInt64]) throws -> TronVoteWitnessContract {
+    private func createVoteWitnessContract(input: SignerInput, votes: [TronVote]) -> TronVoteWitnessContract {
         TronVoteWitnessContract.with {
             $0.ownerAddress = input.senderAddress
             $0.support = true
-            $0.votes = votes.map { address, count in
+            $0.votes = votes.map { vote in
                 TronVoteWitnessContract.Vote.with {
-                    $0.voteAddress = address
-                    $0.voteCount = Int64(count)
+                    $0.voteAddress = vote.validator
+                    $0.voteCount = Int64(vote.count)
                 }
             }
         }
     }
 
-    public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let contract = TronTransferContract.with {
             $0.ownerAddress = input.senderAddress
             $0.toAddress = input.destinationAddress
@@ -72,7 +74,7 @@ public struct TronSigner: Signable {
         return try sign(input: input, contract: .transfer(contract), feeLimit: .none, memo: input.memo, privateKey: privateKey)
     }
 
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+    func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let contract = try TronTransferTRC20Contract.with {
             $0.contractAddress = try input.asset.getTokenId()
             $0.ownerAddress = input.senderAddress
@@ -84,27 +86,45 @@ public struct TronSigner: Signable {
             contract: .transferTrc20Contract(contract),
             feeLimit: input.fee.gasLimit.asInt,
             memo: input.memo,
-            privateKey: privateKey)
+            privateKey: privateKey
+        )
     }
 
-    public func signData(input: SignerInput, privateKey: Data) throws -> String {
-        try ChainSigner(chain: input.asset.chain)
-            .signData(input: input, privateKey: privateKey)
-    }
-
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case let .stake(_, stakeType) = input.type else {
-            throw (AnyError("Invalid input type for staking"))
+            throw AnyError("Invalid input type for staking")
+        }
+        guard case .tron(_, _, _, _, _, _, let stakeData) = input.metadata else {
+            throw AnyError("Missing tron metadata")
         }
 
         let contract: WalletCore.TronTransaction.OneOf_ContractOneof
         switch stakeType {
-        case .stake, .redelegate, .unstake:
-            contract = try .voteWitness(
-                createVoteWitnessContract(
-                    input: input,
-                    votes: input.metadata.getVotes())
-            )
+        case .stake, .redelegate:
+            guard case .votes(let votes) = stakeData else {
+                throw AnyError("Expected votes for stake/redelegate")
+            }
+            contract = .voteWitness(createVoteWitnessContract(input: input, votes: votes))
+        case .unstake:
+            switch stakeData {
+            case .unfreeze(let amounts):
+                return try amounts.map { unfreeze in
+                    try sign(
+                        input: input,
+                        contract: .unfreezeBalanceV2(
+                            TronUnfreezeBalanceV2Contract.with {
+                                $0.ownerAddress = input.senderAddress
+                                $0.unfreezeBalance = Int64(unfreeze.amount)
+                                $0.resource = unfreeze.resource.key
+                            }
+                        ),
+                        feeLimit: .none,
+                        privateKey: privateKey
+                    )
+                }
+            case .votes(let votes):
+                contract = .voteWitness(createVoteWitnessContract(input: input, votes: votes))
+            }
         case .rewards:
             contract = .withdrawBalance(
                 TronWithdrawBalanceContract.with {
@@ -115,21 +135,21 @@ public struct TronSigner: Signable {
                 TronWithdrawExpireUnfreezeContract.with {
                     $0.ownerAddress = input.senderAddress
                 })
-        case let .freeze(data):
+        case .freeze(let data):
             switch data.freezeType {
             case .freeze:
                 contract = .freezeBalanceV2(
                     TronFreezeBalanceV2Contract.with {
                         $0.ownerAddress = input.senderAddress
                         $0.frozenBalance = input.value.asInt64
-                        $0.resource = data.resource.rawValue.uppercased()
+                        $0.resource = data.resource.key
                     })
             case .unfreeze:
                 contract = .unfreezeBalanceV2(
                     TronUnfreezeBalanceV2Contract.with {
                         $0.ownerAddress = input.senderAddress
                         $0.unfreezeBalance = input.value.asInt64
-                        $0.resource = data.resource.rawValue.uppercased()
+                        $0.resource = data.resource.key
                     })
             }
         }

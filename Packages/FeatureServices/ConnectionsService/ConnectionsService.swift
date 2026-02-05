@@ -11,12 +11,12 @@ public final class ConnectionsService: Sendable {
     private let signer: any WalletConnectorSignable
     private let connector: WalletConnectorServiceable
     private let preferences: Preferences
-    
+
     public var isWalletConnectActivated: Bool {
         get { preferences.isWalletConnectActivated == true }
         set { preferences.isWalletConnectActivated = newValue }
     }
-    
+
     public init(
         store: ConnectionsStore,
         signer: any WalletConnectorSignable,
@@ -41,9 +41,11 @@ public final class ConnectionsService: Sendable {
             preferences: preferences
         )
     }
-    
-    // MARK: - Public methods
+}
 
+// MARK: - Public
+
+extension ConnectionsService {
     public func setup() async throws {
         checkExistSessions()
         try connector.configure()
@@ -62,27 +64,28 @@ public final class ConnectionsService: Sendable {
     public func disconnect(session: WalletConnectionSession) async throws {
         try await disconnect(sessionId: session.sessionId)
     }
-    
+
     public func updateSessions() {
         connector.updateSessions()
     }
-    
-    // MARK: - Private methods
+}
 
+// MARK: - Private
+
+extension ConnectionsService {
     private func disconnect(sessionId: String) async throws {
         try store.delete(ids: [sessionId])
         try await connector.disconnect(sessionId: sessionId)
     }
-    
+
     private func setupConnector() async throws {
-        if !isWalletConnectActivated {        
+        if !isWalletConnectActivated {
             isWalletConnectActivated = true
         }
         await connector.setup()
     }
-    
+
     // TODO: - Remove migration 08.2025
-    
     private func checkExistSessions() {
         if preferences.isWalletConnectActivated == nil {
             isWalletConnectActivated = (try? store.getSessions().isNotEmpty) == true

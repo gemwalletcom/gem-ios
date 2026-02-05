@@ -7,7 +7,7 @@ import Testing
 import WalletCore
 
 struct SolanaSignerTests {
-    let fee = Fee(fee: .zero, gasPriceType: .eip1559(gasPrice: 5_000, priorityFee: 10_000), gasLimit: 125_000)
+    let fee = Fee(fee: .zero, gasPriceType: .solana(gasPrice: 5_000, priorityFee: 10_000, unitPrice: 200, jitoTip: 0), gasLimit: 125_000)
 
     @Test
     func testTransfer() throws {
@@ -30,7 +30,7 @@ struct SolanaSignerTests {
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
-        #expect(result == "ATMIgrvRXhyfgZ1CsTIZu8L76/TZZ2y0tP8VT7d7xf2+5I7SehvqstpEKQncjcMoB4+f6I8Re9HPg/V7gzc59A4BAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAICAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+        #expect(result == "AQ+bcpkOGB15GeVJxnh3F9oQmLUf98OkLMonJusdLm85R2ukxnqgd6OmmP1XgBUL7GbN4t2jRJsOQOGiQkEcVwsBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDyAAAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
     }
 
     @Test
@@ -54,7 +54,7 @@ struct SolanaSignerTests {
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
-        #expect(result == "ATMIgrvRXhyfgZ1CsTIZu8L76/TZZ2y0tP8VT7d7xf2+5I7SehvqstpEKQncjcMoB4+f6I8Re9HPg/V7gzc59A4BAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAICAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+        #expect(result == "AQ+bcpkOGB15GeVJxnh3F9oQmLUf98OkLMonJusdLm85R2ukxnqgd6OmmP1XgBUL7GbN4t2jRJsOQOGiQkEcVwsBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDyAAAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
     }
 
     @Test
@@ -78,7 +78,7 @@ struct SolanaSignerTests {
         )
 
         let result = try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey)
-        #expect(result == "ATMIgrvRXhyfgZ1CsTIZu8L76/TZZ2y0tP8VT7d7xf2+5I7SehvqstpEKQncjcMoB4+f6I8Re9HPg/V7gzc59A4BAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAICAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+        #expect(result == "AQ+bcpkOGB15GeVJxnh3F9oQmLUf98OkLMonJusdLm85R2ukxnqgd6OmmP1XgBUL7GbN4t2jRJsOQOGiQkEcVwsBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDyAAAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
     }
 
     @Test

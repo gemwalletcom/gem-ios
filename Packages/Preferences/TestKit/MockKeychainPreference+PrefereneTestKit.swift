@@ -18,6 +18,14 @@ public final class MockKeychainPreference: KeychainPreferenceStorable, @unchecke
         storage.string(forKey: key)
     }
 
+    public func set(_ value: Data, key: String) throws {
+        storage.set(value, forKey: key)
+    }
+
+    public func getData(key: String) throws -> Data? {
+        storage.data(forKey: key)
+    }
+
     public func remove(key: String) throws {
         storage.removeObject(forKey: key)
     }

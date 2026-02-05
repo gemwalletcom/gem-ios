@@ -131,7 +131,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
 
     public static func empty(
-        paddingHorizontal: CGFloat = .small + .space4,
+        paddingHorizontal: CGFloat = .space12,
         paddingVertical: CGFloat = .small,
         cornerRadius: CGFloat = .small,
         glassEffect: GlassEffectSettings = .isInteractive

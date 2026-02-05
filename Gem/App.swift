@@ -27,11 +27,12 @@ struct GemApp: App {
         WindowGroup {
             RootScene(
                 model: RootSceneViewModel(
+                    observablePreferences: resolver.storages.observablePreferences,
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
                     onstartWalletService: resolver.services.onstartWalletService,
                     transactionStateService: resolver.services.transactionStateService,
                     connectionsService: resolver.services.connectionsService,
-                    observersService: resolver.services.observersService,
+                    appLifecycleService: resolver.services.appLifecycleService,
                     navigationHandler: resolver.services.navigationHandler,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
                     walletService: resolver.services.walletService,

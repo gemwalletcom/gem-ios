@@ -10,7 +10,6 @@ import AssetsService
 import Style
 
 struct SwapNavigationView: View {
-    @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.activityService) private var activityService
     @Environment(\.assetSearchService) private var assetSearchService

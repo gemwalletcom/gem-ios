@@ -13,6 +13,7 @@ public actor WebSocketConnection: WebSocketConnectable {
     private var reconnectTask: Task<Void, Never>?
     private var continuation: AsyncStream<WebSocketEvent>.Continuation?
     private var reconnectAttempt: Int = 0
+    private var pendingMessages: [URLSessionWebSocketTask.Message] = []
 
     public init(configuration: WebSocketConfiguration) {
         self.configuration = configuration
@@ -48,6 +49,7 @@ public actor WebSocketConnection: WebSocketConnectable {
 
         cancelReconnect()
         cancelTask()
+        cancelPendingMessages()
 
         continuation?.yield(.disconnected(nil))
         continuation?.finish()
@@ -55,13 +57,45 @@ public actor WebSocketConnection: WebSocketConnectable {
     }
 
     public func send(_ data: Data) async throws {
-        guard let task, state == .connected else {
-            throw WebSocketError.notConnected
-        }
-        try await task.send(.data(data))
+        try await send(message: .data(data))
+    }
+
+    public func send(_ text: String) async throws {
+        try await send(message: .string(text))
     }
 
     // MARK: - Private
+
+    private func send(message: URLSessionWebSocketTask.Message) async throws {
+        switch state {
+        case .connected:
+            guard let task else { throw WebSocketError.notConnected }
+            try await task.send(message)
+        case .connecting, .reconnecting:
+            pendingMessages.append(message)
+        case .disconnected:
+            throw WebSocketError.notConnected
+        }
+    }
+
+    private func sendPendingMessages() async {
+        let messages = pendingMessages
+        pendingMessages = []
+
+        for message in messages {
+            do {
+                try await task?.send(message)
+            } catch {
+                #if DEBUG
+                NSLog("WebSocket send error: \(error)")
+                #endif
+            }
+        }
+    }
+
+    private func cancelPendingMessages() {
+        pendingMessages.removeAll()
+    }
 
     private func cancelTask() {
         task?.cancel(with: .goingAway, reason: nil)
@@ -91,12 +125,18 @@ public actor WebSocketConnection: WebSocketConnectable {
 
         cancelTask()
         cancelReconnect()
+        cancelPendingMessages()
 
         state = .disconnected
     }
 
     private func startConnection() {
         state = .connecting
+
+        guard let request = try? configuration.requestProvider.makeRequest() else {
+            scheduleReconnect(with: WebSocketError.notConnected)
+            return
+        }
 
         let delegate = WebSocketSessionDelegate(
             didOpen: { [weak self] in
@@ -113,7 +153,7 @@ public actor WebSocketConnection: WebSocketConnectable {
             delegateQueue: nil
         )
 
-        task = session?.webSocketTask(with: configuration.url)
+        task = session?.webSocketTask(with: request)
         task?.resume()
 
         listen()
@@ -125,6 +165,10 @@ public actor WebSocketConnection: WebSocketConnectable {
         state = .connected
         resetReconnectionAttempt()
         continuation?.yield(.connected)
+
+        Task {
+            await sendPendingMessages()
+        }
     }
 
     private func didClose(closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
@@ -152,8 +196,16 @@ public actor WebSocketConnection: WebSocketConnectable {
     }
 
     private func handleMessage(_ message: URLSessionWebSocketTask.Message) {
-        guard let data = message.data else { return }
-        continuation?.yield(.message(data))
+        switch message {
+        case .data(let data):
+            continuation?.yield(.message(data))
+        case .string(let text):
+            if let data = text.data(using: .utf8) {
+                continuation?.yield(.message(data))
+            }
+        @unknown default:
+            break
+        }
     }
 
     private func handleError(_ error: Error) {

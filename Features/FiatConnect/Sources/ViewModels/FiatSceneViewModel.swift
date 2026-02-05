@@ -28,6 +28,7 @@ public final class FiatSceneViewModel {
     private let assetAddress: AssetAddress
     private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
+    private let walletId: WalletId
 
     var assetData: AssetData = .empty {
         didSet {
@@ -46,7 +47,7 @@ public final class FiatSceneViewModel {
     let sellViewModel: FiatOperationViewModel
 
     public init(
-        fiatService: any GemAPIFiatService = GemAPIService(),
+        fiatService: any GemAPIFiatService,
         securePreferences: SecurePreferences = SecurePreferences(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
@@ -58,18 +59,23 @@ public final class FiatSceneViewModel {
         self.securePreferences = securePreferences
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
+        self.walletId = walletId
         self.type = type
         self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id)
 
         let buyOperation = BuyOperation(
             service: fiatService,
             asset: assetAddress.asset,
-            currencyFormatter: currencyFormatter
+            currencyFormatter: currencyFormatter,
+            securePreferences: securePreferences,
+            walletId: walletId
         )
         let sellOperation = SellOperation(
             service: fiatService,
             asset: assetAddress.asset,
-            currencyFormatter: currencyFormatter
+            currencyFormatter: currencyFormatter,
+            securePreferences: securePreferences,
+            walletId: walletId
         )
 
         self.buyViewModel = FiatOperationViewModel(
@@ -186,13 +192,8 @@ extension FiatSceneViewModel {
 
             do {
                 let deviceId = try securePreferences.getDeviceId()
-                let request = FiatQuoteUrlRequest(
-                    quoteId: selectedQuote.id,
-                    walletAddress: assetAddress.address,
-                    deviceId: deviceId
-                )
 
-                guard let url = try await fiatService.getQuoteUrl(request: request).redirectUrl.asURL else {
+                guard let url = try await fiatService.getQuoteUrl(deviceId: deviceId, walletId: walletId.id, quoteId: selectedQuote.id).redirectUrl.asURL else {
                     urlState = .noData
                     return
                 }

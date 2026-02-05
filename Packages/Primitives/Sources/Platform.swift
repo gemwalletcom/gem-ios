@@ -8,14 +8,3 @@ public enum Platform: String, Codable, CaseIterable, Equatable, Sendable {
 	case ios
 	case android
 }
-
-public enum PlatformStore: String, Codable, CaseIterable, Equatable, Sendable {
-	case appStore
-	case googlePlay
-	case fdroid
-	case huawei
-	case solanaStore
-	case samsungStore
-	case apkUniversal
-	case local
-}

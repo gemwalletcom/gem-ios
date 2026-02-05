@@ -9,6 +9,7 @@ import StakeService
 import NodeService
 import PriceService
 import WalletConnector
+import ConnectionsService
 import ExplorerService
 import BalanceService
 import AssetsService
@@ -28,6 +29,8 @@ import ActivityService
 import RewardsService
 import EventPresenterService
 import NotificationService
+import Support
+import GemAPI
 
 extension AppResolver {
     struct Services: Sendable {
@@ -64,7 +67,7 @@ extension AppResolver {
         let onstartWalletService: OnstartWalletService
         let walletConnectorManager: WalletConnectorManager
         let perpetualService: PerpetualService
-        let perpetualObserverService: PerpetualObserverService
+        let hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>
         let nameService: NameService
         let addressNameService: AddressNameService
         let activityService: ActivityService
@@ -73,8 +76,10 @@ extension AppResolver {
         let rewardsService: RewardsService
         let walletSearchService: WalletSearchService
         let assetSearchService: AssetSearchService
-        let observersService: ObserversService
+        let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
+        let supportService: SupportService
+        let fiatService: any GemAPIFiatService
 
         init(
             assetsService: AssetsService,
@@ -109,7 +114,7 @@ extension AppResolver {
             onstartWalletService: OnstartWalletService,
             walletConnectorManager: WalletConnectorManager,
             perpetualService: PerpetualService,
-            perpetualObserverService: PerpetualObserverService,
+            hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription>,
             nameService: NameService,
             addressNameService: AddressNameService,
             activityService: ActivityService,
@@ -118,8 +123,10 @@ extension AppResolver {
             rewardsService: RewardsService,
             walletSearchService: WalletSearchService,
             assetSearchService: AssetSearchService,
-            observersService: ObserversService,
-            inAppNotificationService: InAppNotificationService
+            appLifecycleService: AppLifecycleService,
+            inAppNotificationService: InAppNotificationService,
+            supportService: SupportService,
+            fiatService: any GemAPIFiatService
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -153,7 +160,7 @@ extension AppResolver {
             self.onstartWalletService = onstartWalletService
             self.walletConnectorManager = walletConnectorManager
             self.perpetualService = perpetualService
-            self.perpetualObserverService = perpetualObserverService
+            self.hyperliquidObserverService = hyperliquidObserverService
             self.nameService = nameService
             self.addressNameService = addressNameService
             self.activityService = activityService
@@ -162,8 +169,10 @@ extension AppResolver {
             self.rewardsService = rewardsService
             self.walletSearchService = walletSearchService
             self.assetSearchService = assetSearchService
-            self.observersService = observersService
+            self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
+            self.supportService = supportService
+            self.fiatService = fiatService
         }
     }
 }

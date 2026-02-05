@@ -34,26 +34,6 @@ public struct TransactionStore: Sendable {
         }
     }
 
-    func getTransactionRecord(transactionId: String) throws -> TransactionRecord {
-        try db.read { db in
-            guard let transaction = try TransactionRecord
-                .filter(TransactionRecord.Columns.transactionId == transactionId)
-                .fetchOne(db) else {
-                throw AnyError("getTransaction transaction not found \(transactionId)")
-            }
-            return transaction
-        }
-    }
-
-    func getWalletIds(for transactionId: String) throws -> [String] {
-        return try db.read { db in
-            return try TransactionRecord
-                .filter(TransactionRecord.Columns.transactionId == transactionId)
-                .fetchAll(db)
-                .map { $0.walletId }
-        }
-    }
-
     func getTransactionAssetAssociations(for transactionId: String) throws -> [TransactionAssetAssociationRecord] {
         try db.read { db in
             try TransactionAssetAssociationRecord

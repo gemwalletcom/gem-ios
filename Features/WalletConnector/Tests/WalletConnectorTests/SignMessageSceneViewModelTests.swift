@@ -52,4 +52,37 @@ struct SignMessageSceneViewModelTests {
         #expect(viewModel.connectionViewModel.connection.wallet.id == "specific-wallet-id")
         #expect(viewModel.connectionViewModel.connection.wallet.name == "Test Wallet")
     }
+
+    @Test
+    @MainActor
+    func payloadStoresValidatedChainNotMessageChain() {
+        let payload = SignMessagePayload(
+            chain: .ethereum,
+            session: .mock(),
+            wallet: .mock(),
+            message: SignMessage(chain: "bitcoin", signType: .eip191, data: "test".data(using: .utf8)!)
+        )
+
+        #expect(payload.chain == .ethereum)
+        #expect(payload.message.chain == "bitcoin")
+    }
+
+    @Test
+    @MainActor
+    func networkTextUsesPayloadChain() {
+        let payload = SignMessagePayload(
+            chain: .ethereum,
+            session: .mock(),
+            wallet: .mock(),
+            message: SignMessage(chain: "bitcoin", signType: .eip191, data: "test".data(using: .utf8)!)
+        )
+
+        let viewModel = SignMessageSceneViewModel(
+            keystore: KeystoreMock(),
+            payload: payload,
+            confirmTransferDelegate: { _ in }
+        )
+
+        #expect(viewModel.networkText == "Ethereum")
+    }
 }

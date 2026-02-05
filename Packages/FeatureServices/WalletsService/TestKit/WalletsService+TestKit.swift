@@ -12,6 +12,8 @@ import PriceService
 import PriceServiceTestKit
 import DeviceService
 import DeviceServiceTestKit
+import DiscoverAssetsService
+import DiscoverAssetsServiceTestKit
 import PreferencesTestKit
 import WalletSessionService
 import WalletSessionServiceTestKit
@@ -23,7 +25,8 @@ public extension WalletsService {
         balanceService: BalanceService = .mock(),
         priceService: PriceService = .mock(),
         priceObserver: PriceObserverService = .mock(),
-        deviceService: DeviceService = .mock()
+        deviceService: DeviceService = .mock(),
+        discoverAssetsService: DiscoverAssetsService = .mock()
     ) -> WalletsService {
         WalletsService(
             walletSessionService: walletSessionService,
@@ -31,7 +34,8 @@ public extension WalletsService {
             balanceService: balanceService,
             priceService: priceService,
             priceObserver: priceObserver,
-            deviceService: deviceService
+            deviceService: deviceService,
+            discoverAssetsService: discoverAssetsService
         )
     }
 }

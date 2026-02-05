@@ -55,14 +55,12 @@ struct VerifyPhraseWalletScene: View {
             }
             .cleanListRow()
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: Localized.Common.continue,
                 type: .primary(model.buttonState),
                 action: model.onContinue
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .extraSmall, for: .scrollContent)
         .listSectionSpacing(.custom(.medium))
@@ -73,4 +71,3 @@ struct VerifyPhraseWalletScene: View {
     }
 
 }
-

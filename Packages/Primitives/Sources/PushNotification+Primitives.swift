@@ -3,7 +3,7 @@
 import Foundation
 
 public enum PushNotification: Equatable, Sendable {
-    case transaction(walletIndex: Int?, walletId: String, AssetId, transaction: Transaction)
+    case transaction(walletId: WalletId, AssetId, transaction: Transaction)
     case asset(AssetId)
     case priceAlert(AssetId)
     case buyAsset(AssetId, amount: Int?)
@@ -28,7 +28,8 @@ public enum PushNotification: Equatable, Sendable {
         case .transaction:
             let transaction = try decoder.decode(PushNotificationTransaction.self, from: data)
             let assetId = try AssetId(id: transaction.assetId)
-            self = .transaction(walletIndex: transaction.walletIndex?.asInt, walletId: transaction.walletId, assetId, transaction: transaction.transaction)
+            let walletId = WalletId(id: transaction.walletId)
+            self = .transaction(walletId: walletId, assetId, transaction: transaction.transaction)
         case .asset:
             let asset = try decoder.decode(PushNotificationAsset.self, from: data)
             self = .asset(try AssetId(id: asset.assetId))

@@ -47,10 +47,6 @@ public struct Scenes {
         public init() {}
     }
 
-    public struct Wallets: Hashable {
-        public init() {}
-    }
-
     public struct Currency: Hashable {
         public init() {}
     }
@@ -61,24 +57,6 @@ public struct Scenes {
 
     public struct AppIcon: Hashable {
         public init() {}
-    }
-
-    public struct WalletConnectorScene: Hashable {
-        public init() {}
-    }
-
-    public struct Validators: Hashable {
-        public init() {}
-    }
-
-    public struct Stake: Hashable {
-        public let chain: Chain
-        public let wallet: Wallet
-
-        public init(chain: Chain, wallet: Wallet) {
-            self.chain = chain
-            self.wallet = wallet
-        }
     }
 
     public struct WalletConnect: Hashable {
@@ -173,6 +151,16 @@ public struct Scenes {
     
     public struct Perpetuals: Hashable {
         public init() {}
+    }
+
+    public struct AssetsResults: Hashable {
+        public let searchQuery: String
+        public let tag: String?
+
+        public init(searchQuery: String, tag: String?) {
+            self.searchQuery = searchQuery
+            self.tag = tag
+        }
     }
 
     public struct Referral: Hashable {

@@ -53,6 +53,6 @@ public struct CheckboxStyle: ToggleStyle {
             }
         }
             .frame(width: .image.small, height: .image.small)
-            .foregroundColor(configuration.isOn ? Colors.blue : Colors.gray)
+            .foregroundStyle(configuration.isOn ? Colors.blue : Colors.gray)
     }
 }

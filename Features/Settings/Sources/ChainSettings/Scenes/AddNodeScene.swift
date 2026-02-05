@@ -34,14 +34,12 @@ struct AddNodeScene: View {
             interval: model.debounceInterval,
             action: model.onChangeInput(_:)
         )
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.state),
                 action: onSelectImport
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .onAppear {
             focusedField = .address

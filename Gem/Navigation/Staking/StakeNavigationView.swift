@@ -9,9 +9,6 @@ import InfoSheet
 
 struct StakeNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @Environment(\.stakeService) private var stakeService
-    @Environment(\.balanceService) private var balanceService
-    @Environment(\.priceService) private var priceService
 
     @State private var model: StakeSceneViewModel
     @Binding private var navigationPath: NavigationPath

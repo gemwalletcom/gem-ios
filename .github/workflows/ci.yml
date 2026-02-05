@@ -17,56 +17,56 @@ jobs:
     runs-on: [self-hosted, macOS]
 
     steps:
-      - name: Setup sccache for GitHub-hosted
-        if: runner.environment == 'github-hosted'
-        run: |
-          echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
-          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
+      # - name: Setup sccache for GitHub-hosted
+      #   if: runner.environment == 'github-hosted'
+      #   run: |
+      #     echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+      #     echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: true
 
-      - name: Cache Cargo Dependencies
-        if: runner.environment == 'github-hosted'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-deps-
+      # - name: Cache Cargo Dependencies
+      #   if: runner.environment == 'github-hosted'
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/.cargo/registry
+      #       ~/.cargo/git
+      #     key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-cargo-deps-
 
-      - name: Cache Cargo Target
-        if: runner.environment == 'github-hosted'
-        uses: actions/cache@v4
-        with:
-          path: |
-            core/target
-          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-deps-
+      # - name: Cache Cargo Target
+      #   if: runner.environment == 'github-hosted'
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       core/target
+      #     key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-cargo-deps-
 
-      - name: Cache Swift Package Manager
-        if: runner.environment == 'github-hosted'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.swiftpm
-            .build
-          key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-spm-
+      # - name: Cache Swift Package Manager
+      #   if: runner.environment == 'github-hosted'
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/.swiftpm
+      #       .build
+      #     key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-spm-
 
-      - name: Run sccache-cache
-        if: runner.environment == 'github-hosted'
-        uses: mozilla-actions/sccache-action@v0.0.8
+      # - name: Run sccache-cache
+      #   if: runner.environment == 'github-hosted'
+      #   uses: mozilla-actions/sccache-action@v0.0.8
 
-      - name: Install just
-        if: runner.environment == 'github-hosted'
-        run: brew install just
+      # - name: Install just
+      #   if: runner.environment == 'github-hosted'
+      #   run: brew install just
 
       - name: Install dependencies
         run: just install-toolchains

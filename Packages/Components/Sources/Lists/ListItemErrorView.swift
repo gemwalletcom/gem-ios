@@ -38,7 +38,7 @@ public struct ListItemErrorView: View {
             VStack(alignment: .leading, spacing: .small) {
                 HStack(spacing: .small) {
                     Image(systemName: errorSystemNameImage)
-                        .foregroundColor(Colors.red)
+                        .foregroundStyle(Colors.red)
                         .frame(width: .list.image, height: .list.image)
                     Text(errorTitle ?? error.localizedDescription)
                         .textStyle(.headline)

@@ -97,14 +97,14 @@ private extension BannerView {
                 .resizable()
                 .frame(size: .small)
                 .symbolRenderingMode(.hierarchical)
-                .foregroundColor(Colors.gray)
+                .foregroundStyle(Colors.gray)
                 .padding(.small)
                 .liquidGlass { _ in
                     ListButton(
                         image: Images.System.xmarkCircle,
                         action: { action(model.closeAction) }
                     )
-                    .foregroundColor(Colors.gray)
+                    .foregroundStyle(Colors.gray)
                 }
         }
         .buttonStyle(.borderless)

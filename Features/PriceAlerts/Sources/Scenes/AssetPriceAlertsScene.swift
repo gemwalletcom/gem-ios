@@ -36,8 +36,8 @@ public struct AssetPriceAlertsScene: View {
             }
         }
         .overlay {
-            if let emptyContentModel = model.emptyContentModel {
-                EmptyContentView(model: emptyContentModel)
+            if model.showEmptyState {
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .observeQuery(request: $model.request, value: $model.priceAlerts)

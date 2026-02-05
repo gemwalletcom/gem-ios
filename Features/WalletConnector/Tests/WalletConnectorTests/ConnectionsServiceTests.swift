@@ -4,6 +4,8 @@ import Testing
 import Preferences
 import Store
 import WalletConnectorServiceTestKit
+import ConnectionsService
+import ConnectionsServiceTestKit
 @testable import WalletConnector
 
 struct ConnectionsServiceTests {
