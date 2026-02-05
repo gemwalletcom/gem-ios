@@ -185,6 +185,14 @@ public struct Scenes {
         }
     }
     
+    public struct Transaction: Hashable, Codable {
+        public let transaction: TransactionExtended
+
+        public init(transaction: TransactionExtended) {
+            self.transaction = transaction
+        }
+    }
+
     public struct AssetPriceAlert: Hashable, Codable {
         public let asset: Primitives.Asset
         public let price: Double?

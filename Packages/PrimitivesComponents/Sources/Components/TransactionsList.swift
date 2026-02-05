@@ -65,7 +65,7 @@ private struct TransactionsListView: View {
 
     var body: some View {
         ForEach(transactions) { transaction in
-            NavigationLink(value: transaction) {
+            NavigationLink(value: Scenes.Transaction(transaction: transaction)) {
                 TransactionView(
                     model: .init(
                         explorerService: explorerService,

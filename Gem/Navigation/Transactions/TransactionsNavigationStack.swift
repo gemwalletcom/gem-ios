@@ -47,10 +47,10 @@ struct TransactionsNavigationStack: View {
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(model.title)
-                .navigationDestination(for: TransactionExtended.self) {
+                .navigationDestination(for: Scenes.Transaction.self) {
                     TransactionNavigationView(
                         model: TransactionSceneViewModel(
-                            transaction: $0,
+                            transaction: $0.transaction,
                             walletId: model.wallet.walletId
                         )
                     )
