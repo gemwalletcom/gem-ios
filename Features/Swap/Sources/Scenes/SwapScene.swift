@@ -80,7 +80,7 @@ public struct SwapScene: View {
         .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
-        .onTimer(every: .seconds30) {
+        .onTimer(every: .seconds(30)) {
             await model.fetch()
         }
         .onAppear {

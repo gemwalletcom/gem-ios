@@ -86,13 +86,10 @@ public struct ChartScene: View {
             }
         }
         .observeQuery(request: $model.priceRequest, value: $model.priceData)
-        .refreshable {
+        .refreshableTimer(every: .minutes(1)) {
             await model.fetch()
         }
         .task {
-            await model.fetch()
-        }
-        .onTimer(every: .minute1) {
             await model.fetch()
         }
         .listSectionSpacing(.compact)

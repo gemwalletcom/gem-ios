@@ -5,12 +5,8 @@ import Foundation
 public typealias Interval = TimeInterval
 
 public extension Interval {
-    /// 30s
-    static let seconds30: Interval = 30
-    /// 60s
-    static let minute1: Interval = 60
-    /// 300s
-    static let minutes5: Interval = 300
+    static func seconds(_ value: Int) -> Interval { Interval(value) }
+    static func minutes(_ value: Int) -> Interval { Interval(value) * 60 }
 
     struct AnimationDuration {
         /// 0.15s

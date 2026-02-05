@@ -28,7 +28,9 @@ public struct TransactionsScene: View {
             }
             .listSectionSpacing(.compact)
             .scrollContentBackground(.hidden)
-            .refreshable(action: model.fetch)
+            .refreshableTimer(every: .minutes(5)) {
+                await model.fetch()
+            }
         }
         .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .overlay {
@@ -38,8 +40,5 @@ public struct TransactionsScene: View {
             }
         }
         .task { await model.fetch() }
-        .onTimer(every: .minutes5) {
-            await model.fetch()
-        }
     }
 }

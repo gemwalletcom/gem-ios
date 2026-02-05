@@ -53,10 +53,7 @@ struct PerpetualPortfolioScene: View {
             .task {
                 await model.fetch()
             }
-            .refreshable {
-                await model.fetch()
-            }
-            .onTimer(every: .minute1) {
+            .refreshableTimer(every: .minutes(1)) {
                 await model.fetch()
             }
             .listSectionSpacing(.compact)

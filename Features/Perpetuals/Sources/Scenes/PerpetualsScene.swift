@@ -50,10 +50,7 @@ struct PerpetualsScene: View {
         .onDisappear {
             Task { await model.onDisappear() }
         }
-        .refreshable {
-            await model.fetch()
-        }
-        .onTimer(every: .minute1) {
+        .refreshableTimer(every: .minutes(1)) {
             await model.fetch()
         }
         .listSectionSpacing(.compact)
