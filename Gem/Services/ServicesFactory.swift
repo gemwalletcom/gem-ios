@@ -423,7 +423,7 @@ extension ServicesFactory {
         assetsService: AssetsService,
         balanceStore: BalanceStore,
         earnStore: EarnStore,
-        earnService: any EarnServiceType
+        earnService: any EarnServiceable
     ) -> EarnBalanceService {
         EarnBalanceService(
             assetsService: assetsService,
@@ -668,7 +668,7 @@ extension ServicesFactory {
 
     private static func makeEarnServices(
         stakeService: StakeService,
-        earnService: any EarnServiceType
+        earnService: any EarnServiceable
     ) -> EarnServices {
         EarnServices(
             stakeService: stakeService,

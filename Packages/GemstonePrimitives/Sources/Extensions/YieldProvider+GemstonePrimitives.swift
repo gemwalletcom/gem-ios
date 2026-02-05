@@ -4,22 +4,22 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemEarnProvider {
+extension GemYieldProvider {
     public var displayName: String {
         switch self {
         case .yo: "Yo"
         }
     }
 
-    public func map() -> EarnProvider {
+    public func map() -> YieldProvider {
         switch self {
         case .yo: .yo
         }
     }
 }
 
-extension EarnProvider {
-    public func map() -> GemEarnProvider {
+extension YieldProvider {
+    public func map() -> GemYieldProvider {
         switch self {
         case .yo: .yo
         }

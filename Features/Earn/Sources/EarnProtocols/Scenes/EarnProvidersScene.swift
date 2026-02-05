@@ -7,10 +7,10 @@ import Primitives
 import Localization
 import Store
 
-public struct EarnProtocolsScene: View {
-    @State private var model: EarnProtocolsSceneViewModel
+public struct EarnProvidersScene: View {
+    @State private var model: EarnProvidersSceneViewModel
 
-    public init(model: EarnProtocolsSceneViewModel) {
+    public init(model: EarnProvidersSceneViewModel) {
         _model = State(initialValue: model)
     }
 
@@ -19,7 +19,7 @@ public struct EarnProtocolsScene: View {
             if model.hasPosition {
                 positionSection
             }
-            protocolsStateView
+            providersStateView
         }
         .navigationTitle(model.title)
         .observeQuery(request: $model.positionsRequest, value: $model.positions)
@@ -32,7 +32,7 @@ public struct EarnProtocolsScene: View {
 
 // MARK: - UI Components
 
-extension EarnProtocolsScene {
+extension EarnProvidersScene {
     private var loadingView: some View {
         Section {
             HStack {
@@ -67,14 +67,14 @@ extension EarnProtocolsScene {
         }
     }
 
-    private var protocolsSection: some View {
+    private var providersSection: some View {
         Section {
-            ForEach(model.protocols) { `protocol` in
-                EarnProtocolView(
-                    model: `protocol`,
+            ForEach(model.providers) { provider in
+                EarnProviderView(
+                    model: provider,
                     displayName: model.assetName
                 ) {
-                    model.onSelectProtocol(`protocol`)
+                    model.onSelectProvider(provider)
                 }
             }
         } header: {
@@ -117,13 +117,13 @@ extension EarnProtocolsScene {
         }
     }
 
-    private var protocolsStateView: some View {
+    private var providersStateView: some View {
         StateView(
-            state: model.protocolsState,
+            state: model.providersState,
             content: { _ in
                 Group {
-                    if model.hasProtocols {
-                        protocolsSection
+                    if model.hasProviders {
+                        providersSection
                     } else if !model.hasPosition {
                         emptyStateView
                     }

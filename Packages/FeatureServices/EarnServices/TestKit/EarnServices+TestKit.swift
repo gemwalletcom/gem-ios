@@ -11,7 +11,7 @@ import EarnServiceTestKit
 public extension EarnServices {
     static func mock(
         stakeService: StakeService = StakeService.mock(),
-        earnService: any EarnServiceType = MockEarnService()
+        earnService: any EarnServiceable = MockEarnService()
     ) -> EarnServices {
         EarnServices(
             stakeService: stakeService,

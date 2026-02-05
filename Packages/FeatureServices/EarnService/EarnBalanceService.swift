@@ -4,6 +4,7 @@ import AssetsService
 import BigInt
 import Formatters
 import Foundation
+import GemstonePrimitives
 import Primitives
 import Store
 
@@ -15,14 +16,14 @@ public struct EarnBalanceService: EarnBalanceServiceable {
     private let assetsService: AssetsService
     private let balanceStore: BalanceStore
     private let earnStore: EarnStore
-    private let earnService: any EarnServiceType
+    private let earnService: any EarnServiceable
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         assetsService: AssetsService,
         balanceStore: BalanceStore,
         earnStore: EarnStore,
-        earnService: any EarnServiceType
+        earnService: any EarnServiceable
     ) {
         self.assetsService = assetsService
         self.balanceStore = balanceStore
@@ -31,27 +32,32 @@ public struct EarnBalanceService: EarnBalanceServiceable {
     }
 
     public func updatePositions(walletId: WalletId, assetId: AssetId, address: String) async {
-        for provider in EarnProvider.allCases {
-            do {
-                let position = try await earnService.fetchPosition(
-                    provider: provider,
-                    asset: assetId,
-                    walletAddress: address
-                )
-                try earnStore.updatePosition(position, walletId: walletId)
-            } catch {
-                // Asset may not have earn support for this provider - skip silently
-            }
-        }
+        do {
+            let providers = try await earnService.getProviders(for: assetId)
+            try earnStore.updateProviders(providers)
 
-        updateEarnBalance(walletId: walletId, assetId: assetId)
+            for provider in YieldProvider.allCases {
+                do {
+                    let position = try await earnService.fetchPosition(
+                        provider: provider,
+                        asset: assetId,
+                        walletAddress: address
+                    )
+                    try earnStore.updatePosition(position.map(), walletId: walletId)
+                } catch {}
+            }
+
+            updateEarnBalance(walletId: walletId, assetId: assetId)
+        } catch {
+            debugLog("earn positions update error: \(error)")
+        }
     }
 
     private func updateEarnBalance(walletId: WalletId, assetId: AssetId) {
         do {
             let positions = try earnStore.getPositions(walletId: walletId, assetId: assetId)
             let total = positions
-                .compactMap { BigInt($0.balance) }
+                .compactMap { BigInt($0.base.balance) }
                 .reduce(.zero, +)
             guard let asset = try assetsService.getAssets(for: [assetId]).first else {
                 throw AnyError("asset not found")

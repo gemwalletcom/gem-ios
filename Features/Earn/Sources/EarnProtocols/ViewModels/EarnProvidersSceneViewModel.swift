@@ -10,18 +10,18 @@ import EarnService
 
 @MainActor
 @Observable
-public final class EarnProtocolsSceneViewModel {
+public final class EarnProvidersSceneViewModel {
     public let wallet: Wallet
     public let asset: Asset
     private let earnPositionsService: any EarnBalanceServiceable
-    private let earnService: any EarnServiceType
+    private let earnService: any EarnServiceable
     private let onAmountInputAction: AmountInputAction
 
     public var positionsRequest: EarnPositionsRequest
     public var positions: [EarnPosition] = []
-    public var protocols: [EarnProtocolViewModel] = []
+    public var providers: [EarnProviderViewModel] = []
 
-    public var protocolsState: StateViewType<Bool> = .loading
+    public var providersState: StateViewType<Bool> = .loading
 
     public var title: String {
         Localized.Common.earn
@@ -45,7 +45,7 @@ public final class EarnProtocolsSceneViewModel {
     }
 
     public var isLoading: Bool {
-        protocolsState.isLoading
+        providersState.isLoading
     }
 
     public var positionModels: [EarnPositionViewModel] {
@@ -58,20 +58,20 @@ public final class EarnProtocolsSceneViewModel {
         positionModels.isNotEmpty
     }
 
-    public var hasProtocols: Bool {
-        !protocols.isEmpty
+    public var hasProviders: Bool {
+        !providers.isEmpty
     }
 
     public var hasError: Bool {
-        protocolsState.isError
+        providersState.isError
     }
 
     public var isEmpty: Bool {
-        protocolsState.isNoData
+        providersState.isNoData
     }
 
     public var error: Error? {
-        if case .error(let error) = protocolsState {
+        if case .error(let error) = providersState {
             return error
         }
         return nil
@@ -89,7 +89,7 @@ public final class EarnProtocolsSceneViewModel {
         wallet: Wallet,
         asset: Asset,
         earnPositionsService: any EarnBalanceServiceable,
-        earnService: any EarnServiceType,
+        earnService: any EarnServiceable,
         onAmountInputAction: AmountInputAction = nil
     ) {
         self.wallet = wallet
@@ -110,16 +110,16 @@ public final class EarnProtocolsSceneViewModel {
     }
 
     public func fetch() async {
-        protocolsState = .loading
+        providersState = .loading
         async let _ = updatePositions()
 
         do {
-            let protocols = try await earnService.getProtocols(for: asset.id)
-            let protocolModels = protocols.map { EarnProtocolViewModel(protocol: $0) }
-            self.protocols = protocolModels
-            protocolsState = protocolModels.isEmpty ? .noData : .data(true)
+            let earnProviders = try await earnService.getProviders(for: asset.id)
+            let providerModels = earnProviders.map { EarnProviderViewModel(provider: $0) }
+            self.providers = providerModels
+            providersState = providerModels.isEmpty ? .noData : .data(true)
         } catch {
-            protocolsState = .error(error)
+            providersState = .error(error)
         }
     }
 
@@ -132,8 +132,8 @@ public final class EarnProtocolsSceneViewModel {
         )
     }
 
-    public func onSelectProtocol(_ opportunity: EarnProtocolViewModel) {
-        let earnData = makeEarnData(provider: opportunity.provider.rawValue)
+    public func onSelectProvider(_ provider: EarnProviderViewModel) {
+        let earnData = makeEarnData(provider: provider.earnProvider.id)
         let amountInput = AmountInput(
             type: .earn(action: .deposit, data: earnData, depositedBalance: nil),
             asset: asset
@@ -142,9 +142,9 @@ public final class EarnProtocolsSceneViewModel {
     }
 
     public func onWithdraw(_ position: EarnPositionViewModel) {
-        let earnData = makeEarnData(provider: position.provider)
+        let earnData = makeEarnData(provider: position.providerId)
         let amountInput = AmountInput(
-            type: .earn(action: .withdraw, data: earnData, depositedBalance: position.vaultBalance),
+            type: .earn(action: .withdraw, data: earnData, depositedBalance: position.balance),
             asset: asset
         )
         onAmountInputAction?(amountInput)

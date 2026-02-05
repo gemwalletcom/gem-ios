@@ -44,7 +44,7 @@ extension EarnSceneViewModel {
         wallet: Wallet = .mock(),
         chain: StakeChain = .tron,
         stakeService: any StakeServiceable = MockStakeService(stakeApr: 13.5),
-        earnService: any EarnServiceType = MockEarnService(),
+        earnService: any EarnServiceable = MockEarnService(),
         earnPositionsService: any EarnBalanceServiceable = MockEarnBalanceService(),
         earnAsset: Asset = .mockTron()
     ) -> EarnSceneViewModel {

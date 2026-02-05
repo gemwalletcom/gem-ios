@@ -393,8 +393,6 @@ struct Migrations {
                 $0.add(column: AssetRecord.Columns.earnApr.name, .double)
             }
 
-            try EarnPositionRecord.create(db: db)
-
             try? db.alter(table: BalanceRecord.databaseTableName) {
                 $0.add(column: BalanceRecord.Columns.earn.name, .text)
                     .defaults(to: "0")
@@ -406,6 +404,11 @@ struct Migrations {
                 $0.drop(column: BalanceRecord.Columns.totalAmount.name)
                 $0.addColumn(sql: BalanceRecord.totalAmountSQlCreation)
             }
+        }
+
+        migrator.registerMigration("Create earn_providers and earn_positions tables") { db in
+            try EarnProviderRecord.create(db: db)
+            try EarnPositionRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

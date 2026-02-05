@@ -18,7 +18,7 @@ import EarnService
 @Observable
 public final class EarnSceneViewModel {
     private let stakeService: any StakeServiceable
-    private let earnService: any EarnServiceType
+    private let earnService: any EarnServiceable
     private let earnPositionsService: any EarnBalanceServiceable
     private let earnAsset: Asset
 
@@ -43,7 +43,7 @@ public final class EarnSceneViewModel {
         wallet: Wallet,
         chain: StakeChain,
         stakeService: any StakeServiceable,
-        earnService: any EarnServiceType,
+        earnService: any EarnServiceable,
         earnPositionsService: any EarnBalanceServiceable,
         earnAsset: Asset
     ) {
@@ -251,19 +251,19 @@ extension EarnSceneViewModel {
     }
 }
 
-// MARK: - Earn Protocols
+// MARK: - Earn Providers
 
 extension EarnSceneViewModel {
-    public var showEarnProtocols: Bool {
+    public var showEarnProviders: Bool {
         assetData.isEarnable
     }
 
-    public var earnProtocolsTitle: String {
+    public var earnProvidersTitle: String {
         Localized.Common.earn
     }
 
-    public func earnProtocolsSceneViewModel() -> EarnProtocolsSceneViewModel {
-        EarnProtocolsSceneViewModel(
+    public func earnProvidersViewModel() -> EarnProvidersSceneViewModel {
+        EarnProvidersSceneViewModel(
             wallet: wallet,
             asset: earnAsset,
             earnPositionsService: earnPositionsService,

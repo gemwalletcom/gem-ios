@@ -5,25 +5,13 @@
 import Foundation
 
 public struct EarnPosition: Codable, Equatable, Hashable, Sendable {
-	public let assetId: AssetId
+	public let base: EarnPositionBase
 	public let provider: EarnProvider
-	public let vaultTokenAddress: String
-	public let assetTokenAddress: String
-	public let vaultBalanceValue: String
-	public let assetBalanceValue: String
-	public let balance: String
-	public let rewards: String?
-	public let apy: Double?
+	public let price: Price?
 
-	public init(assetId: AssetId, provider: EarnProvider, vaultTokenAddress: String, assetTokenAddress: String, vaultBalanceValue: String, assetBalanceValue: String, balance: String, rewards: String?, apy: Double?) {
-		self.assetId = assetId
+	public init(base: EarnPositionBase, provider: EarnProvider, price: Price?) {
+		self.base = base
 		self.provider = provider
-		self.vaultTokenAddress = vaultTokenAddress
-		self.assetTokenAddress = assetTokenAddress
-		self.vaultBalanceValue = vaultBalanceValue
-		self.assetBalanceValue = assetBalanceValue
-		self.balance = balance
-		self.rewards = rewards
-		self.apy = apy
+		self.price = price
 	}
 }

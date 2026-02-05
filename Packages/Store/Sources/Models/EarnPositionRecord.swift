@@ -11,57 +11,53 @@ public struct EarnPositionRecord: Codable, FetchableRecord, PersistableRecord {
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let assetId = Column("assetId")
+        static let providerId = Column("providerId")
+        static let state = Column("state")
         static let balance = Column("balance")
+        static let shares = Column("shares")
         static let rewards = Column("rewards")
-        static let apy = Column("apy")
-        static let provider = Column("provider")
-        static let vaultTokenAddress = Column("vaultTokenAddress")
-        static let assetTokenAddress = Column("assetTokenAddress")
-        static let vaultBalanceValue = Column("vaultBalanceValue")
-        static let assetBalanceValue = Column("assetBalanceValue")
+        static let unlockDate = Column("unlockDate")
+        static let positionId = Column("positionId")
     }
 
     public var id: String
     public var walletId: String
     public var assetId: AssetId
+    public var providerId: String
+    public var state: String
     public var balance: String
-    public var rewards: String?
-    public var apy: Double?
-
-    public var provider: String?
-    public var vaultTokenAddress: String
-    public var assetTokenAddress: String
-    public var vaultBalanceValue: String
-    public var assetBalanceValue: String
+    public var shares: String
+    public var rewards: String
+    public var unlockDate: Date?
+    public var positionId: String
 
     public init(
         id: String,
         walletId: String,
         assetId: AssetId,
+        providerId: String,
+        state: String,
         balance: String,
-        rewards: String?,
-        apy: Double?,
-        provider: String?,
-        vaultTokenAddress: String,
-        assetTokenAddress: String,
-        vaultBalanceValue: String,
-        assetBalanceValue: String
+        shares: String,
+        rewards: String,
+        unlockDate: Date?,
+        positionId: String
     ) {
         self.id = id
         self.walletId = walletId
         self.assetId = assetId
+        self.providerId = providerId
+        self.state = state
         self.balance = balance
+        self.shares = shares
         self.rewards = rewards
-        self.apy = apy
-        self.provider = provider
-        self.vaultTokenAddress = vaultTokenAddress
-        self.assetTokenAddress = assetTokenAddress
-        self.vaultBalanceValue = vaultBalanceValue
-        self.assetBalanceValue = assetBalanceValue
+        self.unlockDate = unlockDate
+        self.positionId = positionId
     }
 
     static let wallet = belongsTo(WalletRecord.self, key: "wallet")
     static let asset = belongsTo(AssetRecord.self, key: "asset", using: ForeignKey(["assetId"], to: ["id"]))
+    static let provider = belongsTo(EarnProviderRecord.self, key: "provider", using: ForeignKey(["providerId"], to: ["id"]))
 }
 
 extension EarnPositionRecord: CreateTable {
@@ -77,64 +73,61 @@ extension EarnPositionRecord: CreateTable {
                 .notNull()
                 .indexed()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
+            $0.column(Columns.providerId.name, .text)
+                .notNull()
+                .indexed()
+                .references(EarnProviderRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
+            $0.column(Columns.state.name, .text)
+                .notNull()
+                .defaults(to: "active")
             $0.column(Columns.balance.name, .text)
                 .notNull()
                 .defaults(to: "0")
+            $0.column(Columns.shares.name, .text)
+                .notNull()
+                .defaults(to: "0")
             $0.column(Columns.rewards.name, .text)
-            $0.column(Columns.apy.name, .double)
-            $0.column(Columns.provider.name, .text)
-            $0.column(Columns.vaultTokenAddress.name, .text)
-                .notNull()
-                .defaults(to: "")
-            $0.column(Columns.assetTokenAddress.name, .text)
-                .notNull()
-                .defaults(to: "")
-            $0.column(Columns.vaultBalanceValue.name, .text)
                 .notNull()
                 .defaults(to: "0")
-            $0.column(Columns.assetBalanceValue.name, .text)
+            $0.column(Columns.unlockDate.name, .datetime)
+            $0.column(Columns.positionId.name, .text)
                 .notNull()
-                .defaults(to: "0")
         }
     }
 }
 
 extension EarnPositionRecord {
-    public var earnPosition: EarnPosition? {
-        guard let provider, let earnProvider = EarnProvider(rawValue: provider) else { return nil }
-
-        return EarnPosition(
+    public func earnPosition(provider: EarnProvider) -> EarnPosition? {
+        guard let state = EarnPositionState(rawValue: state) else {
+            return nil
+        }
+        let base = EarnPositionBase(
             assetId: assetId,
-            provider: earnProvider,
-            vaultTokenAddress: vaultTokenAddress,
-            assetTokenAddress: assetTokenAddress,
-            vaultBalanceValue: vaultBalanceValue,
-            assetBalanceValue: assetBalanceValue,
+            state: state,
             balance: balance,
+            shares: shares,
             rewards: rewards,
-            apy: apy
+            unlockDate: unlockDate,
+            positionId: positionId,
+            providerId: provider.id
         )
+        return EarnPosition(base: base, provider: provider, price: nil)
     }
 }
 
-extension EarnPosition {
+extension EarnPositionBase {
     public func record(walletId: String) -> EarnPositionRecord {
-        return EarnPositionRecord(
-            id: recordId(walletId: walletId),
+        EarnPositionRecord(
+            id: "\(walletId)_\(positionId)",
             walletId: walletId,
             assetId: assetId,
+            providerId: EarnProvider.recordId(chain: assetId.chain, providerId: providerId),
+            state: state.rawValue,
             balance: balance,
+            shares: shares,
             rewards: rewards,
-            apy: apy,
-            provider: provider.rawValue,
-            vaultTokenAddress: vaultTokenAddress,
-            assetTokenAddress: assetTokenAddress,
-            vaultBalanceValue: vaultBalanceValue,
-            assetBalanceValue: assetBalanceValue
+            unlockDate: unlockDate,
+            positionId: positionId
         )
-    }
-
-    private func recordId(walletId: String) -> String {
-        "\(walletId)-\(assetId.identifier)-\(provider.rawValue)"
     }
 }

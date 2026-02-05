@@ -6,19 +6,19 @@ import Primitives
 
 @testable import EarnService
 
-public final class MockEarnService: EarnServiceType, @unchecked Sendable {
-    public var mockProtocols: [EarnProtocol] = []
+public final class MockEarnService: EarnServiceable, @unchecked Sendable {
+    public var mockProviders: [EarnProvider] = []
     public var mockPosition: EarnPosition?
     public var mockTransaction: GemYieldTransaction?
 
     public init() {}
 
-    public func getProtocols(for assetId: Primitives.AssetId) async throws -> [EarnProtocol] {
-        mockProtocols
+    public func getProviders(for assetId: Primitives.AssetId) async throws -> [EarnProvider] {
+        mockProviders
     }
 
     public func deposit(
-        provider: EarnProvider,
+        provider: YieldProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
@@ -30,7 +30,7 @@ public final class MockEarnService: EarnServiceType, @unchecked Sendable {
     }
 
     public func withdraw(
-        provider: EarnProvider,
+        provider: YieldProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
@@ -42,7 +42,7 @@ public final class MockEarnService: EarnServiceType, @unchecked Sendable {
     }
 
     public func fetchPosition(
-        provider: EarnProvider,
+        provider: YieldProvider,
         asset: Primitives.AssetId,
         walletAddress: String
     ) async throws -> EarnPosition {
@@ -59,12 +59,12 @@ enum EarnServiceMockError: Error {
 
 extension MockEarnService {
     public static func mock(
-        protocols: [EarnProtocol] = [],
+        providers: [EarnProvider] = [],
         position: EarnPosition? = nil,
         transaction: GemYieldTransaction? = nil
     ) -> MockEarnService {
         let service = MockEarnService()
-        service.mockProtocols = protocols
+        service.mockProviders = providers
         service.mockPosition = position
         service.mockTransaction = transaction
         return service

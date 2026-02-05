@@ -35,7 +35,7 @@ public struct ViewModelFactory: Sendable {
     let walletsService: WalletsService
     let walletService: WalletService
     let stakeService: StakeService
-    let earnService: any EarnServiceType
+    let earnService: any EarnServiceable
     let earnBalanceService: any EarnBalanceServiceable
     let nameService: NameService
     let balanceService: BalanceService
@@ -54,7 +54,7 @@ public struct ViewModelFactory: Sendable {
         walletsService: WalletsService,
         walletService: WalletService,
         stakeService: StakeService,
-        earnService: any EarnServiceType,
+        earnService: any EarnServiceable,
         earnBalanceService: any EarnBalanceServiceable,
         nameService: NameService,
         balanceService: BalanceService,
@@ -192,12 +192,12 @@ public struct ViewModelFactory: Sendable {
     }
 
     @MainActor
-    public func earnProtocolsScene(
+    public func earnProvidersScene(
         wallet: Wallet,
         asset: Asset,
         onAmountInputAction: AmountInputAction = nil
-    ) -> EarnProtocolsSceneViewModel {
-        EarnProtocolsSceneViewModel(
+    ) -> EarnProvidersSceneViewModel {
+        EarnProvidersSceneViewModel(
             wallet: wallet,
             asset: asset,
             earnPositionsService: earnBalanceService,

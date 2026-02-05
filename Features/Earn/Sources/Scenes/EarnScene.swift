@@ -25,8 +25,8 @@ public struct EarnScene: View {
                 resourcesSection
             }
             delegationsSection
-            if model.showEarnProtocols {
-                earnProtocolsSection
+            if model.showEarnProviders {
+                earnProvidersSection
             }
         }
         .listSectionSpacing(.compact)
@@ -157,13 +157,13 @@ extension EarnScene {
         }
     }
 
-    private var earnProtocolsSection: some View {
-        let earnModel = model.earnProtocolsSceneViewModel()
-        return Section(model.earnProtocolsTitle) {
+    private var earnProvidersSection: some View {
+        let earnModel = model.earnProvidersViewModel()
+        return Section(model.earnProvidersTitle) {
             NavigationLink {
-                EarnProtocolsScene(model: earnModel)
+                EarnProvidersScene(model: earnModel)
             } label: {
-                ListItemView(title: model.earnProtocolsTitle)
+                ListItemView(title: model.earnProvidersTitle)
             }
         }
     }

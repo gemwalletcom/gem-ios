@@ -5,12 +5,16 @@ import Gemstone
 import Primitives
 
 extension GemYield {
-    public func map() throws -> EarnProtocol {
-        EarnProtocol(
+    public func mapToEarnProvider() throws -> EarnProvider {
+        let assetId = try AssetId(id: assetId)
+        return EarnProvider(
+            chain: assetId.chain,
+            id: provider.map().rawValue,
             name: name,
-            assetId: try AssetId(id: assetId),
-            provider: provider.map(),
-            apy: apy
+            isActive: true,
+            fee: 0,
+            apy: apy ?? 0,
+            providerType: .yield
         )
     }
 }

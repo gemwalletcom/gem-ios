@@ -41,13 +41,12 @@ public struct EarnPositionsRequest: ValueObservationQueryable {
     }
 
     public func fetch(_ db: Database) throws -> [EarnPosition] {
-        var request = EarnPositionRecord
+        try EarnPositionRecord
             .filter(EarnPositionRecord.Columns.walletId == walletId.id)
-
-        request = request.filter(EarnPositionRecord.Columns.assetId == assetId.identifier)
-
-        return try request
+            .filter(EarnPositionRecord.Columns.assetId == assetId.identifier)
+            .including(required: EarnPositionRecord.provider)
             .order(EarnPositionRecord.Columns.balance.desc)
+            .asRequest(of: EarnPositionInfo.self)
             .fetchAll(db)
             .compactMap { $0.earnPosition }
     }

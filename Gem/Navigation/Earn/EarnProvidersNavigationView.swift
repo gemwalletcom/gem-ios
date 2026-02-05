@@ -6,14 +6,14 @@ import Primitives
 import Earn
 import Transfer
 
-struct EarnProtocolsNavigationView: View {
+struct EarnProvidersNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
 
-    @State private var model: EarnProtocolsSceneViewModel
+    @State private var model: EarnProvidersSceneViewModel
     @Binding private var navigationPath: NavigationPath
 
     init(
-        model: EarnProtocolsSceneViewModel,
+        model: EarnProvidersSceneViewModel,
         navigationPath: Binding<NavigationPath>
     ) {
         _model = State(initialValue: model)
@@ -21,7 +21,7 @@ struct EarnProtocolsNavigationView: View {
     }
 
     var body: some View {
-        EarnProtocolsScene(model: model)
+        EarnProvidersScene(model: model)
             .navigationDestination(for: AmountInput.self) { input in
                 AmountNavigationView(
                     model: viewModelFactory.amountScene(

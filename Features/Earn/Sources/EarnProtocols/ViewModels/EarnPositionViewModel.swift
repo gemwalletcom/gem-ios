@@ -15,37 +15,46 @@ public struct EarnPositionViewModel: Identifiable, Sendable {
         self.decimals = decimals
     }
 
-    public var provider: String {
-        position.provider.rawValue
+    public var providerId: String {
+        position.base.providerId
     }
 
     public var id: String {
-        provider
+        position.base.positionId
     }
 
     public var providerName: String {
-        position.provider.displayName
+        position.provider.name
     }
 
     public var hasBalance: Bool {
-        vaultBalance > 0
+        balance > 0
     }
 
-    public var vaultBalance: BigInt {
-        BigInt(position.vaultBalanceValue) ?? .zero
+    public var balance: BigInt {
+        BigInt(position.base.balance) ?? .zero
+    }
+
+    public var shares: BigInt {
+        BigInt(position.base.shares) ?? .zero
     }
 
     public var assetBalanceFormatted: String {
-        guard let balance = BigInt(position.balance) else {
-            return "0"
-        }
-        return ValueFormatter(style: .medium).string(balance, decimals: decimals)
+        ValueFormatter(style: .medium).string(balance, decimals: decimals)
     }
 
     public var rewardsFormatted: String? {
-        guard let rewards = position.rewards.flatMap({ BigInt($0) }), rewards > 0 else {
+        guard let rewards = BigInt(position.base.rewards), rewards > 0 else {
             return nil
         }
         return ValueFormatter(style: .medium).string(rewards, decimals: decimals)
+    }
+
+    public var apy: Double {
+        position.provider.apy
+    }
+
+    public var apyFormatted: String {
+        String(format: "%.2f%%", apy)
     }
 }

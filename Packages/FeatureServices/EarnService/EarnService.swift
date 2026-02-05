@@ -6,7 +6,7 @@ import GemstonePrimitives
 import NativeProviderService
 import Primitives
 
-public final class EarnService: EarnServiceType {
+public final class EarnService: EarnServiceable {
     public let yielder: GemYielder
 
     public init(yielder: GemYielder) {
@@ -19,13 +19,13 @@ public final class EarnService: EarnServiceType {
         self.init(yielder: yielder)
     }
 
-    public func getProtocols(for assetId: Primitives.AssetId) async throws -> [EarnProtocol] {
-        let protocols = try await yielder.yieldsForAsset(assetId: assetId.identifier)
-        return try protocols.map { try $0.map() }
+    public func getProviders(for assetId: Primitives.AssetId) async throws -> [EarnProvider] {
+        let yields = try await yielder.yieldsForAsset(assetId: assetId.identifier)
+        return try yields.map { try $0.mapToEarnProvider() }
     }
 
     public func deposit(
-        provider: EarnProvider,
+        provider: YieldProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
@@ -39,7 +39,7 @@ public final class EarnService: EarnServiceType {
     }
 
     public func withdraw(
-        provider: EarnProvider,
+        provider: YieldProvider,
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
@@ -53,18 +53,14 @@ public final class EarnService: EarnServiceType {
     }
 
     public func fetchPosition(
-        provider: EarnProvider,
+        provider: YieldProvider,
         asset: Primitives.AssetId,
         walletAddress: String
-    ) async throws -> EarnPosition {
-        let position = try await yielder.positions(
+    ) async throws -> GemEarnPositionBase {
+        try await yielder.positions(
             provider: provider.map(),
             asset: asset.identifier,
             walletAddress: walletAddress
         )
-        guard let earnPosition = EarnPosition(position: position) else {
-            throw AnyError("Earn position mapping failed")
-        }
-        return earnPosition
     }
 }

@@ -4,7 +4,7 @@ import SwiftUI
 import Primitives
 import Style
 
-extension EarnProvider {
+extension YieldProvider {
     public var image: Image {
         switch self {
         case .yo: Images.EarnProviders.yo
