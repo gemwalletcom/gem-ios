@@ -12,7 +12,6 @@ import PrimitivesComponents
 import Localization
 
 public struct ChartScene: View {
-    private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
     @State private var model: ChartSceneViewModel
 
     public init(model: ChartSceneViewModel) {
@@ -87,16 +86,11 @@ public struct ChartScene: View {
             }
         }
         .observeQuery(request: $model.priceRequest, value: $model.priceData)
-        .refreshable {
+        .refreshableTimer(every: .minutes(1)) {
             await model.fetch()
         }
         .task {
             await model.fetch()
-        }
-        .onReceive(fetchTimer) { time in
-            Task {
-                await model.fetch()
-            }
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
