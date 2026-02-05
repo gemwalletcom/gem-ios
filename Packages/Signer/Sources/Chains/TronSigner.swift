@@ -97,6 +97,11 @@ struct TronSigner: Signable {
         )
     }
 
+    func signData(input: SignerInput, privateKey: Data) throws -> String {
+        try ChainSigner(chain: input.asset.chain)
+            .signData(input: input, privateKey: privateKey)
+    }
+
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case let .stake(_, stakeType) = input.type else {
             throw AnyError("Invalid input type for staking")
