@@ -52,7 +52,16 @@ extension GemTransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let stakeData):
+        case .tron(
+            let blockNumber,
+            let blockVersion,
+            let blockTimestamp,
+            let transactionTreeRoot,
+            let parentHash,
+            let witnessAddress,
+            let stakeData,
+            let rawDataHex
+        ):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
@@ -60,7 +69,8 @@ extension GemTransactionLoadMetadata {
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress,
-                stakeData: stakeData.map()
+                stakeData: stakeData.map(),
+                rawDataHex: rawDataHex
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
@@ -118,7 +128,16 @@ extension TransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let stakeData):
+        case .tron(
+            let blockNumber,
+            let blockVersion,
+            let blockTimestamp,
+            let transactionTreeRoot,
+            let parentHash,
+            let witnessAddress,
+            let stakeData,
+            let rawDataHex
+        ):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
@@ -126,7 +145,8 @@ extension TransactionLoadMetadata {
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress,
-                stakeData: stakeData.map()
+                stakeData: stakeData.map(),
+                rawDataHex: rawDataHex
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
@@ -203,4 +223,3 @@ extension HyperliquidOrder {
         )
     }
 }
-
