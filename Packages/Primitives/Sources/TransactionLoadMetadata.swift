@@ -77,8 +77,7 @@ public enum TransactionLoadMetadata: Sendable {
         transactionTreeRoot: String,
         parentHash: String,
         witnessAddress: String,
-        stakeData: TronStakeData,
-        rawDataHex: String?
+        stakeData: TronStakeData
     )
     case sui(messageBytes: String)
     case hyperliquid(order: HyperliquidOrder?)
@@ -105,7 +104,7 @@ extension TransactionLoadMetadata {
     public func getBlockNumber() throws -> UInt64 {
         switch self {
         case .polkadot(_, _, _, let blockNumber, _, _, _),
-             .tron(let blockNumber, _, _, _, _, _, _, _),
+             .tron(let blockNumber, _, _, _, _, _, _),
              .xrp(_, let blockNumber):
             return blockNumber
         default:
