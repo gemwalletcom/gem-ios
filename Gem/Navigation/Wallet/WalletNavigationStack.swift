@@ -230,8 +230,8 @@ struct WalletNavigationStack: View {
                 )
             }
             .safariSheet(url: $model.isPresentingUrl)
-            .toast(message: $model.isPresentingToastMessage)
         }
+        .toast(message: $model.isPresentingToastMessage)
     }
 
     private func onSelectAsset(asset: Asset) {
