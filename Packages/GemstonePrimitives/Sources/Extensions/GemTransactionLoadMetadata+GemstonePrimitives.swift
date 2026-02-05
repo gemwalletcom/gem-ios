@@ -59,8 +59,7 @@ extension GemTransactionLoadMetadata {
             let transactionTreeRoot,
             let parentHash,
             let witnessAddress,
-            let stakeData,
-            let rawDataHex
+            let stakeData
         ):
             return .tron(
                 blockNumber: UInt64(blockNumber),
@@ -69,8 +68,7 @@ extension GemTransactionLoadMetadata {
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress,
-                stakeData: stakeData.map(),
-                rawDataHex: rawDataHex
+                stakeData: stakeData.map()
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)
@@ -135,8 +133,7 @@ extension TransactionLoadMetadata {
             let transactionTreeRoot,
             let parentHash,
             let witnessAddress,
-            let stakeData,
-            let rawDataHex
+            let stakeData
         ):
             return .tron(
                 blockNumber: UInt64(blockNumber),
@@ -145,8 +142,7 @@ extension TransactionLoadMetadata {
                 transactionTreeRoot: transactionTreeRoot,
                 parentHash: parentHash,
                 witnessAddress: witnessAddress,
-                stakeData: stakeData.map(),
-                rawDataHex: rawDataHex
+                stakeData: stakeData.map()
             )
         case .sui(let messageBytes):
             return .sui(messageBytes: messageBytes)

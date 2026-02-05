@@ -21,7 +21,6 @@ struct TronSigner: Signable {
             let transactionTreeRoot,
             let parentHash,
             let witnessAddress,
-            _,
             _
         ) = input.metadata
         else {
@@ -106,7 +105,7 @@ struct TronSigner: Signable {
         guard case .stake(_, let stakeType) = input.type else {
             throw AnyError("Invalid input type for staking")
         }
-        guard case .tron(_, _, _, _, _, _, let stakeData, _) = input.metadata else {
+        guard case .tron(_, _, _, _, _, _, let stakeData) = input.metadata else {
             throw AnyError("Missing tron metadata")
         }
 
