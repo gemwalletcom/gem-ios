@@ -4,56 +4,46 @@ import Foundation
 import SwiftUI
 import Localization
 import GemstonePrimitives
-import Preferences
 import Primitives
 import NotificationService
-import GemAPI
 
 @Observable
 @MainActor
 public final class SupportSceneViewModel: Sendable {
     var selectedType: SupportType = .support
     var isPresentingSupport: Binding<Bool>
-    
+
     private let pushNotificationService: PushNotificationEnablerService
-    private let supportService: SupportService
-    
+    private let deviceId: String
+
     public init(
         pushNotificationService: PushNotificationEnablerService = PushNotificationEnablerService(),
-        supportService: SupportService,
+        deviceId: String,
         isPresentingSupport: Binding<Bool>
     ) {
         self.isPresentingSupport = isPresentingSupport
         self.pushNotificationService = pushNotificationService
-        self.supportService = supportService
+        self.deviceId = deviceId
     }
-    
+
     var title: String { Localized.Settings.support }
     var helpCenterURL: URL { Docs.url(.start) }
-    
+
     var chatwootModel: ChatwootWebViewModel {
         return ChatwootWebViewModel(
             websiteToken: Constants.Support.chatwootPublicToken,
             baseUrl: Constants.Support.chatwootURL,
-            supportDeviceId: supportService.getOrCreateSupportDeviceId(),
+            deviceId: deviceId,
             domainPolicy: Constants.Support.domainPolicy,
             isPresentingSupport: isPresentingSupport
         )
     }
-    
+
     func requestPushNotifications() async {
         do {
             _ = try await pushNotificationService.requestPermissions()
         } catch {
             debugLog("Failed to request push notifications: \(error)")
-        }
-    }
-    
-    public func registerSupport() async {
-        do {
-            try await supportService.registerSupportDeviceIfNeeded()
-        } catch {
-            debugLog("registerSupport error \(error)")
         }
     }
 }

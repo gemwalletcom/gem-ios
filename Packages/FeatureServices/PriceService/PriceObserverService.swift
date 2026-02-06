@@ -121,6 +121,8 @@ public actor PriceObserverService: Sendable {
                 break
             case .inAppNotification:
                 break
+            case .newAssets:
+                break
             }
         } catch {
             debugLog("price observer: handleMessage error: \(error)")
