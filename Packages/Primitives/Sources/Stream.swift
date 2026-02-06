@@ -6,14 +6,10 @@ import Foundation
 
 public struct StreamBalanceUpdate: Codable, Sendable {
 	public let walletId: WalletId
-	public let chain: Chain
-	public let address: String
 	public let assetId: AssetId
 
-	public init(walletId: WalletId, chain: Chain, address: String, assetId: AssetId) {
+	public init(walletId: WalletId, assetId: AssetId) {
 		self.walletId = walletId
-		self.chain = chain
-		self.address = address
 		self.assetId = assetId
 	}
 }
@@ -26,11 +22,45 @@ public struct StreamMessagePrices: Codable, Sendable {
 	}
 }
 
+public struct StreamNftUpdate: Codable, Sendable {
+	public let walletId: WalletId
+
+	public init(walletId: WalletId) {
+		self.walletId = walletId
+	}
+}
+
+public struct StreamNotificationlUpdate: Codable, Sendable {
+	public let walletId: WalletId
+	public let notification: InAppNotification
+
+	public init(walletId: WalletId, notification: InAppNotification) {
+		self.walletId = walletId
+		self.notification = notification
+	}
+}
+
+public struct StreamPerpetualUpdate: Codable, Sendable {
+	public let walletId: WalletId
+
+	public init(walletId: WalletId) {
+		self.walletId = walletId
+	}
+}
+
+public struct StreamPriceAlertUpdate: Codable, Sendable {
+	public let assets: [AssetId]
+
+	public init(assets: [AssetId]) {
+		self.assets = assets
+	}
+}
+
 public struct StreamTransactionsUpdate: Codable, Sendable {
 	public let walletId: WalletId
-	public let transactions: [Transaction]
+	public let transactions: [TransactionId]
 
-	public init(walletId: WalletId, transactions: [Transaction]) {
+	public init(walletId: WalletId, transactions: [TransactionId]) {
 		self.walletId = walletId
 		self.transactions = transactions
 	}
@@ -40,11 +70,19 @@ public enum StreamEvent: Codable, Sendable {
 	case prices(WebSocketPricePayload)
 	case balances([StreamBalanceUpdate])
 	case transactions(StreamTransactionsUpdate)
+	case priceAlerts(StreamPriceAlertUpdate)
+	case nft(StreamNftUpdate)
+	case perpetual(StreamPerpetualUpdate)
+	case inAppNotification(StreamNotificationlUpdate)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case prices,
 			balances,
-			transactions
+			transactions,
+			priceAlerts,
+			nft,
+			perpetual,
+			inAppNotification
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -70,6 +108,26 @@ public enum StreamEvent: Codable, Sendable {
 					self = .transactions(content)
 					return
 				}
+			case .priceAlerts:
+				if let content = try? container.decode(StreamPriceAlertUpdate.self, forKey: .data) {
+					self = .priceAlerts(content)
+					return
+				}
+			case .nft:
+				if let content = try? container.decode(StreamNftUpdate.self, forKey: .data) {
+					self = .nft(content)
+					return
+				}
+			case .perpetual:
+				if let content = try? container.decode(StreamPerpetualUpdate.self, forKey: .data) {
+					self = .perpetual(content)
+					return
+				}
+			case .inAppNotification:
+				if let content = try? container.decode(StreamNotificationlUpdate.self, forKey: .data) {
+					self = .inAppNotification(content)
+					return
+				}
 			}
 		}
 		throw DecodingError.typeMismatch(StreamEvent.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for StreamEvent"))
@@ -87,6 +145,18 @@ public enum StreamEvent: Codable, Sendable {
 		case .transactions(let content):
 			try container.encode(CodingKeys.transactions, forKey: .event)
 			try container.encode(content, forKey: .data)
+		case .priceAlerts(let content):
+			try container.encode(CodingKeys.priceAlerts, forKey: .event)
+			try container.encode(content, forKey: .data)
+		case .nft(let content):
+			try container.encode(CodingKeys.nft, forKey: .event)
+			try container.encode(content, forKey: .data)
+		case .perpetual(let content):
+			try container.encode(CodingKeys.perpetual, forKey: .event)
+			try container.encode(content, forKey: .data)
+		case .inAppNotification(let content):
+			try container.encode(CodingKeys.inAppNotification, forKey: .event)
+			try container.encode(content, forKey: .data)
 		}
 	}
 }
@@ -95,11 +165,15 @@ public enum StreamMessage: Codable, Sendable {
 	case subscribePrices(StreamMessagePrices)
 	case unsubscribePrices(StreamMessagePrices)
 	case addPrices(StreamMessagePrices)
+	case subscribeRealtimePrices(StreamMessagePrices)
+	case unsubscribeRealtimePrices(StreamMessagePrices)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case subscribePrices,
 			unsubscribePrices,
-			addPrices
+			addPrices,
+			subscribeRealtimePrices,
+			unsubscribeRealtimePrices
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -125,6 +199,16 @@ public enum StreamMessage: Codable, Sendable {
 					self = .addPrices(content)
 					return
 				}
+			case .subscribeRealtimePrices:
+				if let content = try? container.decode(StreamMessagePrices.self, forKey: .data) {
+					self = .subscribeRealtimePrices(content)
+					return
+				}
+			case .unsubscribeRealtimePrices:
+				if let content = try? container.decode(StreamMessagePrices.self, forKey: .data) {
+					self = .unsubscribeRealtimePrices(content)
+					return
+				}
 			}
 		}
 		throw DecodingError.typeMismatch(StreamMessage.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for StreamMessage"))
@@ -141,6 +225,12 @@ public enum StreamMessage: Codable, Sendable {
 			try container.encode(content, forKey: .data)
 		case .addPrices(let content):
 			try container.encode(CodingKeys.addPrices, forKey: .type)
+			try container.encode(content, forKey: .data)
+		case .subscribeRealtimePrices(let content):
+			try container.encode(CodingKeys.subscribeRealtimePrices, forKey: .type)
+			try container.encode(content, forKey: .data)
+		case .unsubscribeRealtimePrices(let content):
+			try container.encode(CodingKeys.unsubscribeRealtimePrices, forKey: .type)
 			try container.encode(content, forKey: .data)
 		}
 	}
