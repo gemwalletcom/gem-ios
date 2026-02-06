@@ -7,6 +7,7 @@ import Primitives
 extension GemChartCandleStick {
     public func map() throws -> ChartCandleStick {
         ChartCandleStick(
+            coin: coin,
             date: Date(timeIntervalSince1970: TimeInterval(date)),
             interval: interval,
             open: open,

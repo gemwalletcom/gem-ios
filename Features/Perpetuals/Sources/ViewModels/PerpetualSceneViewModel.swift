@@ -304,7 +304,8 @@ private extension PerpetualSceneViewModel {
     }
 
     func handleChartUpdate(_ candle: ChartCandleStick) {
-        guard candle.interval == currentChartSubscription.interval,
+        guard candle.coin == currentChartSubscription.coin,
+              candle.interval == currentChartSubscription.interval,
               case .data(var candlesticks) = state,
               let lastCandle = candlesticks.last
         else {

@@ -5,6 +5,7 @@
 import Foundation
 
 public struct ChartCandleStick: Codable, Equatable, Sendable {
+	public let coin: String
 	public let date: Date
 	public let interval: String
 	public let open: Double
@@ -13,7 +14,8 @@ public struct ChartCandleStick: Codable, Equatable, Sendable {
 	public let close: Double
 	public let volume: Double
 
-	public init(date: Date, interval: String, open: Double, high: Double, low: Double, close: Double, volume: Double) {
+	public init(coin: String, date: Date, interval: String, open: Double, high: Double, low: Double, close: Double, volume: Double) {
+		self.coin = coin
 		self.date = date
 		self.interval = interval
 		self.open = open
