@@ -59,10 +59,7 @@ struct SettingsNavigationStack: View {
     }
 
     private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.settings },
-            set: { navigationState.settings = $0 }
-        )
+        navigationState.settings.binding
     }
 
     var body: some View {

@@ -147,12 +147,9 @@ extension NavigationHandler {
 
     private func navigateToTransaction(walletId: WalletId, assetId: AssetId, transaction: Primitives.Transaction) async throws {
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
-        var path = NavigationPath()
-        path.append(Scenes.Asset(asset: asset))
         try transactionsService.addTransaction(walletId: walletId, transaction: transaction)
-        let tx = try transactionsService.getTransaction(walletId: walletId, transactionId: transaction.id.identifier)
-        path.append(tx)
-        navigationState.wallet = path
+        let transactionExtended = try transactionsService.getTransaction(walletId: walletId, transactionId: transaction.id.identifier)
+        navigationState.wallet.setPath([Scenes.Asset(asset: asset), Scenes.Transaction(transaction: transactionExtended)])
     }
 
     private func presentSwap(from fromId: AssetId, to toId: AssetId?) async throws {

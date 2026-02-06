@@ -39,10 +39,7 @@ struct WalletNavigationStack: View {
     }
 
     private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.wallet },
-            set: { navigationState.wallet = $0 }
-        )
+        navigationState.wallet.binding
     }
 
     var body: some View {
@@ -115,10 +112,10 @@ struct WalletNavigationStack: View {
                     )
                 )
             }
-            .navigationDestination(for: TransactionExtended.self) {
+            .navigationDestination(for: Scenes.Transaction.self) {
                 TransactionNavigationView(
                     model: TransactionSceneViewModel(
-                        transaction: $0,
+                        transaction: $0.transaction,
                         walletId: model.wallet.walletId
                     )
                 )
