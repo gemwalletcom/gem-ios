@@ -41,7 +41,7 @@ import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
 import SwiftHTTPClient
-import Support
+
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages, navigation: NavigationStateManager) -> AppResolver.Services {
@@ -249,8 +249,6 @@ struct ServicesFactory {
             store: storeManager.inAppNotificationStore
         )
 
-        let supportService = SupportService(api: apiService)
-
         let appLifecycleService = AppLifecycleService(
             preferences: preferences,
             connectionsService: connectionsService,
@@ -321,7 +319,6 @@ struct ServicesFactory {
             assetSearchService: assetSearchService,
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
-            supportService: supportService,
             fiatService: apiService
         )
     }
