@@ -297,21 +297,22 @@ private extension PerpetualSceneViewModel {
     }
 
     func observeCandles() async {
-        for await candle in await observerService.chartService.makeStream() {
+        for await update in await observerService.chartService.makeStream() {
             if Task.isCancelled { break }
-            handleChartUpdate(candle)
+            handleChartUpdate(update)
         }
     }
 
-    func handleChartUpdate(_ candle: ChartCandleStick) {
-        guard candle.coin == currentChartSubscription.coin,
-              candle.interval == currentChartSubscription.interval,
+    func handleChartUpdate(_ update: ChartCandleUpdate) {
+        guard update.coin == currentChartSubscription.coin,
+              update.interval == currentChartSubscription.interval,
               case .data(var candlesticks) = state,
               let lastCandle = candlesticks.last
         else {
             return
         }
 
+        let candle = update.candle
         if lastCandle.date == candle.date {
             candlesticks[candlesticks.count - 1] = candle
         } else if candle.date > lastCandle.date {
