@@ -119,14 +119,14 @@ extension FloatTextField {
             )
             .lineLimit(1)
             .scaleEffect(text.isEmpty ? 1 : style.placeholderScale, anchor: .leading)
-            .offset(y: text.isEmpty ? .zero : -.small - .extraSmall)
-            .animation(.smooth(duration: 0.15), value: text.isEmpty)
+            .offset(y: text.isEmpty ? .zero : -.space10)
+            .animation(.smooth(duration: .AnimationDuration.fast), value: text.isEmpty)
     }
 
     private var textField: some View {
         TextField("", text: $text)
-            .offset(y: text.isEmpty ? .zero : .small + .extraSmall)
-            .animation(.smooth(duration: 0.15), value: text.isEmpty)
+            .offset(y: text.isEmpty ? .zero : .space10)
+            .animation(.smooth(duration: .AnimationDuration.fast), value: text.isEmpty)
     }
 
     private var trailingContent: some View {
@@ -179,7 +179,7 @@ extension FloatTextField {
             ) {
                 Button(action: { print("Show Password") }) {
                     Image(systemName: "eye.slash")
-                        .foregroundColor(.blue)
+                        .foregroundStyle(.blue)
                 }
             }
 
@@ -190,11 +190,11 @@ extension FloatTextField {
                 HStack {
                     Button(action: { print("Clear") }) {
                         Image(systemName: "xmark.circle")
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                     Button(action: { print("Edit") }) {
                         Image(systemName: "pencil")
-                            .foregroundColor(.green)
+                            .foregroundStyle(.green)
                     }
                 }
             }
@@ -205,7 +205,7 @@ extension FloatTextField {
             ) {
                 Button(action: { print("Select Country Code") }) {
                     Image(systemName: "flag.fill")
-                        .foregroundColor(.purple)
+                        .foregroundStyle(.purple)
                 }
             }
         }

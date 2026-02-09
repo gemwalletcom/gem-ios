@@ -5,7 +5,7 @@ import class Gemstone.Hyperliquid
 import struct Gemstone.GemPerpetualBalance
 import struct Gemstone.GemPerpetualPosition
 import struct Gemstone.GemHyperliquidOpenOrder
-import struct Gemstone.GemChartCandleStick
+import struct Gemstone.GemChartCandleUpdate
 import Primitives
 import WebSocketClient
 
@@ -18,6 +18,7 @@ public actor HyperliquidObserverService: PerpetualObservable {
 
     private var observeTask: Task<Void, Never>?
     private var currentWallet: Wallet?
+    private var activeSubscriptions: Set<HyperliquidSubscription> = []
 
     public let chartService: any ChartStreamable = ChartObserverService()
 
@@ -35,18 +36,9 @@ public actor HyperliquidObserverService: PerpetualObservable {
 
     // MARK: - Public API
 
-    public func connect(for wallet: Wallet) async {
-        guard currentWallet?.id != wallet.id else { return }
-
-        await disconnect()
-        currentWallet = wallet
-
-        guard observeTask == nil else { return }
-
-        observeTask = Task { [weak self] in
-            guard let self else { return }
-            await observeConnection()
-        }
+    public func setup(for wallet: Wallet) async {
+        await update(for: wallet)
+        await connect(for: wallet)
     }
 
     public func disconnect() async {
@@ -60,14 +52,39 @@ public actor HyperliquidObserverService: PerpetualObservable {
     }
 
     public func subscribe(_ subscription: HyperliquidSubscription) async throws {
+        activeSubscriptions.insert(subscription)
         try await send(HyperliquidRequest(method: .subscribe, subscription: subscription))
     }
 
     public func unsubscribe(_ subscription: HyperliquidSubscription) async throws {
+        activeSubscriptions.remove(subscription)
         try await send(HyperliquidRequest(method: .unsubscribe, subscription: subscription))
     }
 
+    public func update(for wallet: Wallet) async {
+        guard let address = wallet.hyperliquidAccount?.address else { return }
+        do {
+            try await perpetualService.fetchPositions(walletId: wallet.walletId, address: address)
+        } catch {
+            debugLog("HyperliquidObserver: update failed: \(error)")
+        }
+    }
+
     // MARK: - Private
+
+    private func connect(for wallet: Wallet) async {
+        guard currentWallet?.id != wallet.id else { return }
+
+        await disconnect()
+        currentWallet = wallet
+
+        guard observeTask == nil else { return }
+
+        observeTask = Task { [weak self] in
+            guard let self else { return }
+            await observeConnection()
+        }
+    }
 
     private func observeConnection() async {
         for await event in await webSocket.connect() {
@@ -87,9 +104,7 @@ public actor HyperliquidObserverService: PerpetualObservable {
     private func handleConnected() async {
         guard let address = currentWallet?.hyperliquidAccount?.address else { return }
         do {
-            try await perpetualService.updateMarkets()
-            try await send(HyperliquidRequest(method: .subscribe, subscription: .clearinghouseState(user: address)))
-            try await send(HyperliquidRequest(method: .subscribe, subscription: .openOrders(user: address)))
+            try await subscribe(defaultSubscriptions(for: address) + activeSubscriptions.asArray())
         } catch {
             debugLog("HyperliquidObserver: subscribe failed: \(error)")
         }
@@ -152,8 +167,23 @@ public actor HyperliquidObserverService: PerpetualObservable {
         )
     }
 
-    private func handleCandle(candle: GemChartCandleStick) async throws {
-        await chartService.yield(try candle.map())
+    private func handleCandle(candle: GemChartCandleUpdate) async throws {
+        await chartService.yield(candle.map())
+    }
+
+    private func defaultSubscriptions(for address: String) -> [HyperliquidSubscription] {
+        [.clearinghouseState(user: address), .openOrders(user: address)]
+    }
+
+    private func subscribe(_ subscriptions: [HyperliquidSubscription]) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for subscription in subscriptions {
+                group.addTask {
+                    try await self.send(HyperliquidRequest(method: .subscribe, subscription: subscription))
+                }
+            }
+            try await group.waitForAll()
+        }
     }
 
     private func send(_ request: some Encodable) async throws {

@@ -25,10 +25,8 @@ struct WalletNavigationStack: View {
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.priceObserverService) private var priceObserverService
-    @Environment(\.stakeService) private var stakeService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.hyperliquidObserverService) private var hyperliquidObserverService
-    @Environment(\.balanceService) private var balanceService
     @Environment(\.activityService) private var activityService
     @Environment(\.walletSearchService) private var walletSearchService
     @Environment(\.assetSearchService) private var assetSearchService
@@ -41,10 +39,7 @@ struct WalletNavigationStack: View {
     }
 
     private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.wallet },
-            set: { navigationState.wallet = $0 }
-        )
+        navigationState.wallet.binding
     }
 
     var body: some View {
@@ -117,10 +112,10 @@ struct WalletNavigationStack: View {
                     )
                 )
             }
-            .navigationDestination(for: TransactionExtended.self) {
+            .navigationDestination(for: Scenes.Transaction.self) {
                 TransactionNavigationView(
                     model: TransactionSceneViewModel(
-                        transaction: $0,
+                        transaction: $0.transaction,
                         walletId: model.wallet.walletId
                     )
                 )
@@ -232,8 +227,8 @@ struct WalletNavigationStack: View {
                 )
             }
             .safariSheet(url: $model.isPresentingUrl)
-            .toast(message: $model.isPresentingToastMessage)
         }
+        .toast(message: $model.isPresentingToastMessage)
     }
 
     private func onSelectAsset(asset: Asset) {

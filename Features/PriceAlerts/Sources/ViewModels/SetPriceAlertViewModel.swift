@@ -20,9 +20,11 @@ public final class SetPriceAlertViewModel {
     private let onComplete: StringAction
     private let preferences = Preferences.standard
     private let currencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
+    private let roundingFormatter = RoundingFormatter()
+    private let percentageSuggestionsFormatter = PercentageSuggestionsFormatter()
+    private let priceSuggestionPercent: Double = 5
 
     var state: SetPriceAlertViewModelState
-    let preselectedPercentages: [String] = ["5", "10", "15"]
     
     public init(
         walletId: WalletId,
@@ -45,8 +47,25 @@ public final class SetPriceAlertViewModel {
         )
     }
     
-    var showPercentagePreselectedPicker: Bool {
-        state.type == .percentage
+    func percentageSuggestions(for price: Price?) -> [PercentageSuggestion] {
+        guard let currentPrice = price?.price else { return [] }
+        return percentageSuggestionsFormatter.suggestions(for: currentPrice).map {
+            PercentageSuggestion(value: $0)
+        }
+    }
+
+    func priceSuggestions(for price: Price?) -> [PriceSuggestion] {
+        guard let currentPrice = price?.price else { return [] }
+        return roundingFormatter.roundedValues(for: currentPrice, byPercent: priceSuggestionPercent).map { value in
+            PriceSuggestion(
+                title: currencyFormatter.string(value),
+                value: value
+            )
+        }
+    }
+
+    func onSelectSuggestion(_ suggestion: some SuggestionViewable) {
+        state.amount = suggestion.inputValue
     }
     
     var alertDirectionTitle: String {

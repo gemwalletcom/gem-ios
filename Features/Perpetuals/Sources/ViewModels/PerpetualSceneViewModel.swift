@@ -116,6 +116,8 @@ public final class PerpetualSceneViewModel {
             }
         }
     }
+
+    private var currentChartSubscription: ChartSubscription { ChartSubscription(coin: perpetual.name, period: currentPeriod) }
 }
 
 // MARK: - Actions
@@ -123,12 +125,12 @@ public final class PerpetualSceneViewModel {
 public extension PerpetualSceneViewModel {
     func fetch() {
         Task {
-            try await perpetualService.updateMarket(symbol: perpetual.name)
+            await observerService.update(for: wallet)
         }
     }
 
     func onAppear() async {
-        await subscribeCandles(period: currentPeriod)
+        await subscribeCandles(currentChartSubscription)
         observeTask = Task {
             await observeCandles()
         }
@@ -137,14 +139,14 @@ public extension PerpetualSceneViewModel {
     func onDisappear() async {
         observeTask?.cancel()
         observeTask = nil
-        await unsubscribeCandles(period: currentPeriod)
+        await unsubscribeCandles(currentChartSubscription)
     }
 
     func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
         Task {
             do {
-                await unsubscribeCandles(period: oldPeriod)
-                await subscribeCandles(period: newPeriod)
+                await unsubscribeCandles(ChartSubscription(coin: perpetual.name, period: oldPeriod))
+                await subscribeCandles(ChartSubscription(coin: perpetual.name, period: newPeriod))
                 try await fetchCandlesticks()
             } catch {
                 state = .error(error)
@@ -263,7 +265,6 @@ public extension PerpetualSceneViewModel {
 
     func onAutocloseComplete() {
         isPresentingAutoclose = false
-        fetch()
     }
 }
 
@@ -279,39 +280,39 @@ private extension PerpetualSceneViewModel {
         state = .data(candlesticks)
     }
 
-    func subscribeCandles(period: ChartPeriod) async {
-        let subscription = ChartSubscription(coin: perpetual.name, period: period)
+    func subscribeCandles(_ subscription: ChartSubscription) async {
         do {
-            try await observerService.subscribe(.candle(coin: subscription.coin, interval: subscription.interval))
+            try await observerService.subscribe(.candle(subscription))
         } catch {
             debugLog("Chart subscription failed: \(error)")
         }
     }
 
-    func unsubscribeCandles(period: ChartPeriod) async {
-        let subscription = ChartSubscription(coin: perpetual.name, period: period)
+    func unsubscribeCandles(_ subscription: ChartSubscription) async {
         do {
-            try await observerService.unsubscribe(.candle(coin: subscription.coin, interval: subscription.interval))
+            try await observerService.unsubscribe(.candle(subscription))
         } catch {
             debugLog("Chart unsubscribe failed: \(error)")
         }
     }
 
     func observeCandles() async {
-        for await candle in await observerService.chartService.makeStream() {
+        for await update in await observerService.chartService.makeStream() {
             if Task.isCancelled { break }
-            handleChartUpdate(candle)
+            handleChartUpdate(update)
         }
     }
 
-    func handleChartUpdate(_ candle: ChartCandleStick) {
-        guard candle.interval == ChartSubscription(coin: perpetual.name, period: currentPeriod).interval,
+    func handleChartUpdate(_ update: ChartCandleUpdate) {
+        guard update.coin == currentChartSubscription.coin,
+              update.interval == currentChartSubscription.interval,
               case .data(var candlesticks) = state,
               let lastCandle = candlesticks.last
         else {
             return
         }
 
+        let candle = update.candle
         if lastCandle.date == candle.date {
             candlesticks[candlesticks.count - 1] = candle
         } else if candle.date > lastCandle.date {

@@ -45,18 +45,7 @@ struct ImportWalletScene: View {
                         .keyboardType(.asciiCapable)
                         .frame(minHeight: 80, alignment: .top)
                         .focused($focusedField, equals: .input)
-                        .toolbar {
-                            if model.importType.showToolbar, model.wordsSuggestion.isNotEmpty, focusedField == .input {
-                                ToolbarItem(placement: .keyboard) {
-                                    WordSuggestionView(
-                                        words: model.wordsSuggestion,
-                                        selectWord: model.onSelectWord
-                                    )
-                                    .padding(.horizontal, .small)
-                                }
-                            }
-                        }
-                        .padding(.top, .small + .tiny)
+                        .padding(.top, .space12)
                         
                         if let nameRecordViewModel = model.nameRecordViewModel, model.importType == .address {
                             NameRecordView(
@@ -105,6 +94,19 @@ struct ImportWalletScene: View {
         }
         .listSectionSpacing(.compact)
         .contentMargins(.top, .scene.top, for: .scrollContent)
+        .safeAreaView {
+            if model.importType.showToolbar, model.wordsSuggestion.isNotEmpty, focusedField == .input {
+                WordSuggestionView(
+                    words: model.wordsSuggestion,
+                    selectWord: model.onSelectWord
+                )
+                .clipShape(Capsule())
+                .padding(.small)
+                .liquidGlass()
+                .background(Colors.grayBackground)
+                .padding(.small)
+            }
+        }
         .navigationBarTitle(model.title)
         .alertSheet($model.isPresentingAlertMessage)
         .sheet(isPresented: $model.isPresentingScanner) {

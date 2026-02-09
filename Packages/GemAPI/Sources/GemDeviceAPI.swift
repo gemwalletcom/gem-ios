@@ -26,7 +26,6 @@ public enum GemDeviceAPI: TargetType {
 
     case reportNft(deviceId: String, report: ReportNft)
     case scanTransaction(deviceId: String, payload: ScanTransactionPayload)
-    case addSupportDevice(deviceId: String, supportDeviceId: String)
 
     case getAuthNonce(deviceId: String)
 
@@ -39,6 +38,9 @@ public enum GemDeviceAPI: TargetType {
 
     case getNotifications(deviceId: String, fromTimestamp: Int)
     case markNotificationsRead(deviceId: String)
+
+    case getFiatQuotes(deviceId: String, walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest)
+    case getFiatQuoteUrl(deviceId: String, walletId: String, quoteId: String)
 
     public var baseUrl: URL {
         Constants.apiURL
@@ -57,13 +59,14 @@ public enum GemDeviceAPI: TargetType {
             .getDeviceRewardsEvents,
             .getDeviceRedemptionOption,
             .getNotifications,
-            .isDeviceRegistered:
+            .isDeviceRegistered,
+            .getFiatQuotes,
+            .getFiatQuoteUrl:
             return .GET
         case .addDevice,
             .addSubscriptions,
             .addPriceAlerts,
             .scanTransaction,
-            .addSupportDevice,
             .reportNft,
             .migrateDevice,
             .createDeviceReferral,
@@ -113,8 +116,6 @@ public enum GemDeviceAPI: TargetType {
             return "/v2/devices/nft/report"
         case .scanTransaction:
             return "/v2/devices/scan/transaction"
-        case .addSupportDevice:
-            return "/v2/devices/support"
         case .getAuthNonce:
             return "/v2/devices/auth/nonce"
         case .getDeviceRewards:
@@ -133,6 +134,10 @@ public enum GemDeviceAPI: TargetType {
             return "/v2/devices/notifications?from_timestamp=\(fromTimestamp)"
         case .markNotificationsRead:
             return "/v2/devices/notifications/read"
+        case .getFiatQuotes(_, _, let type, let assetId, _):
+            return "/v2/devices/fiat/quotes/\(type.rawValue)/\(assetId.identifier)"
+        case .getFiatQuoteUrl(_, _, let quoteId):
+            return "/v2/devices/fiat/quotes/\(quoteId)/url"
         }
     }
 
@@ -143,7 +148,6 @@ public enum GemDeviceAPI: TargetType {
             .deleteDevice(let deviceId),
             .reportNft(let deviceId, _),
             .scanTransaction(let deviceId, _),
-            .addSupportDevice(let deviceId, _),
             .getAuthNonce(let deviceId),
             .getNotifications(let deviceId, _),
             .markNotificationsRead(let deviceId),
@@ -165,7 +169,9 @@ public enum GemDeviceAPI: TargetType {
             .getDeviceRewardsEvents(let deviceId, let walletId),
             .createDeviceReferral(let deviceId, let walletId, _),
             .useDeviceReferralCode(let deviceId, let walletId, _),
-            .redeemDeviceRewards(let deviceId, let walletId, _):
+            .redeemDeviceRewards(let deviceId, let walletId, _),
+            .getFiatQuotes(let deviceId, let walletId, _, _, _),
+            .getFiatQuoteUrl(let deviceId, let walletId, _):
             return ["x-device-id": deviceId, "x-wallet-id": walletId]
         default:
             return [:]
@@ -186,12 +192,19 @@ public enum GemDeviceAPI: TargetType {
             .getNotifications,
             .markNotificationsRead,
             .getTransactions,
-            .isDeviceRegistered:
+            .isDeviceRegistered,
+            .getFiatQuoteUrl:
             return .plain
         case .getPriceAlerts(_, let assetId):
             let params: [String: Any] = [
                 "asset_id": assetId,
             ].compactMapValues { $0 }
+            return .params(params)
+        case .getFiatQuotes(_, _, _, _, let request):
+            let params: [String: Any] = [
+                "amount": request.amount,
+                "currency": request.currency
+            ]
             return .params(params)
         case .addDevice(let device),
             .updateDevice(let device):
@@ -209,8 +222,6 @@ public enum GemDeviceAPI: TargetType {
             return .encodable(payload)
         case .reportNft(_, let report):
             return .encodable(report)
-        case .addSupportDevice(_, let supportDeviceId):
-            return .encodable(SupportDeviceRequest(supportDeviceId: supportDeviceId))
         case .createDeviceReferral(_, _, let request):
             return .encodable(request)
         case .useDeviceReferralCode(_, _, let request):

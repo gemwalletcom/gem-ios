@@ -1,27 +1,6 @@
 import Foundation
 import SwiftUI
 
-// TODO: - Remove modifier and use native navigationDestination(item: )
-struct NavigationStackModifier<Item: Hashable, Destination: View>: ViewModifier {
-    let item: Binding<Item?>
-    let destination: (Item) -> Destination
-
-    func body(content: Content) -> some View {
-        content.navigationDestination(item: item) { scene in
-            destination(scene)
-        }
-    }
-}
-
-public extension View {
-    func navigationDestination<Item: Hashable, Destination: View>(
-        for binding: Binding<Item?>,
-        @ViewBuilder destination: @escaping (Item) -> Destination
-    ) -> some View {
-        self.modifier(NavigationStackModifier(item: binding, destination: destination))
-    }
-}
-
 public extension Binding where Value == Bool {
     init<Wrapped: Sendable>(bindingOptional: Binding<Wrapped?>) {
         self.init(

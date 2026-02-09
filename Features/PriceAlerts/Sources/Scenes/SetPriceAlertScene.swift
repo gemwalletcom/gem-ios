@@ -29,17 +29,12 @@ struct SetPriceAlertScene: View {
                 VStack(spacing: .small) {
                     Text(model.alertDirectionTitle)
                         .textStyle(.subHeadline)
-                    
+
                     CurrencyInputView(
                         text: $model.state.amount,
                         config: model.currencyInputConfig(for: assetData)
                     )
                     .focused($focusedField)
-                }
-                
-                if model.showPercentagePreselectedPicker {
-                    preselectedPercentagePickerView
-                        .padding(.top, Spacing.medium)
                 }
             }
             .cleanListRow()
@@ -49,13 +44,7 @@ struct SetPriceAlertScene: View {
             }
         }
         .safeAreaView {
-            StateButton(
-                text: Localized.Transfer.confirm,
-                type: .primary(model.confirmButtonState),
-                action: confirm
-            )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .padding(.bottom, Spacing.scene.bottom)
+            safeAreaContent
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -83,16 +72,33 @@ extension SetPriceAlertScene {
         .pickerStyle(.segmented)
         .fixedSize()
     }
-    
-    var preselectedPercentagePickerView: some View {
-        Picker("", selection: $model.state.amount) {
-            ForEach(model.preselectedPercentages, id: \.self) {
-                Text($0 + "%")
-                    .tag($0)
-            }
+
+    var confirmButton: StateButton {
+        StateButton(
+            text: Localized.Transfer.confirm,
+            type: .primary(model.confirmButtonState),
+            action: confirm
+        )
+    }
+
+    @ViewBuilder
+    var safeAreaContent: some View {
+        switch model.state.type {
+        case .price:
+            inputAccessoryView(model.priceSuggestions(for: assetData.price))
+        case .percentage:
+            inputAccessoryView(model.percentageSuggestions(for: assetData.price))
         }
-        .pickerStyle(.segmented)
-        .frame(width: 200)
+    }
+
+    private func inputAccessoryView(_ suggestions: [some SuggestionViewable]) -> some View {
+        InputAccessoryView(
+            isEditing: focusedField && model.state.amount.isEmpty,
+            suggestions: suggestions,
+            onSelect: onSelectSuggestion,
+            onDone: { focusedField = false },
+            button: confirmButton
+        )
     }
 }
 
@@ -102,7 +108,11 @@ extension SetPriceAlertScene {
     func onChangeAmount(_: String, _: String) {
         model.setAlertDirection(for: assetData.price)
     }
-    
+
+    func onSelectSuggestion(_ suggestion: some SuggestionViewable) {
+        model.onSelectSuggestion(suggestion)
+    }
+
     func confirm() {
         Task {
             await model.setPriceAlert()

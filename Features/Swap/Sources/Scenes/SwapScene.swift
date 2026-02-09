@@ -10,9 +10,6 @@ public struct SwapScene: View {
 
     @State private var model: SwapSceneViewModel
 
-    // Update quote every 30 seconds, needed if you come back from the background.
-    private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
-
     public init(model: SwapSceneViewModel) {
         _model = State(initialValue: model)
     }
@@ -83,8 +80,8 @@ public struct SwapScene: View {
         .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
-        .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
-            model.fetch()
+        .onTimer(every: .seconds(30)) {
+            await model.fetch()
         }
         .onAppear {
             focusedField = true
@@ -150,7 +147,7 @@ extension SwapScene {
         }
     }
 
-    private var buttonView: some View {
+    private var swapButton: StateButton {
         StateButton(
             text: model.buttonViewModel.title,
             type: model.buttonViewModel.type,
@@ -158,36 +155,19 @@ extension SwapScene {
             infoTitle: model.buttonViewModel.infoText,
             action: onSelectActionButton
         )
-        .frame(maxWidth: Spacing.scene.button.maxWidth)
     }
 
-    @ViewBuilder
     private var bottomActionView: some View {
-        VStack(spacing: 0) {
-            Divider()
-                .frame(height: 1 / UIScreen.main.scale)
-                .background(Colors.grayVeryLight)
-                .isVisible(focusedField)
-
-            Group {
-                if model.buttonViewModel.isVisible {
-                    buttonView
-                } else if focusedField {
-                    PercentageAccessoryView(
-                        percents: SwapSceneViewModel.inputPercents,
-                        onSelectPercent: {
-                            focusedField = false
-                            model.onSelectPercent($0)
-                        },
-                        onDone: {
-                            focusedField = false
-                        }
-                    )
-                }
-            }
-            .padding(.small)
-        }
-        .background(Colors.grayBackground)
+        InputAccessoryView(
+            isEditing: focusedField && !model.buttonViewModel.isVisible,
+            suggestions: SwapSceneViewModel.inputPercentSuggestions,
+            onSelect: {
+                focusedField = false
+                model.onSelectPercent($0.value)
+            },
+            onDone: { focusedField = false },
+            button: swapButton
+        )
     }
 }
 

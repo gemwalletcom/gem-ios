@@ -18,13 +18,13 @@ struct CalloutView: View {
             if let title = title {
                 Text(title)
                     .font(titleStyle.font)
-                    .foregroundColor(titleStyle.color)
+                    .foregroundStyle(titleStyle.color)
                     .multilineTextAlignment(.center)
             }
             if let subtitle = subtitle {
                 Text(subtitle)
                     .font(subtitleStyle.font)
-                    .foregroundColor(subtitleStyle.color)
+                    .foregroundStyle(subtitleStyle.color)
                     .multilineTextAlignment(.center)
             }
         }

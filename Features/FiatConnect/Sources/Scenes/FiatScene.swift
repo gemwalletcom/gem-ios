@@ -24,20 +24,21 @@ public struct FiatScene: View {
             amountSelectorSection
             providerSection
         }
-        .safeAreaView {
+        .safeAreaButton {
             StateButton(
                 text: model.actionButtonTitle,
                 type: .primary(model.actionButtonState, showProgress: true),
                 action: model.onSelectContinue
             )
-            .frame(maxWidth: .scene.button.maxWidth)
-            .padding(.bottom, .scene.bottom)
         }
         .contentMargins([.top], .zero, for: .scrollContent)
         .frame(maxWidth: .infinity)
         .onChange(of: model.type, model.onChangeType)
         .onChange(of: model.inputValidationModel.text, model.onChangeAmountText)
         .debouncedTask(id: model.fetchTrigger) {
+            await model.fetch()
+        }
+        .onTimer(every: .minutes(5)) {
             await model.fetch()
         }
         .alertSheet($model.isPresentingAlertMessage)
@@ -54,7 +55,7 @@ extension FiatScene {
                 title: model.assetTitle,
                 balance: model.assetBalance,
                 secondary: {
-                    HStack(spacing: .small + .extraSmall) {
+                    HStack(spacing: .space10) {
                         ForEach(model.suggestedAmounts, id: \.self) { amount in
                             Button(model.buttonTitle(amount: amount)) {
                                 model.onSelect(amount: amount)

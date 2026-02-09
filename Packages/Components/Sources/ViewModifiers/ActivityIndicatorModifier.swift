@@ -36,7 +36,7 @@ private struct ActivityIndicatorOverlay: ViewModifier {
                         .padding(.horizontal, .extraLarge)
                         .padding(.vertical, .medium)
                         .background(Color.secondary.colorInvert())
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                         .cornerRadius(20)
                         .position(
                             x: geo.size.width / 2,
@@ -46,7 +46,7 @@ private struct ActivityIndicatorOverlay: ViewModifier {
                     }
                 }
             }
-            .animation(.easeInOut(duration: 0.2), value: isLoading)
+            .animation(.easeInOut(duration: .AnimationDuration.normal), value: isLoading)
     }
 }
 

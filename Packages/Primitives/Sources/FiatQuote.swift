@@ -40,18 +40,6 @@ public struct FiatQuoteUrl: Codable, Sendable {
 	}
 }
 
-public struct FiatQuoteUrlRequest: Codable, Sendable {
-	public let quoteId: String
-	public let walletAddress: String
-	public let deviceId: String
-
-	public init(quoteId: String, walletAddress: String, deviceId: String) {
-		self.quoteId = quoteId
-		self.walletAddress = walletAddress
-		self.deviceId = deviceId
-	}
-}
-
 public struct FiatQuotes: Codable, Sendable {
 	public let quotes: [FiatQuote]
 

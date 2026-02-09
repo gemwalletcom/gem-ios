@@ -129,7 +129,7 @@ private struct PaletteSwatch: View {
     let title: String
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: .space12) {
             Text(title)
                 .frame(width: 90, alignment: .leading)
 

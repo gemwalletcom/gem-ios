@@ -5,7 +5,7 @@ import Foundation
 extension WalletSubscription {
     public var asWalletSubscriptionChains: WalletSubscriptionChains {
         WalletSubscriptionChains(
-            wallet_id: wallet_id,
+            walletId: walletId,
             chains: subscriptions.map(\.chain).sorted()
         )
     }

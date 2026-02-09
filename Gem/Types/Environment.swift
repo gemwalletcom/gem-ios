@@ -26,7 +26,6 @@ import WalletService
 import AvatarService
 import AppService
 import ScanService
-import SwapService
 import NameService
 import PerpetualService
 import TransactionStateService
@@ -34,8 +33,6 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
-import Support
-
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
     @Entry var keystore: any Keystore = AppResolver.main.storages.keystore
@@ -60,7 +57,6 @@ extension EnvironmentValues {
     @Entry var avatarService: AvatarService = AppResolver.main.services.avatarService
     @Entry var releaseService: AppReleaseService = AppResolver.main.services.appReleaseService
     @Entry var scanService: ScanService = AppResolver.main.services.scanService
-    @Entry var swapService: SwapService = AppResolver.main.services.swapService
     @Entry var perpetualService: PerpetualService = AppResolver.main.services.perpetualService
     @Entry var hyperliquidObserverService: any PerpetualObservable<HyperliquidSubscription> = AppResolver.main.services.hyperliquidObserverService
     @Entry var transactionStateService: TransactionStateService = AppResolver.main.services.transactionStateService
@@ -73,5 +69,4 @@ extension EnvironmentValues {
     @Entry var walletSearchService: WalletSearchService = AppResolver.main.services.walletSearchService
     @Entry var assetSearchService: AssetSearchService = AppResolver.main.services.assetSearchService
     @Entry var inAppNotificationService: InAppNotificationService = AppResolver.main.services.inAppNotificationService
-    @Entry var supportService: SupportService = AppResolver.main.services.supportService
 }
