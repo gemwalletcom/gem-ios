@@ -28,8 +28,6 @@ public enum Localized {
       }
     }
   }
-  public enum Application {
-  }
   public enum Asset {
     /// Add to wallet
     public static let addToWallet = Localized.tr("Localizable", "asset.add_to_wallet", fallback: "Add to wallet")
@@ -251,6 +249,8 @@ public enum Localized {
     public static let details = Localized.tr("Localizable", "common.details", fallback: "Details")
     /// Done
     public static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
+    /// Earn
+    public static let earn = Localized.tr("Localizable", "common.earn", fallback: "Earn")
     /// Edit
     public static let edit = Localized.tr("Localizable", "common.edit", fallback: "Edit")
     /// Emoji
@@ -331,8 +331,6 @@ public enum Localized {
     public static let warning = Localized.tr("Localizable", "common.warning", fallback: "Warning")
     /// Yes
     public static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
-  }
-  public enum Contacts {
   }
   public enum Date {
     /// Today
@@ -754,22 +752,10 @@ public enum Localized {
   }
   public enum Notifications {
     public enum Inapp {
-      public enum Referral {
-        public enum Joined {
-        }
-      }
       public enum Rewards {
-        public enum CreateUsername {
-        }
-        public enum Disabled {
-        }
-        public enum Enabled {
-        }
         public enum Invite {
           /// Invite friends and earn rewards together
           public static let subtitle = Localized.tr("Localizable", "notifications.inapp.rewards.invite.subtitle", fallback: "Invite friends and earn rewards together")
-        }
-        public enum Redeemed {
         }
       }
       public enum State {
@@ -1082,8 +1068,6 @@ public enum Localized {
       }
     }
   }
-  public enum Rootcheck {
-  }
   public enum Search {
     public enum State {
       public enum Empty {
@@ -1350,6 +1334,8 @@ public enum Localized {
     }
   }
   public enum Transfer {
+    /// Amount
+    public static let amount = Localized.tr("Localizable", "transfer.amount", fallback: "Amount")
     /// Balance: %@
     public static func balance(_ p1: Any) -> String {
       return Localized.tr("Localizable", "transfer.balance", String(describing: p1), fallback: "Balance: %@")
@@ -1398,10 +1384,6 @@ public enum Localized {
       /// Activate Asset
       public static let title = Localized.tr("Localizable", "transfer.activate_asset.title", fallback: "Activate Asset")
     }
-    public enum Amount {
-      /// Amount
-      public static let title = Localized.tr("Localizable", "transfer.amount.title", fallback: "Amount")
-    }
     public enum Approve {
       /// Approve
       public static let title = Localized.tr("Localizable", "transfer.approve.title", fallback: "Approve")
@@ -1409,8 +1391,6 @@ public enum Localized {
     public enum ClaimRewards {
       /// Claim Rewards
       public static let title = Localized.tr("Localizable", "transfer.claim_rewards.title", fallback: "Claim Rewards")
-    }
-    public enum Confirm {
     }
     public enum Freeze {
       /// Freeze
@@ -1553,6 +1533,10 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "wallet.new.title", fallback: "New Wallet")
     }
     public enum Receive {
+      /// No destination tag required
+      public static let noDestinationTagRequired = Localized.tr("Localizable", "wallet.receive.no_destination_tag_required", fallback: "No destination tag required")
+      /// No memo required
+      public static let noMemoRequired = Localized.tr("Localizable", "wallet.receive.no_memo_required", fallback: "No memo required")
     }
     public enum Watch {
       public enum Tooltip {
