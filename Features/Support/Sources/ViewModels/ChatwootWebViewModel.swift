@@ -15,7 +15,7 @@ final class ChatwootWebViewModel: NSObject, Sendable {
     let websiteToken: String
     let baseUrl: URL
     let settings: ChatwootSettings
-    let supportDeviceId: String
+    let deviceId: String
     let domainPolicy: WebViewDomainPolicy
 
     var isPresentingSupport: Binding<Bool>
@@ -24,14 +24,14 @@ final class ChatwootWebViewModel: NSObject, Sendable {
     init(
         websiteToken: String,
         baseUrl: URL,
-        supportDeviceId: String,
+        deviceId: String,
         domainPolicy: WebViewDomainPolicy,
         settings: ChatwootSettings = .defaultSettings,
         isPresentingSupport: Binding<Bool>
     ) {
         self.websiteToken = websiteToken
         self.baseUrl = baseUrl
-        self.supportDeviceId = supportDeviceId
+        self.deviceId = deviceId
         self.domainPolicy = domainPolicy
         self.settings = settings
         self.isPresentingSupport = isPresentingSupport
@@ -106,7 +106,7 @@ final class ChatwootWebViewModel: NSObject, Sendable {
         return """
         window.addEventListener('chatwoot:ready', function () {
           window.$chatwoot.setCustomAttributes({
-            support_device_id: '\(supportDeviceId)',
+            device_id: '\(deviceId)',
             platform: 'ios',
             os: '\(os)',
             device: '\(device)',

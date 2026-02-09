@@ -146,6 +146,10 @@ extension NavigationHandler {
     }
 
     private func navigateToTransaction(walletId: WalletId, assetId: AssetId, transaction: Primitives.Transaction) async throws {
+        guard let _ = try? walletService.getWallet(walletId: walletId) else {
+            return
+        }
+        walletService.setCurrent(for: walletId)
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
         try transactionsService.addTransaction(walletId: walletId, transaction: transaction)
         let transactionExtended = try transactionsService.getTransaction(walletId: walletId, transactionId: transaction.id.identifier)

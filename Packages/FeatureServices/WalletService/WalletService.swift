@@ -56,6 +56,10 @@ public struct WalletService: Sendable {
         walletSessionService.setCurrent(walletId: walletId)
     }
 
+    public func getWallet(walletId: WalletId) throws -> Wallet {
+        try walletSessionService.getWallet(walletId: walletId)
+    }
+
     public func acceptTerms() {
         preferences.isAcceptTermsCompleted = true
     }
