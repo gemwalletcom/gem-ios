@@ -193,9 +193,8 @@ struct SolanaSigner: Signable {
         }
 
         var finalTransaction = encodedTx
-        if unitPrice > 0 {
+        if unitPrice > 0, let targetUnitPrice = UInt64(exactly: unitPrice) {
             let currentUnitPrice = SolanaTransaction.getComputeUnitPrice(encodedTx: finalTransaction).flatMap(UInt64.init)
-            let targetUnitPrice = UInt64(unitPrice)
             if currentUnitPrice.map({ targetUnitPrice > $0 }) ?? true {
                 guard let tx = SolanaTransaction.setComputeUnitPrice(encodedTx: finalTransaction, price: String(targetUnitPrice)) else {
                     throw AnyError("unable to set compute unit price")
@@ -204,9 +203,8 @@ struct SolanaSigner: Signable {
             }
         }
 
-        if unitLimit > 0 {
+        if unitLimit > 0, let targetUnitLimit = UInt64(exactly: unitLimit) {
             let currentUnitLimit = SolanaTransaction.getComputeUnitLimit(encodedTx: finalTransaction).flatMap(UInt64.init)
-            let targetUnitLimit = UInt64(unitLimit)
             if currentUnitLimit.map({ targetUnitLimit > $0 }) ?? true {
                 guard let tx = SolanaTransaction.setComputeUnitLimit(encodedTx: finalTransaction, limit: String(targetUnitLimit)) else {
                     throw AnyError("unable to set compute unit limit")
