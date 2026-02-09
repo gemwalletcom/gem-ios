@@ -173,6 +173,7 @@ struct SolanaSigner: Signable {
         let (_, _, data) = try input.type.swap()
         let encodedTx = data.data.data
         let unitPrice = input.fee.gasPriceType.unitPrice
+        let unitLimit = input.fee.gasLimit
         let jitoTip = input.fee.gasPriceType.jitoTip
 
         guard
@@ -191,18 +192,32 @@ struct SolanaSigner: Signable {
             ]
         }
 
-        // Only user's signature is needed, safe to modify instructions
-        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: encodedTx, price: unitPrice.description) else {
-            throw AnyError("unable to set compute unit price")
-        }
-        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: input.fee.gasLimit.description) else {
-            throw AnyError("unable to set compute unit limit")
+        var finalTransaction = encodedTx
+        if unitPrice > 0 {
+            let currentUnitPrice = SolanaTransaction.getComputeUnitPrice(encodedTx: finalTransaction).flatMap(UInt64.init)
+            let targetUnitPrice = UInt64(unitPrice)
+            if currentUnitPrice.map({ targetUnitPrice > $0 }) ?? true {
+                guard let tx = SolanaTransaction.setComputeUnitPrice(encodedTx: finalTransaction, price: String(targetUnitPrice)) else {
+                    throw AnyError("unable to set compute unit price")
+                }
+                finalTransaction = tx
+            }
         }
 
-        var finalTransaction = transaction
+        if unitLimit > 0 {
+            let currentUnitLimit = SolanaTransaction.getComputeUnitLimit(encodedTx: finalTransaction).flatMap(UInt64.init)
+            let targetUnitLimit = UInt64(unitLimit)
+            if currentUnitLimit.map({ targetUnitLimit > $0 }) ?? true {
+                guard let tx = SolanaTransaction.setComputeUnitLimit(encodedTx: finalTransaction, limit: String(targetUnitLimit)) else {
+                    throw AnyError("unable to set compute unit limit")
+                }
+                finalTransaction = tx
+            }
+        }
+
         if jitoTip > 0 {
             let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
-            guard let tx = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) else {
+            guard let tx = SolanaTransaction.insertInstruction(encodedTx: finalTransaction, insertAt: -1, instruction: instructionJson) else {
                 throw AnyError("unable to insert Jito tip instruction")
             }
             finalTransaction = tx

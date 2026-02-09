@@ -8,6 +8,45 @@ import WalletCore
 
 struct SolanaSignerTests {
     let fee = Fee(fee: .zero, gasPriceType: .solana(gasPrice: 5_000, priorityFee: 10_000, unitPrice: 200, jitoTip: 0), gasLimit: 125_000)
+    let swapTx = "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAIE4X7qT7inGBPqFijUWiMASkIQer7GcY6cKR108e8O++fF6bw89YHC7acs3m1YUIhVlGt8Lsh5HSIZozEPbcak9lEkZ+TiEMZdELfvcljcnBtv3Cf2z6oSYOBlVK0qYEJiVPvd6ryg3kqPlsEMcw3Fwx5sgoudurpYDKruhuxfayEdR478uf/smdZykpYhZIZWgIVX3IpDQW2WlWxw1AX3C53BHo4HDkVOPejukK6/oQdRT8m1S5xpmRD9q8e3XSK/Xu3TqNZNjLp6OSRg8r3sOv1e+QztSj31QG3tKRlT5zLqo0WQ1mJ0Hxkrw69L1dQmgMqgZd20xmPPvg53n23dsfNG6CPj/KUTsrekiJQc2Hvabji48RBleABXKq2lBKpj89u0FRUiC4li6CDgDgrZl6r6UV4hTXUW6fWb5yNguwg6dRIiwf+OZsakVXlghtpfUMBbAo8Tzu8oq+0HQFjMFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAABHnVW/IxwG7udMVuzmgVB/2xst6j9I5RArHNola8E48G3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqYyXJY9OJInxuz0QKRSODYMLWhOZ2v8QhASOe9jb6fhZrBrj0IfykjcGJUj3DEwErsKplWlJhufLtGdSBiHThjC0P/on9df2SnTAmx8pWHneSwmrNt/J3VFLMhqns4zl6Mb6evO+2606PWXzaqvJdDGxu+TC0vbg5HymAgNFL11hhfF5aGC8uN+dIBDrxV3vHwZYs2RmFKm87C1HtO3e+NIHDAAFAsBcFQAPBgAJACwLDgEBCwIACQwCAAAAgJaYAAAAAAAOAQkBEQ8GAAYAEgsOAQENQg4QAAkFCgYsEgcNEQ0qKRYZCgUXGBArDg0nDi0uEAUhIgQfICYOHiUdGhsoHB4eHh4eHgQDECMOEBQDFQoTCAIBJDLBIJszQdacgQUEAAAAEgA8AAQDKAACB2QCAxEBZAMEgJaYAAAAAACBqQkAAAAAADIAMg4DCQAAAQkEB4tUBJUod+xdJHClaAbwfY0KcsPyS6puvinwAKI7S1cD9e7vBh7xJzZ/XBUMq/0+5x74cLXUfrm4RcW7GMg1vW5lr144gPYI6KKjBMO8u74DwL/CbfplXQ5y4uTDJAQIjShVPQLz8v+me8U9jJd68IPKjLkFvL08uLoAzNqZz4glI8qy5jvrpHYo8Vzh6SmqRgs5a0H2AAOFaZwE6uzp5wNl7es="
+
+    private func makeSwapInput(provider: SwapProvider, fee: Fee? = nil, tx: String? = nil) -> SignerInput {
+        let fromAsset = Asset(.solana).chain.asset
+        let toAsset = Asset.mockEthereumUSDT()
+        let quote = SwapQuote(
+            fromAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
+            fromValue: "1",
+            toAddress: "0x1111111111111111111111111111111111111111",
+            toValue: "1",
+            providerData: SwapProviderData(provider: provider, name: provider.rawValue, protocolName: provider.rawValue),
+            slippageBps: 50,
+            etaInSeconds: nil,
+            useMaxAmount: false
+        )
+        let swapData = SwapData(
+            quote: quote,
+            data: SwapQuoteData(
+                to: "",
+                dataType: .contract,
+                value: "0",
+                data: tx ?? swapTx,
+                memo: nil,
+                approval: nil,
+                gasLimit: nil
+            )
+        )
+
+        return SignerInput(
+            type: .swap(fromAsset, toAsset, swapData),
+            asset: fromAsset,
+            value: .zero,
+            fee: fee ?? self.fee,
+            isMaxAmount: false,
+            memo: nil,
+            senderAddress: quote.fromAddress,
+            destinationAddress: quote.toAddress
+        )
+    }
 
     @Test
     func testTransfer() throws {
@@ -83,7 +122,7 @@ struct SolanaSignerTests {
 
     @Test
     func solanaSwap() {
-        let tx = "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAIE4X7qT7inGBPqFijUWiMASkIQer7GcY6cKR108e8O++fF6bw89YHC7acs3m1YUIhVlGt8Lsh5HSIZozEPbcak9lEkZ+TiEMZdELfvcljcnBtv3Cf2z6oSYOBlVK0qYEJiVPvd6ryg3kqPlsEMcw3Fwx5sgoudurpYDKruhuxfayEdR478uf/smdZykpYhZIZWgIVX3IpDQW2WlWxw1AX3C53BHo4HDkVOPejukK6/oQdRT8m1S5xpmRD9q8e3XSK/Xu3TqNZNjLp6OSRg8r3sOv1e+QztSj31QG3tKRlT5zLqo0WQ1mJ0Hxkrw69L1dQmgMqgZd20xmPPvg53n23dsfNG6CPj/KUTsrekiJQc2Hvabji48RBleABXKq2lBKpj89u0FRUiC4li6CDgDgrZl6r6UV4hTXUW6fWb5yNguwg6dRIiwf+OZsakVXlghtpfUMBbAo8Tzu8oq+0HQFjMFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAABHnVW/IxwG7udMVuzmgVB/2xst6j9I5RArHNola8E48G3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqYyXJY9OJInxuz0QKRSODYMLWhOZ2v8QhASOe9jb6fhZrBrj0IfykjcGJUj3DEwErsKplWlJhufLtGdSBiHThjC0P/on9df2SnTAmx8pWHneSwmrNt/J3VFLMhqns4zl6Mb6evO+2606PWXzaqvJdDGxu+TC0vbg5HymAgNFL11hhfF5aGC8uN+dIBDrxV3vHwZYs2RmFKm87C1HtO3e+NIHDAAFAsBcFQAPBgAJACwLDgEBCwIACQwCAAAAgJaYAAAAAAAOAQkBEQ8GAAYAEgsOAQENQg4QAAkFCgYsEgcNEQ0qKRYZCgUXGBArDg0nDi0uEAUhIgQfICYOHiUdGhsoHB4eHh4eHgQDECMOEBQDFQoTCAIBJDLBIJszQdacgQUEAAAAEgA8AAQDKAACB2QCAxEBZAMEgJaYAAAAAACBqQkAAAAAADIAMg4DCQAAAQkEB4tUBJUod+xdJHClaAbwfY0KcsPyS6puvinwAKI7S1cD9e7vBh7xJzZ/XBUMq/0+5x74cLXUfrm4RcW7GMg1vW5lr144gPYI6KKjBMO8u74DwL/CbfplXQ5y4uTDJAQIjShVPQLz8v+me8U9jJd68IPKjLkFvL08uLoAzNqZz4glI8qy5jvrpHYo8Vzh6SmqRgs5a0H2AAOFaZwE6uzp5wNl7es="
+        let tx = swapTx
         let bytes = Base64.decode(string: tx)!
         let decoder = SolanaRawTxDecoder(rawData: bytes)
         let message = decoder.messageData()
@@ -97,6 +136,56 @@ struct SolanaSignerTests {
         signed.append(message)
 
         #expect(signed.base64EncodedString() == "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAIE4X7qT7inGBPqFijUWiMASkIQer7GcY6cKR108e8O++fF6bw89YHC7acs3m1YUIhVlGt8Lsh5HSIZozEPbcak9lEkZ+TiEMZdELfvcljcnBtv3Cf2z6oSYOBlVK0qYEJiVPvd6ryg3kqPlsEMcw3Fwx5sgoudurpYDKruhuxfayEdR478uf/smdZykpYhZIZWgIVX3IpDQW2WlWxw1AX3C53BHo4HDkVOPejukK6/oQdRT8m1S5xpmRD9q8e3XSK/Xu3TqNZNjLp6OSRg8r3sOv1e+QztSj31QG3tKRlT5zLqo0WQ1mJ0Hxkrw69L1dQmgMqgZd20xmPPvg53n23dsfNG6CPj/KUTsrekiJQc2Hvabji48RBleABXKq2lBKpj89u0FRUiC4li6CDgDgrZl6r6UV4hTXUW6fWb5yNguwg6dRIiwf+OZsakVXlghtpfUMBbAo8Tzu8oq+0HQFjMFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAABHnVW/IxwG7udMVuzmgVB/2xst6j9I5RArHNola8E48G3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqYyXJY9OJInxuz0QKRSODYMLWhOZ2v8QhASOe9jb6fhZrBrj0IfykjcGJUj3DEwErsKplWlJhufLtGdSBiHThjC0P/on9df2SnTAmx8pWHneSwmrNt/J3VFLMhqns4zl6Mb6evO+2606PWXzaqvJdDGxu+TC0vbg5HymAgNFL11hhfF5aGC8uN+dIBDrxV3vHwZYs2RmFKm87C1HtO3e+NIHDAAFAsBcFQAPBgAJACwLDgEBCwIACQwCAAAAgJaYAAAAAAAOAQkBEQ8GAAYAEgsOAQENQg4QAAkFCgYsEgcNEQ0qKRYZCgUXGBArDg0nDi0uEAUhIgQfICYOHiUdGhsoHB4eHh4eHgQDECMOEBQDFQoTCAIBJDLBIJszQdacgQUEAAAAEgA8AAQDKAACB2QCAxEBZAMEgJaYAAAAAACBqQkAAAAAADIAMg4DCQAAAQkEB4tUBJUod+xdJHClaAbwfY0KcsPyS6puvinwAKI7S1cD9e7vBh7xJzZ/XBUMq/0+5x74cLXUfrm4RcW7GMg1vW5lr144gPYI6KKjBMO8u74DwL/CbfplXQ5y4uTDJAQIjShVPQLz8v+me8U9jJd68IPKjLkFvL08uLoAzNqZz4glI8qy5jvrpHYo8Vzh6SmqRgs5a0H2AAOFaZwE6uzp5wNl7es=")
+    }
+
+    @Test
+    func signSwapKeepsComputeBudgetWhenInputLower() throws {
+        let signer = SolanaSigner()
+        guard let providerTx = SolanaTransaction.setComputeUnitPrice(encodedTx: swapTx, price: "70000") else {
+            throw AnyError("unable to build provider tx fixture")
+        }
+        let input = makeSwapInput(provider: .jupiter, tx: providerTx)
+
+        let expected = try signer.signRawTransaction(transaction: providerTx, privateKey: TestPrivateKey)
+        let signed = try signer.signSwap(input: input, privateKey: TestPrivateKey)
+
+        #expect(signed == [expected])
+    }
+
+    @Test
+    func signSwapBumpsComputeBudgetWhenInputHigher() throws {
+        let signer = SolanaSigner()
+        guard let providerTx = SolanaTransaction.setComputeUnitPrice(encodedTx: swapTx, price: "70000") else {
+            throw AnyError("unable to build provider tx fixture")
+        }
+        let currentUnitPrice = UInt64(SolanaTransaction.getComputeUnitPrice(encodedTx: providerTx) ?? "") ?? 0
+        let currentUnitLimit = UInt64(SolanaTransaction.getComputeUnitLimit(encodedTx: providerTx) ?? "") ?? 0
+        #expect(currentUnitPrice > 0)
+        #expect(currentUnitLimit > 0)
+
+        let fee = Fee(
+            fee: .zero,
+            gasPriceType: .solana(
+                gasPrice: 5_000,
+                priorityFee: 10_000,
+                unitPrice: .init(currentUnitPrice + 1_000),
+                jitoTip: 0
+            ),
+            gasLimit: .init(currentUnitLimit + 10_000)
+        )
+        let input = makeSwapInput(provider: .jupiter, fee: fee, tx: providerTx)
+
+        guard
+            let withPrice = SolanaTransaction.setComputeUnitPrice(encodedTx: providerTx, price: String(currentUnitPrice + 1_000)),
+            let withLimit = SolanaTransaction.setComputeUnitLimit(encodedTx: withPrice, limit: String(currentUnitLimit + 10_000))
+        else {
+            throw AnyError("unable to set expected compute budget")
+        }
+
+        let expected = try signer.signRawTransaction(transaction: withLimit, privateKey: TestPrivateKey)
+        let signed = try signer.signSwap(input: input, privateKey: TestPrivateKey)
+
+        #expect(signed == [expected])
     }
 
     @Test
