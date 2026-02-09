@@ -11,23 +11,23 @@ import PrimitivesComponents
 public final class TransactionsFilterViewModel {
     private let wallet: Wallet
     private let type: TransactionsRequestType
-    
+
     public var chainsFilter: ChainsFilterViewModel {
-        didSet { request.filters = requestFilters }
+        didSet { query.request.filters = requestFilters }
     }
     public var transactionTypesFilter: TransactionTypesFilterViewModel {
-        didSet { request.filters = requestFilters }
+        didSet { query.request.filters = requestFilters }
     }
-    
-    public var request: TransactionsRequest
-    
+
+    public let query: ObservableQuery<TransactionsRequest>
+
     private static let excludeTransactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition]
     private let transactionTypes = TransactionType.allCases.filter( { !excludeTransactionTypes.contains($0) })
-    
+
     private let defaultFilters: [TransactionsRequestFilter] = [
         .assetRankGreaterThan(AssetScore.defaultScore),
     ]
-    
+
     var isPresentingChains: Bool = false
     var isPresentingTypes: Bool = false
 
@@ -37,15 +37,16 @@ public final class TransactionsFilterViewModel {
     ) {
         self.wallet = wallet
         self.type = type
-        
+
         self.chainsFilter = ChainsFilterViewModel(chains: wallet.chains)
         self.transactionTypesFilter = TransactionTypesFilterViewModel(types: TransactionType.allCases)
-        
-        self.request = TransactionsRequest(
+
+        let request = TransactionsRequest(
             walletId: wallet.walletId,
             type: type,
-            filters: defaultFilters + [.types(transactionTypes.map { $0.rawValue })] // FIX: pass requestFilters for consistency
+            filters: defaultFilters + [.types(transactionTypes.map { $0.rawValue })]
         )
+        self.query = ObservableQuery(request)
     }
 
     public var isAnyFilterSpecified: Bool {

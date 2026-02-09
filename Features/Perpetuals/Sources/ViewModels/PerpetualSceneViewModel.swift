@@ -32,12 +32,12 @@ public final class PerpetualSceneViewModel {
     public var positionsRequest: PerpetualPositionsRequest
     public var perpetualRequest: PerpetualRequest
     public var perpetualTotalValueRequest: TotalValueRequest
-    public var transactionsRequest: TransactionsRequest
+    public let transactionsQuery: ObservableQuery<TransactionsRequest>
 
     public var positions: [PerpetualPositionData] = []
     public var perpetualData: PerpetualData = .empty
     public var perpetualTotalValue: Double = .zero
-    public var transactions: [TransactionExtended] = []
+    public var transactions: [TransactionExtended] { transactionsQuery.value }
 
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .day
@@ -70,11 +70,12 @@ public final class PerpetualSceneViewModel {
         self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.walletId, balanceType: .perpetual)
 
         let transactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition]
-        self.transactionsRequest = TransactionsRequest(
+        let transactionsRequest = TransactionsRequest(
             walletId: wallet.walletId,
             type: .asset(assetId: asset.id),
             filters: [.types(transactionTypes.map { $0.rawValue })]
         )
+        self.transactionsQuery = ObservableQuery(transactionsRequest)
     }
 
     public var navigationTitle: String {
