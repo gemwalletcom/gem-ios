@@ -5,16 +5,16 @@ import Primitives
 
 public extension SwapQuoteData {
     static func mock(
-        quote: SwapQuote = .mock()
+        data: String = ""
     ) -> SwapQuoteData {
         SwapQuoteData(
             to: "",
             dataType: .contract,
             value: "",
-            data: "",
+            data: data,
             memo: nil,
             approval: nil,
-            gasLimit: ""
+            gasLimit: nil
         )
     }
 }
