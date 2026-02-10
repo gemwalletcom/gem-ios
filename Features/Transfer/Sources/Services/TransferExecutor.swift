@@ -2,6 +2,7 @@
 
 import Blockchain
 import Foundation
+import Preferences
 import Primitives
 import Signer
 import TransactionStateService
@@ -102,7 +103,7 @@ extension TransferExecutor {
             case .transfer, .deposit, .withdrawal, .transferNft, .stake, .account, .tokenApprove, .perpetual: BroadcastOptions(
                 skipPreflight: false
             )
-            case .swap, .generic: BroadcastOptions(skipPreflight: true)
+            case .swap, .generic: BroadcastOptions(skipPreflight: Preferences.standard.isSolanaSkipPreflightEnabled)
             }
         default: BroadcastOptions(skipPreflight: false)
         }

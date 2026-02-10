@@ -58,6 +58,11 @@ public final class DeveloperViewModel {
         (try? SecurePreferences().get(key: .deviceToken)) ?? .empty
     }
 
+    var isSolanaSkipPreflightEnabled: Bool {
+        get { Preferences.standard.isSolanaSkipPreflightEnabled }
+        set { Preferences.standard.isSolanaSkipPreflightEnabled = newValue }
+    }
+
     func reset() {
         do {
             try clearDocuments()

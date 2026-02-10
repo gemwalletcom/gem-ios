@@ -36,6 +36,7 @@ public final class Preferences: @unchecked Sendable {
         static let perpetualLeverage = "perpetual_leverage"
         static let perpetualNodeUrl = "perpetual_node_url"
         static let isDeviceRegistered = "is_device_registered"
+        static let isSolanaSkipPreflightEnabled = "is_solana_skip_preflight_enabled"
     }
 
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
@@ -119,6 +120,9 @@ public final class Preferences: @unchecked Sendable {
     @ConfigurableDefaults(key: Keys.isDeviceRegistered, defaultValue: false)
     public var isDeviceRegistered: Bool
 
+    @ConfigurableDefaults(key: Keys.isSolanaSkipPreflightEnabled, defaultValue: true)
+    public var isSolanaSkipPreflightEnabled: Bool
+
     public static let standard = Preferences()
     private let defaults: UserDefaults
 
@@ -160,6 +164,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._perpetualLeverage, key: Keys.perpetualLeverage, defaultValue: 10)
         configure(\._perpetualNodeUrl, key: Keys.perpetualNodeUrl, defaultValue: nil)
         configure(\._isDeviceRegistered, key: Keys.isDeviceRegistered, defaultValue: false)
+        configure(\._isSolanaSkipPreflightEnabled, key: Keys.isSolanaSkipPreflightEnabled, defaultValue: true)
     }
 
     public func incrementLaunchesCount() {

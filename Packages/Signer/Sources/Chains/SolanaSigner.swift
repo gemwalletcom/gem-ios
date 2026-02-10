@@ -170,47 +170,8 @@ struct SolanaSigner: Signable {
     }
 
     func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let (_, _, data) = try input.type.swap()
-        let encodedTx = data.data.data
-        let unitPrice = input.fee.gasPriceType.unitPrice
-        let jitoTip = input.fee.gasPriceType.jitoTip
-
-        guard
-            let encodedTxData = Base64.decode(string: encodedTx),
-            !encodedTxData.isEmpty
-        else {
-            throw AnyError("unable to decode base64 string or empty transaction data")
-        }
-
-        let rawTxDecoder = SolanaRawTxDecoder(rawData: encodedTxData)
-        let numRequiredSignatures = rawTxDecoder.signatureCount()
-        if numRequiredSignatures > 1 {
-            // other signers' signatures already prefilled, changing instructions would lead signature verification failure
-            return try [
-                signRawTransaction(transaction: encodedTx, privateKey: privateKey),
-            ]
-        }
-
-        // Only user's signature is needed, safe to modify instructions
-        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: encodedTx, price: unitPrice.description) else {
-            throw AnyError("unable to set compute unit price")
-        }
-        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: input.fee.gasLimit.description) else {
-            throw AnyError("unable to set compute unit limit")
-        }
-
-        var finalTransaction = transaction
-        if jitoTip > 0 {
-            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
-            guard let tx = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) else {
-                throw AnyError("unable to insert Jito tip instruction")
-            }
-            finalTransaction = tx
-        }
-
-        return try [
-            signRawTransaction(transaction: finalTransaction, privateKey: privateKey),
-        ]
+        let chainSigner = ChainSigner(chain: .solana)
+        return try chainSigner.signSwap(input: input, privateKey: privateKey)
     }
 
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {

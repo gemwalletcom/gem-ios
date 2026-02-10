@@ -109,6 +109,10 @@ public struct DeveloperScene: View {
                 )
             }
             
+            Section("Solana") {
+                Toggle("Skip Preflight (Swap)", isOn: $model.isSolanaSkipPreflightEnabled)
+            }
+
             Section("Preferences") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear Swap Assets Version"),
