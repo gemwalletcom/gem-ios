@@ -4,9 +4,9 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemYieldTransaction {
-    public func map() throws -> YieldTransaction {
-        YieldTransaction(
+extension GemEarnTransaction {
+    public func map() throws -> EarnTransaction {
+        EarnTransaction(
             chain: try chain.map(),
             from: from,
             to: to,
@@ -26,7 +26,7 @@ extension GemYield {
             isActive: true,
             commission: 0,
             apr: apy ?? 0,
-            providerType: .yield
+            providerType: .earn
         )
     }
 }

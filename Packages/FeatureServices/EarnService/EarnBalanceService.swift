@@ -16,29 +16,29 @@ public struct EarnBalanceService: EarnBalanceServiceable {
     private let assetsService: AssetsService
     private let balanceStore: BalanceStore
     private let stakeStore: StakeStore
-    private let yieldService: YieldService
+    private let earnProviderService: EarnProviderService
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         assetsService: AssetsService,
         balanceStore: BalanceStore,
         stakeStore: StakeStore,
-        yieldService: YieldService
+        earnProviderService: EarnProviderService
     ) {
         self.assetsService = assetsService
         self.balanceStore = balanceStore
         self.stakeStore = stakeStore
-        self.yieldService = yieldService
+        self.earnProviderService = earnProviderService
     }
 
     public func updatePositions(walletId: WalletId, assetId: AssetId, address: String) async {
         do {
-            let providers = try await yieldService.getProviders(for: assetId)
+            let providers = try await earnProviderService.getProviders(for: assetId)
             try stakeStore.updateValidators(providers)
 
             for provider in YieldProvider.allCases {
                 do {
-                    let position = try await yieldService.fetchPosition(
+                    let position = try await earnProviderService.fetchPosition(
                         provider: provider,
                         asset: assetId,
                         walletAddress: address

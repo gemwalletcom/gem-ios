@@ -6,7 +6,7 @@ import GemstonePrimitives
 import NativeProviderService
 import Primitives
 
-public final class YieldService: Sendable {
+public final class EarnProviderService: Sendable {
     public let yielder: GemYielder
 
     public init(yielder: GemYielder) {
@@ -29,7 +29,7 @@ public final class YieldService: Sendable {
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
-    ) async throws -> YieldTransaction {
+    ) async throws -> EarnTransaction {
         try await yielder.deposit(
             provider: provider.map(),
             asset: asset.identifier,
@@ -43,7 +43,7 @@ public final class YieldService: Sendable {
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
-    ) async throws -> YieldTransaction {
+    ) async throws -> EarnTransaction {
         try await yielder.withdraw(
             provider: provider.map(),
             asset: asset.identifier,

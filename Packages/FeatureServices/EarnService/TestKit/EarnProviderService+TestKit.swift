@@ -6,9 +6,9 @@ import Primitives
 
 @testable import EarnService
 
-extension YieldService {
-    public static func mock() -> YieldService {
-        try! YieldService(yielder: GemYielder(rpcProvider: MockRpcProvider()))
+extension EarnProviderService {
+    public static func mock() -> EarnProviderService {
+        try! EarnProviderService(yielder: GemYielder(rpcProvider: MockRpcProvider()))
     }
 }
 

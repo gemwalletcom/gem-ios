@@ -4,20 +4,20 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemEarnProviderType {
-    public func map() -> EarnProviderType {
+extension GemGrowthProviderType {
+    public func map() -> GrowthProviderType {
         switch self {
         case .stake: .stake
-        case .yield: .yield
+        case .earn: .earn
         }
     }
 }
 
-extension EarnProviderType {
-    public func map() -> GemEarnProviderType {
+extension GrowthProviderType {
+    public func map() -> GemGrowthProviderType {
         switch self {
         case .stake: .stake
-        case .yield: .yield
+        case .earn: .earn
         }
     }
 }
