@@ -15,7 +15,6 @@ let package = Package(
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Primitives", path: "../../Packages/Primitives"),
-        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
@@ -29,7 +28,6 @@ let package = Package(
                 "Style",
                 "Components",
                 "Primitives",
-                "GemAPI",
                 "Localization",
                 "GemstonePrimitives",
                 "PrimitivesComponents",
@@ -43,7 +41,6 @@ let package = Package(
             name: "SupportTests",
             dependencies: [
                 "Support",
-                .product(name: "PreferencesTestKit", package: "Preferences"),
             ]
         ),
     ]

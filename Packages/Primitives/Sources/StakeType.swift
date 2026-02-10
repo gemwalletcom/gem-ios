@@ -34,6 +34,36 @@ public struct RedelegateData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
+public struct StakeData: Codable, Equatable, Hashable, Sendable {
+	public let data: String?
+	public let to: String?
+
+	public init(data: String?, to: String?) {
+		self.data = data
+		self.to = to
+	}
+}
+
+public struct TronUnfreeze: Codable, Equatable, Hashable, Sendable {
+	public let resource: Resource
+	public let amount: UInt64
+
+	public init(resource: Resource, amount: UInt64) {
+		self.resource = resource
+		self.amount = amount
+	}
+}
+
+public struct TronVote: Codable, Equatable, Hashable, Sendable {
+	public let validator: String
+	public let count: UInt64
+
+	public init(validator: String, count: UInt64) {
+		self.validator = validator
+		self.count = count
+	}
+}
+
 public enum StakeType: Codable, Equatable, Hashable, Sendable {
 	case stake(DelegationValidator)
 	case unstake(Delegation)
@@ -114,6 +144,51 @@ public enum StakeType: Codable, Equatable, Hashable, Sendable {
 			try container.encode(content, forKey: .content)
 		case .freeze(let content):
 			try container.encode(CodingKeys.freeze, forKey: .type)
+			try container.encode(content, forKey: .content)
+		}
+	}
+}
+
+public enum TronStakeData: Codable, Equatable, Hashable, Sendable {
+	case votes([TronVote])
+	case unfreeze([TronUnfreeze])
+
+	enum CodingKeys: String, CodingKey, Codable {
+		case votes = "Votes",
+			unfreeze = "Unfreeze"
+	}
+
+	private enum ContainerCodingKeys: String, CodingKey {
+		case type, content
+	}
+
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: ContainerCodingKeys.self)
+		if let type = try? container.decode(CodingKeys.self, forKey: .type) {
+			switch type {
+			case .votes:
+				if let content = try? container.decode([TronVote].self, forKey: .content) {
+					self = .votes(content)
+					return
+				}
+			case .unfreeze:
+				if let content = try? container.decode([TronUnfreeze].self, forKey: .content) {
+					self = .unfreeze(content)
+					return
+				}
+			}
+		}
+		throw DecodingError.typeMismatch(TronStakeData.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for TronStakeData"))
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: ContainerCodingKeys.self)
+		switch self {
+		case .votes(let content):
+			try container.encode(CodingKeys.votes, forKey: .type)
+			try container.encode(content, forKey: .content)
+		case .unfreeze(let content):
+			try container.encode(CodingKeys.unfreeze, forKey: .type)
 			try container.encode(content, forKey: .content)
 		}
 	}

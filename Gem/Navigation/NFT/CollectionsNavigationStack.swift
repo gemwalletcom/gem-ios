@@ -24,10 +24,7 @@ struct CollectionsNavigationStack: View {
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
 
     private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.collections },
-            set: { navigationState.collections = $0 }
-        )
+        navigationState.collections.binding
     }
 
     init(

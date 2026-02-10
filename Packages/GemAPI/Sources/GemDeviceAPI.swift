@@ -26,7 +26,6 @@ public enum GemDeviceAPI: TargetType {
 
     case reportNft(deviceId: String, report: ReportNft)
     case scanTransaction(deviceId: String, payload: ScanTransactionPayload)
-    case addSupportDevice(deviceId: String, supportDeviceId: String)
 
     case getAuthNonce(deviceId: String)
 
@@ -68,7 +67,6 @@ public enum GemDeviceAPI: TargetType {
             .addSubscriptions,
             .addPriceAlerts,
             .scanTransaction,
-            .addSupportDevice,
             .reportNft,
             .migrateDevice,
             .createDeviceReferral,
@@ -118,8 +116,6 @@ public enum GemDeviceAPI: TargetType {
             return "/v2/devices/nft/report"
         case .scanTransaction:
             return "/v2/devices/scan/transaction"
-        case .addSupportDevice:
-            return "/v2/devices/support"
         case .getAuthNonce:
             return "/v2/devices/auth/nonce"
         case .getDeviceRewards:
@@ -152,7 +148,6 @@ public enum GemDeviceAPI: TargetType {
             .deleteDevice(let deviceId),
             .reportNft(let deviceId, _),
             .scanTransaction(let deviceId, _),
-            .addSupportDevice(let deviceId, _),
             .getAuthNonce(let deviceId),
             .getNotifications(let deviceId, _),
             .markNotificationsRead(let deviceId),
@@ -227,8 +222,6 @@ public enum GemDeviceAPI: TargetType {
             return .encodable(payload)
         case .reportNft(_, let report):
             return .encodable(report)
-        case .addSupportDevice(_, let supportDeviceId):
-            return .encodable(SupportDeviceRequest(supportDeviceId: supportDeviceId))
         case .createDeviceReferral(_, _, let request):
             return .encodable(request)
         case .useDeviceReferralCode(_, _, let request):

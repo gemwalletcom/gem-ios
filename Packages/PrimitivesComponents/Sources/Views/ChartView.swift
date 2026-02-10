@@ -114,7 +114,7 @@ extension ChartView {
                     PulsingDotView(color: model.lineColor)
                         .position(x: origin.x + xPos, y: origin.y + yPos)
                         .opacity(selectedValue == nil ? 1 : 0)
-                        .animation(.easeInOut(duration: 0.2), value: selectedValue == nil)
+                        .animation(.easeInOut(duration: .AnimationDuration.normal), value: selectedValue == nil)
                 }
             }
         }
