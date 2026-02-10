@@ -41,8 +41,8 @@ extension WalletHeaderViewModel: HeaderViewModel {
 
     public var subtitleImage: Image? {
         switch totalValue.pnlAmount {
-        case _ where totalValue.pnlAmount > 0: Image(systemName: "arrowtriangle.up.fill")
-        case _ where totalValue.pnlAmount < 0: Image(systemName: "arrowtriangle.down.fill")
+        case _ where totalValue.pnlAmount > 0: EquilateralTriangle.image(pointingUp: true)
+        case _ where totalValue.pnlAmount < 0: EquilateralTriangle.image(pointingUp: false)
         default: nil
         }
     }

@@ -49,18 +49,17 @@ public struct WalletHeaderView: View {
 
             if let subtitle = model.subtitle {
                 HStack(spacing: Spacing.tiny) {
+                    if let subtitleImage = model.subtitleImage, !isPrivacyEnabled {
+                        subtitleImage
+                            .foregroundStyle(model.subtitleColor)
+                    }
+
                     PrivacyText(
                         subtitle,
                         isEnabled: $isPrivacyEnabled
                     )
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(model.subtitleColor)
-
-                    if let arrow = model.subtitleImage, !isPrivacyEnabled {
-                        arrow
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(model.subtitleColor)
-                    }
                 }
                 .numericTransition(for: model.subtitle)
                 .padding(.bottom, .space10)
