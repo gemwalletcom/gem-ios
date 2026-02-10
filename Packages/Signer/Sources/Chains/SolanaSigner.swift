@@ -170,8 +170,7 @@ struct SolanaSigner: Signable {
     }
 
     func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let chainSigner = ChainSigner(chain: .solana)
-        return try chainSigner.signSwap(input: input, privateKey: privateKey)
+        try ChainSigner(chain: .solana).signSwap(input: input, privateKey: privateKey)
     }
 
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
