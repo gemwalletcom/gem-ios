@@ -14,7 +14,7 @@ public final class EarnProvidersSceneViewModel {
     public let wallet: Wallet
     public let asset: Asset
     private let earnPositionsService: any EarnBalanceServiceable
-    private let yieldService: YieldService
+    private let earnProviderService: EarnProviderService
     private let onAmountInputAction: AmountInputAction
 
     public var positionsRequest: DelegationsRequest
@@ -50,7 +50,7 @@ public final class EarnProvidersSceneViewModel {
 
     public var positionModels: [EarnPositionViewModel] {
         positions
-            .compactMap { EarnPositionViewModel(position: $0, decimals: Int(asset.decimals)) }
+            .compactMap { EarnPositionViewModel(delegation: $0, decimals: Int(asset.decimals)) }
             .filter { $0.hasBalance }
     }
 
@@ -89,18 +89,18 @@ public final class EarnProvidersSceneViewModel {
         wallet: Wallet,
         asset: Asset,
         earnPositionsService: any EarnBalanceServiceable,
-        yieldService: YieldService,
+        earnProviderService: EarnProviderService,
         onAmountInputAction: AmountInputAction = nil
     ) {
         self.wallet = wallet
         self.asset = asset
         self.earnPositionsService = earnPositionsService
-        self.yieldService = yieldService
+        self.earnProviderService = earnProviderService
         self.onAmountInputAction = onAmountInputAction
         self.positionsRequest = DelegationsRequest(
             walletId: wallet.walletId,
             assetId: asset.id,
-            providerType: .yield
+            providerType: .earn
         )
     }
 
@@ -115,7 +115,7 @@ public final class EarnProvidersSceneViewModel {
         async let _ = updatePositions()
 
         do {
-            let earnProviders = try await yieldService.getProviders(for: asset.id)
+            let earnProviders = try await earnProviderService.getProviders(for: asset.id)
             let providerModels = earnProviders.map { EarnProviderViewModel(provider: $0) }
             self.providers = providerModels
             providersState = providerModels.isEmpty ? .noData : .data(true)
@@ -134,30 +134,18 @@ public final class EarnProvidersSceneViewModel {
     }
 
     public func onSelectProvider(_ provider: EarnProviderViewModel) {
-        let yieldData = makeYieldData(provider: provider.earnProvider.id)
         let amountInput = AmountInput(
-            type: .earn(action: .deposit, data: yieldData, depositedBalance: nil),
+            type: .earn(.deposit(provider: provider.earnProvider)),
             asset: asset
         )
         onAmountInputAction?(amountInput)
     }
 
     public func onWithdraw(_ position: EarnPositionViewModel) {
-        let yieldData = makeYieldData(provider: position.providerId)
         let amountInput = AmountInput(
-            type: .earn(action: .withdraw, data: yieldData, depositedBalance: position.balance),
+            type: .earn(.withdraw(delegation: position.delegation)),
             asset: asset
         )
         onAmountInputAction?(amountInput)
-    }
-
-    private func makeYieldData(provider: String) -> YieldData {
-        YieldData(
-            provider: provider,
-            contractAddress: nil,
-            callData: nil,
-            approval: nil,
-            gasLimit: nil
-        )
     }
 }

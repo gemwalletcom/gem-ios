@@ -11,25 +11,18 @@ import PrimitivesComponents
 import Earn
 import Validators
 
-enum StakeAction {
-    case stake(validators: [DelegationValidator], recommended: DelegationValidator?)
-    case unstake(Delegation)
-    case redelegate(Delegation, validators: [DelegationValidator], recommended: DelegationValidator?)
-    case withdraw(Delegation)
-}
-
 final class AmountStakeViewModel: AmountDataProvidable {
     let asset: Asset
-    let action: StakeAction
+    let action: StakeAmountType
     let validatorSelection: SelectionState<DelegationValidator>
 
-    init(asset: Asset, action: StakeAction) {
+    init(asset: Asset, action: StakeAmountType) {
         self.asset = asset
         self.action = action
         self.validatorSelection = Self.makeValidatorSelection(action: action)
     }
 
-    private static func makeValidatorSelection(action: StakeAction) -> SelectionState<DelegationValidator> {
+    private static func makeValidatorSelection(action: StakeAmountType) -> SelectionState<DelegationValidator> {
         switch action {
         case let .stake(validators, recommended):
             SelectionState(options: validators, selected: recommended ?? validators[0], isEnabled: true, title: Localized.Stake.validator)
@@ -59,16 +52,7 @@ final class AmountStakeViewModel: AmountDataProvidable {
     }
 
     var amountType: AmountType {
-        switch action {
-        case .stake(let validators, let recommended):
-            .stake(validators: validators, recommendedValidator: recommended)
-        case .unstake(let delegation):
-            .stakeUnstake(delegation: delegation)
-        case .redelegate(let delegation, let validators, let recommended):
-            .stakeRedelegate(delegation: delegation, validators: validators, recommendedValidator: recommended)
-        case .withdraw(let delegation):
-            .stakeWithdraw(delegation: delegation)
-        }
+        .stake(action)
     }
 
     var minimumValue: BigInt {

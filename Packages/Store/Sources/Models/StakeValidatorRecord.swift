@@ -49,7 +49,7 @@ extension StakeValidatorRecord: CreateTable {
                 .notNull()
             $0.column(Columns.providerType.name, .text)
                 .notNull()
-                .defaults(to: EarnProviderType.stake.rawValue)
+                .defaults(to: GrowthProviderType.stake.rawValue)
         }
     }
 }
@@ -63,7 +63,7 @@ extension StakeValidatorRecord {
             isActive: isActive,
             commission: commission,
             apr: apr,
-            providerType: EarnProviderType(rawValue: providerType) ?? .stake
+            providerType: GrowthProviderType(rawValue: providerType) ?? .stake
         )
     }
 }

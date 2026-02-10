@@ -60,8 +60,8 @@ struct TransferDataViewModel {
             case .reduce(let data): PerpetualDirectionViewModel(direction: data.positionDirection).reduceTitle
             case .modify: Localized.Perpetual.modifyPosition
             }
-        case .earn(_, let action, _):
-            switch action {
+        case .earn(_, let type):
+            switch type {
             case .deposit: Localized.Wallet.deposit
             case .withdraw: Localized.Wallet.withdraw
             }

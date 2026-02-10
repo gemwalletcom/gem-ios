@@ -35,7 +35,7 @@ public struct ViewModelFactory: Sendable {
     let walletsService: WalletsService
     let walletService: WalletService
     let stakeService: StakeService
-    let yieldService: YieldService
+    let earnProviderService: EarnProviderService
     let earnBalanceService: any EarnBalanceServiceable
     let nameService: NameService
     let balanceService: BalanceService
@@ -54,7 +54,7 @@ public struct ViewModelFactory: Sendable {
         walletsService: WalletsService,
         walletService: WalletService,
         stakeService: StakeService,
-        yieldService: YieldService,
+        earnProviderService: EarnProviderService,
         earnBalanceService: any EarnBalanceServiceable,
         nameService: NameService,
         balanceService: BalanceService,
@@ -72,7 +72,7 @@ public struct ViewModelFactory: Sendable {
         self.walletsService = walletsService
         self.walletService = walletService
         self.stakeService = stakeService
-        self.yieldService = yieldService
+        self.earnProviderService = earnProviderService
         self.earnBalanceService = earnBalanceService
         self.nameService = nameService
         self.balanceService = balanceService
@@ -185,7 +185,7 @@ public struct ViewModelFactory: Sendable {
             wallet: wallet,
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
             stakeService: stakeService,
-            yieldService: yieldService,
+            earnProviderService: earnProviderService,
             earnPositionsService: earnBalanceService,
             earnAsset: chain.asset
         )
@@ -201,7 +201,7 @@ public struct ViewModelFactory: Sendable {
             wallet: wallet,
             asset: asset,
             earnPositionsService: earnBalanceService,
-            yieldService: yieldService,
+            earnProviderService: earnProviderService,
             onAmountInputAction: onAmountInputAction
         )
     }

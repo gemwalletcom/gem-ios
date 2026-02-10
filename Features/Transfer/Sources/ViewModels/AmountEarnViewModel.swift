@@ -7,15 +7,11 @@ import Primitives
 
 final class AmountEarnViewModel: AmountDataProvidable {
     let asset: Asset
-    let action: YieldType
-    let data: YieldData
-    let depositedBalance: BigInt?
+    let action: EarnAmountType
 
-    init(asset: Asset, action: YieldType, data: YieldData, depositedBalance: BigInt?) {
+    init(asset: Asset, action: EarnAmountType) {
         self.asset = asset
         self.action = action
-        self.data = data
-        self.depositedBalance = depositedBalance
     }
 
     var title: String {
@@ -26,7 +22,7 @@ final class AmountEarnViewModel: AmountDataProvidable {
     }
 
     var amountType: AmountType {
-        .earn(action: action, data: data, depositedBalance: depositedBalance)
+        .earn(action)
     }
 
     var minimumValue: BigInt { .zero }
@@ -38,7 +34,7 @@ final class AmountEarnViewModel: AmountDataProvidable {
     func availableValue(from assetData: AssetData) -> BigInt {
         switch action {
         case .deposit: assetData.balance.available
-        case .withdraw: depositedBalance ?? .zero
+        case .withdraw(let delegation): delegation.base.balanceValue
         }
     }
 
@@ -47,18 +43,26 @@ final class AmountEarnViewModel: AmountDataProvidable {
     }
 
     func recipientData() -> RecipientData {
-        RecipientData(
-            recipient: Recipient(name: data.provider ?? "", address: data.contractAddress ?? "", memo: nil),
+        let provider = switch action {
+        case .deposit(let provider): provider
+        case .withdraw(let delegation): delegation.validator
+        }
+        return RecipientData(
+            recipient: Recipient(name: provider.name, address: provider.id, memo: nil),
             amount: nil
         )
     }
 
     func makeTransferData(value: BigInt) throws -> TransferData {
-        TransferData(
-            type: .earn(asset, action, data),
+        let earnType: EarnType = switch action {
+        case .deposit(let provider): .deposit(provider)
+        case .withdraw(let delegation): .withdraw(delegation)
+        }
+        return TransferData(
+            type: .earn(asset, earnType),
             recipientData: recipientData(),
             value: value,
-            canChangeValue: true
+            canChangeValue: canChangeValue
         )
     }
 }

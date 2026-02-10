@@ -91,14 +91,14 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
-        let yieldService = Self.makeYieldService(
+        let earnProviderService = Self.makeEarnProviderService(
             nodeProvider: nodeService
         )
         let earnBalanceService = Self.makeEarnBalanceService(
             assetsService: assetsService,
             balanceStore: storeManager.balanceStore,
             stakeStore: storeManager.stakeStore,
-            yieldService: yieldService
+            earnProviderService: earnProviderService
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
@@ -276,7 +276,7 @@ struct ServicesFactory {
             walletsService: walletsService,
             walletService: walletService,
             stakeService: stakeService,
-            yieldService: yieldService,
+            earnProviderService: earnProviderService,
             earnBalanceService: earnBalanceService,
             nameService: nameService,
             balanceService: balanceService,
@@ -414,13 +414,13 @@ extension ServicesFactory {
         assetsService: AssetsService,
         balanceStore: BalanceStore,
         stakeStore: StakeStore,
-        yieldService: YieldService
+        earnProviderService: EarnProviderService
     ) -> EarnBalanceService {
         EarnBalanceService(
             assetsService: assetsService,
             balanceStore: balanceStore,
             stakeStore: stakeStore,
-            yieldService: yieldService
+            earnProviderService: earnProviderService
         )
     }
 
@@ -651,10 +651,10 @@ extension ServicesFactory {
         )
     }
 
-    private static func makeYieldService(
+    private static func makeEarnProviderService(
         nodeProvider: any NodeURLFetchable
-    ) -> YieldService {
-        try! YieldService(nodeProvider: nodeProvider)
+    ) -> EarnProviderService {
+        try! EarnProviderService(nodeProvider: nodeProvider)
     }
 
 }

@@ -125,7 +125,7 @@ extension StakeStore {
         try db.read { db in
             try StakeValidatorRecord
                 .filter(StakeValidatorRecord.Columns.assetId == chain.assetId.identifier)
-                .filter(StakeValidatorRecord.Columns.providerType == EarnProviderType.yield.rawValue)
+                .filter(StakeValidatorRecord.Columns.providerType == GrowthProviderType.earn.rawValue)
                 .fetchAll(db)
                 .map { $0.validator }
         }
@@ -133,7 +133,7 @@ extension StakeStore {
 
     public func getEarnPositions(walletId: WalletId, assetId: AssetId) throws -> [Delegation] {
         try getDelegations(walletId: walletId, assetId: assetId)
-            .filter { $0.validator.providerType == .yield }
+            .filter { $0.validator.providerType == .earn }
     }
 }
 

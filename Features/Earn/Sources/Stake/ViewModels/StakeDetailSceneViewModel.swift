@@ -120,21 +120,21 @@ public struct StakeDetailSceneViewModel {
 
     public func stakeRecipientData() throws -> AmountInput {
         AmountInput(
-            type: .stake(
+            type: .stake(.stake(
                 validators: try service.getValidatorsActive(assetId: asset.id),
-                recommendedValidator: model.delegation.validator
-            ),
+                recommended: model.delegation.validator
+            )),
             asset: asset
         )
     }
 
     public func redelegateRecipientData() throws -> AmountInput {
         AmountInput(
-            type: .stakeRedelegate(
-                delegation: model.delegation,
+            type: .stake(.redelegate(
+                model.delegation,
                 validators: try service.getValidatorsActive(assetId: asset.id),
-                recommendedValidator: recommendedCurrentValidator
-            ),
+                recommended: recommendedCurrentValidator
+            )),
             asset: asset
         )
     }
@@ -157,7 +157,7 @@ extension StakeDetailSceneViewModel {
     func onUnstakeAction() {
         if chain.canChangeAmountOnUnstake {
             let data = AmountInput(
-                type: .stakeUnstake(delegation: model.delegation),
+                type: .stake(.unstake(model.delegation)),
                 asset: asset
             )
             onAmountInputAction?(data)

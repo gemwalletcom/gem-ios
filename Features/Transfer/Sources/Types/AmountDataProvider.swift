@@ -19,20 +19,14 @@ enum AmountDataProvider: AmountDataProvidable {
             .transfer(AmountTransferViewModel(asset: input.asset, action: .deposit(recipient)))
         case .withdraw(let recipient):
             .transfer(AmountTransferViewModel(asset: input.asset, action: .withdraw(recipient)))
-        case .stake(let validators, let recommended):
-            .stake(AmountStakeViewModel(asset: input.asset, action: .stake(validators: validators, recommended: recommended)))
-        case .stakeUnstake(let delegation):
-            .stake(AmountStakeViewModel(asset: input.asset, action: .unstake(delegation)))
-        case .stakeRedelegate(let delegation, let validators, let recommended):
-            .stake(AmountStakeViewModel(asset: input.asset, action: .redelegate(delegation, validators: validators, recommended: recommended)))
-        case .stakeWithdraw(let delegation):
-            .stake(AmountStakeViewModel(asset: input.asset, action: .withdraw(delegation)))
+        case .stake(let stakeType):
+            .stake(AmountStakeViewModel(asset: input.asset, action: stakeType))
         case .freeze(let data):
             .freeze(AmountFreezeViewModel(asset: input.asset, data: data))
         case .perpetual(let data):
             .perpetual(AmountPerpetualViewModel(asset: input.asset, data: data))
-        case .earn(let action, let data, let depositedBalance):
-            .earn(AmountEarnViewModel(asset: input.asset, action: action, data: data, depositedBalance: depositedBalance))
+        case .earn(let earnType):
+            .earn(AmountEarnViewModel(asset: input.asset, action: earnType))
         }
     }
 

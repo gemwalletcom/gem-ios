@@ -11,9 +11,9 @@ public struct DelegationsRequest: ValueObservationQueryable {
 
     private let walletId: WalletId
     private let assetId: AssetId
-    private let providerType: EarnProviderType?
+    private let providerType: GrowthProviderType?
 
-    public init(walletId: WalletId, assetId: AssetId, providerType: EarnProviderType? = nil) {
+    public init(walletId: WalletId, assetId: AssetId, providerType: GrowthProviderType? = nil) {
         self.walletId = walletId
         self.assetId = assetId
         self.providerType = providerType
