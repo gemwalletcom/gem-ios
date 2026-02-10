@@ -14,5 +14,5 @@ public enum AmountType: Equatable, Hashable, Sendable {
     case stakeWithdraw(delegation: Delegation)
     case freeze(data: FreezeData)
     case perpetual(PerpetualRecipientData)
-    case earn(action: EarnAction, data: EarnData, depositedBalance: BigInt?)
+    case earn(action: YieldType, data: YieldData, depositedBalance: BigInt?)
 }

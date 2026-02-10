@@ -79,7 +79,8 @@ extension StakeService {
                 name: name,
                 isActive: $0.isActive,
                 commission: $0.commission,
-                apr: $0.apr
+                apr: $0.apr,
+                providerType: $0.providerType
             )
         }
         try store.updateValidators(updateValidators)

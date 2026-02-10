@@ -30,8 +30,8 @@ extension GemTransactionLoadMetadata {
             return .zcash(utxos: try utxos.map { try $0.map() }, branchId: branchId)
         case .cardano(let utxos):
             return .cardano(utxos: try utxos.map { try $0.map() })
-        case .evm(let nonce, let chainId, let earnData):
-            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId), earnData: earnData?.map())
+        case .evm(let nonce, let chainId, let yieldData):
+            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId), yieldData: yieldData?.map())
         case .near(let sequence, let blockHash):
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):
@@ -92,8 +92,8 @@ extension TransactionLoadMetadata {
             return .zcash(utxos: utxos.map { $0.map() }, branchId: branchId)
         case .cardano(let utxos):
             return .cardano(utxos: utxos.map { $0.map() })
-        case .evm(let nonce, let chainId, let earnData):
-            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId), earnData: earnData?.map())
+        case .evm(let nonce, let chainId, let yieldData):
+            return .evm(nonce: UInt64(nonce), chainId: UInt64(chainId), yieldData: yieldData?.map())
         case .near(let sequence, let blockHash):
             return .near(sequence: sequence, blockHash: blockHash)
         case .stellar(let sequence, let isDestinationAddressExist):

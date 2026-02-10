@@ -4,16 +4,28 @@ import Foundation
 import Gemstone
 import Primitives
 
+extension GemYieldTransaction {
+    public func map() throws -> YieldTransaction {
+        YieldTransaction(
+            chain: try chain.map(),
+            from: from,
+            to: to,
+            data: data,
+            value: value,
+            approval: approval?.map()
+        )
+    }
+}
+
 extension GemYield {
-    public func mapToEarnProvider() throws -> EarnProvider {
-        let assetId = try AssetId(id: assetId)
-        return EarnProvider(
-            chain: assetId.chain,
+    public func map() throws -> DelegationValidator {
+        DelegationValidator(
+            chain: try AssetId(id: assetId).chain,
             id: provider.map().rawValue,
             name: name,
             isActive: true,
-            fee: 0,
-            apy: apy ?? 0,
+            commission: 0,
+            apr: apy ?? 0,
             providerType: .yield
         )
     }

@@ -118,6 +118,25 @@ public struct StakeStore: Sendable {
     }
 }
 
+// MARK: - Earn
+
+extension StakeStore {
+    public func getEarnProviders(chain: Chain) throws -> [DelegationValidator] {
+        try db.read { db in
+            try StakeValidatorRecord
+                .filter(StakeValidatorRecord.Columns.assetId == chain.assetId.identifier)
+                .filter(StakeValidatorRecord.Columns.providerType == EarnProviderType.yield.rawValue)
+                .fetchAll(db)
+                .map { $0.validator }
+        }
+    }
+
+    public func getEarnPositions(walletId: WalletId, assetId: AssetId) throws -> [Delegation] {
+        try getDelegations(walletId: walletId, assetId: assetId)
+            .filter { $0.validator.providerType == .yield }
+    }
+}
+
 // MARK: - Static
 
 extension StakeStore {

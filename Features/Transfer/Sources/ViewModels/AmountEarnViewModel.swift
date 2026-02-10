@@ -7,11 +7,11 @@ import Primitives
 
 final class AmountEarnViewModel: AmountDataProvidable {
     let asset: Asset
-    let action: EarnAction
-    let data: EarnData
+    let action: YieldType
+    let data: YieldData
     let depositedBalance: BigInt?
 
-    init(asset: Asset, action: EarnAction, data: EarnData, depositedBalance: BigInt?) {
+    init(asset: Asset, action: YieldType, data: YieldData, depositedBalance: BigInt?) {
         self.asset = asset
         self.action = action
         self.data = data

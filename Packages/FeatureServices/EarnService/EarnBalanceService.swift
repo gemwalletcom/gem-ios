@@ -15,35 +15,35 @@ public protocol EarnBalanceServiceable: Sendable {
 public struct EarnBalanceService: EarnBalanceServiceable {
     private let assetsService: AssetsService
     private let balanceStore: BalanceStore
-    private let earnStore: EarnStore
-    private let earnService: any EarnServiceable
+    private let stakeStore: StakeStore
+    private let yieldService: YieldService
     private let formatter = ValueFormatter(style: .full)
 
     public init(
         assetsService: AssetsService,
         balanceStore: BalanceStore,
-        earnStore: EarnStore,
-        earnService: any EarnServiceable
+        stakeStore: StakeStore,
+        yieldService: YieldService
     ) {
         self.assetsService = assetsService
         self.balanceStore = balanceStore
-        self.earnStore = earnStore
-        self.earnService = earnService
+        self.stakeStore = stakeStore
+        self.yieldService = yieldService
     }
 
     public func updatePositions(walletId: WalletId, assetId: AssetId, address: String) async {
         do {
-            let providers = try await earnService.getProviders(for: assetId)
-            try earnStore.updateProviders(providers)
+            let providers = try await yieldService.getProviders(for: assetId)
+            try stakeStore.updateValidators(providers)
 
             for provider in YieldProvider.allCases {
                 do {
-                    let position = try await earnService.fetchPosition(
+                    let position = try await yieldService.fetchPosition(
                         provider: provider,
                         asset: assetId,
                         walletAddress: address
                     )
-                    try earnStore.updatePosition(position.map(), walletId: walletId)
+                    try stakeStore.updateDelegations(walletId: walletId, delegations: [position])
                 } catch {}
             }
 
@@ -55,7 +55,7 @@ public struct EarnBalanceService: EarnBalanceServiceable {
 
     private func updateEarnBalance(walletId: WalletId, assetId: AssetId) {
         do {
-            let positions = try earnStore.getPositions(walletId: walletId, assetId: assetId)
+            let positions = try stakeStore.getEarnPositions(walletId: walletId, assetId: assetId)
             let total = positions
                 .compactMap { BigInt($0.base.balance) }
                 .reduce(.zero, +)

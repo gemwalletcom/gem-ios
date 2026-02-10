@@ -10,9 +10,9 @@ import SwiftUI
 
 @Observable
 public final class EarnProviderViewModel: Sendable {
-    public let earnProvider: EarnProvider
+    public let earnProvider: DelegationValidator
 
-    public init(provider: EarnProvider) {
+    public init(provider: DelegationValidator) {
         self.earnProvider = provider
     }
 
@@ -21,14 +21,14 @@ public final class EarnProviderViewModel: Sendable {
     }
 
     public var apyText: String {
-        guard earnProvider.apy > 0 else {
+        guard earnProvider.apr > 0 else {
             return "--"
         }
-        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(earnProvider.apy))
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(earnProvider.apr))
     }
 
     public var hasApy: Bool {
-        earnProvider.apy > 0
+        earnProvider.apr > 0
     }
 
     public var providerImage: Image {

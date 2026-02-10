@@ -14,11 +14,11 @@ public final class EarnProvidersSceneViewModel {
     public let wallet: Wallet
     public let asset: Asset
     private let earnPositionsService: any EarnBalanceServiceable
-    private let earnService: any EarnServiceable
+    private let yieldService: YieldService
     private let onAmountInputAction: AmountInputAction
 
-    public var positionsRequest: EarnPositionsRequest
-    public var positions: [EarnPosition] = []
+    public var positionsRequest: DelegationsRequest
+    public var positions: [Delegation] = []
     public var providers: [EarnProviderViewModel] = []
 
     public var providersState: StateViewType<Bool> = .loading
@@ -89,17 +89,18 @@ public final class EarnProvidersSceneViewModel {
         wallet: Wallet,
         asset: Asset,
         earnPositionsService: any EarnBalanceServiceable,
-        earnService: any EarnServiceable,
+        yieldService: YieldService,
         onAmountInputAction: AmountInputAction = nil
     ) {
         self.wallet = wallet
         self.asset = asset
         self.earnPositionsService = earnPositionsService
-        self.earnService = earnService
+        self.yieldService = yieldService
         self.onAmountInputAction = onAmountInputAction
-        self.positionsRequest = EarnPositionsRequest(
+        self.positionsRequest = DelegationsRequest(
             walletId: wallet.walletId,
-            assetId: asset.id
+            assetId: asset.id,
+            providerType: .yield
         )
     }
 
@@ -114,7 +115,7 @@ public final class EarnProvidersSceneViewModel {
         async let _ = updatePositions()
 
         do {
-            let earnProviders = try await earnService.getProviders(for: asset.id)
+            let earnProviders = try await yieldService.getProviders(for: asset.id)
             let providerModels = earnProviders.map { EarnProviderViewModel(provider: $0) }
             self.providers = providerModels
             providersState = providerModels.isEmpty ? .noData : .data(true)
@@ -133,25 +134,25 @@ public final class EarnProvidersSceneViewModel {
     }
 
     public func onSelectProvider(_ provider: EarnProviderViewModel) {
-        let earnData = makeEarnData(provider: provider.earnProvider.id)
+        let yieldData = makeYieldData(provider: provider.earnProvider.id)
         let amountInput = AmountInput(
-            type: .earn(action: .deposit, data: earnData, depositedBalance: nil),
+            type: .earn(action: .deposit, data: yieldData, depositedBalance: nil),
             asset: asset
         )
         onAmountInputAction?(amountInput)
     }
 
     public func onWithdraw(_ position: EarnPositionViewModel) {
-        let earnData = makeEarnData(provider: position.providerId)
+        let yieldData = makeYieldData(provider: position.providerId)
         let amountInput = AmountInput(
-            type: .earn(action: .withdraw, data: earnData, depositedBalance: position.balance),
+            type: .earn(action: .withdraw, data: yieldData, depositedBalance: position.balance),
             asset: asset
         )
         onAmountInputAction?(amountInput)
     }
 
-    private func makeEarnData(provider: String) -> EarnData {
-        EarnData(
+    private func makeYieldData(provider: String) -> YieldData {
+        YieldData(
             provider: provider,
             contractAddress: nil,
             callData: nil,

@@ -12,7 +12,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case perpetual(Asset, PerpetualType)
-    case earn(Asset, EarnAction, EarnData)
+    case earn(Asset, YieldType, YieldData)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
 
     public var transactionType: TransactionType {

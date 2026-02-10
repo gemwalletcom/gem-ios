@@ -4,6 +4,24 @@ import Foundation
 import Gemstone
 import Primitives
 
+extension GemEarnProviderType {
+    public func map() -> EarnProviderType {
+        switch self {
+        case .stake: .stake
+        case .yield: .yield
+        }
+    }
+}
+
+extension EarnProviderType {
+    public func map() -> GemEarnProviderType {
+        switch self {
+        case .stake: .stake
+        case .yield: .yield
+        }
+    }
+}
+
 extension GemDelegationValidator {
     public func map() throws -> DelegationValidator {
         DelegationValidator(
@@ -12,7 +30,8 @@ extension GemDelegationValidator {
             name: name,
             isActive: isActive,
             commission: commission,
-            apr: apr
+            apr: apr,
+            providerType: providerType.map()
         )
     }
 }
@@ -25,7 +44,8 @@ extension DelegationValidator {
             name: name,
             isActive: isActive,
             commission: commission,
-            apr: apr
+            apr: apr,
+            providerType: providerType.map()
         )
     }
 }

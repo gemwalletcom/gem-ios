@@ -6,7 +6,7 @@ import GemstonePrimitives
 import NativeProviderService
 import Primitives
 
-public final class EarnService: EarnServiceable {
+public final class YieldService: Sendable {
     public let yielder: GemYielder
 
     public init(yielder: GemYielder) {
@@ -19,9 +19,9 @@ public final class EarnService: EarnServiceable {
         self.init(yielder: yielder)
     }
 
-    public func getProviders(for assetId: Primitives.AssetId) async throws -> [EarnProvider] {
-        let yields = try await yielder.yieldsForAsset(assetId: assetId.identifier)
-        return try yields.map { try $0.mapToEarnProvider() }
+    public func getProviders(for assetId: Primitives.AssetId) async throws -> [DelegationValidator] {
+        try await yielder.yieldsForAsset(assetId: assetId.identifier)
+            .map { try $0.map() }
     }
 
     public func deposit(
@@ -29,13 +29,13 @@ public final class EarnService: EarnServiceable {
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
-    ) async throws -> GemYieldTransaction {
+    ) async throws -> YieldTransaction {
         try await yielder.deposit(
             provider: provider.map(),
             asset: asset.identifier,
             walletAddress: walletAddress,
             value: value
-        )
+        ).map()
     }
 
     public func withdraw(
@@ -43,24 +43,24 @@ public final class EarnService: EarnServiceable {
         asset: Primitives.AssetId,
         walletAddress: String,
         value: String
-    ) async throws -> GemYieldTransaction {
+    ) async throws -> YieldTransaction {
         try await yielder.withdraw(
             provider: provider.map(),
             asset: asset.identifier,
             walletAddress: walletAddress,
             value: value
-        )
+        ).map()
     }
 
     public func fetchPosition(
         provider: YieldProvider,
         asset: Primitives.AssetId,
         walletAddress: String
-    ) async throws -> GemEarnPositionBase {
+    ) async throws -> DelegationBase {
         try await yielder.positions(
             provider: provider.map(),
             asset: asset.identifier,
             walletAddress: walletAddress
-        )
+        ).map()
     }
 }

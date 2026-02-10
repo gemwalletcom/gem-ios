@@ -9,26 +9,6 @@ public enum EarnProviderType: String, Codable, CaseIterable, Equatable, Sendable
 	case yield
 }
 
-public struct EarnProvider: Codable, Equatable, Hashable, Sendable {
-	public let chain: Chain
-	public let id: String
-	public let name: String
-	public let isActive: Bool
-	public let fee: Double
-	public let apy: Double
-	public let providerType: EarnProviderType
-
-	public init(chain: Chain, id: String, name: String, isActive: Bool, fee: Double, apy: Double, providerType: EarnProviderType) {
-		self.chain = chain
-		self.id = id
-		self.name = name
-		self.isActive = isActive
-		self.fee = fee
-		self.apy = apy
-		self.providerType = providerType
-	}
-}
-
 public enum YieldProvider: String, Codable, CaseIterable, Equatable, Sendable {
 	case yo
 }

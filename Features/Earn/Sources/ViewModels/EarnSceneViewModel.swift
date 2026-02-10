@@ -18,7 +18,7 @@ import EarnService
 @Observable
 public final class EarnSceneViewModel {
     private let stakeService: any StakeServiceable
-    private let earnService: any EarnServiceable
+    private let yieldService: YieldService
     private let earnPositionsService: any EarnBalanceServiceable
     private let earnAsset: Asset
 
@@ -29,7 +29,7 @@ public final class EarnSceneViewModel {
     private let recommendedValidators = StakeRecommendedValidators()
 
     public let wallet: Wallet
-    public var request: EarnDelegationsRequest
+    public var request: DelegationsRequest
     public var delegations: [Delegation] = []
     public var validatorsRequest: StakeValidatorsRequest
     public var validators: [DelegationValidator] = []
@@ -43,17 +43,17 @@ public final class EarnSceneViewModel {
         wallet: Wallet,
         chain: StakeChain,
         stakeService: any StakeServiceable,
-        earnService: any EarnServiceable,
+        yieldService: YieldService,
         earnPositionsService: any EarnBalanceServiceable,
         earnAsset: Asset
     ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
-        self.earnService = earnService
+        self.yieldService = yieldService
         self.earnPositionsService = earnPositionsService
         self.earnAsset = earnAsset
-        self.request = EarnDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
+        self.request = DelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
         self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
         self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
     }
@@ -267,7 +267,7 @@ extension EarnSceneViewModel {
             wallet: wallet,
             asset: earnAsset,
             earnPositionsService: earnPositionsService,
-            earnService: earnService
+            yieldService: yieldService
         )
     }
 }

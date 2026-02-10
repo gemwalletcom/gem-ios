@@ -17,7 +17,7 @@ public extension GemTransactionInputType {
         case .generic(let asset, _, _): asset
         case .account(let asset, _): asset
         case .perpetual(asset: let asset, perpetualType: _): asset
-        case .earn(let asset, _, _): asset
+        case .yield(let asset, _, _): asset
         }
     }
 }
@@ -43,7 +43,7 @@ public extension GemTransactionInputType {
             return try TransferDataType.account(asset.map(), accountType.map())
         case .perpetual(asset: let asset, perpetualType: let perpetualType):
             return try TransferDataType.perpetual(asset.map(), perpetualType.map())
-        case .earn(let asset, let action, let data):
+        case .yield(let asset, let action, let data):
             return try TransferDataType.earn(asset.map(), action.map(), data.map())
         }
     }
@@ -76,13 +76,13 @@ public extension TransferDataType {
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
         case .earn(let asset, let action, let data):
-            return .earn(asset: asset.map(), action: action.map(), data: data.map())
+            return .yield(asset: asset.map(), action: action.map(), data: data.map())
         }
     }
 }
 
-public extension Gemstone.EarnAction {
-    func map() -> Primitives.EarnAction {
+public extension Gemstone.YieldType {
+    func map() -> Primitives.YieldType {
         switch self {
         case .deposit: .deposit
         case .withdraw: .withdraw
@@ -90,8 +90,8 @@ public extension Gemstone.EarnAction {
     }
 }
 
-public extension Primitives.EarnAction {
-    func map() -> Gemstone.EarnAction {
+public extension Primitives.YieldType {
+    func map() -> Gemstone.YieldType {
         switch self {
         case .deposit: .deposit
         case .withdraw: .withdraw

@@ -406,9 +406,11 @@ struct Migrations {
             }
         }
 
-        migrator.registerMigration("Create earn_providers and earn_positions tables") { db in
-            try EarnProviderRecord.create(db: db)
-            try EarnPositionRecord.create(db: db)
+        migrator.registerMigration("Add providerType to stake_validators") { db in
+            try? db.alter(table: "stake_validators") {
+                $0.add(column: "providerType", .text)
+                    .defaults(to: EarnProviderType.stake.rawValue)
+            }
         }
 
         try migrator.migrate(dbQueue)

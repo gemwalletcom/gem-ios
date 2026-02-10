@@ -7,24 +7,24 @@ import Primitives
 import PrimitivesComponents
 
 public struct EarnPositionViewModel: Identifiable, Sendable {
-    private let position: EarnPosition
+    private let position: Delegation
     private let decimals: Int
 
-    public init?(position: EarnPosition, decimals: Int) {
+    public init?(position: Delegation, decimals: Int) {
         self.position = position
         self.decimals = decimals
     }
 
     public var providerId: String {
-        position.base.providerId
+        position.base.validatorId
     }
 
     public var id: String {
-        position.base.positionId
+        position.base.delegationId
     }
 
     public var providerName: String {
-        position.provider.name
+        position.validator.name
     }
 
     public var hasBalance: Bool {
@@ -51,7 +51,7 @@ public struct EarnPositionViewModel: Identifiable, Sendable {
     }
 
     public var apy: Double {
-        position.provider.apy
+        position.validator.apr
     }
 
     public var apyFormatted: String {

@@ -10,7 +10,6 @@ import BannerService
 import ChainService
 import ConnectionsService
 import DeviceService
-import EarnServices
 import EventPresenterService
 import ExplorerService
 import Foundation
@@ -25,7 +24,6 @@ import PriceService
 import RewardsService
 import ScanService
 import StakeService
-import Support
 import SwiftUI
 import TransactionsService
 import TransactionStateService
@@ -69,6 +67,4 @@ extension EnvironmentValues {
     @Entry var walletSearchService: WalletSearchService = AppResolver.main.services.walletSearchService
     @Entry var assetSearchService: AssetSearchService = AppResolver.main.services.assetSearchService
     @Entry var inAppNotificationService: InAppNotificationService = AppResolver.main.services.inAppNotificationService
-    @Entry var earnServices: EarnServices = AppResolver.main.services.earnServices
-    @Entry var supportService: SupportService = AppResolver.main.services.supportService
 }

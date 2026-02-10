@@ -6,7 +6,7 @@ import GRDB
 
 struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     static let databaseTableName: String = "stake_validators"
-    
+
     enum Columns {
         static let id = Column("id")
         static let assetId = Column("assetId")
@@ -15,6 +15,7 @@ struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
         static let isActive = Column("isActive")
         static let commission = Column("commission")
         static let apr = Column("apr")
+        static let providerType = Column("providerType")
     }
 
     var id: String
@@ -24,6 +25,7 @@ struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     var isActive: Bool
     var commission: Double
     var apr: Double
+    var providerType: String
 }
 
 extension StakeValidatorRecord: CreateTable {
@@ -45,6 +47,9 @@ extension StakeValidatorRecord: CreateTable {
                 .notNull()
             $0.column(Columns.apr.name, .double)
                 .notNull()
+            $0.column(Columns.providerType.name, .text)
+                .notNull()
+                .defaults(to: EarnProviderType.stake.rawValue)
         }
     }
 }
@@ -57,7 +62,8 @@ extension StakeValidatorRecord {
             name: name,
             isActive: isActive,
             commission: commission,
-            apr: apr
+            apr: apr,
+            providerType: EarnProviderType(rawValue: providerType) ?? .stake
         )
     }
 }
@@ -77,7 +83,8 @@ extension DelegationValidator {
             name: name,
             isActive: isActive,
             commission: commission,
-            apr: apr
+            apr: apr,
+            providerType: providerType.rawValue
         )
     }
 }

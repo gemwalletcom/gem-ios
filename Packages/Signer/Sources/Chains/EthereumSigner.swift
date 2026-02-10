@@ -203,18 +203,18 @@ class EthereumSigner: Signable {
 
     func signEarn(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
-            case .evm(_, _, let earnData) = input.metadata,
-            let earnData = earnData,
-            let callDataHex = earnData.callData,
-            let contractAddress = earnData.contractAddress
+            case .evm(_, _, let yieldData) = input.metadata,
+            let yieldData = yieldData,
+            let callDataHex = yieldData.callData,
+            let contractAddress = yieldData.contractAddress
         else {
             throw AnyError("Invalid metadata for earn transaction")
         }
 
         let callData = try Data.from(hex: callDataHex)
-        let depositGasLimit = earnData.gasLimit.flatMap { BigInt($0) } ?? input.fee.gasLimit
+        let depositGasLimit = yieldData.gasLimit.flatMap { BigInt($0) } ?? input.fee.gasLimit
 
-        if let approvalData = earnData.approval {
+        if let approvalData = yieldData.approval {
             return try [
                 sign(coinType: input.coinType, input: buildBaseInput(
                     input: input,
@@ -260,10 +260,10 @@ class EthereumSigner: Signable {
 
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard
-            case .evm(_, _, let earnData) = input.metadata,
-            let earnData = earnData,
-            let data = earnData.callData,
-            let to = earnData.contractAddress
+            case .evm(_, _, let yieldData) = input.metadata,
+            let yieldData = yieldData,
+            let data = yieldData.callData,
+            let to = yieldData.contractAddress
         else {
             throw AnyError("Invalid metadata for {\(input.asset.chain)} staking")
         }
