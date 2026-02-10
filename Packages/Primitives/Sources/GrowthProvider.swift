@@ -4,9 +4,9 @@
 
 import Foundation
 
-public enum EarnProviderType: String, Codable, CaseIterable, Equatable, Sendable {
+public enum GrowthProviderType: String, Codable, CaseIterable, Equatable, Sendable {
 	case stake
-	case yield
+	case earn
 }
 
 public enum YieldProvider: String, Codable, CaseIterable, Equatable, Sendable {

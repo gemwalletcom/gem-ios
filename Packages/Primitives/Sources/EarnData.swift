@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct YieldData: Codable, Equatable, Hashable, Sendable {
+public struct EarnData: Codable, Equatable, Hashable, Sendable {
 	public let provider: String?
 	public let contractAddress: String?
 	public let callData: String?
