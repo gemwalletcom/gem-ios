@@ -13,8 +13,6 @@ import PriceService
 import RewardsService
 import InAppNotifications
 import NotificationService
-import Support
-
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.deviceService) private var deviceService
@@ -34,7 +32,6 @@ struct SettingsNavigationStack: View {
     @Environment(\.walletConnectorManager) private var walletConnectorManager
     @Environment(\.rewardsService) private var rewardsService
     @Environment(\.inAppNotificationService) private var inAppNotificationService
-    @Environment(\.supportService) private var supportService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -59,10 +56,7 @@ struct SettingsNavigationStack: View {
     }
 
     private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.settings },
-            set: { navigationState.settings = $0 }
-        )
+        navigationState.settings.binding
     }
 
     var body: some View {
@@ -75,7 +69,7 @@ struct SettingsNavigationStack: View {
                 ),
                 isPresentingWallets: $isPresentingWallets,
                 isPresentingSupport: $isPresentingSupport,
-                supportService: supportService
+                deviceId: (try? deviceService.getDeviceId()) ?? ""
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in

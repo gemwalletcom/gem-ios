@@ -23,10 +23,7 @@ struct TransactionsNavigationStack: View {
     }
 
     private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.activity },
-            set: { navigationState.activity = $0 }
-        )
+        navigationState.activity.binding
     }
 
     var body: some View {
@@ -50,10 +47,10 @@ struct TransactionsNavigationStack: View {
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(model.title)
-                .navigationDestination(for: TransactionExtended.self) {
+                .navigationDestination(for: Scenes.Transaction.self) {
                     TransactionNavigationView(
                         model: TransactionSceneViewModel(
-                            transaction: $0,
+                            transaction: $0.transaction,
                             walletId: model.wallet.walletId
                         )
                     )

@@ -120,13 +120,13 @@ extension FloatTextField {
             .lineLimit(1)
             .scaleEffect(text.isEmpty ? 1 : style.placeholderScale, anchor: .leading)
             .offset(y: text.isEmpty ? .zero : -.space10)
-            .animation(.smooth(duration: 0.15), value: text.isEmpty)
+            .animation(.smooth(duration: .AnimationDuration.fast), value: text.isEmpty)
     }
 
     private var textField: some View {
         TextField("", text: $text)
             .offset(y: text.isEmpty ? .zero : .space10)
-            .animation(.smooth(duration: 0.15), value: text.isEmpty)
+            .animation(.smooth(duration: .AnimationDuration.fast), value: text.isEmpty)
     }
 
     private var trailingContent: some View {

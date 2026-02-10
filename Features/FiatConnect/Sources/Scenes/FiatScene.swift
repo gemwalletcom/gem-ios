@@ -38,6 +38,9 @@ public struct FiatScene: View {
         .debouncedTask(id: model.fetchTrigger) {
             await model.fetch()
         }
+        .onTimer(every: .minutes(5)) {
+            await model.fetch()
+        }
         .alertSheet($model.isPresentingAlertMessage)
     }
 }
