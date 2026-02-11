@@ -12,7 +12,6 @@ import PrimitivesComponents
 import Formatters
 import Validators
 import BigInt
-import Preferences
 
 @MainActor
 @Observable
@@ -24,7 +23,6 @@ public final class FiatSceneViewModel {
     }
 
     private let fiatService: any GemAPIFiatService
-    private let securePreferences: SecurePreferences
     private let assetAddress: AssetAddress
     private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
@@ -48,7 +46,6 @@ public final class FiatSceneViewModel {
 
     public init(
         fiatService: any GemAPIFiatService,
-        securePreferences: SecurePreferences = SecurePreferences(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
         walletId: WalletId,
@@ -56,7 +53,6 @@ public final class FiatSceneViewModel {
         amount: Int? = nil
     ) {
         self.fiatService = fiatService
-        self.securePreferences = securePreferences
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
         self.walletId = walletId
@@ -67,14 +63,12 @@ public final class FiatSceneViewModel {
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            securePreferences: securePreferences,
             walletId: walletId
         )
         let sellOperation = SellOperation(
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            securePreferences: securePreferences,
             walletId: walletId
         )
 
@@ -191,9 +185,7 @@ extension FiatSceneViewModel {
             urlState = .loading
 
             do {
-                let deviceId = try securePreferences.getDeviceId()
-
-                guard let url = try await fiatService.getQuoteUrl(deviceId: deviceId, walletId: walletId.id, quoteId: selectedQuote.id).redirectUrl.asURL else {
+                guard let url = try await fiatService.getQuoteUrl(walletId: walletId.id, quoteId: selectedQuote.id).redirectUrl.asURL else {
                     urlState = .noData
                     return
                 }

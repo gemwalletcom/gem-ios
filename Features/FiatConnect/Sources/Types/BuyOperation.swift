@@ -7,13 +7,11 @@ import Validators
 import BigInt
 import Formatters
 import Localization
-import Preferences
 
 struct BuyOperation: FiatOperation {
     private let service: any GemAPIFiatService
     private let asset: Asset
     private let currencyFormatter: CurrencyFormatter
-    private let securePreferences: SecurePreferences
     private let walletId: WalletId
 
     private let config = FiatOperationConfig(
@@ -32,20 +30,17 @@ struct BuyOperation: FiatOperation {
         service: any GemAPIFiatService,
         asset: Asset,
         currencyFormatter: CurrencyFormatter,
-        securePreferences: SecurePreferences,
         walletId: WalletId
     ) {
         self.service = service
         self.asset = asset
         self.currencyFormatter = currencyFormatter
-        self.securePreferences = securePreferences
         self.walletId = walletId
     }
 
     func fetch(amount: Double) async throws -> [FiatQuote] {
-        let deviceId = try securePreferences.getDeviceId()
         let request = FiatQuoteRequest(amount: amount, currency: currencyFormatter.currencyCode)
-        return try await service.getQuotes(deviceId: deviceId, walletId: walletId.id, type: .buy, assetId: asset.id, request: request)
+        return try await service.getQuotes(walletId: walletId.id, type: .buy, assetId: asset.id, request: request)
     }
 
     func validators(
