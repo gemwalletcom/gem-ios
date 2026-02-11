@@ -29,7 +29,7 @@ public struct DeviceRequestSigner: Sendable {
         let message = "\(timestamp).\(method).\(path).\(walletId).\(bodyHash)"
         let signature = try privateKey.signature(for: Data(message.utf8))
 
-        let payload = "\(publicKeyHex).\(timestamp).\(walletId).\(bodyHash).\(signature.hex)"
+        let payload = "\(publicKeyHex).\(timestamp).\(walletId).\(bodyHash).\(signature.rawRepresentation.hex)"
         let encoded = Data(payload.utf8).base64EncodedString()
         request.setValue("Gem \(encoded)", forHTTPHeaderField: "Authorization")
     }
