@@ -42,18 +42,18 @@ public struct EarnScene: View {
                     }
                 }
             }
-            if model.hasPositions {
-                Section(model.positionsSectionTitle) {
+            Section(model.positionsSectionTitle) {
+                if model.hasPositions {
                     ForEach(model.positionModels) { delegation in
                         NavigationLink(value: delegation.delegation) {
                             DelegationView(delegation: delegation)
                         }
                     }
                     .listRowInsets(.assetListRowInsets)
+                } else if model.showEmptyState {
+                    EmptyContentView(model: model.emptyContentModel)
+                        .cleanListRow()
                 }
-            } else if model.showEmptyState {
-                EmptyContentView(model: model.emptyContentModel)
-                    .cleanListRow()
             }
         }
         .listSectionSpacing(.compact)
