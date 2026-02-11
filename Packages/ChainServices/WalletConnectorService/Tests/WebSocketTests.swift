@@ -8,7 +8,7 @@ struct WebSocketTests {
 
     @Test
     func initialState() {
-        let socket = WebSocket(request: URLRequest(url: URL(string: "wss://example.com")!))
+        let socket = WebSocket.mock()
 
         #expect(socket.isConnected == false)
         #expect(socket.onConnect == nil)
@@ -18,7 +18,7 @@ struct WebSocketTests {
 
     @Test
     func writeWithoutConnectionCallsCompletionImmediately() async {
-        let socket = WebSocket(request: URLRequest(url: URL(string: "wss://example.com")!))
+        let socket = WebSocket.mock()
 
         await confirmation { confirm in
             socket.write(string: "test") {
@@ -31,7 +31,7 @@ struct WebSocketTests {
 
     @Test
     func stressTestConcurrentPropertyAccess() async {
-        let socket = WebSocket(request: URLRequest(url: URL(string: "wss://example.com")!))
+        let socket = WebSocket.mock()
         let iterations = 1000
 
         await withTaskGroup(of: Void.self) { group in
@@ -60,7 +60,7 @@ struct WebSocketTests {
 
     @Test
     func stressTestConcurrentWrites() async {
-        let socket = WebSocket(request: URLRequest(url: URL(string: "wss://example.com")!))
+        let socket = WebSocket.mock()
         let iterations = 100
 
         await confirmation(expectedCount: iterations) { confirm in
@@ -78,7 +78,7 @@ struct WebSocketTests {
 
     @Test
     func stressTestConcurrentConnectDisconnect() async {
-        let socket = WebSocket(request: URLRequest(url: URL(string: "wss://example.com")!))
+        let socket = WebSocket.mock()
         let iterations = 50
 
         await withTaskGroup(of: Void.self) { group in
@@ -100,5 +100,11 @@ struct WebSocketTests {
                 }
             }
         }
+    }
+}
+
+extension WebSocket {
+    static func mock(url: String = "wss://example.com") -> WebSocket {
+        WebSocket(request: URLRequest(url: URL(string: url)!))
     }
 }
