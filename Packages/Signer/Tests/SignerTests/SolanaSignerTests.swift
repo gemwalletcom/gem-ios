@@ -7,7 +7,7 @@ import Testing
 import WalletCore
 
 struct SolanaSignerTests {
-    let fee = Fee(fee: .zero, gasPriceType: .solana(gasPrice: 5_000, priorityFee: 10_000, unitPrice: 200, jitoTip: 0), gasLimit: 125_000)
+    let fee = Fee(fee: .zero, gasPriceType: .solana(gasPrice: 5_000, priorityFee: 10_000, unitPrice: 200), gasLimit: 125_000)
 
     @Test
     func testTransfer() throws {

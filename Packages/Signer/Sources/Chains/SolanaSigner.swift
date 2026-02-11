@@ -5,7 +5,6 @@ import Keystore
 import Primitives
 import WalletCore
 
-internal import Gemstone
 internal import BigInt
 
 struct SolanaSigner: Signable {
@@ -73,7 +72,6 @@ struct SolanaSigner: Signable {
 
     private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
         let unitPrice = input.fee.gasPriceType.unitPrice
-        let jitoTip = input.fee.gasPriceType.jitoTip
 
         let signingInput = try SolanaSigningInput.with {
             $0.transactionType = type
@@ -95,13 +93,6 @@ struct SolanaSigner: Signable {
         }
 
         let encoded = try transcodeBase58ToBase64(output.encoded)
-        if jitoTip > 0 {
-            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
-            guard let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) else {
-                throw AnyError("unable to insert Jito tip instruction")
-            }
-            return try signRawTransaction(transaction: transaction, privateKey: privateKey)
-        }
         return try signRawTransaction(transaction: encoded, privateKey: privateKey)
     }
 
