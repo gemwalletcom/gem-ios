@@ -51,7 +51,7 @@ public struct EarnScene: View {
                     }
                     .listRowInsets(.assetListRowInsets)
                 }
-            } else {
+            } else if model.showEmptyState {
                 EmptyContentView(model: model.emptyContentModel)
                     .cleanListRow()
             }

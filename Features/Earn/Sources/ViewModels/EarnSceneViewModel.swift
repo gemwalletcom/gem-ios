@@ -45,7 +45,7 @@ public final class EarnSceneViewModel {
     }
 
     var title: String { Localized.Common.earn }
-    var assetTitle: String { "\(asset.chain.asset.name) (\(asset.symbol))" }
+    var assetTitle: String { "\(asset.symbol) (\(asset.chain.asset.name))" }
 
     var aprTitle: String { Localized.Stake.apr("") }
     var aprValue: String {
@@ -78,6 +78,10 @@ public final class EarnSceneViewModel {
 
     var hasPositions: Bool {
         positionModels.isNotEmpty
+    }
+
+    var showEmptyState: Bool {
+        !hasPositions && !viewState.isLoading
     }
 
     var positionsSectionTitle: String {
