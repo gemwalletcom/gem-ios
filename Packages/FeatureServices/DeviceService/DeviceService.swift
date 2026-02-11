@@ -9,6 +9,8 @@ import Preferences
 
 public struct DeviceService: DeviceServiceable {
 
+    public static let authTokenRefreshInterval: Duration = .seconds(3600)
+
     private let deviceProvider: any GemAPIDeviceService
     private let subscriptionsService: SubscriptionService
     private let preferences: Preferences
@@ -54,6 +56,7 @@ public struct DeviceService: DeviceServiceable {
             try await migrateDeviceIfNeeded()
             try await updateDevice()
         }
+        try? await updateAuthTokenIfNeeded()
     }
 
     private func migrateDeviceIfNeeded() async throws {
@@ -84,6 +87,19 @@ public struct DeviceService: DeviceServiceable {
         if needsSubscriptionUpdate || needsDeviceUpdate {
             device = try await self.updateDevice(localDevice)
         }
+    }
+
+    public func updateAuthTokenIfNeeded() async throws {
+        guard preferences.isDeviceRegistered, shouldUpdateAuthToken() else { return }
+        let token = try await deviceProvider.getDeviceToken(deviceId: try getDeviceId())
+        try securePreferences.setAuthToken(token)
+    }
+
+    private func shouldUpdateAuthToken() -> Bool {
+        guard let token = try? securePreferences.authToken() else { return true }
+        let now = UInt64(Date.now.timeIntervalSince1970)
+        let remainingTime = token.expiresAt > now ? token.expiresAt - now : 0
+        return remainingTime < UInt64(Self.authTokenRefreshInterval.components.seconds)
     }
     
     private func getOrCreateDevice(_ deviceId: String) async throws -> Device {

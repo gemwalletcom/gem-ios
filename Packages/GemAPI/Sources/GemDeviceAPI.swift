@@ -28,6 +28,7 @@ public enum GemDeviceAPI: TargetType {
     case scanTransaction(deviceId: String, payload: ScanTransactionPayload)
 
     case getAuthNonce(deviceId: String)
+    case getDeviceToken(deviceId: String)
 
     case getDeviceRewards(deviceId: String, walletId: String)
     case getDeviceRewardsEvents(deviceId: String, walletId: String)
@@ -55,6 +56,7 @@ public enum GemDeviceAPI: TargetType {
             .getPriceAlerts,
             .getDeviceNFTAssets,
             .getAuthNonce,
+            .getDeviceToken,
             .getDeviceRewards,
             .getDeviceRewardsEvents,
             .getDeviceRedemptionOption,
@@ -118,6 +120,8 @@ public enum GemDeviceAPI: TargetType {
             return "/v2/devices/scan/transaction"
         case .getAuthNonce:
             return "/v2/devices/auth/nonce"
+        case .getDeviceToken:
+            return "/v2/devices/token"
         case .getDeviceRewards:
             return "/v2/devices/rewards"
         case .getDeviceRewardsEvents:
@@ -149,6 +153,7 @@ public enum GemDeviceAPI: TargetType {
             .reportNft(let deviceId, _),
             .scanTransaction(let deviceId, _),
             .getAuthNonce(let deviceId),
+            .getDeviceToken(let deviceId),
             .getNotifications(let deviceId, _),
             .markNotificationsRead(let deviceId),
             .getDeviceRedemptionOption(let deviceId, _),
@@ -186,6 +191,7 @@ public enum GemDeviceAPI: TargetType {
             .getAssetsList,
             .getDeviceNFTAssets,
             .getAuthNonce,
+            .getDeviceToken,
             .getDeviceRewards,
             .getDeviceRewardsEvents,
             .getDeviceRedemptionOption,
