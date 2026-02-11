@@ -19,9 +19,6 @@ public final class WalletConnectorService {
     private let signer: WalletConnectorSignable
     private let messageTracker = MessageTracker()
     private let walletConnect = WalletConnect()
-    private static let tronMethodVersionKey = "tron_method_version"
-    private static let tronMethodVersionValue = "v1"
-
     public init(signer: WalletConnectorSignable) {
         self.signer = signer
     }
@@ -314,10 +311,10 @@ extension WalletConnectorService {
             events: events.map { $0.rawValue },
             accounts: supportedAccounts
         )
-        var sessionProperties = proposal.sessionProperties ?? [:]
-        if supportedChains.contains(where: { $0.chain == .tron }), sessionProperties[Self.tronMethodVersionKey] == nil {
-            sessionProperties[Self.tronMethodVersionKey] = Self.tronMethodVersionValue
-        }
+        let sessionProperties = walletConnect.configSessionProperties(
+            properties: proposal.sessionProperties ?? [:],
+            chains: chains.map { $0.id }
+        )
 
         return try await WalletKit.instance.approve(
             proposalId: proposal.id,

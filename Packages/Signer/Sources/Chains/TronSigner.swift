@@ -96,7 +96,6 @@ struct TronSigner: Signable {
     }
 
     func signData(input: SignerInput, privateKey: Data) throws -> String {
-        // use GemChainSigner instead of WalletCore to sign
         try ChainSigner(chain: input.asset.chain)
             .signData(input: input, privateKey: privateKey)
     }
