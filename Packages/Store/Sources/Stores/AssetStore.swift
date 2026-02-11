@@ -89,7 +89,7 @@ public struct AssetStore: Sendable {
     }
 
     public func setEarnApr(assetId: String, apr: Double) throws {
-        try db.write { db in
+        _ = try db.write { db in
             try AssetRecord
                 .filter(AssetRecord.Columns.id == assetId)
                 .updateAll(db, AssetRecord.Columns.earnApr.set(to: apr))
