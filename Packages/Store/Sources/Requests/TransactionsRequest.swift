@@ -5,8 +5,6 @@ import GRDB
 import Primitives
 
 public struct TransactionsRequest: DatabaseQueryable {
-    public static var defaultValue: [TransactionExtended] { [] }
-
     private let walletId: WalletId
     private let type: TransactionsRequestType
     private let limit: Int

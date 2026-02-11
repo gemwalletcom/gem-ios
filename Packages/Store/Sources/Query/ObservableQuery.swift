@@ -18,27 +18,27 @@ public final class ObservableQuery<Request: DatabaseQueryable>: Sendable, Bindab
 
     public private(set) var value: Request.Value
 
-    private var db: DatabaseQueue?
+    private var dbQueue: DatabaseQueue?
     private var cancellable: AnyCancellable?
 
-    public init(_ request: Request) {
+    public init(_ request: Request, initialValue: Request.Value) {
         self.request = request
-        self.value = Request.defaultValue
+        self.value = initialValue
     }
 
-    public func bind(db: DatabaseQueue) {
-        guard self.db == nil else { return }
-        self.db = db
+    public func bind(dbQueue: DatabaseQueue) {
+        guard self.dbQueue == nil else { return }
+        self.dbQueue = dbQueue
         startObservation()
     }
 
     private func startObservation() {
-        guard let db else { return }
+        guard let dbQueue else { return }
 
         cancellable = ValueObservation.tracking { [request] db in
             try request.fetch(db)
         }
-        .publisher(in: db, scheduling: .immediate)
+        .publisher(in: dbQueue, scheduling: .immediate)
         .sink(
             receiveCompletion: { completion in
                 if case .failure(let error) = completion {

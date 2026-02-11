@@ -46,7 +46,7 @@ public final class TransactionsFilterViewModel {
             type: type,
             filters: defaultFilters + [.types(transactionTypes.map { $0.rawValue })]
         )
-        self.query = ObservableQuery(request)
+        self.query = ObservableQuery(request, initialValue: [])
     }
 
     public var isAnyFilterSpecified: Bool {

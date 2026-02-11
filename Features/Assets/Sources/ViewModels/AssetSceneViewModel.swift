@@ -69,7 +69,7 @@ public final class AssetSceneViewModel: Sendable {
             assetData: AssetData.with(asset: input.asset),
             feeAssetData: AssetData.with(asset: input.asset.chain.asset)
         )
-        self.transactionsQuery = ObservableQuery(input.transactionsRequest)
+        self.transactionsQuery = ObservableQuery(input.transactionsRequest, initialValue: [])
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 

@@ -75,7 +75,7 @@ public final class PerpetualSceneViewModel {
             type: .asset(assetId: asset.id),
             filters: [.types(transactionTypes.map { $0.rawValue })]
         )
-        self.transactionsQuery = ObservableQuery(transactionsRequest)
+        self.transactionsQuery = ObservableQuery(transactionsRequest, initialValue: [])
     }
 
     public var navigationTitle: String {

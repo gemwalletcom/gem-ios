@@ -5,19 +5,19 @@ import SwiftUI
 import GRDB
 
 public struct DatabaseAccess: Sendable {
-    private let dbQueue: DatabaseQueue?
+    private let _dbQueue: DatabaseQueue?
 
     public static let notConfigured = DatabaseAccess(nil)
 
     public init(_ dbQueue: DatabaseQueue?) {
-        self.dbQueue = dbQueue
+        self._dbQueue = dbQueue
     }
 
-    public var db: DatabaseQueue {
-        guard let dbQueue else {
+    public var dbQueue: DatabaseQueue {
+        guard let _dbQueue else {
             fatalError("DatabaseQueue not configured. Use .databaseQueue() modifier.")
         }
-        return dbQueue
+        return _dbQueue
     }
 }
 
@@ -33,7 +33,7 @@ public extension EnvironmentValues {
 }
 
 public extension View {
-    func databaseQueue(_ db: DatabaseQueue) -> some View {
-        environment(\.database, DatabaseAccess(db))
+    func databaseQueue(_ dbQueue: DatabaseQueue) -> some View {
+        environment(\.database, DatabaseAccess(dbQueue))
     }
 }

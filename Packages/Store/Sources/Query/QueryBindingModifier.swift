@@ -12,7 +12,7 @@ struct QueryBindingModifier: ViewModifier {
         content
             .onAppear {
                 for query in queries {
-                    query.bind(db: database.db)
+                    query.bind(dbQueue: database.dbQueue)
                 }
             }
     }
