@@ -116,7 +116,7 @@ public struct ImportAssetsService: Sendable {
 
         try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { try? AssetId(id: $0) })
         try assetStore.setAssetIsSwappable(for: assets.assetIds, value: true)
-    
+
         preferences.swapAssetsVersion = Int(assets.version)
     }
 }

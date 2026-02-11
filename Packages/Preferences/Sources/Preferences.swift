@@ -36,8 +36,6 @@ public final class Preferences: @unchecked Sendable {
         static let perpetualLeverage = "perpetual_leverage"
         static let perpetualNodeUrl = "perpetual_node_url"
         static let isDeviceRegistered = "is_device_registered"
-        static let supportDeviceId = "support_device_id"
-        static let supportDeviceRegistered = "support_device_registered"
     }
 
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
@@ -121,12 +119,6 @@ public final class Preferences: @unchecked Sendable {
     @ConfigurableDefaults(key: Keys.isDeviceRegistered, defaultValue: false)
     public var isDeviceRegistered: Bool
 
-    @ConfigurableDefaults(key: Keys.supportDeviceId, defaultValue: nil)
-    public var supportDeviceId: String?
-
-    @ConfigurableDefaults(key: Keys.supportDeviceRegistered, defaultValue: false)
-    public var isSupportDeviceRegistered: Bool
-
     public static let standard = Preferences()
     private let defaults: UserDefaults
 
@@ -168,8 +160,6 @@ public final class Preferences: @unchecked Sendable {
         configure(\._perpetualLeverage, key: Keys.perpetualLeverage, defaultValue: 10)
         configure(\._perpetualNodeUrl, key: Keys.perpetualNodeUrl, defaultValue: nil)
         configure(\._isDeviceRegistered, key: Keys.isDeviceRegistered, defaultValue: false)
-        configure(\._supportDeviceId, key: Keys.supportDeviceId, defaultValue: nil)
-        configure(\._isSupportDeviceRegistered, key: Keys.supportDeviceRegistered, defaultValue: false)
     }
 
     public func incrementLaunchesCount() {

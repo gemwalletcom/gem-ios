@@ -7,7 +7,6 @@ import GemstonePrimitives
 import Localization
 import Primitives
 import PrimitivesComponents
-import Earn
 
 final class AmountFreezeViewModel: AmountDataProvidable {
     let asset: Asset

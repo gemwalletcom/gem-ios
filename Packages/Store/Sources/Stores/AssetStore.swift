@@ -38,8 +38,9 @@ public struct AssetStore: Sendable {
                         AssetRecord.Columns.isSellable.set(to: asset.properties.isSellable),
                         AssetRecord.Columns.isSwappable.set(to: asset.properties.isSwapable),
                         AssetRecord.Columns.isStakeable.set(to: asset.properties.isStakeable),
+                        AssetRecord.Columns.isEarnable.set(to: asset.properties.isEarnable),
                         AssetRecord.Columns.stakingApr.set(to: asset.properties.stakingApr),
-                        AssetRecord.Columns.isEarnable.set(to: asset.properties.isEarnable)
+                        AssetRecord.Columns.earnApr.set(to: asset.properties.earnApr)
                     )
             }
         }
@@ -80,6 +81,19 @@ public struct AssetStore: Sendable {
     @discardableResult
     public func setAssetIsStakeable(for assetIds: [String], value: Bool) throws -> Int {
         try setColumn(for: assetIds, column: AssetRecord.Columns.isStakeable, value: value)
+    }
+
+    @discardableResult
+    public func setAssetIsEarnable(for assetIds: [String], value: Bool) throws -> Int {
+        try setColumn(for: assetIds, column: AssetRecord.Columns.isEarnable, value: value)
+    }
+
+    public func setEarnApr(assetId: String, apr: Double) throws {
+        try db.write { db in
+            try AssetRecord
+                .filter(AssetRecord.Columns.id == assetId)
+                .updateAll(db, AssetRecord.Columns.earnApr.set(to: apr))
+        }
     }
     
     private func setColumn(for assetIds: [String], column: Column, value: Bool) throws -> Int {

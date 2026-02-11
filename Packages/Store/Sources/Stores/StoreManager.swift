@@ -19,7 +19,6 @@ public struct StoreManager: Sendable {
     public let recentActivityStore: RecentActivityStore
     public let searchStore: SearchStore
     public let inAppNotificationStore: InAppNotificationStore
-    public let earnStore: EarnStore
     public let stakeStore: StakeStore
 
     public init(db: DB) {
@@ -39,7 +38,6 @@ public struct StoreManager: Sendable {
         self.recentActivityStore = RecentActivityStore(db: db)
         self.searchStore = SearchStore(db: db)
         self.inAppNotificationStore = InAppNotificationStore(db: db)
-        self.earnStore = EarnStore(db: db)
         self.stakeStore = StakeStore(db: db)
     }
 }

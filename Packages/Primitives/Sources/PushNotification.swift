@@ -54,13 +54,11 @@ public struct PushNotificationSwapAsset: Codable, Equatable, Sendable {
 }
 
 public struct PushNotificationTransaction: Codable, Equatable, Sendable {
-	public let walletIndex: Int32?
 	public let walletId: String
 	public let assetId: String
 	public let transaction: Transaction
 
-	public init(walletIndex: Int32?, walletId: String, assetId: String, transaction: Transaction) {
-		self.walletIndex = walletIndex
+	public init(walletId: String, assetId: String, transaction: Transaction) {
 		self.walletId = walletId
 		self.assetId = assetId
 		self.transaction = transaction

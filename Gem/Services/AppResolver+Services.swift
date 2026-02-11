@@ -30,8 +30,6 @@ import RewardsService
 import EventPresenterService
 import NotificationService
 import EarnService
-import EarnServices
-import Support
 import GemAPI
 
 extension AppResolver {
@@ -80,8 +78,6 @@ extension AppResolver {
         let assetSearchService: AssetSearchService
         let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
-        let earnServices: EarnServices
-        let supportService: SupportService
         let fiatService: any GemAPIFiatService
 
         init(
@@ -128,8 +124,6 @@ extension AppResolver {
             assetSearchService: AssetSearchService,
             appLifecycleService: AppLifecycleService,
             inAppNotificationService: InAppNotificationService,
-            earnServices: EarnServices,
-            supportService: SupportService,
             fiatService: any GemAPIFiatService
         ) {
             self.assetsService = assetsService
@@ -175,8 +169,6 @@ extension AppResolver {
             self.assetSearchService = assetSearchService
             self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
-            self.earnServices = earnServices
-            self.supportService = supportService
             self.fiatService = fiatService
         }
     }

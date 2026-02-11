@@ -160,7 +160,7 @@ public extension NewBanner {
         )
     }
 
-    public static func earn(assetId: AssetId) -> NewBanner {
+    static func earn(assetId: AssetId) -> NewBanner {
         NewBanner(
             assetId: assetId,
             event: .earn,

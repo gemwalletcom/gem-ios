@@ -259,10 +259,10 @@ public enum Localized {
     public static let details = Localized.tr("Localizable", "common.details", fallback: "Details")
     /// Done
     public static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
-    /// Edit
-    public static let edit = Localized.tr("Localizable", "common.edit", fallback: "Edit")
     /// Earn
     public static let earn = Localized.tr("Localizable", "common.earn", fallback: "Earn")
+    /// Edit
+    public static let edit = Localized.tr("Localizable", "common.edit", fallback: "Edit")
     /// Emoji
     public static let emoji = Localized.tr("Localizable", "common.emoji", fallback: "Emoji")
     /// Get Started
@@ -365,6 +365,18 @@ public enum Localized {
     public static let today = Localized.tr("Localizable", "date.today", fallback: "Today")
     /// Yesterday
     public static let yesterday = Localized.tr("Localizable", "date.yesterday", fallback: "Yesterday")
+  }
+  public enum Earn {
+    public enum State {
+      public enum Empty {
+        /// Deposit your first %@
+        public static func description(_ p1: Any) -> String {
+          return Localized.tr("Localizable", "earn.state.empty.description", String(describing: p1), fallback: "Deposit your first %@")
+        }
+        /// Your positions will appear here
+        public static let title = Localized.tr("Localizable", "earn.state.empty.title", fallback: "Your positions will appear here")
+      }
+    }
   }
   public enum Errors {
     /// Camera permission not granted. Please enable camera access in settings to scan QR code.

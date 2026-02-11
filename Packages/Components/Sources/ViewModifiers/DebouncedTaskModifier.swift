@@ -22,7 +22,7 @@ struct DebouncedTaskModifier<T: DebouncableTrigger>: ViewModifier {
 public extension View {
     func debouncedTask<T: DebouncableTrigger>(
         id trigger: T,
-        interval: Duration = .milliseconds(250),
+        interval: Duration = .Debounce.normal,
         action: @Sendable @escaping () async -> Void
     ) -> some View {
         modifier(
