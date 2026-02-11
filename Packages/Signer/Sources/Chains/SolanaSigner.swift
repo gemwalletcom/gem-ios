@@ -96,48 +96,8 @@ struct SolanaSigner: Signable {
         return try signRawTransaction(transaction: encoded, privateKey: privateKey)
     }
 
-    func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        guard
-            case .generic(_, _, let extra) = input.type,
-            let string = String(data: extra.data!, encoding: .utf8),
-            let bytes = Base64.decode(string: string)
-        else {
-            throw AnyError("not data input")
-        }
-        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType)
-    }
-
-    func signData(bytes: Data, privateKey: Data, outputType: Primitives.TransferDataOutputType) throws -> String {
-        let rawTxDecoder = SolanaRawTxDecoder(rawData: bytes)
-        let numRequiredSignatures = rawTxDecoder.signatureCount()
-        var signatures: [Data] = rawTxDecoder.signatures()
-
-        guard signatures[0] == Data(repeating: 0x0, count: 64) else {
-            throw AnyError("user signature should be first")
-        }
-
-        // read message to sign
-        let message = rawTxDecoder.messageData()
-        guard
-            let signature = PrivateKey(data: privateKey)?.sign(digest: message, curve: .ed25519)
-        else {
-            throw AnyError("fail to sign data")
-        }
-
-        switch outputType {
-        case .signature:
-            return Base58.encodeNoCheck(data: signature)
-        case .encodedTransaction:
-            // update user's signature
-            signatures[0] = signature
-
-            var signed = Data([numRequiredSignatures])
-            for sig in signatures {
-                signed.append(sig)
-            }
-            signed.append(message)
-            return signed.base64EncodedString()
-        }
+    func signData(input: SignerInput, privateKey: Data) throws -> String {
+        try ChainSigner(chain: .solana).signData(input: input, privateKey: privateKey)
     }
 
     func signRawTransaction(transaction: String, privateKey: Data) throws -> String {
@@ -227,39 +187,3 @@ extension String {
     }
 }
 
-struct SolanaRawTxDecoder {
-    let rawData: Data
-
-    /// Decode a “short-vec” (compact-U16) length at `offset`, advancing the offset.
-    private func decodeShortVecLength(offset: inout Int) -> UInt8 {
-        let byte = rawData[offset]
-        offset += 1
-        return byte & 0x7F
-    }
-
-    func signatureCount() -> UInt8 {
-        var offset = 0
-        return decodeShortVecLength(offset: &offset)
-    }
-
-    func signatures() -> [Data] {
-        var offset = 0
-        let count = decodeShortVecLength(offset: &offset)
-        var result: [Data] = []
-        for _ in 0..<count {
-            let sig = rawData.subdata(in: offset..<(offset + 64))
-            result.append(sig)
-            offset += 64
-        }
-        return result
-    }
-
-    /// The serialized message bytes that every signer signs.
-    /// (Everything after the sig-array: length byte + N×64-byte sigs.)
-    func messageData() -> Data {
-        var offset = 0
-        let sigCount = Int(decodeShortVecLength(offset: &offset))
-        offset += sigCount * 64
-        return rawData.subdata(in: offset..<rawData.count)
-    }
-}
