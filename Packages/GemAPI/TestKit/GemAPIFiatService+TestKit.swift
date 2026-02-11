@@ -16,11 +16,11 @@ public struct GemAPIFiatServiceMock: GemAPIFiatService {
         self.quoteUrl = quoteUrl
     }
 
-    public func getQuotes(deviceId: String, walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote] {
+    public func getQuotes(walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote] {
         quotes
     }
 
-    public func getQuoteUrl(deviceId: String, walletId: String, quoteId: String) async throws -> FiatQuoteUrl {
+    public func getQuoteUrl(walletId: String, quoteId: String) async throws -> FiatQuoteUrl {
         quoteUrl
     }
 }

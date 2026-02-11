@@ -35,9 +35,8 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
 
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
         let wallet = try walletSessionService.getWallet(walletId: walletId)
-        let deviceId = try await deviceService.getSubscriptionsDeviceId()
+        _ = try await deviceService.getSubscriptionsDeviceId()
         let assetIds = try await discoverAssetService.getAssets(
-            deviceId: deviceId,
             wallet: wallet,
             fromTimestamp: preferences.assetsTimestamp
         )
