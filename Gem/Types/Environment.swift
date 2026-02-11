@@ -1,16 +1,39 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import ActivityService
-import AddressNameService
-import AppService
-import AssetsService
-import AvatarService
-import BalanceService
+import Foundation
+import SwiftUI
+import GRDB
+import Store
+import Keystore
 import BannerService
-import ChainService
-import ConnectionsService
+import NotificationService
 import DeviceService
+import PriceAlertService
+import GemAPI
+import ChainService
+import StakeService
+import NodeService
+import PriceService
+import WalletConnector
+import ConnectionsService
+import ExplorerService
+import NFTService
+import BalanceService
+import AssetsService
+import TransactionsService
+import WalletsService
+import WalletService
+import AvatarService
+import AppService
+import ScanService
+import NameService
+import PerpetualService
+import TransactionStateService
+import AddressNameService
+import ActivityService
+import RewardsService
 import EventPresenterService
+
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
     @Entry var keystore: any Keystore = AppResolver.main.storages.keystore

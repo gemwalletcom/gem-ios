@@ -103,6 +103,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
+                "Formatters",
                 .product(name: "ChainService", package: "ChainServices"),
                 "AssetsService"
             ],
