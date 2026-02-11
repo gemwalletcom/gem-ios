@@ -5,8 +5,6 @@ import Primitives
 import PrimitivesComponents
 import Style
 import SwiftUI
-import struct Earn.StakeValidatorViewModel
-import struct Earn.ValidatorView
 
 struct AmountScene: View {
     @FocusState private var focusedField: Bool
@@ -113,7 +111,12 @@ struct AmountScene: View {
                     }
                 }
 
-            case .transfer, .earn:
+            case let .earn(earn):
+                Section(earn.providerTitle) {
+                    ValidatorView(model: StakeValidatorViewModel(validator: earn.provider))
+                }
+
+            case .transfer:
                 EmptyView()
             }
         }

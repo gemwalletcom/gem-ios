@@ -6,17 +6,16 @@ import GemstonePrimitives
 import NativeProviderService
 import Primitives
 
-public final class EarnProviderService: Sendable {
-    public let yielder: GemYielder
+public final class YieldService: Sendable {
+    private let yielder: GemYielder
 
     public init(yielder: GemYielder) {
         self.yielder = yielder
     }
 
-    public convenience init(nodeProvider: any NodeURLFetchable) throws {
-        let nativeProvider = NativeProvider(nodeProvider: nodeProvider)
-        let yielder = try GemYielder(rpcProvider: nativeProvider)
-        self.init(yielder: yielder)
+    public convenience init(nodeProvider: any NodeURLFetchable) {
+        // TODO: - review core force unwrapping
+        try! self.init(yielder: GemYielder(rpcProvider: NativeProvider(nodeProvider: nodeProvider)))
     }
 
     public func getProviders(for assetId: Primitives.AssetId) async throws -> [DelegationValidator] {

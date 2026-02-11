@@ -3,7 +3,6 @@
 import SwiftUI
 import Components
 import PrimitivesComponents
-import Staking
 
 public struct EarnDetailScene: View {
     private let model: EarnDetailSceneViewModel
@@ -27,13 +26,7 @@ public struct EarnDetailScene: View {
             .cleanListRow()
 
             Section {
-                if let url = model.providerUrl {
-                    SafariNavigationLink(url: url) {
-                        ListItemView(title: model.providerTitle, subtitle: model.providerText)
-                    }
-                } else {
-                    ListItemView(title: model.providerTitle, subtitle: model.providerText)
-                }
+                ListItemView(title: model.providerTitle, subtitle: model.providerText)
 
                 if model.showApr {
                     ListItemView(title: model.aprTitle, subtitle: model.aprText)

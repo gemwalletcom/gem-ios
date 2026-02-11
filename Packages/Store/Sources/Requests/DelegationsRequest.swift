@@ -11,27 +11,22 @@ public struct DelegationsRequest: ValueObservationQueryable {
 
     private let walletId: WalletId
     private let assetId: AssetId
-    private let providerType: GrowthProviderType?
+    private let providerType: GrowthProviderType
 
-    public init(walletId: WalletId, assetId: AssetId, providerType: GrowthProviderType? = nil) {
+    public init(walletId: WalletId, assetId: AssetId, providerType: GrowthProviderType) {
         self.walletId = walletId
         self.assetId = assetId
         self.providerType = providerType
     }
 
     public func fetch(_ db: Database) throws -> [Delegation] {
-        var request = StakeDelegationRecord
+        try StakeDelegationRecord
             .including(optional: StakeDelegationRecord.validator)
             .including(optional: StakeDelegationRecord.price)
             .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
             .filter(StakeDelegationRecord.Columns.assetId == assetId.identifier)
-
-        if let providerType {
-            request = request.joining(required: StakeDelegationRecord.validator
+            .joining(required: StakeDelegationRecord.validator
                 .filter(StakeValidatorRecord.Columns.providerType == providerType.rawValue))
-        }
-
-        return try request
             .order(StakeDelegationRecord.Columns.balance.desc)
             .asRequest(of: StakeDelegationInfo.self)
             .fetchAll(db)

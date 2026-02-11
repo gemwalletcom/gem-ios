@@ -366,6 +366,18 @@ public enum Localized {
     /// Yesterday
     public static let yesterday = Localized.tr("Localizable", "date.yesterday", fallback: "Yesterday")
   }
+  public enum Earn {
+    public enum State {
+      public enum Empty {
+        /// Deposit your first %@
+        public static func description(_ p1: Any) -> String {
+          return Localized.tr("Localizable", "earn.state.empty.description", String(describing: p1), fallback: "Deposit your first %@")
+        }
+        /// Your positions will appear here
+        public static let title = Localized.tr("Localizable", "earn.state.empty.title", fallback: "Your positions will appear here")
+      }
+    }
+  }
   public enum Errors {
     /// Camera permission not granted. Please enable camera access in settings to scan QR code.
     public static let cameraPermissionsNotGranted = Localized.tr("Localizable", "errors.camera_permissions_not_granted", fallback: "Camera permission not granted. Please enable camera access in settings to scan QR code.")

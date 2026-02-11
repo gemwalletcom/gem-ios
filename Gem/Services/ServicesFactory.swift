@@ -43,7 +43,6 @@ import EventPresenterService
 import EarnService
 import SwiftHTTPClient
 
-
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages, navigation: NavigationStateManager) -> AppResolver.Services {
         let storeManager = StoreManager(db: storages.db)
@@ -77,6 +76,7 @@ struct ServicesFactory {
         let nativeProvider = NativeProvider(nodeProvider: nodeService)
         let gatewayService = GatewayService(provider: nativeProvider)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
+        let yieldService = YieldService(nodeProvider: nodeService)
 
         let avatarService = AvatarService(store: storeManager.walletStore)
         let assetsService = Self.makeAssetsService(
@@ -91,14 +91,13 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
-        let earnProviderService = Self.makeEarnProviderService(
-            nodeProvider: nodeService
-        )
-        let earnBalanceService = Self.makeEarnBalanceService(
+
+        let earnService = Self.makeEarnService(
             assetsService: assetsService,
+            assetStore: storeManager.assetStore,
             balanceStore: storeManager.balanceStore,
             stakeStore: storeManager.stakeStore,
-            earnProviderService: earnProviderService
+            yieldService: yieldService
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
@@ -126,6 +125,7 @@ struct ServicesFactory {
         let transactionStateService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainFactory: chainServiceFactory,
             balanceService: balanceService
@@ -183,7 +183,7 @@ struct ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
-            earnBalanceService: earnBalanceService,
+            earnService: earnService,
             priceService: priceService,
             priceObserver: priceObserverService,
             deviceService: deviceService,
@@ -276,8 +276,8 @@ struct ServicesFactory {
             walletsService: walletsService,
             walletService: walletService,
             stakeService: stakeService,
-            earnProviderService: earnProviderService,
-            earnBalanceService: earnBalanceService,
+            yieldService: yieldService,
+            earnService: earnService,
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,
@@ -410,17 +410,19 @@ extension ServicesFactory {
         )
     }
 
-    private static func makeEarnBalanceService(
+    private static func makeEarnService(
         assetsService: AssetsService,
+        assetStore: AssetStore,
         balanceStore: BalanceStore,
         stakeStore: StakeStore,
-        earnProviderService: EarnProviderService
-    ) -> EarnBalanceService {
-        EarnBalanceService(
+        yieldService: YieldService
+    ) -> EarnService {
+        EarnService(
             assetsService: assetsService,
+            assetStore: assetStore,
             balanceStore: balanceStore,
-            stakeStore: stakeStore,
-            earnProviderService: earnProviderService
+            store: stakeStore,
+            yieldService: yieldService
         )
     }
 
@@ -469,6 +471,7 @@ extension ServicesFactory {
     private static func makeTransactionService(
         transactionStore: TransactionStore,
         stakeService: StakeService,
+        earnService: any EarnServiceable,
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
         balanceService: BalanceService
@@ -476,6 +479,7 @@ extension ServicesFactory {
         TransactionStateService(
             transactionStore: transactionStore,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainServiceFactory: chainFactory,
             balanceUpdater: balanceService
@@ -527,7 +531,7 @@ extension ServicesFactory {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        earnBalanceService: any EarnBalanceServiceable,
+        earnService: any EarnServiceable,
         priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: DeviceService,
@@ -537,7 +541,7 @@ extension ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
-            earnBalanceService: earnBalanceService,
+            earnService: earnService,
             priceService: priceService,
             priceObserver: priceObserver,
             deviceService: deviceService,
@@ -650,11 +654,4 @@ extension ServicesFactory {
             securePreferences: securePreferences
         )
     }
-
-    private static func makeEarnProviderService(
-        nodeProvider: any NodeURLFetchable
-    ) -> EarnProviderService {
-        try! EarnProviderService(nodeProvider: nodeProvider)
-    }
-
 }

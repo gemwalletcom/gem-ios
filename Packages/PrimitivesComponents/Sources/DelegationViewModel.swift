@@ -5,20 +5,17 @@ import Primitives
 import Components
 import SwiftUI
 import Style
-import Preferences
-import ExplorerService
-import GemstonePrimitives
 import Formatters
-import PrimitivesComponents
 import Localization
 
-public struct StakeDelegationViewModel: Sendable {
-    
+public struct DelegationViewModel: Sendable {
+
     public let delegation: Delegation
+    public let currencyCode: String
+    private let asset: Asset
     private let formatter: ValueFormatter
     private let validatorImageFormatter = AssetImageFormatter()
-    private let exploreService: ExplorerService = .standard
-    private let priceFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
+    private let priceFormatter: CurrencyFormatter
 
     private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
@@ -27,7 +24,7 @@ public struct StakeDelegationViewModel: Sendable {
         formatter.unitsStyle = .full
         return formatter
     }()
-    
+
     private static let dateFormatterDay: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]
@@ -35,40 +32,28 @@ public struct StakeDelegationViewModel: Sendable {
         formatter.unitsStyle = .full
         return formatter
     }()
-    
-    public init(delegation: Delegation, formatter: ValueFormatter = ValueFormatter(style: .short)) {
+
+    public init(
+        delegation: Delegation,
+        asset: Asset? = nil,
+        formatter: ValueFormatter = .short,
+        currencyCode: String
+    ) {
         self.delegation = delegation
+        self.currencyCode = currencyCode
+        self.asset = asset ?? delegation.base.assetId.chain.asset
         self.formatter = formatter
+        self.priceFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
     }
-    
-    private var asset: Asset {
-        delegation.base.assetId.chain.asset
-    }
-    
+
     public var state: DelegationState {
         delegation.base.state
     }
-    
-    public var navigationDestination: any Hashable {
-        switch state {
-        case .active, .pending, .inactive, .activating, .deactivating:
-            delegation
-        case .awaitingWithdrawal:
-            TransferData(
-                type: .stake(asset, .withdraw(delegation)),
-                recipientData: RecipientData(
-                    recipient: Recipient(name: validatorText, address: delegation.validator.id, memo: ""),
-                    amount: .none
-                ),
-                value: delegation.base.balanceValue
-            )
-        }
-    }
-    
+
     public var stateText: String? {
         DelegationStateViewModel(state: state).title
     }
-    
+
     public var titleStyle: TextStyle {
         TextStyle(font: .body, color: .primary, fontWeight: .semibold)
     }
@@ -80,11 +65,11 @@ public struct StakeDelegationViewModel: Sendable {
     public var subtitleStyle: TextStyle {
         TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
     }
-    
+
     public var subtitleExtraStyle: TextStyle {
         TextStyle(font: .footnote, color: Colors.gray)
     }
-    
+
     public var stateTextColor: Color {
         switch state {
         case .active:
@@ -98,11 +83,11 @@ public struct StakeDelegationViewModel: Sendable {
             Colors.red
         }
     }
-    
+
     public var balanceText: String {
         formatter.string(delegation.base.balanceValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
-    
+
     public var fiatValueText: String? {
         guard
             let price = delegation.price,
@@ -110,11 +95,10 @@ public struct StakeDelegationViewModel: Sendable {
         else { return nil }
         return priceFormatter.string(price.price * balance)
     }
-    
+
     public var rewardsText: String? {
         switch delegation.base.state {
         case .active:
-            // hide 0 rewards
             if delegation.base.rewardsValue == 0 {
                 return .none
             }
@@ -127,7 +111,7 @@ public struct StakeDelegationViewModel: Sendable {
             return .none
         }
     }
-    
+
     public var rewardsFiatValueText: String? {
         guard
             let price = delegation.price,
@@ -136,34 +120,35 @@ public struct StakeDelegationViewModel: Sendable {
         else { return nil }
         return priceFormatter.string(price.price * rewards)
     }
-    
-    public var balanceTextStyle: TextStyle {
-        .body
-    }
-    
+
     public var validatorText: String {
-        if delegation.validator.name.isEmpty {
-            return AddressFormatter(style: .short, address: delegation.validator.id, chain: asset.chain).value()
+        switch delegation.validator.providerType {
+        case .earn:
+            return YieldProvider(rawValue: delegation.validator.id)?.displayName ?? delegation.validator.name
+        case .stake:
+            if delegation.validator.name.isEmpty {
+                return AddressFormatter(style: .short, address: delegation.validator.id, chain: asset.chain).value()
+            }
+            return delegation.validator.name
         }
-        return delegation.validator.name
     }
-    
+
     public var validatorImage: AssetImage {
-        AssetImage(
-            type: String(validatorText.first ?? " "),
-            imageURL: validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
-        )
+        switch delegation.validator.providerType {
+        case .stake:
+            return AssetImage(
+                type: String(validatorText.first ?? " "),
+                imageURL: validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
+            )
+        case .earn:
+            return AssetImage(placeholder: YieldProvider(rawValue: delegation.validator.id)?.image)
+        }
     }
-    
-    public var validatorUrl: URL? {
-        guard delegation.validator.id != DelegationValidator.systemId else { return nil }
-        return exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
-    }
-    
+
     public var completionDateText: String? {
         let now = Date.now
         if let completionDate = delegation.base.completionDate, completionDate > now {
-            if now.distance(to: completionDate) < 86400 { // 1 day
+            if now.distance(to: completionDate) < 86400 {
                 return Self.dateFormatterDay.string(from: .now, to: completionDate)
             }
             return Self.dateFormatterDefault.string(from: .now, to: completionDate)
@@ -172,6 +157,6 @@ public struct StakeDelegationViewModel: Sendable {
     }
 }
 
-extension StakeDelegationViewModel: Identifiable {
+extension DelegationViewModel: Identifiable {
     public var id: String { delegation.id }
 }

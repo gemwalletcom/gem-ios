@@ -30,7 +30,7 @@ public struct StakeService: StakeServiceable {
     }
 
     public func update(walletId: WalletId, chain: Chain, address: String) async throws {
-        let validators = try store.getValidators(assetId: chain.assetId)
+        let validators = try store.getValidators(assetId: chain.assetId, providerType: .stake)
         if validators.isEmpty {
             try await updateValidators(chain: chain)
             try await updateDelegations(walletId: walletId, chain: chain, address: address)
@@ -41,7 +41,7 @@ public struct StakeService: StakeServiceable {
     }
 
     public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
-        try store.getValidatorsActive(assetId: assetId)
+        try store.getValidatorsActive(assetId: assetId, providerType: .stake)
     }
 
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
@@ -92,13 +92,13 @@ extension StakeService {
     private func updateDelegations(walletId: WalletId, chain: Chain, address: String) async throws {
         let delegations = try await getDelegations(chain: chain, address: address)
         let existingIds = try store
-            .getDelegations(walletId: walletId, assetId: chain.assetId)
+            .getDelegations(walletId: walletId, assetId: chain.assetId, providerType: .stake)
             .map(\.id)
             .asSet()
         let delegationsIds = delegations.map(\.id).asSet()
         let deleteIds = existingIds.subtracting(delegationsIds).asArray()
 
-        let validatorsIds = try store.getValidators(assetId: chain.assetId).map { $0.id }.asSet()
+        let validatorsIds = try store.getValidators(assetId: chain.assetId, providerType: .stake).map { $0.id }.asSet()
         let delegationsValidatorIds = delegations.map { $0.validatorId }.asSet()
         let missingValidatorIds = delegationsValidatorIds.subtracting(validatorsIds)
 

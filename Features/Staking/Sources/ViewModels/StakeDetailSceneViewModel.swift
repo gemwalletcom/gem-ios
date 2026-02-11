@@ -53,7 +53,7 @@ public struct StakeDetailSceneViewModel {
     public var delegationModel: StakeDelegationViewModel { model }
 
     public var stateText: String {
-        model.state.title
+        DelegationStateViewModel(state: model.state).title
     }
 
     public var stateTextStyle: TextStyle {

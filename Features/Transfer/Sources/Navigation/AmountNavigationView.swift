@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI
 import Primitives
-import Earn
+import Staking
 import InfoSheet
 import Components
 import FiatConnect

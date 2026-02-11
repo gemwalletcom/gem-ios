@@ -114,7 +114,8 @@
 		D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */; };
 		D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */; };
 		D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
-		D8C4A3762C8CF956006FABE8 /* GrowthNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* GrowthNavigationView.swift */; };
+		D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
+		D8C4A3772C8CF957006FABE8 /* EarnNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3782C8CF957006FABE8 /* EarnNavigationView.swift */; };
 		D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */; };
 		D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */ = {isa = PBXBuildFile; productRef = D8CF19E22CC747370025D6B4 /* Transfer */; };
 		D8CFDE9E2E37FC2500D27283 /* Style in Frameworks */ = {isa = PBXBuildFile; productRef = D8CFDE9D2E37FC2500D27283 /* Style */; };
@@ -274,7 +275,8 @@
 		D8B738D32C59643D004EF083 /* MainTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabViewModel.swift; sourceTree = "<group>"; };
 		D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetSceneNavigationStack.swift; sourceTree = "<group>"; };
 		D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenNavigationStack.swift; sourceTree = "<group>"; };
-		D8C4A3752C8CF956006FABE8 /* GrowthNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthNavigationView.swift; sourceTree = "<group>"; };
+		D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationView.swift; sourceTree = "<group>"; };
+		D8C4A3782C8CF957006FABE8 /* EarnNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarnNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetNavigationView.swift; sourceTree = "<group>"; };
 		D8CF19E12CC745ED0025D6B4 /* Transfer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transfer; sourceTree = "<group>"; };
 		D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftHTTPClient; sourceTree = "<group>"; };
@@ -477,7 +479,8 @@
 				8361BB6F2D402C63008D89CF /* WalletConnector */,
 				8361BB6E2D402C11008D89CF /* Transactions */,
 				D891DD3F2D3F359A00241222 /* NFT */,
-				D891DD3C2D3EDD7300241222 /* Growth */,
+				D891DD3C2D3EDD7300241222 /* Stake */,
+				D891DD3D2D3EDD7400241222 /* Earn */,
 				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
 				B67ED5462DDB5DCC009F74E6 /* NavigationHandler.swift */,
@@ -728,12 +731,20 @@
 			path = Markets;
 			sourceTree = "<group>";
 		};
-		D891DD3C2D3EDD7300241222 /* Growth */ = {
+		D891DD3C2D3EDD7300241222 /* Stake */ = {
 			isa = PBXGroup;
 			children = (
-				D8C4A3752C8CF956006FABE8 /* GrowthNavigationView.swift */,
+				D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */,
 			);
-			path = Growth;
+			path = Stake;
+			sourceTree = "<group>";
+		};
+		D891DD3D2D3EDD7400241222 /* Earn */ = {
+			isa = PBXGroup;
+			children = (
+				D8C4A3782C8CF957006FABE8 /* EarnNavigationView.swift */,
+			);
+			path = Earn;
 			sourceTree = "<group>";
 		};
 		D891DD3F2D3F359A00241222 /* NFT */ = {
@@ -1143,7 +1154,8 @@
 				C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */,
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,
 				D8D5C1D12E6CAC16007628A1 /* Errors.swift in Sources */,
-				D8C4A3762C8CF956006FABE8 /* GrowthNavigationView.swift in Sources */,
+				D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */,
+				D8C4A3772C8CF957006FABE8 /* EarnNavigationView.swift in Sources */,
 				D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */,
 				833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */,
 			);

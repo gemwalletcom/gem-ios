@@ -17,7 +17,10 @@ import NameService
 import BalanceService
 import PriceService
 import TransactionStateService
+import Staking
 import Earn
+import Preferences
+import PrimitivesComponents
 import Assets
 import FiatConnect
 import WalletConnectorService
@@ -35,8 +38,8 @@ public struct ViewModelFactory: Sendable {
     let walletsService: WalletsService
     let walletService: WalletService
     let stakeService: StakeService
-    let earnProviderService: EarnProviderService
-    let earnBalanceService: any EarnBalanceServiceable
+    let yieldService: YieldService
+    let earnService: any EarnServiceable
     let nameService: NameService
     let balanceService: BalanceService
     let priceService: PriceService
@@ -54,8 +57,8 @@ public struct ViewModelFactory: Sendable {
         walletsService: WalletsService,
         walletService: WalletService,
         stakeService: StakeService,
-        earnProviderService: EarnProviderService,
-        earnBalanceService: any EarnBalanceServiceable,
+        yieldService: YieldService,
+        earnService: any EarnServiceable,
         nameService: NameService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -72,8 +75,8 @@ public struct ViewModelFactory: Sendable {
         self.walletsService = walletsService
         self.walletService = walletService
         self.stakeService = stakeService
-        self.earnProviderService = earnProviderService
-        self.earnBalanceService = earnBalanceService
+        self.yieldService = yieldService
+        self.earnService = earnService
         self.nameService = nameService
         self.balanceService = balanceService
         self.priceService = priceService
@@ -177,32 +180,27 @@ public struct ViewModelFactory: Sendable {
     }
 
     @MainActor
-    public func earnScene(
+    public func stakeScene(
         wallet: Wallet,
         chain: Chain
-    ) -> EarnSceneViewModel {
-        EarnSceneViewModel(
+    ) -> StakeSceneViewModel {
+        StakeSceneViewModel(
             wallet: wallet,
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
-            stakeService: stakeService,
-            earnProviderService: earnProviderService,
-            earnPositionsService: earnBalanceService,
-            earnAsset: chain.asset
+            stakeService: stakeService
         )
     }
 
     @MainActor
-    public func earnProvidersScene(
+    public func earnScene(
         wallet: Wallet,
-        asset: Asset,
-        onAmountInputAction: AmountInputAction = nil
-    ) -> EarnProvidersSceneViewModel {
-        EarnProvidersSceneViewModel(
+        asset: Asset
+    ) -> EarnSceneViewModel {
+        EarnSceneViewModel(
             wallet: wallet,
             asset: asset,
-            earnPositionsService: earnBalanceService,
-            earnProviderService: earnProviderService,
-            onAmountInputAction: onAmountInputAction
+            currencyCode: Preferences.standard.currency,
+            earnService: earnService
         )
     }
 
@@ -222,8 +220,8 @@ public struct ViewModelFactory: Sendable {
     public func stakeDetailScene(
         wallet: Wallet,
         delegation: Delegation,
-        onAmountInputAction: Earn.AmountInputAction,
-        onTransferAction: Earn.TransferDataAction
+        onAmountInputAction: AmountInputAction,
+        onTransferAction: TransferDataAction
     ) -> StakeDetailSceneViewModel {
         StakeDetailSceneViewModel(
             wallet: wallet,
@@ -233,5 +231,21 @@ public struct ViewModelFactory: Sendable {
             onTransferAction: onTransferAction
         )
     }
-    
+
+    @MainActor
+    public func earnDetailScene(
+        wallet: Wallet,
+        asset: Asset,
+        delegation: Delegation,
+        onAmountInputAction: AmountInputAction,
+        onTransferAction: TransferDataAction
+    ) -> EarnDetailSceneViewModel {
+        EarnDetailSceneViewModel(
+            wallet: wallet,
+            model: DelegationViewModel(delegation: delegation, asset: asset, formatter: .auto, currencyCode: Preferences.standard.currency),
+            asset: asset,
+            onAmountInputAction: onAmountInputAction,
+            onTransferAction: onTransferAction
+        )
+    }
 }

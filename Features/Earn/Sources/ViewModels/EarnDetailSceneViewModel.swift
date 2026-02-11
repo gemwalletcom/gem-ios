@@ -8,10 +8,9 @@ import Components
 import Localization
 import Formatters
 import PrimitivesComponents
-import Staking
 
 public struct EarnDetailSceneViewModel {
-    public let model: StakeDelegationViewModel
+    public let model: DelegationViewModel
     public let onAmountInputAction: AmountInputAction
     public let onTransferAction: TransferDataAction
 
@@ -20,7 +19,7 @@ public struct EarnDetailSceneViewModel {
 
     public init(
         wallet: Wallet,
-        model: StakeDelegationViewModel,
+        model: DelegationViewModel,
         asset: Asset,
         onAmountInputAction: AmountInputAction,
         onTransferAction: TransferDataAction
@@ -41,20 +40,19 @@ public struct EarnDetailSceneViewModel {
     public var withdrawTitle: String { Localized.Transfer.Withdraw.title }
 
     public var headerViewModel: HeaderViewModel {
-        ValidatorHeaderViewModel(model: StakeDelegationViewModel(delegation: model.delegation, asset: asset, formatter: .auto))
+        DelegationHeaderViewModel(model: DelegationViewModel(delegation: model.delegation, asset: asset, formatter: .auto, currencyCode: model.currencyCode))
     }
 
     public var providerTitle: String { Localized.Common.provider }
     public var providerText: String { model.validatorText }
-    public var providerUrl: URL? { model.validatorUrl }
     public var showApr: Bool { !model.delegation.validator.apr.isZero }
     public var aprText: String { CurrencyFormatter.percentSignLess.string(model.delegation.validator.apr) }
-    public var delegationModel: StakeDelegationViewModel { model }
+    public var delegationModel: DelegationViewModel { model }
     public var completionDateTitle: String? { nil }
     public var completionDateText: String? { nil }
 
     public var stateText: String {
-        model.state.title
+        DelegationStateViewModel(state: model.state).title
     }
 
     public var stateTextStyle: TextStyle {

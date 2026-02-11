@@ -8,16 +8,16 @@ import WalletSessionService
 
 struct BalanceUpdateService: BalanceUpdater {
     private let balanceService: BalanceService
-    private let earnBalanceService: any EarnBalanceServiceable
+    private let earnService: any EarnServiceable
     private let walletSessionService: any WalletSessionManageable
 
     init(
         balanceService: BalanceService,
-        earnBalanceService: any EarnBalanceServiceable,
+        earnService: any EarnServiceable,
         walletSessionService: any WalletSessionManageable
     ) {
         self.balanceService = balanceService
-        self.earnBalanceService = earnBalanceService
+        self.earnService = earnService
         self.walletSessionService = walletSessionService
     }
 
@@ -44,7 +44,7 @@ struct BalanceUpdateService: BalanceUpdater {
                     guard let account = try? wallet.account(for: assetId.chain) else {
                         return
                     }
-                    await earnBalanceService.updatePositions(
+                    try? await earnService.update(
                         walletId: wallet.walletId,
                         assetId: assetId,
                         address: account.address

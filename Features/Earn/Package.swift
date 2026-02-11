@@ -14,7 +14,6 @@ let package = Package(
             targets: ["Earn"]),
     ],
     dependencies: [
-        .package(name: "Staking", path: "../Stake"),
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Localization", path: "../../Packages/Localization"),
@@ -28,7 +27,6 @@ let package = Package(
         .target(
             name: "Earn",
             dependencies: [
-                "Staking",
                 "Primitives",
                 "Components",
                 "Localization",

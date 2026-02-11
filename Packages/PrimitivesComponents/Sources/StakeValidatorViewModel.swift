@@ -15,7 +15,12 @@ public struct StakeValidatorViewModel {
     }
     
     public var name: String {
-        validator.name
+        switch validator.providerType {
+        case .earn:
+            YieldProvider(rawValue: validator.id)?.displayName ?? validator.name
+        case .stake:
+            validator.name
+        }
     }
     
     public var aprText: String {

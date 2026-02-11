@@ -3,39 +3,42 @@
 import Foundation
 import SwiftUI
 import Primitives
-import Earn
+import Staking
 import Transfer
 import Store
+import InfoSheet
 
-struct EarnNavigationView: View {
+struct StakeNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @State private var model: EarnSceneViewModel
+    @State private var model: StakeSceneViewModel
     @Binding var navigationPath: NavigationPath
-
-    let wallet: Wallet
-    let asset: Asset
 
     init(
         wallet: Wallet,
-        asset: Asset,
+        chain: Chain,
         viewModelFactory: ViewModelFactory,
         navigationPath: Binding<NavigationPath>
     ) {
-        _model = State(initialValue: viewModelFactory.earnScene(wallet: wallet, asset: asset))
-        self.wallet = wallet
-        self.asset = asset
+        _model = State(initialValue: viewModelFactory.stakeScene(wallet: wallet, chain: chain))
         _navigationPath = navigationPath
     }
 
     var body: some View {
-        EarnScene(model: model)
-            .observeQuery(request: $model.positionsRequest, value: $model.positions)
-            .observeQuery(request: $model.providersRequest, value: $model.providers)
+        StakeScene(model: model)
+            .observeQuery(request: $model.request, value: $model.delegations)
+            .observeQuery(request: $model.assetRequest, value: $model.assetData)
+            .observeQuery(request: $model.validatorsRequest, value: $model.validators)
+            .ifLet(model.stakeInfoUrl, content: { view, url in
+                view.toolbarInfoButton(url: url)
+            })
+            .sheet(item: $model.isPresentingInfoSheet) {
+                InfoSheetScene(type: $0)
+            }
             .navigationDestination(for: AmountInput.self) { input in
                 AmountNavigationView(
                     model: viewModelFactory.amountScene(
                         input: input,
-                        wallet: wallet,
+                        wallet: model.wallet,
                         onTransferAction: {
                             navigationPath.append($0)
                         }
@@ -43,10 +46,9 @@ struct EarnNavigationView: View {
                 )
             }
             .navigationDestination(for: Delegation.self) { delegation in
-                EarnDetailScene(
-                    model: viewModelFactory.earnDetailScene(
-                        wallet: wallet,
-                        asset: asset,
+                StakeDetailScene(
+                    model: viewModelFactory.stakeDetailScene(
+                        wallet: model.wallet,
                         delegation: delegation,
                         onAmountInputAction: {
                             navigationPath.append($0)

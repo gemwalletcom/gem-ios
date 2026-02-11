@@ -231,6 +231,7 @@ let package = Package(
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "StakeService", package: "ChainServices"),
                 "BalanceService",
+                "EarnService",
                 "NFTService",
                 "GemstonePrimitives"
             ],
@@ -246,6 +247,7 @@ let package = Package(
                 "NFTServiceTestKit",
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 "BalanceServiceTestKit",
+                "EarnServiceTestKit",
                 "TransactionStateService"
             ],
             path: "TransactionStateService/TestKit"

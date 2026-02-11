@@ -14,6 +14,17 @@ final class AmountEarnViewModel: AmountDataProvidable {
         self.action = action
     }
 
+    var provider: DelegationValidator {
+        switch action {
+        case .deposit(let provider): provider
+        case .withdraw(let delegation): delegation.validator
+        }
+    }
+
+    var providerTitle: String {
+        Localized.Common.provider
+    }
+
     var title: String {
         switch action {
         case .deposit: Localized.Wallet.deposit

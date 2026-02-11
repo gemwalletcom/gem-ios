@@ -9,40 +9,43 @@ import Primitives
 import Store
 import Style
 import EarnService
-import Staking
+import PrimitivesComponents
 
 @MainActor
 @Observable
 public final class EarnSceneViewModel {
-    private let earnService: any EarnBalanceServiceable
-    private var fetchState: StateViewType<Bool> = .loading
+    private let earnService: any EarnServiceable
+    private var viewState: StateViewType<Bool> = .loading
 
     public let wallet: Wallet
     public let asset: Asset
+    private let currencyCode: String
 
     public var positionsRequest: DelegationsRequest
     public var positions: [Delegation] = []
-    public var providersRequest: EarnProvidersRequest
+    public var providersRequest: ValidatorsRequest
     public var providers: [DelegationValidator] = []
 
     public init(
         wallet: Wallet,
         asset: Asset,
-        earnService: any EarnBalanceServiceable
+        currencyCode: String,
+        earnService: any EarnServiceable
     ) {
         self.wallet = wallet
         self.asset = asset
+        self.currencyCode = currencyCode
         self.earnService = earnService
         self.positionsRequest = DelegationsRequest(
             walletId: wallet.walletId,
             assetId: asset.id,
             providerType: .earn
         )
-        self.providersRequest = EarnProvidersRequest(chain: asset.id.chain)
+        self.providersRequest = ValidatorsRequest(chain: asset.id.chain, providerType: .earn)
     }
 
     var title: String { Localized.Common.earn }
-    var assetTitle: String { "\(asset.name) (\(asset.symbol))" }
+    var assetTitle: String { "\(asset.chain.asset.name) (\(asset.symbol))" }
 
     var aprTitle: String { Localized.Stake.apr("") }
     var aprValue: String {
@@ -63,22 +66,30 @@ public final class EarnSceneViewModel {
         )
     }
 
-    var positionModels: [StakeDelegationViewModel] {
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .earn(symbol: asset.symbol))
+    }
+
+    var positionModels: [DelegationViewModel] {
         positions
             .filter { (BigInt($0.base.balance) ?? .zero) > 0 }
-            .map { StakeDelegationViewModel(delegation: $0, asset: asset) }
+            .map { DelegationViewModel(delegation: $0, asset: asset, currencyCode: currencyCode) }
     }
 
     var hasPositions: Bool {
         positionModels.isNotEmpty
     }
 
+    var positionsSectionTitle: String {
+        hasPositions ? Localized.Perpetual.positions : .empty
+    }
+
     var providersState: StateViewType<Bool> {
-        switch fetchState {
-        case .noData: return .noData
-        case .loading: return providers.isEmpty ? .loading : .data(true)
-        case .data: return providers.isEmpty ? .noData : .data(true)
-        case .error(let error): return .error(error)
+        switch viewState {
+        case .noData: .noData
+        case .loading: providers.isEmpty ? .loading : .data(true)
+        case .data: providers.isEmpty ? .noData : .data(true)
+        case .error(let error): .error(error)
         }
     }
 }
@@ -87,7 +98,7 @@ public final class EarnSceneViewModel {
 
 extension EarnSceneViewModel {
     func fetch() async {
-        fetchState = .loading
+        viewState = .loading
         do {
             let address = (try? wallet.account(for: asset.id.chain))?.address ?? ""
             try await earnService.update(
@@ -95,9 +106,9 @@ extension EarnSceneViewModel {
                 assetId: asset.id,
                 address: address
             )
-            fetchState = .data(true)
+            viewState = .data(true)
         } catch {
-            fetchState = .error(error)
+            viewState = .error(error)
         }
     }
 }

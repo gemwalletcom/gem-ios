@@ -51,16 +51,17 @@ public struct StakeStore: Sendable {
         }
     }
 
-    public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
-        return try db.read { db in
-            try Self.getValidatorsActive(db: db, assetId: assetId)
+    public func getValidatorsActive(assetId: AssetId, providerType: GrowthProviderType) throws -> [DelegationValidator] {
+        try db.read { db in
+            try ValidatorsRequest(chain: assetId.chain, providerType: providerType).fetch(db)
         }
     }
 
-    public func getValidators(assetId: AssetId) throws -> [DelegationValidator] {
+    public func getValidators(assetId: AssetId, providerType: GrowthProviderType) throws -> [DelegationValidator] {
         try db.read { db in
             try StakeValidatorRecord
                 .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)
+                .filter(StakeValidatorRecord.Columns.providerType == providerType.rawValue)
                 .order(StakeValidatorRecord.Columns.apr.desc)
                 .fetchAll(db)
                 .map { $0.validator }
@@ -75,16 +76,9 @@ public struct StakeStore: Sendable {
         }
     }
 
-    public func getDelegations(walletId: WalletId, assetId: AssetId) throws -> [Delegation] {
+    public func getDelegations(walletId: WalletId, assetId: AssetId, providerType: GrowthProviderType) throws -> [Delegation] {
         try db.read { db in
-            try StakeDelegationRecord
-                .including(optional: StakeDelegationRecord.validator)
-                .including(optional: StakeDelegationRecord.price)
-                .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
-                .filter(StakeDelegationRecord.Columns.assetId == assetId.identifier)
-                .asRequest(of: StakeDelegationInfo.self)
-                .fetchAll(db)
-                .map { $0.mapToDelegation() }
+            try DelegationsRequest(walletId: walletId, assetId: assetId, providerType: providerType).fetch(db)
         }
     }
 
@@ -115,40 +109,5 @@ public struct StakeStore: Sendable {
     public func clear() throws {
         try clearDelegations()
         try clearValidators()
-    }
-}
-
-// MARK: - Earn
-
-extension StakeStore {
-    public func getEarnProviders(chain: Chain) throws -> [DelegationValidator] {
-        try db.read { db in
-            try StakeValidatorRecord
-                .filter(StakeValidatorRecord.Columns.assetId == chain.assetId.identifier)
-                .filter(StakeValidatorRecord.Columns.providerType == GrowthProviderType.earn.rawValue)
-                .fetchAll(db)
-                .map { $0.validator }
-        }
-    }
-
-    public func getEarnPositions(walletId: WalletId, assetId: AssetId) throws -> [Delegation] {
-        try getDelegations(walletId: walletId, assetId: assetId)
-            .filter { $0.validator.providerType == .earn }
-    }
-}
-
-// MARK: - Static
-
-extension StakeStore {
-    static func getValidatorsActive(db: Database, assetId: AssetId) throws -> [DelegationValidator] {
-        let excludeValidatorIds = [DelegationValidator.systemId, DelegationValidator.legacySystemId]
-        return try StakeValidatorRecord
-            .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)
-            .filter(StakeValidatorRecord.Columns.isActive == true)
-            .filter(!excludeValidatorIds.contains(StakeValidatorRecord.Columns.validatorId))
-            .filter(StakeValidatorRecord.Columns.name != "")
-            .order(StakeValidatorRecord.Columns.apr.desc)
-            .fetchAll(db)
-            .map { $0.validator }
     }
 }
