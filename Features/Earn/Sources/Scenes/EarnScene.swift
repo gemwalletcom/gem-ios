@@ -1,39 +1,37 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Store
-import Primitives
 import Components
+import Style
+import Primitives
 import Localization
-import InfoSheet
-import PrimitivesComponents
+import Store
+import Staking
 
 public struct EarnScene: View {
-    private let model: EarnSceneViewModel
+    @State private var model: EarnSceneViewModel
 
     public init(model: EarnSceneViewModel) {
-        self.model = model
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
         List {
-            stakeInfoSection
-            if model.showManage {
-                stakeSection
+            infoSection
+            if model.showDeposit {
+                manageSection
             }
-            if model.showTronResources {
-                resourcesSection
-            }
-            delegationsSection
-            if model.showEarnProviders {
-                earnProvidersSection
+            if model.hasPositions {
+                positionsSection
             }
         }
         .listSectionSpacing(.compact)
+        .navigationTitle(model.title)
+        .observeQuery(request: $model.positionsRequest, value: $model.positions)
+        .observeQuery(request: $model.providersRequest, value: $model.providers)
         .refreshable {
             await model.fetch()
         }
-        .navigationTitle(model.title)
         .taskOnce {
             Task {
                 await model.fetch()
@@ -45,126 +43,44 @@ public struct EarnScene: View {
 // MARK: - UI Components
 
 extension EarnScene {
-    private var stakeSection: some View {
+    @ViewBuilder
+    private var infoSection: some View {
+        switch model.providersState {
+        case .noData:
+            Section {
+                ListItemView(title: Localized.Errors.noDataAvailable)
+            }
+        case .loading:
+            ListItemLoadingView()
+                .id(UUID())
+        case .data:
+            Section(model.assetTitle) {
+                ListItemView(
+                    title: model.aprTitle,
+                    subtitle: model.aprValue
+                )
+            }
+        case .error(let error):
+            ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
+        }
+    }
+
+    private var manageSection: some View {
         Section(Localized.Common.manage) {
-            if model.showStake {
-                NavigationLink(value: model.stakeDestination) {
-                    ListItemView(title: model.stakeTitle)
-                }
-                .enabled(model.isStakeEnabled)
-            }
-
-            if model.showFreeze {
-                NavigationLink(value: model.freezeDestination) {
-                    ListItemView(title: model.freezeTitle)
-                }
-            }
-
-            if model.showUnfreeze {
-                NavigationLink(value: model.unfreezeDestination) {
-                    ListItemView(title: model.unfreezeTitle)
-                }
-            }
-
-            if model.canClaimRewards {
-                NavigationLink(value: model.claimRewardsDestination) {
-                    ListItemView(
-                        title: model.claimRewardsTitle,
-                        subtitle: model.claimRewardsText
-                    )
-                }
+            NavigationLink(value: model.depositDestination) {
+                ListItemView(title: Localized.Wallet.deposit)
             }
         }
     }
 
-    private var delegationsSection: some View {
-        Section(model.delegationsSectionTitle) {
-            StateView(
-                state: model.delegationsViewState,
-                content: { _ in
-                    ForEach(model.delegationModels) { delegation in
-                        NavigationLink(value: delegation.navigationDestination) {
-                            StakeDelegationView(delegation: delegation)
-                        }
-                    }
-                    .listRowInsets(.assetListRowInsets)
-                },
-                emptyView: {
-                    AnyView(
-                        EmptyContentView(model: model.emptyContentModel)
-                            .cleanListRow()
-                    )
-                },
-                noDataView: {
-                    AnyView(
-                        EmptyContentView(model: model.emptyContentModel)
-                            .cleanListRow()
-                    )
-                },
-                loadingView: {
-                    AnyView(
-                        ListItemLoadingView()
-                            .id(UUID())
-                    )
-                },
-                errorView: {
-                    AnyView(
-                        Group {
-                            if let error = model.delegationsError {
-                                ListItemErrorView(
-                                    errorTitle: Localized.Errors.errorOccured,
-                                    error: error
-                                )
-                            } else {
-                                EmptyView()
-                            }
-                        }
-                    )
+    private var positionsSection: some View {
+        Section(Localized.Perpetual.positions) {
+            ForEach(model.positionModels) { delegation in
+                NavigationLink(value: delegation.navigationDestination) {
+                    StakeDelegationView(delegation: delegation)
                 }
-            )
-        }
-    }
-
-    private var stakeInfoSection: some View {
-        Section(model.assetTitle) {
-            ListItemView(
-                title: model.stakeAprTitle,
-                subtitle: model.stakeAprValue,
-                infoAction: model.onAprInfo
-            )
-            ListItemView(
-                title: model.lockTimeTitle,
-                subtitle: model.lockTimeValue,
-                infoAction: model.onLockTimeInfo
-            )
-            if let minAmountValue = model.minAmountValue {
-                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
             }
-        }
-    }
-
-    private var resourcesSection: some View {
-        Section(model.resourcesTitle) {
-            ListItemView(
-                title: model.energyTitle,
-                subtitle: model.energyText
-            )
-
-            ListItemView(
-                title: model.bandwidthTitle,
-                subtitle: model.bandwidthText
-            )
-        }
-    }
-
-    private var earnProvidersSection: some View {
-        let earnModel = model.earnProvidersViewModel()
-        return Section(model.earnProvidersTitle) {
-            NavigationLink {
-                EarnProvidersScene(model: earnModel)
-            } label: {
-                ListItemView(title: model.earnProvidersTitle)
-            }
+            .listRowInsets(.assetListRowInsets)
         }
     }
 }

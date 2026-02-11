@@ -1,307 +1,103 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
+import Components
 import Foundation
+import Formatters
+import Localization
 import Primitives
 import Store
-import Components
-import BigInt
-import struct GemstonePrimitives.Docs
-import SwiftUI
-import Localization
-import StakeService
-import InfoSheet
-import PrimitivesComponents
-import Formatters
+import Style
 import EarnService
+import Staking
 
 @MainActor
 @Observable
 public final class EarnSceneViewModel {
-    private let stakeService: any StakeServiceable
-    private let earnProviderService: EarnProviderService
-    private let earnPositionsService: any EarnBalanceServiceable
-    private let earnAsset: Asset
-
-    public var delegationsState: StateViewType<Bool> = .loading
-    private let chain: StakeChain
-
-    private let formatter = ValueFormatter(style: .medium)
-    private let recommendedValidators = StakeRecommendedValidators()
+    private let earnService: any EarnBalanceServiceable
+    private var fetchState: StateViewType<Bool> = .loading
 
     public let wallet: Wallet
-    public var request: DelegationsRequest
-    public var delegations: [Delegation] = []
-    public var validatorsRequest: StakeValidatorsRequest
-    public var validators: [DelegationValidator] = []
+    public let asset: Asset
 
-    public var assetRequest: AssetRequest
-    public var assetData: AssetData = .empty
-
-    public var isPresentingInfoSheet: InfoSheetType? = .none
+    public var positionsRequest: DelegationsRequest
+    public var positions: [Delegation] = []
+    public var providersRequest: EarnProvidersRequest
+    public var providers: [DelegationValidator] = []
 
     public init(
         wallet: Wallet,
-        chain: StakeChain,
-        stakeService: any StakeServiceable,
-        earnProviderService: EarnProviderService,
-        earnPositionsService: any EarnBalanceServiceable,
-        earnAsset: Asset
+        asset: Asset,
+        earnService: any EarnBalanceServiceable
     ) {
         self.wallet = wallet
-        self.chain = chain
-        self.stakeService = stakeService
-        self.earnProviderService = earnProviderService
-        self.earnPositionsService = earnPositionsService
-        self.earnAsset = earnAsset
-        self.request = DelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
-        self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
-        self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
+        self.asset = asset
+        self.earnService = earnService
+        self.positionsRequest = DelegationsRequest(
+            walletId: wallet.walletId,
+            assetId: asset.id,
+            providerType: .earn
+        )
+        self.providersRequest = EarnProvidersRequest(chain: asset.id.chain)
     }
 
-    public var stakeInfoUrl: URL {
-        Docs.url(.staking(chain.map()))
-    }
+    var title: String { Localized.Common.earn }
+    var assetTitle: String { "\(asset.name) (\(asset.symbol))" }
 
-    var title: String { Localized.Transfer.Stake.title }
-
-    var stakeTitle: String { Localized.Transfer.Stake.title }
-    var claimRewardsTitle: String { Localized.Transfer.ClaimRewards.title }
-    var assetTitle: String { assetModel.title }
-    var delegationsTitle: String { Localized.Stake.delegations }
-
-    var stakeAprTitle: String { Localized.Stake.apr("") }
-    var stakeAprValue: String {
-        let apr = (try? stakeService.stakeApr(assetId: chain.chain.assetId)) ?? 0
-        guard apr > 0 else {
-            return .empty
+    var aprTitle: String { Localized.Stake.apr("") }
+    var aprValue: String {
+        guard let provider = providers.first, provider.apr > 0 else {
+            return "-"
         }
-        return CurrencyFormatter.percentSignLess.string(apr)
+        return CurrencyFormatter.percentSignLess.string(provider.apr)
     }
 
-    var resourcesTitle: String { Localized.Asset.resources }
-
-    var energyTitle: String { ResourceViewModel(resource: .energy).title }
-    var energyText: String { balanceModel.energyText }
-
-    var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
-    var bandwidthText: String { balanceModel.bandwidthText }
-
-    var freezeTitle: String { Localized.Transfer.Freeze.title }
-    var unfreezeTitle: String { Localized.Transfer.Unfreeze.title }
-
-
-    var lockTimeTitle: String { Localized.Stake.lockTime }
-    var lockTimeValue: String {
-        let now = Date.now
-        let date = now.addingTimeInterval(chain.lockTime)
-        return Self.lockTimeFormatter.string(from: now, to: date) ?? .empty
-    }
-    var lockTimeInfoSheet: InfoSheetType {
-        InfoSheetType.stakeLockTime(assetModel.assetImage.placeholder)
+    var showDeposit: Bool {
+        wallet.canSign && providers.isNotEmpty
     }
 
-    var aprInfoSheet: InfoSheetType {
-        InfoSheetType.stakeApr(assetModel.assetImage.placeholder)
-    }
-
-    var minAmountTitle: String { Localized.Stake.minimumAmount }
-    var minAmountValue: String? {
-        guard chain.minAmount != 0 else { return .none }
-        return formatter.string(chain.minAmount, decimals: Int(asset.decimals), currency: asset.symbol)
-    }
-
-    var delegationsErrorTitle: String { Localized.Errors.errorOccured }
-    var delegationsRetryTitle: String { Localized.Common.tryAgain }
-    var emptyDelegationsTitle: String { Localized.Stake.noActiveStaking }
-
-    var showManage: Bool {
-        wallet.canSign
-    }
-
-    var recommendedCurrentValidator: DelegationValidator? {
-        guard let validatorId = recommendedValidators.randomValidatorId(chain: chain.chain) else { return .none }
-        return try? stakeService.getValidator(assetId: asset.id, validatorId: validatorId)
-    }
-
-    var emptyContentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .stake(symbol: assetModel.symbol))
-    }
-
-    var delegationsSectionTitle: String {
-        guard case .data = delegationsViewState, delegationModels.isNotEmpty else {
-            return .empty
-        }
-        return delegationsTitle
-    }
-
-    var delegationModels: [StakeDelegationViewModel] {
-        delegations.map { StakeDelegationViewModel(delegation: $0) }
-    }
-
-    var delegationsError: Error? {
-        if case .error(let error) = delegationsViewState {
-            return error
-        }
-        return nil
-    }
-
-    var delegationsViewState: StateViewType<Bool> {
-        switch delegationsState {
-        case .noData:
-            return .noData
-        case .loading:
-            return delegationModels.isEmpty ? .loading : .data(true)
-        case .data:
-            return delegationModels.isEmpty ? .noData : .data(true)
-        case .error(let error):
-            return .error(error)
-        }
-    }
-
-    var claimRewardsText: String {
-        formatter.string(rewardsValue, decimals: asset.decimals.asInt, currency: asset.symbol)
-    }
-
-    var canClaimRewards: Bool {
-        chain.supportClaimRewards && rewardsValue > 0
-    }
-
-    var claimRewardsDestination: any Hashable {
-        let validators = delegations
-            .filter { $0.base.rewardsValue > 0 }
-            .map { $0.validator }
-
-        return TransferData(
-            type: .stake(chain.chain.asset, .rewards(validators)),
-            recipientData: RecipientData(
-                recipient: Recipient(name: .none, address: "", memo: .none),
-                amount: .none
-            ),
-            value: rewardsValue
+    var depositDestination: AmountInput {
+        AmountInput(
+            type: .earn(.deposit(provider: providers.first!)),
+            asset: asset
         )
     }
 
-    var stakeDestination: any Hashable {
-        destination(
-            type: .stake(.stake(
-                validators: validators,
-                recommended: recommendedCurrentValidator
-            ))
-        )
+    var positionModels: [StakeDelegationViewModel] {
+        positions
+            .filter { (BigInt($0.base.balance) ?? .zero) > 0 }
+            .map { StakeDelegationViewModel(delegation: $0, asset: asset) }
     }
 
-    var freezeDestination: any Hashable {
-        destination(
-            type: .freeze(
-                data: FreezeData(
-                    freezeType: .freeze,
-                    resource: .bandwidth
-                )
-            )
-        )
+    var hasPositions: Bool {
+        positionModels.isNotEmpty
     }
 
-    var unfreezeDestination: any Hashable {
-        destination(
-            type: .freeze(
-                data: FreezeData(
-                    freezeType: .unfreeze,
-                    resource: .bandwidth
-                )
-            )
-        )
-    }
-
-    var showFreeze: Bool { chain == .tron }
-    var showUnfreeze: Bool { balanceModel.hasStakingResources }
-    var showStake: Bool {
-        if showFreeze {
-            return balanceModel.hasStakingResources
+    var providersState: StateViewType<Bool> {
+        switch fetchState {
+        case .noData: return .noData
+        case .loading: return providers.isEmpty ? .loading : .data(true)
+        case .data: return providers.isEmpty ? .noData : .data(true)
+        case .error(let error): return .error(error)
         }
-        return true
-    }
-    var isStakeEnabled: Bool { validators.isNotEmpty }
-
-    var showTronResources: Bool {
-        balanceModel.hasStakingResources
     }
 }
 
-// MARK: - Business Logic
+// MARK: - Actions
 
 extension EarnSceneViewModel {
     func fetch() async {
-        delegationsState = .loading
+        fetchState = .loading
         do {
-            let acccount = try wallet.account(for: chain.chain)
-            try await stakeService.update(walletId: wallet.walletId, chain: chain.chain, address: acccount.address)
-            delegationsState = .data(true)
+            let address = (try? wallet.account(for: asset.id.chain))?.address ?? ""
+            try await earnService.update(
+                walletId: wallet.walletId,
+                assetId: asset.id,
+                address: address
+            )
+            fetchState = .data(true)
         } catch {
-            debugLog("Stake scene fetch error: \(error)")
-            delegationsState = .error(error)
+            fetchState = .error(error)
         }
-    }
-
-    func onLockTimeInfo() {
-        isPresentingInfoSheet = lockTimeInfoSheet
-    }
-
-    func onAprInfo() {
-        isPresentingInfoSheet = aprInfoSheet
-    }
-}
-
-// MARK: - Earn Providers
-
-extension EarnSceneViewModel {
-    public var showEarnProviders: Bool {
-        assetData.isEarnable
-    }
-
-    public var earnProvidersTitle: String {
-        Localized.Common.earn
-    }
-
-    public func earnProvidersViewModel() -> EarnProvidersSceneViewModel {
-        EarnProvidersSceneViewModel(
-            wallet: wallet,
-            asset: earnAsset,
-            earnPositionsService: earnPositionsService,
-            earnProviderService: earnProviderService
-        )
-    }
-}
-
-// MARK: - Private
-
-extension EarnSceneViewModel {
-    private static let lockTimeFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.day]
-        formatter.unitsStyle = .full
-        return formatter
-    }()
-
-    private var assetModel: AssetViewModel {
-        AssetViewModel(asset: asset)
-    }
-
-    private var asset: Asset {
-        chain.chain.asset
-    }
-
-    private var balanceModel: BalanceViewModel {
-        BalanceViewModel(asset: asset, balance: assetData.balance, formatter: formatter)
-    }
-
-    private var rewardsValue: BigInt {
-        delegations.map { $0.base.rewardsValue }.reduce(0, +)
-    }
-
-    private func destination(type: AmountType) -> any Hashable {
-        AmountInput(
-            type: type,
-            asset: asset
-        )
     }
 }
