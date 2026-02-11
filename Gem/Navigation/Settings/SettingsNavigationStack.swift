@@ -27,6 +27,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.releaseService) private var releaseService
     @Environment(\.perpetualService) private var perpetualService
@@ -175,7 +176,11 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.ChainSettings.self) {
                 ChainSettingsScene(
-                    model: ChainSettingsSceneViewModel(nodeService: nodeService, chain: $0.chain)
+                    model: ChainSettingsSceneViewModel(
+                        nodeService: nodeService,
+                        chainServiceFactory: chainServiceFactory,
+                        chain: $0.chain
+                    )
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {

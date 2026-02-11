@@ -146,6 +146,11 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
 
+    public func withGasLimit(_ gasLimit: String) -> TransferDataType {
+        guard case .swap(let from, let to, let swapData) = self else { return self }
+        return .swap(from, to, swapData.withGasLimit(gasLimit))
+    }
+
     public var recentActivityData: RecentActivityData? {
         switch self {
         case .transfer(let asset): RecentActivityData(type: .transfer, assetId: asset.id, toAssetId: nil)

@@ -11,26 +11,6 @@ import ChainService
 import ConnectionsService
 import DeviceService
 import EventPresenterService
-import ExplorerService
-import Foundation
-import Keystore
-import NameService
-import NFTService
-import NodeService
-import NotificationService
-import PerpetualService
-import PriceAlertService
-import PriceService
-import RewardsService
-import ScanService
-import StakeService
-import SwiftUI
-import TransactionsService
-import TransactionStateService
-import WalletConnector
-import WalletService
-import WalletsService
-
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
     @Entry var keystore: any Keystore = AppResolver.main.storages.keystore

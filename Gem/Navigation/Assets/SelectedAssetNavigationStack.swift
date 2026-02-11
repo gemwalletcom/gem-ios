@@ -19,7 +19,7 @@ import EventPresenterService
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
+    @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.walletsService) private var walletsService
     @Environment(\.scanService) private var scanService
     @Environment(\.balanceService) private var balanceService
@@ -53,7 +53,7 @@ struct SelectedAssetNavigationStack: View  {
                     RecipientNavigationView(
                         confirmService: ConfirmServiceFactory.create(
                             keystore: keystore,
-                            nodeService: nodeService,
+                            chainServiceFactory: chainServiceFactory,
                             walletsService: walletsService,
                             scanService: scanService,
                             balanceService: balanceService,

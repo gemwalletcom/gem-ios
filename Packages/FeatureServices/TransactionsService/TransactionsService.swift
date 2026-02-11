@@ -39,9 +39,8 @@ public final class TransactionsService: Sendable {
         let store = WalletPreferences(walletId: walletId)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
 
-        let deviceId = try await deviceService.getSubscriptionsDeviceId()
+        _ = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getDeviceTransactions(
-            deviceId: deviceId,
             walletId: wallet.id,
             fromTimestamp: store.transactionsTimestamp
         )
@@ -56,9 +55,8 @@ public final class TransactionsService: Sendable {
     public func updateForAsset(wallet: Wallet, assetId: AssetId) async throws {
         let store = WalletPreferences(walletId: wallet.walletId)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
-        let deviceId = try await deviceService.getSubscriptionsDeviceId()
+        _ = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getDeviceTransactionsForAsset(
-            deviceId: deviceId,
             walletId: wallet.id,
             asset: assetId,
             fromTimestamp: store.transactionsForAssetTimestamp(assetId: assetId.identifier)
