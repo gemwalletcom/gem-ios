@@ -10,7 +10,7 @@ public struct GemAPIDeviceServiceMock: GemAPIDeviceService {
     public func getDevice(deviceId: String) async throws -> Device? { Device.mock() }
     public func addDevice(device: Device) async throws -> Device { Device.mock() }
     public func updateDevice(device: Device) async throws -> Device { Device.mock() }
-    public func deleteDevice(deviceId: String) async throws {}
     public func isDeviceRegistered(deviceId: String) async throws -> Bool { true }
     public func migrateDevice(request: MigrateDeviceIdRequest) async throws -> Device { Device.mock() }
+    public func getDeviceToken(deviceId: String) async throws -> DeviceToken { DeviceToken(token: "", expiresAt: 0) }
 }
