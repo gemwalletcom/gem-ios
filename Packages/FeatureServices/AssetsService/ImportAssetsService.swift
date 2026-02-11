@@ -91,7 +91,6 @@ public struct ImportAssetsService: Sendable {
         }
         
         try assetStore.setAssetIsStakeable(for: chains.filter { $0.isStakeSupported }.map { $0.id }, value: true)
-        try updateEarnAssets()
     }
 
     public func updateFiatAssets() async throws {
@@ -119,12 +118,5 @@ public struct ImportAssetsService: Sendable {
         try assetStore.setAssetIsSwappable(for: assets.assetIds, value: true)
 
         preferences.swapAssetsVersion = Int(assets.version)
-    }
-
-    public func updateEarnAssets() throws {
-        let assetIds = [
-            "base_0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // USDC on Base
-        ]
-        try assetStore.setAssetIsEarnable(for: assetIds, value: true)
     }
 }
