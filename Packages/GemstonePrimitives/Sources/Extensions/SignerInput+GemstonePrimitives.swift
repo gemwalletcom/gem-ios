@@ -7,7 +7,7 @@ import Primitives
 public extension Primitives.SignerInput {
     func map() throws -> GemTransactionLoadInput {
         GemTransactionLoadInput(
-            inputType: try type.map(),
+            inputType: try typeWithGasLimit.map(),
             senderAddress: senderAddress,
             destinationAddress: destinationAddress,
             value: value.description,
@@ -16,5 +16,11 @@ public extension Primitives.SignerInput {
             isMaxValue: useMaxAmount,
             metadata: metadata.map()
         )
+    }
+
+    private var typeWithGasLimit: TransferDataType {
+        guard case .swap(let from, let to, let swapData) = type else { return type }
+        let data = swapData.data.withGasLimit(fee.gasLimit.description)
+        return .swap(from, to, SwapData(quote: swapData.quote, data: data))
     }
 }
