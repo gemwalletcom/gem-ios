@@ -7,7 +7,7 @@ import BigInt
 import NativeProviderService
 
 public struct ChainService {
-    
+
     let chain: Chain
     let url: URL
 
@@ -18,11 +18,12 @@ public struct ChainService {
         self.chain = chain
         self.url = url
     }
-    
-    public static func service(chain: Chain, with url: URL) -> ChainServiceable {
-        GatewayChainService(
+
+    public static func service(chain: Chain, nodeProvider: any NodeURLFetchable) -> ChainServiceable {
+        let url = nodeProvider.node(for: chain)
+        return GatewayChainService(
             chain: chain,
-            gateway: GatewayService(provider: NativeProvider(url: url))
+            gateway: GatewayService(provider: NativeProvider(url: url, requestInterceptor: nodeProvider.requestInterceptor))
         )
     }
 }

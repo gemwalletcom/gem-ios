@@ -18,7 +18,7 @@ import Recents
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @Environment(\.nodeService) private var nodeService
+    @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.walletsService) private var walletsService
     @Environment(\.keystore) private var keystore
     @Environment(\.scanService) private var scanService
@@ -79,7 +79,7 @@ struct SelectAssetSceneNavigationStack: View {
                         RecipientNavigationView(
                             confirmService: ConfirmServiceFactory.create(
                                 keystore: keystore,
-                                nodeService: nodeService,
+                                chainServiceFactory: chainServiceFactory,
                                 walletsService: walletsService,
                                 scanService: scanService,
                                 balanceService: balanceService,
