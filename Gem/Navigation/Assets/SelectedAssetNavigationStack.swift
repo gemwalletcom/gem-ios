@@ -15,7 +15,6 @@ import ChainService
 import ExplorerService
 import Signer
 import EventPresenterService
-import Earn
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -120,22 +119,17 @@ struct SelectedAssetNavigationStack: View  {
                         )
                     )
                 case .stake:
-                    EarnNavigationView(
-                        model: viewModelFactory.earnScene(
-                            wallet: wallet,
-                            chain: input.asset.id.chain
-                        ),
+                    StakeNavigationView(
+                        wallet: wallet,
+                        chain: input.asset.id.chain,
+                        viewModelFactory: viewModelFactory,
                         navigationPath: $navigationPath
                     )
                 case .earn:
-                    EarnProtocolsNavigationView(
-                        model: viewModelFactory.earnProtocolsScene(
-                            wallet: wallet,
-                            asset: input.asset,
-                            onAmountInputAction: {
-                                navigationPath.append($0)
-                            }
-                        ),
+                    EarnNavigationView(
+                        wallet: wallet,
+                        asset: input.asset,
+                        viewModelFactory: viewModelFactory,
                         navigationPath: $navigationPath
                     )
                 }

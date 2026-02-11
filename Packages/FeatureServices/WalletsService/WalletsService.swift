@@ -24,7 +24,7 @@ public struct WalletsService: Sendable {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        earnBalanceService: any EarnBalanceServiceable,
+        earnService: any EarnServiceable,
         priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: any DeviceServiceable,
@@ -32,7 +32,7 @@ public struct WalletsService: Sendable {
     ) {
         let balanceUpdater = BalanceUpdateService(
             balanceService: balanceService,
-            earnBalanceService: earnBalanceService,
+            earnService: earnService,
             walletSessionService: walletSessionService
         )
         let priceUpdater = PriceUpdateService(priceObserver: priceObserver)

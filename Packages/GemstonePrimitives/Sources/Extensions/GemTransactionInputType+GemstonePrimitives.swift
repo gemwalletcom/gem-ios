@@ -17,7 +17,7 @@ public extension GemTransactionInputType {
         case .generic(let asset, _, _): asset
         case .account(let asset, _): asset
         case .perpetual(asset: let asset, perpetualType: _): asset
-        case .earn(let asset, _, _): asset
+        case .earn(let asset, _): asset
         }
     }
 }
@@ -43,8 +43,12 @@ public extension GemTransactionInputType {
             return try TransferDataType.account(asset.map(), accountType.map())
         case .perpetual(asset: let asset, perpetualType: let perpetualType):
             return try TransferDataType.perpetual(asset.map(), perpetualType.map())
-        case .earn(let asset, let action, let data):
-            return try TransferDataType.earn(asset.map(), action.map(), data.map())
+        case .earn(let asset, let earnType):
+            let type: Primitives.EarnType = switch earnType {
+            case .deposit(let validator): .deposit(try validator.map())
+            case .withdraw(let delegation): .withdraw(try delegation.map())
+            }
+            return try TransferDataType.earn(asset.map(), type)
         }
     }
 }
@@ -75,26 +79,13 @@ public extension TransferDataType {
             return .account(asset: asset.map(), accountType: accountData.map())
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
-        case .earn(let asset, let action, let data):
-            return .earn(asset: asset.map(), action: action.map(), data: data.map())
+        case .earn(let asset, let earnType):
+            let gemEarnType: Gemstone.EarnType = switch earnType {
+            case .deposit(let validator): .deposit(validator.map())
+            case .withdraw(let delegation): .withdraw(delegation.map())
+            }
+            return .earn(asset: asset.map(), earnType: gemEarnType)
         }
     }
 }
 
-public extension Gemstone.EarnAction {
-    func map() -> Primitives.EarnAction {
-        switch self {
-        case .deposit: .deposit
-        case .withdraw: .withdraw
-        }
-    }
-}
-
-public extension Primitives.EarnAction {
-    func map() -> Gemstone.EarnAction {
-        switch self {
-        case .deposit: .deposit
-        case .withdraw: .withdraw
-        }
-    }
-}

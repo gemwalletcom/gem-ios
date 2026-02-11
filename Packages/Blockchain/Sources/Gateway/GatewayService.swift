@@ -169,7 +169,7 @@ extension GatewayService {
     
     public func getPerpetualCandlesticks(chain: Primitives.Chain, symbol: String, period: ChartPeriod) async throws -> [ChartCandleStick] {
         try await gateway.getPerpetualCandlesticks(chain: chain.rawValue, symbol: symbol, period: period.rawValue).map {
-            try $0.map()
+            $0.map()
         }
     }
 

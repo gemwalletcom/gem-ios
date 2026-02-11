@@ -369,6 +369,8 @@
 "activity.state.empty.description" = "Make your first transaction";
 "stake.state.empty.title" = "Your stakes will appear here";
 "stake.state.empty.description" = "Stake your first %@";
+"earn.state.empty.title" = "Your positions will appear here";
+"earn.state.empty.description" = "Deposit your first %@";
 "wallet_connect.state.empty.title" = "Your connections will appear here️";
 "wallet_connect.state.empty.description" = "Scan or paste code to connect to the DApp";
 "assets.state.empty.search_description" = "You can try to add it manually";

@@ -6,10 +6,10 @@ import Primitives
 import BigInt
 
 extension GemFreezeData {
-    public func map() throws -> FreezeData {
-        return FreezeData(
-            freezeType: try freezeType.map(),
-            resource: try resource.map()
+    public func map() -> FreezeData {
+        FreezeData(
+            freezeType: freezeType.map(),
+            resource: resource.map()
         )
     }
 }
@@ -24,7 +24,7 @@ extension FreezeData {
 }
 
 extension GemFreezeType {
-    public func map() throws -> Primitives.FreezeType {
+    public func map() -> Primitives.FreezeType {
         switch self {
         case .freeze: .freeze
         case .unfreeze: .unfreeze
@@ -42,7 +42,7 @@ extension Primitives.FreezeType {
 }
 
 extension GemResource {
-    public func map() throws -> Primitives.Resource {
+    public func map() -> Primitives.Resource {
         switch self {
         case .bandwidth: .bandwidth
         case .energy: .energy
@@ -74,7 +74,7 @@ extension GemStakeType {
         case .withdraw(let delegation):
             return .withdraw(try delegation.map())
         case .freeze(let freezeData):
-            return .freeze(try freezeData.map())
+            return .freeze(freezeData.map())
         }
     }
 }

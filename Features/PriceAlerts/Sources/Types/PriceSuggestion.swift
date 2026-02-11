@@ -5,8 +5,10 @@ import PrimitivesComponents
 
 struct PriceSuggestion: SuggestionViewable {
     let title: String
-    let value: String
+    let value: Double
 
-    var inputValue: String { value }
-    var id: String { title + value }
+    var inputValue: String {
+        value.formatted(.number.grouping(.never))
+    }
+    var id: String { "\(title)_\(inputValue)" }
 }

@@ -12,7 +12,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case perpetual(Asset, PerpetualType)
-    case earn(Asset, EarnAction, EarnData)
+    case earn(Asset, EarnType)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
 
     public var transactionType: TransactionType {
@@ -44,8 +44,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .close, .reduce: .perpetualClosePosition
             case .modify: .perpetualModifyPosition
             }
-        case .earn(_, let action, _):
-            switch action {
+        case .earn(_, let type):
+            switch type {
             case .deposit: .earnDeposit
             case .withdraw: .earnWithdraw
             }
@@ -61,7 +61,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
              .stake(let asset, _),
              .account(let asset, _),
              .perpetual(let asset, _),
-             .earn(let asset, _, _),
+             .earn(let asset, _),
              .tokenApprove(let asset, _),
              .generic(let asset, _, _): asset.chain
         case .transferNft(let asset): asset.chain
@@ -112,7 +112,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
              .generic(let asset, _, _),
              .account(let asset, _),
              .perpetual(let asset, _),
-             .earn(let asset, _, _): [asset.id]
+             .earn(let asset, _): [asset.id]
         case .swap(let from, let to, _): [from.id, to.id]
         case .transferNft: []
         }

@@ -393,8 +393,6 @@ struct Migrations {
                 $0.add(column: AssetRecord.Columns.earnApr.name, .double)
             }
 
-            try EarnPositionRecord.create(db: db)
-
             try? db.alter(table: BalanceRecord.databaseTableName) {
                 $0.add(column: BalanceRecord.Columns.earn.name, .text)
                     .defaults(to: "0")
@@ -405,6 +403,13 @@ struct Migrations {
             try? db.alter(table: BalanceRecord.databaseTableName) {
                 $0.drop(column: BalanceRecord.Columns.totalAmount.name)
                 $0.addColumn(sql: BalanceRecord.totalAmountSQlCreation)
+            }
+        }
+
+        migrator.registerMigration("Add providerType to stake_validators") { db in
+            try? db.alter(table: "stake_validators") {
+                $0.add(column: "providerType", .text)
+                    .defaults(to: GrowthProviderType.stake.rawValue)
             }
         }
 
