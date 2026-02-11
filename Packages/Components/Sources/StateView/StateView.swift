@@ -4,7 +4,7 @@ import Foundation
 
 import SwiftUI
 
-public struct StateView<Content: View, T: Hashable & Sendable>: View {
+struct StateView<Content: View, T: Hashable & Sendable>: View {
     let state: StateViewType<T>
     let content: (T) -> Content
     let emptyView: AnyView
@@ -12,7 +12,7 @@ public struct StateView<Content: View, T: Hashable & Sendable>: View {
     let loadingView: AnyView
     let errorView: AnyView
 
-    public init(
+    init(
         state: StateViewType<T>,
         @ViewBuilder content: @escaping (T) -> Content,
         @ViewBuilder emptyView: @escaping () -> AnyView,
@@ -28,7 +28,7 @@ public struct StateView<Content: View, T: Hashable & Sendable>: View {
         self.errorView = errorView()
     }
 
-    public var body: some View {
+    var body: some View {
         switch state {
         case .noData:
             noDataView

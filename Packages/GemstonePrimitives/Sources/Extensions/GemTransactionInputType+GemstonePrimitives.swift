@@ -44,11 +44,7 @@ public extension GemTransactionInputType {
         case .perpetual(asset: let asset, perpetualType: let perpetualType):
             return try TransferDataType.perpetual(asset.map(), perpetualType.map())
         case .earn(let asset, let earnType):
-            let type: Primitives.EarnType = switch earnType {
-            case .deposit(let validator): .deposit(try validator.map())
-            case .withdraw(let delegation): .withdraw(try delegation.map())
-            }
-            return try TransferDataType.earn(asset.map(), type)
+            return try TransferDataType.earn(asset.map(), earnType.map())
         }
     }
 }
@@ -80,11 +76,7 @@ public extension TransferDataType {
         case .perpetual(let asset, let perpetualType):
             return .perpetual(asset: asset.map(), perpetualType: perpetualType.map())
         case .earn(let asset, let earnType):
-            let gemEarnType: Gemstone.EarnType = switch earnType {
-            case .deposit(let validator): .deposit(validator.map())
-            case .withdraw(let delegation): .withdraw(delegation.map())
-            }
-            return .earn(asset: asset.map(), earnType: gemEarnType)
+            return .earn(asset: asset.map(), earnType: earnType.map())
         }
     }
 }
