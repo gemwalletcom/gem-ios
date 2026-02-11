@@ -44,6 +44,7 @@ public protocol GemAPIDeviceService: Sendable {
     func updateDevice(device: Device) async throws -> Device
     func isDeviceRegistered(deviceId: String) async throws -> Bool
     func migrateDevice(request: MigrateDeviceIdRequest) async throws -> Device
+    func getDeviceToken(deviceId: String) async throws -> DeviceToken
 }
 
 public protocol GemAPISubscriptionService: Sendable {
@@ -195,6 +196,12 @@ extension GemAPIService: GemAPIDeviceService {
         try await deviceProvider
             .request(.migrateDevice(request: request))
             .mapResponse(as: Device.self)
+    }
+
+    public func getDeviceToken(deviceId: String) async throws -> DeviceToken {
+        try await deviceProvider
+            .request(.getDeviceToken(deviceId: deviceId))
+            .mapResponse(as: DeviceToken.self)
     }
 }
 

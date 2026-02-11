@@ -55,9 +55,7 @@ public actor AppLifecycleService: Sendable {
         switch phase {
         case .active:
             debugLog("AppLifecycleService: App active — connecting observers")
-            async let observers: () = connectObservers()
-            async let perpetual: () = connectPerpetual()
-            _ = await (observers, perpetual)
+            await connectObservers()
         case .background:
             debugLog("AppLifecycleService: App background — disconnecting observers")
             await disconnectObservers()
@@ -97,7 +95,10 @@ extension AppLifecycleService {
     }
 
     private func connectObservers() async {
-        await priceObserverService.connect()
+        async let price: () = priceObserverService.connect()
+        async let perpetual: () = connectPerpetual()
+        async let authToken: () = deviceObserverService.startAuthTokenRefresh()
+        _ = await (price, perpetual, authToken)
     }
 
     private func connectPerpetual() async {
@@ -111,6 +112,7 @@ extension AppLifecycleService {
     private func disconnectObservers() async {
         async let price: () = priceObserverService.disconnect()
         async let perpetual: () = hyperliquidObserverService.disconnect()
-        _ = await (price, perpetual)
+        async let authToken: () = deviceObserverService.stopAuthTokenRefresh()
+        _ = await (price, perpetual, authToken)
     }
 }
