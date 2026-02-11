@@ -38,7 +38,6 @@ public struct ViewModelFactory: Sendable {
     let walletsService: WalletsService
     let walletService: WalletService
     let stakeService: StakeService
-    let yieldService: YieldService
     let earnService: any EarnServiceable
     let nameService: NameService
     let balanceService: BalanceService
@@ -57,7 +56,6 @@ public struct ViewModelFactory: Sendable {
         walletsService: WalletsService,
         walletService: WalletService,
         stakeService: StakeService,
-        yieldService: YieldService,
         earnService: any EarnServiceable,
         nameService: NameService,
         balanceService: BalanceService,
@@ -75,7 +73,6 @@ public struct ViewModelFactory: Sendable {
         self.walletsService = walletsService
         self.walletService = walletService
         self.stakeService = stakeService
-        self.yieldService = yieldService
         self.earnService = earnService
         self.nameService = nameService
         self.balanceService = balanceService

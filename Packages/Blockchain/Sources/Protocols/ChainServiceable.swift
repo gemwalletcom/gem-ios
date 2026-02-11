@@ -22,6 +22,7 @@ public protocol ChainBalanceable: Sendable {
     func coinBalance(for address: String) async throws -> AssetBalance
     func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance]
     func getStakeBalance(for address: String) async throws -> AssetBalance?
+    func getEarnBalance(for address: String) async throws -> [AssetBalance]
 }
 
 public protocol ChainFeeRateFetchable: Sendable {
@@ -73,6 +74,12 @@ public protocol ChainNodeStatusFetchable: Sendable {
 }
 
 protocol ChainFeePriorityPreference: Sendable {}
+
+public extension ChainBalanceable {
+    func getEarnBalance(for address: String) async throws -> [AssetBalance] {
+        return []
+    }
+}
 
 public extension ChainFeeRateFetchable {
     func defaultPriority(for type: TransferDataType) -> FeePriority {

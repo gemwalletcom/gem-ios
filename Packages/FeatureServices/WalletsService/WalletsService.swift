@@ -5,7 +5,6 @@ import Primitives
 import PriceService
 import Preferences
 import BalanceService
-import EarnService
 import AssetsService
 import DiscoverAssetsService
 import Store
@@ -24,7 +23,6 @@ public struct WalletsService: Sendable {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        earnService: any EarnServiceable,
         priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: any DeviceServiceable,
@@ -32,7 +30,6 @@ public struct WalletsService: Sendable {
     ) {
         let balanceUpdater = BalanceUpdateService(
             balanceService: balanceService,
-            earnService: earnService,
             walletSessionService: walletSessionService
         )
         let priceUpdater = PriceUpdateService(priceObserver: priceObserver)

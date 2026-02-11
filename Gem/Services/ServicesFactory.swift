@@ -82,8 +82,6 @@ struct ServicesFactory {
         let nativeProvider = NativeProvider(nodeProvider: nodeProvider)
         let gatewayService = GatewayService(provider: nativeProvider)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeProvider)
-        let yieldService = YieldService(nodeProvider: nodeProvider)
-
         let avatarService = AvatarService(store: storeManager.walletStore)
         let assetsService = Self.makeAssetsService(
             assetStore: storeManager.assetStore,
@@ -99,11 +97,9 @@ struct ServicesFactory {
         )
 
         let earnService = Self.makeEarnService(
-            assetsService: assetsService,
             assetStore: storeManager.assetStore,
-            balanceStore: storeManager.balanceStore,
             stakeStore: storeManager.stakeStore,
-            yieldService: yieldService
+            gatewayService: gatewayService
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
@@ -189,7 +185,6 @@ struct ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
-            earnService: earnService,
             priceService: priceService,
             priceObserver: priceObserverService,
             deviceService: deviceService,
@@ -281,7 +276,6 @@ struct ServicesFactory {
             walletsService: walletsService,
             walletService: walletService,
             stakeService: stakeService,
-            yieldService: yieldService,
             earnService: earnService,
             nameService: nameService,
             balanceService: balanceService,
@@ -416,18 +410,14 @@ extension ServicesFactory {
     }
 
     private static func makeEarnService(
-        assetsService: AssetsService,
         assetStore: AssetStore,
-        balanceStore: BalanceStore,
         stakeStore: StakeStore,
-        yieldService: YieldService
+        gatewayService: GatewayService
     ) -> EarnService {
         EarnService(
-            assetsService: assetsService,
             assetStore: assetStore,
-            balanceStore: balanceStore,
             store: stakeStore,
-            yieldService: yieldService
+            gatewayService: gatewayService
         )
     }
 
@@ -536,7 +526,6 @@ extension ServicesFactory {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        earnService: any EarnServiceable,
         priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: DeviceService,
@@ -546,7 +535,6 @@ extension ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
-            earnService: earnService,
             priceService: priceService,
             priceObserver: priceObserver,
             deviceService: deviceService,

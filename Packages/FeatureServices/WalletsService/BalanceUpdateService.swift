@@ -3,56 +3,30 @@
 import Foundation
 import Primitives
 import BalanceService
-import EarnService
 import WalletSessionService
 
 struct BalanceUpdateService: BalanceUpdater {
     private let balanceService: BalanceService
-    private let earnService: any EarnServiceable
     private let walletSessionService: any WalletSessionManageable
 
     init(
         balanceService: BalanceService,
-        earnService: any EarnServiceable,
         walletSessionService: any WalletSessionManageable
     ) {
         self.balanceService = balanceService
-        self.earnService = earnService
         self.walletSessionService = walletSessionService
     }
 
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
         let wallet = try walletSessionService.getWallet(walletId: walletId)
-        async let updateBalance: Void = balanceService.updateBalance(for: wallet, assetIds: assetIds)
-        async let updateEarn: Void = updateEarnPositions(wallet: wallet, assetIds: assetIds)
-        let _ = await (updateBalance, updateEarn)
+        await balanceService.updateBalance(for: wallet, assetIds: assetIds)
     }
 
-    // add asset to asset store and create balance store record
     func addBalancesIfMissing(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
         try balanceService.addAssetsBalancesIfMissing(
             assetIds: assetIds,
             wallet: walletSessionService.getWallet(walletId: walletId),
             isEnabled: isEnabled
         )
-    }
-
-    private func updateEarnPositions(wallet: Wallet, assetIds: [AssetId]) async {
-        await withTaskGroup(of: Void.self) { group in
-            for assetId in assetIds {
-                group.addTask {
-                    guard let account = try? wallet.account(for: assetId.chain) else {
-                        return
-                    }
-                    try? await earnService.update(
-                        walletId: wallet.walletId,
-                        assetId: assetId,
-                        address: account.address
-                    )
-                }
-            }
-
-            for await _ in group { }
-        }
     }
 }
