@@ -12,6 +12,7 @@ public extension Primitives.SignerInput {
             destinationAddress: destinationAddress,
             value: value.description,
             gasPrice: fee.gasPriceType.map(),
+            gasLimit: fee.gasLimit.asUInt32,
             memo: memo,
             isMaxValue: useMaxAmount,
             metadata: metadata.map()
