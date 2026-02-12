@@ -17,7 +17,7 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
 
     public var message: String {
         switch type {
-        case .secretPhrase: Localized.Common.copied(Localized.Common.secretPhrase)
+        case .secretPhrase: Localized.Common.copied(Localized.Wallet.Import.secretPhrase)
         case .privateKey: Localized.Common.copied(Localized.Common.privateKey)
         case .address(let asset, let address):
             Localized.Common.copied(
