@@ -42,10 +42,7 @@ public struct PerpetualNavigationView: View {
                     )
                 }
             }
-            .observeQuery(request: $model.positionsRequest, value: $model.positions)
-            .observeQuery(request: $model.perpetualRequest, value: $model.perpetualData)
-            .bindQuery(model.transactionsQuery)
-            .observeQuery(request: $model.perpetualTotalValueRequest, value: $model.perpetualTotalValue)
+            .bindQuery(model.positionsQuery, model.perpetualQuery, model.transactionsQuery, model.perpetualTotalValueQuery)
             // we should ideally observer is isCompleted, but don't have access from here
             .onChange(of: isPresentingTransferData) { _, newValue in
                 if newValue == .none {

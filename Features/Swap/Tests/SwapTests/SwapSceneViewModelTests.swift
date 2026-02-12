@@ -14,6 +14,7 @@ import Keystore
 import KeystoreTestKit
 import Primitives
 @testable import Swap
+@testable import Store
 
 @MainActor
 struct SwapSceneViewModelTests {
@@ -118,10 +119,8 @@ extension SwapSceneViewModel {
             swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper)),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: LocalKeystore.mock(), swapService: .mock(swapper: swapper))
         )
-
-        model.fromAsset = .mock(asset: .mockEthereum())
-        model.toAsset = .mock(asset: .mockEthereumUSDT())
-        
+        model.fromAssetQuery.value = .mock(asset: .mockEthereum())
+        model.toAssetQuery.value = .mock(asset: .mockEthereumUSDT())
         return model
     }
 }

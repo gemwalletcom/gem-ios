@@ -22,9 +22,7 @@ struct AssetNavigationView: View {
         AssetScene(
             model: model
         )
-        .observeQuery(request: $model.input.assetRequest, value: $model.chainAssetData)
-        .observeQuery(request: $model.input.bannersRequest, value: $model.banners)
-        .bindQuery(model.transactionsQuery)
+        .bindQuery(model.assetQuery, model.bannersQuery, model.transactionsQuery)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: model.onTogglePriceAlert) {

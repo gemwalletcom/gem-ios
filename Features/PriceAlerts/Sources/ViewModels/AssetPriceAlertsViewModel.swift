@@ -5,8 +5,6 @@ import Store
 import Primitives
 import Localization
 import PriceAlertService
-import GRDB
-import GRDBQuery
 import PrimitivesComponents
 import Components
 import Style
@@ -17,13 +15,13 @@ public final class AssetPriceAlertsViewModel: Sendable {
     let priceAlertService: PriceAlertService
     let walletId: WalletId
     let asset: Asset
-    
-    var request: PriceAlertsRequest
-    var priceAlerts: [PriceAlertData] = []
+
+    public let query: ObservableQuery<PriceAlertsRequest>
+    var priceAlerts: [PriceAlertData] { query.value }
 
     var isPresentingSetPriceAlert: Bool = false
     var isPresentingToastMessage: ToastMessage?
-    
+
     public init(
         priceAlertService: PriceAlertService,
         walletId: WalletId,
@@ -32,7 +30,7 @@ public final class AssetPriceAlertsViewModel: Sendable {
         self.priceAlertService = priceAlertService
         self.walletId = walletId
         self.asset = asset
-        self.request = PriceAlertsRequest(assetId: asset.id)
+        self.query = ObservableQuery(PriceAlertsRequest(assetId: asset.id), initialValue: [])
     }
     
     var title: String { Localized.Settings.PriceAlerts.title }

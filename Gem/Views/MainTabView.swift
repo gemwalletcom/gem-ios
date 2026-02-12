@@ -2,8 +2,6 @@
 
 import SwiftUI
 import Primitives
-import GRDB
-import GRDBQuery
 import Store
 import Localization
 import Style
@@ -28,10 +26,7 @@ struct MainTabView: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.transactionsService) private var transactionsService
 
-    private let model: MainTabViewModel
-
-    @Query<TransactionsCountRequest>
-    private var transactions: Int
+    @State private var model: MainTabViewModel
 
     private var tabViewSelection: Binding<TabItem> {
         Binding(
@@ -40,11 +35,8 @@ struct MainTabView: View {
         )
     }
 
-    @State private var isPresentingToastMessage: ToastMessage?
-
     init(model: MainTabViewModel) {
-        self.model = model
-        _transactions = Query(constant: model.transactionsCountRequest)
+        _model = State(initialValue: model)
     }
 
     var body: some View {
@@ -98,7 +90,7 @@ struct MainTabView: View {
             .tabItem {
                 tabItem(Localized.Activity.title, Images.Tabs.activity)
             }
-            .badge(transactions)
+            .badge(model.transactions)
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
@@ -122,14 +114,15 @@ struct MainTabView: View {
             SetPriceAlertNavigationStack(
                 model: SetPriceAlertViewModel(
                     walletId: model.wallet.walletId,
-                    assetId: input.assetId,
+                    asset: input.asset,
                     priceAlertService: priceAlertService,
                     price: input.price,
                     onComplete: onSetPriceAlertComplete
                 )
             )
         }
-        .toast(message: $isPresentingToastMessage)
+        .toast(message: $model.isPresentingToastMessage)
+        .bindQuery(model.transactionsQuery)
         .onChange(of: model.walletId, onWalletIdChange)
     }
 }
@@ -160,7 +153,7 @@ extension MainTabView {
 
     private func onSetPriceAlertComplete(message: String) {
         presenter.isPresentingPriceAlert.wrappedValue = nil
-        isPresentingToastMessage = .priceAlert(message: message)
+        model.isPresentingToastMessage = .priceAlert(message: message)
     }
 
     private func onComplete(type: SelectedAssetType) {

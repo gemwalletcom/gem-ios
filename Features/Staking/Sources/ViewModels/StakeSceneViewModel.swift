@@ -25,13 +25,13 @@ public final class StakeSceneViewModel {
     private let recommendedValidators = StakeRecommendedValidators()
 
     public let wallet: Wallet
-    public var request: StakeDelegationsRequest
-    public var delegations: [Delegation] = []
-    public var validatorsRequest: StakeValidatorsRequest
-    public var validators: [DelegationValidator] = []
+    public let delegationsQuery: ObservableQuery<StakeDelegationsRequest>
+    public let validatorsQuery: ObservableQuery<StakeValidatorsRequest>
+    public let assetQuery: ObservableQuery<AssetRequest>
 
-    public var assetRequest: AssetRequest
-    public var assetData: AssetData = .empty
+    public var delegations: [Delegation] { delegationsQuery.value }
+    public var validators: [DelegationValidator] { validatorsQuery.value }
+    public var assetData: AssetData { assetQuery.value }
 
     public var isPresentingInfoSheet: InfoSheetType? = .none
 
@@ -43,9 +43,9 @@ public final class StakeSceneViewModel {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
-        self.request = StakeDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
-        self.validatorsRequest = StakeValidatorsRequest(assetId: chain.chain.assetId)
-        self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId)
+        self.delegationsQuery = ObservableQuery(StakeDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId), initialValue: [])
+        self.validatorsQuery = ObservableQuery(StakeValidatorsRequest(assetId: chain.chain.assetId), initialValue: [])
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId), initialValue: .with(asset: chain.chain.asset))
     }
 
     public var stakeInfoUrl: URL {

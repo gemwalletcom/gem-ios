@@ -5,8 +5,6 @@ import Charts
 import Primitives
 import Style
 import Components
-import GRDB
-import GRDBQuery
 import Store
 import PrimitivesComponents
 import Localization
@@ -85,7 +83,7 @@ public struct ChartScene: View {
                 }
             }
         }
-        .observeQuery(request: $model.priceRequest, value: $model.priceData)
+        .bindQuery(model.priceQuery)
         .refreshableTimer(every: .minutes(1)) {
             await model.fetch()
         }

@@ -66,18 +66,7 @@ struct WalletNavigationStack: View {
             }
             .onChange(of: model.currentWallet, model.onChangeWallet)
             .onChange(of: navigationState.walletTabReselected, model.onWalletTabReselected)
-            .observeQuery(
-                request: $model.assetsRequest,
-                value: $model.assets
-            )
-            .observeQuery(
-                request: $model.bannersRequest,
-                value: $model.banners
-            )
-            .observeQuery(
-                request: $model.totalFiatRequest,
-                value: $model.totalFiatValue
-            )
+            .bindQuery(model.assetsQuery, model.bannersQuery, model.totalFiatQuery)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if !model.isPresentingSearch {
@@ -211,11 +200,11 @@ struct WalletNavigationStack: View {
                     }
                 )
             }
-            .sheet(item: $model.isPresentingSetPriceAlert) { assetId in
+            .sheet(item: $model.isPresentingSetPriceAlert) { asset in
                 SetPriceAlertNavigationStack(
                     model: SetPriceAlertViewModel(
                         walletId: model.wallet.walletId,
-                        assetId: assetId,
+                        asset: asset,
                         priceAlertService: priceAlertService
                     ) { model.onSetPriceAlertComplete(message: $0) }
                 )

@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct BannersRequest: ValueObservationQueryable {
-    public static var defaultValue: [Banner] { [] }
+public struct BannersRequest: DatabaseQueryable {
 
     public var walletId: WalletId?
 
@@ -52,3 +49,5 @@ public struct BannersRequest: ValueObservationQueryable {
             .compactMap { $0.mapToBanner() }
     }
 }
+
+extension BannersRequest: Equatable {}

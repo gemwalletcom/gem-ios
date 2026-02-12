@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct ChainAssetRequest: ValueObservationQueryable {
-    public static var defaultValue: ChainAssetData { .empty }
+public struct ChainAssetRequest: DatabaseQueryable {
 
     public var assetRequest: AssetRequest
     public var feeAssetRequest: AssetRequest
@@ -32,9 +29,4 @@ public struct ChainAssetRequest: ValueObservationQueryable {
     }
 }
 
-extension ChainAssetData {
-    public static let empty = ChainAssetData(
-        assetData: .empty,
-        feeAssetData: .empty
-    )
-}
+extension ChainAssetRequest: Equatable {}

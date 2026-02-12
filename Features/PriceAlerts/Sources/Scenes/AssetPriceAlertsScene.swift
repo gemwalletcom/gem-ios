@@ -40,7 +40,7 @@ public struct AssetPriceAlertsScene: View {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
-        .observeQuery(request: $model.request, value: $model.priceAlerts)
+        .bindQuery(model.query)
         .listSectionSpacing(.compact)
         .refreshable { await model.fetch() }
         .task { await model.fetch() }
@@ -57,7 +57,7 @@ public struct AssetPriceAlertsScene: View {
             SetPriceAlertNavigationStack(
                 model: SetPriceAlertViewModel(
                     walletId: model.walletId,
-                    assetId: model.asset.id,
+                    asset: model.asset,
                     priceAlertService: model.priceAlertService
                 ) { model.onSetPriceAlertComplete(message: $0) }
             )

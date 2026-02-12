@@ -16,7 +16,7 @@ public final class ObservableQuery<Request: DatabaseQueryable>: Sendable, Bindab
         }
     }
 
-    public private(set) var value: Request.Value
+    public internal(set) var value: Request.Value
 
     private var dbQueue: DatabaseQueue?
     private var cancellable: AnyCancellable?

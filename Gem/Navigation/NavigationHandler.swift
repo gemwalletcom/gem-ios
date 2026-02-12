@@ -85,7 +85,7 @@ extension NavigationHandler {
             return
 
         case .setPriceAlert(let assetId, let price):
-            presenter.isPresentingPriceAlert.wrappedValue = SetPriceAlertInput(assetId: assetId, price: price)
+            try await presentSetPriceAlert(assetId: assetId, price: price)
             return
         }
 
@@ -170,6 +170,11 @@ extension NavigationHandler {
     private func presentSell(assetId: AssetId, amount: Int?) async throws {
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
         try presentAssetInput(type: .sell(asset, amount: amount), for: asset)
+    }
+
+    private func presentSetPriceAlert(assetId: AssetId, price: Double?) async throws {
+        let asset = try await assetsService.getOrFetchAsset(for: assetId)
+        presenter.isPresentingPriceAlert.wrappedValue = SetPriceAlertInput(asset: asset, price: price)
     }
 
     private func presentAssetInput(type: SelectedAssetType, for asset: Asset) throws {

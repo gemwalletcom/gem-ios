@@ -2,7 +2,6 @@
 
 import Foundation
 import SwiftUI
-import GRDBQuery
 import Primitives
 import Store
 import Components
@@ -44,7 +43,7 @@ public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
                 .frame(minHeight: geometry.size.height)
             }
         }
-        .observeQuery(request: $model.request, value: $model.nftDataList)
+        .bindQuery(model.query)
         .overlay {
             if model.content.items.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)

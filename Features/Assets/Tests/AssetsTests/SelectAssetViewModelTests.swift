@@ -14,8 +14,8 @@ struct SelectAssetViewModelTests {
     func recentActivityTypes() {
         let model = SelectAssetViewModel.mock()
 
-        #expect(model.recentsRequest.types.contains(.perpetual) == false)
-        #expect(model.recentsRequest.types.count == RecentActivityType.allCases.count - 1)
+        #expect(model.recentsQuery.request.types.contains(.perpetual) == false)
+        #expect(model.recentsQuery.request.types.count == RecentActivityType.allCases.count - 1)
     }
 
     @Test

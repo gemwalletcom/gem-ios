@@ -38,8 +38,7 @@ public struct WalletSearchScene: View {
                 )
             }
         }
-        .observeQuery(request: $model.searchRequest, value: $model.searchResult)
-        .observeQuery(request: $model.recentsRequest, value: $model.recents)
+        .bindQuery(model.searchQuery, model.recentsQuery)
         .searchable(
             text: $model.searchModel.searchableQuery,
             isPresented: $model.isSearchPresented,

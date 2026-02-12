@@ -26,13 +26,13 @@ public final class SelectAssetViewModel {
 
     public let wallet: Wallet
 
-    var assets: [AssetData] = []
-    var recents: [RecentAsset] = []
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: AssetSearchViewModel
 
-    var request: AssetsRequest
-    public var recentsRequest: RecentActivityRequest
+    public let assetsQuery: ObservableQuery<AssetsRequest>
+    public let recentsQuery: ObservableQuery<RecentActivityRequest>
+    var assets: [AssetData] { assetsQuery.value }
+    var recents: [RecentAsset] { recentsQuery.value }
 
     var isSearching: Bool = false
     var isDismissSearch: Bool = false
@@ -74,15 +74,15 @@ public final class SelectAssetViewModel {
         self.filterModel = filter
         self.searchModel = AssetSearchViewModel(selectType: selectType)
 
-        self.request = AssetsRequest(
-            walletId: wallet.walletId,
-            filters: filter.filters
-        )
-        self.recentsRequest = RecentActivityRequest(
-            walletId: wallet.walletId,
-            limit: 10,
-            types: RecentActivityType.allCases.filter { $0 != .perpetual },
-            filters: filter.defaultFilters
+        self.assetsQuery = ObservableQuery(AssetsRequest(walletId: wallet.walletId, filters: filter.filters), initialValue: [])
+        self.recentsQuery = ObservableQuery(
+            RecentActivityRequest(
+                walletId: wallet.walletId,
+                limit: 10,
+                types: RecentActivityType.allCases.filter { $0 != .perpetual
+                },
+                filters: filter.defaultFilters),
+            initialValue: []
         )
     }
 
@@ -258,7 +258,7 @@ extension SelectAssetViewModel {
     }
 
     func updateRequest() {
-        request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
+        assetsQuery.request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
         state = isNetworkSearchEnabled ? .loading : .noData
     }
 
@@ -271,7 +271,7 @@ extension SelectAssetViewModel {
     }
 
     func onChangeFilterModel(_: AssetsFilterViewModel, model: AssetsFilterViewModel) {
-        request.filters = model.filters
+        assetsQuery.request.filters = model.filters
     }
 }
 

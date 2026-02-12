@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct StakeValidatorsRequest: ValueObservationQueryable {
-    public static var defaultValue: [DelegationValidator] { [] }
+public struct StakeValidatorsRequest: DatabaseQueryable {
 
     private let assetId: AssetId
 
@@ -19,3 +16,5 @@ public struct StakeValidatorsRequest: ValueObservationQueryable {
         try StakeStore.getValidatorsActive(db: db, assetId: assetId)
     }
 }
+
+extension StakeValidatorsRequest: Equatable {}

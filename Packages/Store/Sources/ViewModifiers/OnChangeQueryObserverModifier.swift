@@ -2,35 +2,31 @@
 
 import Foundation
 import SwiftUI
-import GRDBQuery
 
-struct OnChangeQueryObserverModifier<Q: ValueObservationQueryable>: ViewModifier where Q.Value: Equatable, Q.Context == DatabaseContext {
-    @Binding private var value: Q.Value
-    @Binding private var request: Q
+struct OnChangeBindQueryModifier<Q: DatabaseQueryable>: ViewModifier where Q.Value: Equatable {
+    @Environment(\.database) private var database
 
-    private let initial: Bool
-    private let action: ((Q.Value, Q.Value) -> Void)
+    let query: ObservableQuery<Q>
+    let initial: Bool
+    let action: ((Q.Value, Q.Value) -> Void)
 
     init(
-        request: Binding<Q>,
-        value: Binding<Q.Value>,
+        query: ObservableQuery<Q>,
         initial: Bool = false,
         action: @escaping ((Q.Value, Q.Value) -> Void)
     ) {
-        _value = value
-        _request = request
+        self.query = query
         self.initial = initial
         self.action = action
     }
 
     func body(content: Content) -> some View {
         content
-            .observeQuery(
-                request: $request,
-                value: $value
-            )
+            .onAppear {
+                query.bind(dbQueue: database.dbQueue)
+            }
             .onChange(
-                of: value,
+                of: query.value,
                 initial: initial
             ) { oldValue, newValue in
                 action(oldValue, newValue)
@@ -39,16 +35,14 @@ struct OnChangeQueryObserverModifier<Q: ValueObservationQueryable>: ViewModifier
 }
 
 public extension View {
-    func onChangeObserveQuery<Q: ValueObservationQueryable>(
-        request: Binding<Q>,
-        value: Binding<Q.Value>,
+    func onChangeBindQuery<Q: DatabaseQueryable>(
+        _ query: ObservableQuery<Q>,
         initial: Bool = false,
         action: @escaping ((Q.Value, Q.Value) -> Void)
-    ) -> some View where Q.Value: Equatable, Q.Context == DatabaseContext {
+    ) -> some View where Q.Value: Equatable {
         modifier(
-            OnChangeQueryObserverModifier(
-                request: request,
-                value: value,
+            OnChangeBindQueryModifier(
+                query: query,
                 initial: initial,
                 action: action
             )

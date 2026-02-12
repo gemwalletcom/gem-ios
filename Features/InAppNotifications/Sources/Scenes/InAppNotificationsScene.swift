@@ -30,7 +30,7 @@ public struct InAppNotificationsScene: View {
             }
         }
         .navigationTitle(model.title)
-        .observeQuery(request: $model.request, value: $model.notifications)
+        .bindQuery(model.query)
         .task { await model.fetch() }
     }
 

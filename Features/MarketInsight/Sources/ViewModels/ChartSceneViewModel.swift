@@ -18,12 +18,11 @@ import Formatters
 public final class ChartSceneViewModel {
     private let service: ChartService
     private let priceService: PriceService
+    private let preferences: Preferences = .standard
 
     let walletId: WalletId
     let assetModel: AssetViewModel
     let priceAlertService: PriceAlertService
-
-    private let preferences: Preferences = .standard
 
     var state: StateViewType<ChartValuesViewModel> = .loading
     var selectedPeriod: ChartPeriod {
@@ -32,10 +31,10 @@ public final class ChartSceneViewModel {
         }
     }
 
-    var priceData: PriceData?
-    var priceRequest: PriceRequest
+    public let priceQuery: ObservableQuery<PriceRequest>
+    var priceData: PriceData? { priceQuery.value }
 
-    public var isPresentingSetPriceAlert: Binding<AssetId?>
+    public var isPresentingSetPriceAlert: Binding<Asset?>
     var isPresentingMarkets: PriceData?
 
     var title: String { assetModel.name }
@@ -54,7 +53,7 @@ public final class ChartSceneViewModel {
         priceAlertService: PriceAlertService,
         walletId: WalletId,
         currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod,
-        isPresentingSetPriceAlert: Binding<AssetId?>
+        isPresentingSetPriceAlert: Binding<Asset?>
     ) {
         self.service = service
         self.priceService = priceService
@@ -62,7 +61,7 @@ public final class ChartSceneViewModel {
         self.priceAlertService = priceAlertService
         self.walletId = walletId
         self.selectedPeriod = currentPeriod
-        self.priceRequest = PriceRequest(assetId: assetModel.asset.id)
+        self.priceQuery = ObservableQuery(PriceRequest(assetId: assetModel.asset.id), initialValue: nil)
         self.isPresentingSetPriceAlert = isPresentingSetPriceAlert
     }
     
@@ -111,7 +110,7 @@ extension ChartSceneViewModel {
     }
 
     public func onSelectSetPriceAlerts() {
-        isPresentingSetPriceAlert.wrappedValue = assetModel.asset.id
+        isPresentingSetPriceAlert.wrappedValue = assetModel.asset
     }
 
     public func onSelectPriceDetails() {
