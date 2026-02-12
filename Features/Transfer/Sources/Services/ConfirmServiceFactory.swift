@@ -8,7 +8,6 @@ import ExplorerService
 import Keystore
 import WalletsService
 import ScanService
-import NodeService
 import Primitives
 import ChainService
 import Signer
@@ -19,7 +18,7 @@ import EventPresenterService
 public struct ConfirmServiceFactory {
     public static func create(
         keystore: any Keystore,
-        nodeService: NodeService,
+        chainServiceFactory: ChainServiceFactory,
         walletsService: WalletsService,
         scanService: ScanService,
         balanceService: BalanceService,
@@ -30,7 +29,7 @@ public struct ConfirmServiceFactory {
         eventPresenterService: EventPresenterService,
         chain: Chain
     ) -> ConfirmService {
-        let chainService = ChainServiceFactory(nodeProvider: nodeService).service(for: chain)
+        let chainService = chainServiceFactory.service(for: chain)
 
         return ConfirmService(
             explorerService: ExplorerService.standard,

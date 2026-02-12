@@ -70,11 +70,11 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "stake").tap()
         
-        sleep(5)
+        sleep(3)
 
         try snapshoter.snap("earn")
 
-        app.navigationBars.buttons.element(boundBy: 1).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
         app.swipeUp()
@@ -129,13 +129,15 @@ struct Snapshoter {
 
         let screenshotData = app.windows.firstMatch.screenshot().pngRepresentation
 
-        guard let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] else {
-            throw NSError(domain: "Snapshoter", code: 1, userInfo: [NSLocalizedDescriptionKey: "SCREENSHOTS_PATH environment variable not set"])
+        let environmentPath = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"]
+        guard let environmentPath else {
+            throw AnyError("SCREENSHOTS_PATH is not set")
         }
+        let path = environmentPath.isEmpty ? "\(NSHomeDirectory())/Documents/screenshots" : environmentPath
+        
         let directoryPath = "\(path)/\(Locale.current.appstoreLanguageIdentifier())"
         
         let fileURL = URL(fileURLWithPath: "\(directoryPath)/\(UIDevice.current.model.lowercased())_\(name).png")
-
         
         // Create the directory if it doesn't exist
         let fileManager = FileManager.default
@@ -145,5 +147,7 @@ struct Snapshoter {
 
         // Save the screenshot
         try screenshotData.write(to: fileURL)
+        
+        print("fileURL.path \(fileURL.path)")
     }
 }

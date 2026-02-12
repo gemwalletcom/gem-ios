@@ -48,8 +48,10 @@ struct ServicesFactory {
         let storeManager = StoreManager(db: storages.db)
         let securePreferences = SecurePreferences()
         let signer = Self.makeRequestSigner(securePreferences: securePreferences)
-        let interceptor: (@Sendable (inout URLRequest) throws -> Void)? = if let signer {
-            { try signer.sign(request: &$0) }
+        let interceptor: (@Sendable (inout URLRequest, GemDeviceAPI) throws -> Void)? = if let signer {
+            { request, target in
+                try signer.sign(request: &request, walletId: target.walletId ?? "")
+            }
         } else {
             nil
         }
@@ -73,9 +75,11 @@ struct ServicesFactory {
         )
 
         let nodeService = NodeService(nodeStore: storeManager.nodeStore)
-        let nativeProvider = NativeProvider(nodeProvider: nodeService)
+        let nodeAuthProvider = NodeAuthTokenProvider(securePreferences: securePreferences)
+        let nodeProvider = AuthenticatedNodeProvider(nodeProvider: nodeService, requestInterceptor: nodeAuthProvider)
+        let nativeProvider = NativeProvider(nodeProvider: nodeProvider)
         let gatewayService = GatewayService(provider: nativeProvider)
-        let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
+        let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeProvider)
 
         let avatarService = AvatarService(store: storeManager.walletStore)
         let assetsService = Self.makeAssetsService(
@@ -154,7 +158,7 @@ struct ServicesFactory {
             preferences: preferences
         )
         let explorerService = ExplorerService.standard
-        let swapService = SwapService(nodeProvider: nodeService)
+        let swapService = SwapService(nodeProvider: nodeProvider)
 
         let walletSessionService = WalletSessionService(
             walletStore: storeManager.walletStore,
@@ -216,7 +220,7 @@ struct ServicesFactory {
             assetStore: storeManager.assetStore,
             priceAstore: storeManager.priceStore,
             balanceStore: storeManager.balanceStore,
-            nodeProvider: nodeService,
+            nodeProvider: nodeProvider,
             preferences: preferences
         )
         let hyperliquidObserverService = HyperliquidObserverService(
@@ -229,7 +233,7 @@ struct ServicesFactory {
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
         let authService = AuthService(apiService: apiService, keystore: storages.keystore)
-        let rewardsService = RewardsService(apiService: apiService, authService: authService, securePreferences: securePreferences)
+        let rewardsService = RewardsService(apiService: apiService, authService: authService)
         let eventPresenterService = EventPresenterService()
         let walletSearchService = WalletSearchService(
             assetsService: assetsService,
@@ -244,7 +248,6 @@ struct ServicesFactory {
         )
         let inAppNotificationService = InAppNotificationService(
             apiService: apiService,
-            deviceService: deviceService,
             walletService: walletService,
             store: storeManager.inAppNotificationStore
         )
@@ -259,7 +262,7 @@ struct ServicesFactory {
 
         let viewModelFactory = ViewModelFactory(
             keystore: storages.keystore,
-            nodeService: nodeService,
+            chainServiceFactory: chainServiceFactory,
             scanService: scanService,
             swapService: swapService,
             walletsService: walletsService,

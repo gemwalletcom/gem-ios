@@ -9,6 +9,8 @@ import Preferences
 
 public struct DeviceService: DeviceServiceable {
 
+    public static let authTokenRefreshInterval: Duration = .seconds(300)
+
     private let deviceProvider: any GemAPIDeviceService
     private let subscriptionsService: SubscriptionService
     private let preferences: Preferences
@@ -54,6 +56,7 @@ public struct DeviceService: DeviceServiceable {
             try await migrateDeviceIfNeeded()
             try await updateDevice()
         }
+        try? await updateAuthTokenIfNeeded()
     }
 
     private func migrateDeviceIfNeeded() async throws {
@@ -78,22 +81,35 @@ public struct DeviceService: DeviceServiceable {
         let needsDeviceUpdate = device != localDevice
 
         if needsSubscriptionUpdate {
-            try await self.subscriptionsService.update(deviceId: deviceId)
+            try await self.subscriptionsService.update()
         }
 
         if needsSubscriptionUpdate || needsDeviceUpdate {
             device = try await self.updateDevice(localDevice)
         }
     }
+
+    public func updateAuthTokenIfNeeded() async throws {
+        guard preferences.isDeviceRegistered, shouldUpdateAuthToken() else { return }
+        let token = try await deviceProvider.getDeviceToken()
+        try securePreferences.setAuthToken(token)
+    }
+
+    private func shouldUpdateAuthToken() -> Bool {
+        guard let token = try? securePreferences.authToken() else { return true }
+        let now = UInt64(Date.now.timeIntervalSince1970)
+        let remainingTime = token.expiresAt > now ? token.expiresAt - now : 0
+        return remainingTime < UInt64(Self.authTokenRefreshInterval.components.seconds)
+    }
     
     private func getOrCreateDevice(_ deviceId: String) async throws -> Device {
         var shouldFetchDevice = preferences.isDeviceRegistered
         if !shouldFetchDevice {
-            shouldFetchDevice = try await deviceProvider.isDeviceRegistered(deviceId: deviceId)
+            shouldFetchDevice = try await deviceProvider.isDeviceRegistered()
         }
 
         if shouldFetchDevice {
-            if let device = try await getDevice(deviceId: deviceId) {
+            if let device = try await getDevice() {
                 preferences.isDeviceRegistered = true
                 return device
             }
@@ -155,8 +171,8 @@ public struct DeviceService: DeviceServiceable {
         )
     }
 
-    private func getDevice(deviceId: String) async throws -> Device? {
-        try await deviceProvider.getDevice(deviceId: deviceId)
+    private func getDevice() async throws -> Device? {
+        try await deviceProvider.getDevice()
     }
     
     @discardableResult
