@@ -16,7 +16,7 @@ public struct BalanceService: BalancerUpdater, Sendable {
     public init(
         balanceStore: BalanceStore,
         assetsService: AssetsService,
-        chainServiceFactory: ChainServiceFactory
+        chainServiceFactory: any ChainServiceFactorable
     ) {
         self.balanceStore = balanceStore
         self.assetsService = assetsService

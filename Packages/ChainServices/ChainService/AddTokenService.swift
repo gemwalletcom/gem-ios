@@ -4,10 +4,10 @@ import Foundation
 import Primitives
 
 public struct AddTokenService: Sendable {
-    private let chainServiceFactory: ChainServiceFactory
+    private let chainServiceFactory: any ChainServiceFactorable
     
     public init(
-        chainServiceFactory: ChainServiceFactory
+        chainServiceFactory: any ChainServiceFactorable
     ) {
         self.chainServiceFactory = chainServiceFactory
     }

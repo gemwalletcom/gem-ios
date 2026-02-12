@@ -14,7 +14,7 @@ extension AssetsService {
     public static func mock(
         assetStore: AssetStore = .mock(),
         balanceStore: BalanceStore = .mock(),
-        chainServiceFactory: ChainServiceFactory = .mock(),
+        chainServiceFactory: any ChainServiceFactorable = ChainServiceFactoryMock(),
         assetsProvider: any GemAPIAssetsService = GemAPIAssetsServiceMock()
     ) -> AssetsService {
         AssetsService(

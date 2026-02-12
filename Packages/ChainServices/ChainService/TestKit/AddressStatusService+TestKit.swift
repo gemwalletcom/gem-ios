@@ -5,7 +5,7 @@ import ChainService
 
 public extension AddressStatusService {
     static func mock(
-        chainServiceFactory: ChainServiceFactory = .mock()
+        chainServiceFactory: any ChainServiceFactorable = ChainServiceFactoryMock()
     ) -> AddressStatusService {
         AddressStatusService(chainServiceFactory: chainServiceFactory)
     }

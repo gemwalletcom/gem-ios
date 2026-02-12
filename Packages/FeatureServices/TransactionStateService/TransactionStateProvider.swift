@@ -8,11 +8,11 @@ import Blockchain
 
 struct TransactionStateProvider: Sendable {
     private let transactionStore: TransactionStore
-    private let chainServiceFactory: ChainServiceFactory
+    private let chainServiceFactory: any ChainServiceFactorable
 
     init(
         transactionStore: TransactionStore,
-        chainServiceFactory: ChainServiceFactory
+        chainServiceFactory: any ChainServiceFactorable
     ) {
         self.transactionStore = transactionStore
         self.chainServiceFactory = chainServiceFactory
