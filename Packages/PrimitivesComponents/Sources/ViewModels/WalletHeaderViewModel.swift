@@ -41,9 +41,17 @@ extension WalletHeaderViewModel: HeaderViewModel {
 
     public var subtitleImage: Image? {
         switch totalValue.pnlAmount {
-        case _ where totalValue.pnlAmount > 0: EquilateralTriangle.image(pointingUp: true)
-        case _ where totalValue.pnlAmount < 0: EquilateralTriangle.image(pointingUp: false)
+        case _ where totalValue.pnlAmount > 0: Images.System.arrowTriangleUp
+        case _ where totalValue.pnlAmount < 0: Images.System.arrowTriangleDown
         default: nil
+        }
+    }
+
+    public var subtitleImageOffset: CGFloat {
+        switch totalValue.pnlAmount {
+        case _ where totalValue.pnlAmount > 0: -1
+        case _ where totalValue.pnlAmount < 0: 1
+        default: .zero
         }
     }
 

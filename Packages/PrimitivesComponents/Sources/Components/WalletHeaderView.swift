@@ -48,10 +48,13 @@ public struct WalletHeaderView: View {
             .padding(.bottom, .space10)
 
             if let subtitle = model.subtitle {
-                HStack(spacing: Spacing.tiny) {
+                HStack(spacing: Spacing.space6) {
                     if let subtitleImage = model.subtitleImage, !isPrivacyEnabled {
                         subtitleImage
+                            .resizable()
+                            .frame(width: 8, height: 6)
                             .foregroundStyle(model.subtitleColor)
+                            .offset(y: model.subtitleImageOffset)
                     }
 
                     PrivacyText(
