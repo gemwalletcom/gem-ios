@@ -36,9 +36,8 @@ struct StateView<Content: View, T: Hashable & Sendable>: View {
             loadingView
         case .data(let model):
             content(model)
-        case .error(let error):
-            Text("Error: \(error.localizedDescription)")
-                .foregroundStyle(.red)
+        case .error:
+            errorView
         }
     }
 }

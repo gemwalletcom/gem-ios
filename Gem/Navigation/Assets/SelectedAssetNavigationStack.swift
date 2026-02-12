@@ -120,10 +120,16 @@ struct SelectedAssetNavigationStack: View  {
                     )
                 case .stake:
                     StakeNavigationView(
-                        model: viewModelFactory.stakeScene(
-                            wallet: wallet,
-                            chain: input.asset.id.chain
-                        ),
+                        wallet: wallet,
+                        chain: input.asset.id.chain,
+                        viewModelFactory: viewModelFactory,
+                        navigationPath: $navigationPath
+                    )
+                case .earn:
+                    EarnNavigationView(
+                        wallet: wallet,
+                        asset: input.asset,
+                        viewModelFactory: viewModelFactory,
                         navigationPath: $navigationPath
                     )
                 }

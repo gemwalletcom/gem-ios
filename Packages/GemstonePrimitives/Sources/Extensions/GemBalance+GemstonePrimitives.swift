@@ -16,6 +16,7 @@ extension GemBalance {
             pendingUnconfirmed: try BigInt.from(string: pendingUnconfirmed),
             rewards: try BigInt.from(string: rewards),
             reserved: try BigInt.from(string: reserved),
+            earn: try BigInt.from(string: earn),
             withdrawable: try BigInt.from(string: withdrawable),
             metadata: metadata?.map()
         )

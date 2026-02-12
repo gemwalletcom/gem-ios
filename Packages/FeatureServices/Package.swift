@@ -52,6 +52,8 @@ let package = Package(
         .library(name: "RewardsServiceTestKit", targets: ["RewardsServiceTestKit"]),
         .library(name: "AuthService", targets: ["AuthService"]),
         .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
+        .library(name: "EarnService", targets: ["EarnService"]),
+        .library(name: "EarnServiceTestKit", targets: ["EarnServiceTestKit"]),
         .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
         .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
     ],
@@ -100,6 +102,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
+                "Formatters",
                 .product(name: "ChainService", package: "ChainServices"),
                 "AssetsService"
             ],
@@ -228,6 +231,7 @@ let package = Package(
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "StakeService", package: "ChainServices"),
                 "BalanceService",
+                "EarnService",
                 "NFTService",
                 "GemstonePrimitives"
             ],
@@ -243,6 +247,7 @@ let package = Package(
                 "NFTServiceTestKit",
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 "BalanceServiceTestKit",
+                "EarnServiceTestKit",
                 "TransactionStateService"
             ],
             path: "TransactionStateService/TestKit"
@@ -571,6 +576,24 @@ let package = Package(
                 "AuthService",
             ],
             path: "AuthService/TestKit"
+        ),
+        .target(
+            name: "EarnService",
+            dependencies: [
+                "Blockchain",
+                "Primitives",
+                "Store",
+            ],
+            path: "EarnService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "EarnServiceTestKit",
+            dependencies: [
+                "EarnService",
+                "Primitives"
+            ],
+            path: "EarnService/TestKit"
         ),
         .target(
             name: "ConnectionsService",

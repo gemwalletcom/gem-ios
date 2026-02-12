@@ -61,7 +61,7 @@ public struct ImportAssetsService: Sendable {
                         isStakeable: isStakable,
                         stakingApr: .none,
                         isEarnable: false,
-                        earnApr: nil,
+                        earnApr: .none,
                         hasImage: true
                     ),
                     score: score,
@@ -81,7 +81,7 @@ public struct ImportAssetsService: Sendable {
                         isStakeable: false,
                         stakingApr: .none,
                         isEarnable: false,
-                        earnApr: nil,
+                        earnApr: .none,
                         hasImage: false
                     ),
                     score: AssetScore(rank: 16),
@@ -116,7 +116,7 @@ public struct ImportAssetsService: Sendable {
 
         try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { try? AssetId(id: $0) })
         try assetStore.setAssetIsSwappable(for: assets.assetIds, value: true)
-    
+
         preferences.swapAssetsVersion = Int(assets.version)
     }
 }

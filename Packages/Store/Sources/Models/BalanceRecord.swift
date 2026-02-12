@@ -32,6 +32,8 @@ struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let rewardsAmount = Column("rewardsAmount")
         static let reserved = Column("reserved")
         static let reservedAmount = Column("reservedAmount")
+        static let earn = Column("earn")
+        static let earnAmount = Column("earnAmount")
         static let withdrawable = Column("withdrawable")
         static let withdrawableAmount = Column("withdrawableAmount")
         static let totalAmount = Column("totalAmount")
@@ -66,10 +68,13 @@ struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     var reserved: String
     var reservedAmount: Double
+
+    var earn: String
+    var earnAmount: Double
     
     var withdrawable: String
     var withdrawableAmount: Double
-    
+
     var totalAmount: Double
     
     var isEnabled: Bool
@@ -117,10 +122,13 @@ extension BalanceRecord: CreateTable {
             
             $0.column(Columns.reserved.name, .text).defaults(to: "0")
             $0.column(Columns.reservedAmount.name, .double).defaults(to: 0)
+
+            $0.column(Columns.earn.name, .text).defaults(to: "0")
+            $0.column(Columns.earnAmount.name, .double).defaults(to: 0)
             
             $0.column(Columns.withdrawable.name, .text).defaults(to: "0")
             $0.column(Columns.withdrawableAmount.name, .double).defaults(to: 0)
-            
+
             $0.column(sql: totalAmountSQlCreation)
             
             $0.column(Columns.isEnabled.name, .boolean).defaults(to: true).indexed()
@@ -137,7 +145,7 @@ extension BalanceRecord: CreateTable {
         }
     }
     
-    static let totalAmountSQlCreation = "totalAmount DOUBLE AS (availableAmount + frozenAmount + lockedAmount + stakedAmount + pendingAmount + rewardsAmount)"
+    static let totalAmountSQlCreation = "totalAmount DOUBLE AS (availableAmount + frozenAmount + lockedAmount + stakedAmount + pendingAmount + rewardsAmount + earnAmount)"
 }
 
 extension BalanceRecord: Identifiable {
@@ -155,6 +163,7 @@ extension BalanceRecord {
             pendingUnconfirmed: BigInt(stringLiteral: pendingUnconfirmed),
             rewards: BigInt(stringLiteral: rewards),
             reserved: BigInt(stringLiteral: reserved),
+            earn: BigInt(stringLiteral: earn),
             withdrawable: BigInt(stringLiteral: withdrawable),
             metadata: metadata
         )

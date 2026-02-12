@@ -66,16 +66,13 @@ public struct StakeDelegationViewModel: Sendable {
     }
     
     public var stateText: String? {
-        switch state {
-        case .active: nil
-        case .pending, .inactive, .activating, .deactivating, .awaitingWithdrawal: delegation.base.state.title
-        }
+        DelegationStateViewModel(state: state).title
     }
     
     public var titleStyle: TextStyle {
         TextStyle(font: .body, color: .primary, fontWeight: .semibold)
     }
-    
+
     public var stateStyle: TextStyle {
         TextStyle(font: .footnote, color: stateTextColor)
     }

@@ -49,6 +49,11 @@ extension GatewayService {
     public func getStakeBalance(chain: Primitives.Chain, address: String) async throws -> AssetBalance? {
         try await gateway.getBalanceStaking(chain: chain.rawValue, address: address)?.map()
     }
+
+    public func getEarnBalance(chain: Primitives.Chain, address: String) async throws -> [AssetBalance] {
+        try await gateway.getBalanceEarn(chain: chain.rawValue, address: address)
+            .map { try $0.map() }
+    }
 }
 
 // MARK: - Transactions
@@ -150,6 +155,20 @@ extension GatewayService {
 
     public func delegations(chain: Primitives.Chain, address: String) async throws -> [DelegationBase] {
         try await gateway.getStakingDelegations(chain: chain.rawValue, address: address)
+            .map { try $0.map() }
+    }
+}
+
+// MARK: - Earn
+
+extension GatewayService {
+    public func earnProviders(assetId: Primitives.AssetId) async throws -> [DelegationValidator] {
+        try await gateway.getEarnProviders(assetId: assetId.identifier)
+            .map { try $0.map() }
+    }
+
+    public func earnPositions(chain: Primitives.Chain, address: String) async throws -> [DelegationBase] {
+        try await gateway.getEarnPositions(chain: chain.rawValue, address: address)
             .map { try $0.map() }
     }
 }

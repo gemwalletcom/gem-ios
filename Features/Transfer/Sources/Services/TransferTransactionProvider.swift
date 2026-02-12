@@ -49,15 +49,17 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
             )
         }
 
-        return try await TransferTransactionData(
+        let transactionData = try await getTransactionLoad(
+            wallet: wallet,
+            data: data,
+            available: available,
+            rate: rates.selected,
+            metadata: metadata
+        )
+
+        return TransferTransactionData(
             allRates: rates.rates,
-            transactionData: getTransactionLoad(
-                wallet: wallet,
-                data: data,
-                available: available,
-                rate: rates.selected,
-                metadata: metadata
-            ),
+            transactionData: transactionData,
             scanResult: scanResult
         )
     }
@@ -84,10 +86,9 @@ extension TransferTransactionProvider {
             memo: data.recipientData.recipient.memo,
             metadata: metadata
         )
-
         return try await chainService.load(input: input)
     }
-    
+
     private func getTransactionMetadata(wallet: Wallet, data: TransferData) async throws -> TransactionLoadMetadata {
         try await chainService.preload(
             input: TransactionPreloadInput(
@@ -98,7 +99,7 @@ extension TransferTransactionProvider {
         )
     }
 
-    private func getTransactionScan(wallet: Wallet, data: TransferData) async throws -> ScanTransaction? {
+    private func getTransactionScan(wallet: Wallet, data: TransferData) async throws -> Primitives.ScanTransaction? {
         await scanService.getScanTransaction(
             chain: data.chain,
             input: TransactionPreloadInput(

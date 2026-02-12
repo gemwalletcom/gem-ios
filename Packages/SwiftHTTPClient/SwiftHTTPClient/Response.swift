@@ -34,8 +34,11 @@ public struct Response {
     public func mapOrError<T: Decodable, E: Decodable & LocalizedError>(as type: T.Type, asError: E.Type, _ decoder: JSONDecoder = Self.standardDecoder) throws -> T {
         do {
             return try decoder.decode(type, from: body)
-        } catch {
-            throw try decoder.decode(asError, from: body)
+        } catch let originalError {
+            if let errorResponse = try? decoder.decode(asError, from: body) {
+                throw errorResponse
+            }
+            throw originalError
         }
     }
 

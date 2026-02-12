@@ -29,6 +29,7 @@ import ActivityService
 import RewardsService
 import EventPresenterService
 import NotificationService
+import EarnService
 import GemAPI
 
 extension AppResolver {

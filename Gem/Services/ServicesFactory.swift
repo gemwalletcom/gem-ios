@@ -40,7 +40,9 @@ import AuthService
 import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
+import EarnService
 import SwiftHTTPClient
+
 
 
 struct ServicesFactory {
@@ -80,7 +82,6 @@ struct ServicesFactory {
         let nativeProvider = NativeProvider(nodeProvider: nodeProvider)
         let gatewayService = GatewayService(provider: nativeProvider)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeProvider)
-
         let avatarService = AvatarService(store: storeManager.walletStore)
         let assetsService = Self.makeAssetsService(
             assetStore: storeManager.assetStore,
@@ -93,6 +94,12 @@ struct ServicesFactory {
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
             avatarService: avatarService
+        )
+
+        let earnService = Self.makeEarnService(
+            assetStore: storeManager.assetStore,
+            stakeStore: storeManager.stakeStore,
+            gatewayService: gatewayService
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
@@ -120,6 +127,7 @@ struct ServicesFactory {
         let transactionStateService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainFactory: chainServiceFactory,
             balanceService: balanceService
@@ -268,6 +276,7 @@ struct ServicesFactory {
             walletsService: walletsService,
             walletService: walletService,
             stakeService: stakeService,
+            earnService: earnService,
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,
@@ -400,6 +409,18 @@ extension ServicesFactory {
         )
     }
 
+    private static func makeEarnService(
+        assetStore: AssetStore,
+        stakeStore: StakeStore,
+        gatewayService: GatewayService
+    ) -> EarnService {
+        EarnService(
+            assetStore: assetStore,
+            store: stakeStore,
+            gatewayService: gatewayService
+        )
+    }
+
     private static func makeStakeService(
         stakeStore: StakeStore,
         addressStore: AddressStore,
@@ -445,6 +466,7 @@ extension ServicesFactory {
     private static func makeTransactionService(
         transactionStore: TransactionStore,
         stakeService: StakeService,
+        earnService: any EarnServiceable,
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
         balanceService: BalanceService
@@ -452,6 +474,7 @@ extension ServicesFactory {
         TransactionStateService(
             transactionStore: transactionStore,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainServiceFactory: chainFactory,
             balanceUpdater: balanceService

@@ -33,6 +33,7 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
+
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
     @Entry var keystore: any Keystore = AppResolver.main.storages.keystore
@@ -46,7 +47,7 @@ extension EnvironmentValues {
     @Entry var deviceService: DeviceService = AppResolver.main.services.deviceService
     @Entry var balanceService: BalanceService = AppResolver.main.services.balanceService
     @Entry var bannerService: BannerService = AppResolver.main.services.bannerService
-    @Entry var transactionsService: TransactionsService =  AppResolver.main.services.transactionsService
+    @Entry var transactionsService: TransactionsService = AppResolver.main.services.transactionsService
     @Entry var assetsService: AssetsService = AppResolver.main.services.assetsService
     @Entry var navigationPresenter: NavigationPresenter = AppResolver.main.services.navigationPresenter
     @Entry var stakeService: StakeService = AppResolver.main.services.stakeService

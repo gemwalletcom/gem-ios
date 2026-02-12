@@ -18,13 +18,10 @@ struct BalanceUpdateService: BalanceUpdater {
     }
 
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
-        await balanceService.updateBalance(
-            for: try walletSessionService.getWallet(walletId: walletId),
-            assetIds: assetIds
-        )
+        let wallet = try walletSessionService.getWallet(walletId: walletId)
+        await balanceService.updateBalance(for: wallet, assetIds: assetIds)
     }
 
-    // add asset to asset store and create balance store record
     func addBalancesIfMissing(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
         try balanceService.addAssetsBalancesIfMissing(
             assetIds: assetIds,

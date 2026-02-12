@@ -3,9 +3,16 @@
 import Localization
 import Primitives
 
-public extension DelegationState {
-    var title: String {
-        switch self {
+public struct DelegationStateViewModel {
+
+    public let state: DelegationState
+
+    public init(state: DelegationState) {
+        self.state = state
+    }
+
+    public var title: String {
+        switch state {
         case .active: Localized.Stake.active
         case .pending: Localized.Stake.pending
         case .inactive: Localized.Stake.inactive

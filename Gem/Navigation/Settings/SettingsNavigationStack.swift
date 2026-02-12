@@ -25,6 +25,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
+    @Environment(\.balanceService) private var balanceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.observablePreferences) private var observablePreferences

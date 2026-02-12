@@ -40,9 +40,10 @@ extension Gemstone.SwapperError: @retroactive LocalizedError {
 extension Gemstone.AlienError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .RequestError(msg: let msg): msg
-        case .ResponseError(msg: let msg):  msg
-        case .Http(let status, _): "Response Status: \(status)"
+        case .Network(let msg): msg
+        case .Http(let status, _): "HTTP Status: \(status)"
+        case .Timeout: URLError(.timedOut).localizedDescription
+        case .Serialization(let msg): msg
         }
     }
 }

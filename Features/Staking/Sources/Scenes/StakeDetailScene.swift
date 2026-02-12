@@ -15,7 +15,7 @@ public struct StakeDetailScene: View {
         List {
             Section { } header: {
                 WalletHeaderView(
-                    model: model.validatorHeaderViewModel,
+                    model: model.headerViewModel,
                     isPrivacyEnabled: .constant(false),
                     balanceActionType: .none,
                     onHeaderAction: nil,
@@ -26,16 +26,16 @@ public struct StakeDetailScene: View {
             .cleanListRow()
 
             Section {
-                if let url = model.validatorUrl {
+                if let url = model.providerUrl {
                     SafariNavigationLink(url: url) {
-                        ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
+                        ListItemView(title: model.providerTitle, subtitle: model.providerText)
                     }
                 } else {
-                    ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
+                    ListItemView(title: model.providerTitle, subtitle: model.providerText)
                 }
 
-                if model.showValidatorApr {
-                    ListItemView(title: model.aprTitle, subtitle: model.validatorAprText)
+                if model.showApr {
+                    ListItemView(title: model.aprTitle, subtitle: model.aprText)
                 }
 
                 ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
@@ -45,21 +45,20 @@ public struct StakeDetailScene: View {
                 }
             }
 
-            if let rewardsText = model.model.rewardsText {
+            if let rewardsText = model.delegationModel.rewardsText {
                 Section {
                     ListItemView(
                         title: model.rewardsTitle,
-                        titleStyle: model.model.titleStyle,
+                        titleStyle: model.delegationModel.titleStyle,
                         subtitle: rewardsText,
-                        subtitleStyle: model.model.subtitleStyle,
-                        subtitleExtra: model.model.rewardsFiatValueText,
-                        subtitleStyleExtra: model.model.subtitleExtraStyle,
+                        subtitleStyle: model.delegationModel.subtitleStyle,
+                        subtitleExtra: model.delegationModel.rewardsFiatValueText,
+                        subtitleStyleExtra: model.delegationModel.subtitleExtraStyle,
                         imageStyle: model.assetImageStyle
                     )
                 }
             }
 
-            //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
                 Section(model.manageTitle) {
                     if model.isStakeAvailable {

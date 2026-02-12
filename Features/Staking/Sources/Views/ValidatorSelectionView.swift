@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import Components
+import PrimitivesComponents
 
 struct ValidatorSelectionView: View {
     

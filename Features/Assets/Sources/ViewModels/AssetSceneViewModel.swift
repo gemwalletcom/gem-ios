@@ -1,21 +1,21 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Primitives
-import SwiftUI
-import UIKit
-import Components
-import Style
-import Localization
-import PriceAlertService
-import PrimitivesComponents
-import Preferences
-import ExplorerService
 import AssetsService
-import TransactionsService
-import WalletsService
-import PriceService
 import BannerService
+import Components
+import ExplorerService
 import Formatters
+import Localization
+import Preferences
+import PriceAlertService
+import PriceService
+import Primitives
+import PrimitivesComponents
+import Style
+import SwiftUI
+import TransactionsService
+import UIKit
+import WalletsService
 
 @Observable
 @MainActor
@@ -83,8 +83,8 @@ public final class AssetSceneViewModel: Sendable {
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
-    var showBalances: Bool { assetDataModel.showBalances }
-    private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
+    var showBalances: Bool { assetDataModel.showBalances || hasEarnPosition }
+    private var showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showPendingUnconfirmedBalance: Bool { assetDataModel.hasPendingUnconfirmedBalance }
@@ -118,8 +118,33 @@ public final class AssetSceneViewModel: Sendable {
 
     var networkText: String { assetModel.networkFullName }
     var stakeAprText: String {
-        guard let apr = assetDataModel.stakeApr else { return .empty }
+        guard let apr = assetDataModel.stakingApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    }
+
+    var earnTitle: String { Localized.Common.earn }
+
+    var earnAprText: String {
+        guard let apr = assetDataModel.earnApr else { return .empty }
+        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    }
+
+    var showStakeButton: Bool {
+        !showBalances && assetDataModel.isStakeEnabled && !wallet.isViewOnly
+    }
+
+    var showEarnButton: Bool {
+        assetData.metadata.isEarnEnabled && !wallet.isViewOnly && !hasEarnPosition
+    }
+
+    var hasEarnPosition: Bool {
+        assetData.balance.earn > 0
+    }
+
+    var earnBalanceText: String {
+        let balance = assetData.balance.earn
+        guard balance > 0 else { return "0" }
+        return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -277,6 +302,8 @@ extension AssetSceneViewModel {
             case .tradePerpetuals:
                 UIApplication.shared.open(DeepLink.perpetuals.localUrl)
                 preferences.isPerpetualEnabled = true
+            case .earn:
+                onSelectEarn()
             }
         case .button(let bannerButton):
             switch bannerButton {
@@ -297,6 +324,13 @@ extension AssetSceneViewModel {
 
     func onSelectSwap() {
         onSelectHeader(.swap)
+    }
+
+    func onSelectEarn() {
+        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
+            type: .earn(assetData.asset),
+            assetAddress: assetData.assetAddress
+        )
     }
 
     public func onSelectShareAsset() {

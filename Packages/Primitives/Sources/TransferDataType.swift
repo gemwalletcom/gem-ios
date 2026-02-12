@@ -12,6 +12,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case perpetual(Asset, PerpetualType)
+    case earn(Asset, EarnType)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
 
     public var transactionType: TransactionType {
@@ -43,6 +44,11 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .close, .reduce: .perpetualClosePosition
             case .modify: .perpetualModifyPosition
             }
+        case .earn(_, let type):
+            switch type {
+            case .deposit: .earnDeposit
+            case .withdraw: .earnWithdraw
+            }
         }
     }
 
@@ -55,6 +61,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
              .stake(let asset, _),
              .account(let asset, _),
              .perpetual(let asset, _),
+             .earn(let asset, _),
              .tokenApprove(let asset, _),
              .generic(let asset, _, _): asset.chain
         case .transferNft(let asset): asset.chain
@@ -89,7 +96,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             .deposit,
             .withdrawal,
             .tokenApprove,
-            .account:
+            .account,
+            .earn:
             return nil
         }
     }
@@ -103,7 +111,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
              .stake(let asset, _),
              .generic(let asset, _, _),
              .account(let asset, _),
-             .perpetual(let asset, _): [asset.id]
+             .perpetual(let asset, _),
+             .earn(let asset, _): [asset.id]
         case .swap(let from, let to, _): [from.id, to.id]
         case .transferNft: []
         }
@@ -132,7 +141,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var shouldIgnoreValueCheck: Bool {
         switch self {
-        case .transferNft, .stake, .account, .tokenApprove, .perpetual: true
+        case .transferNft, .stake, .account, .tokenApprove, .perpetual, .earn: true
         case .transfer, .deposit, .withdrawal, .swap, .generic: false
         }
     }

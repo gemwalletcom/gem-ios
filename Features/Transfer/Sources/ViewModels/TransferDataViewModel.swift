@@ -60,6 +60,11 @@ struct TransferDataViewModel {
             case .reduce(let data): PerpetualDirectionViewModel(direction: data.positionDirection).reduceTitle
             case .modify: Localized.Perpetual.modifyPosition
             }
+        case .earn(_, let type):
+            switch type {
+            case .deposit: Localized.Wallet.deposit
+            case .withdraw: Localized.Wallet.withdraw
+            }
         }
     }
 
@@ -73,7 +78,8 @@ struct TransferDataViewModel {
             .tokenApprove,
             .stake,
             .account,
-            .perpetual: .none
+            .perpetual,
+            .earn: .none
         case .generic(_, let metadata, _):
             URL(string: metadata.url)
         }
@@ -88,7 +94,8 @@ struct TransferDataViewModel {
                 .tokenApprove,
                 .generic,
                 .transferNft,
-                .perpetual: metadata?.available ?? .zero
+                .perpetual,
+                .earn: metadata?.available ?? .zero
         case .account(_, let type):
             switch type {
             case .activate: metadata?.available ?? .zero

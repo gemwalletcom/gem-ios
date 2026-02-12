@@ -70,13 +70,13 @@ clean:
     @rm -rf {{DERIVED_DATA}}
     @echo "Build cache cleaned"
 
-run: build
-    @echo "==> Installing app on simulator..."
-    @xcrun simctl boot "{{SIMULATOR_NAME}}" 2>/dev/null || true
+run simulator=SIMULATOR_NAME: build
+    @echo "==> Installing app on simulator {{simulator}}..."
+    @xcrun simctl boot "{{simulator}}" 2>/dev/null || true
     @open -a Simulator
-    @xcrun simctl install "{{SIMULATOR_NAME}}" {{DERIVED_DATA}}/Build/Products/Debug-iphonesimulator/Gem.app
+    @xcrun simctl install "{{simulator}}" {{DERIVED_DATA}}/Build/Products/Debug-iphonesimulator/Gem.app
     @echo "==> Launching app..."
-    @xcrun simctl launch --console-pty "{{SIMULATOR_NAME}}" com.gemwallet.ios
+    @xcrun simctl launch --console-pty "{{simulator}}" com.gemwallet.ios
 
 # Example: just build-package Primitives
 build-package PACKAGE:

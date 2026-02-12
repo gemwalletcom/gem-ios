@@ -29,6 +29,11 @@ struct TransactionFactory {
             case .some: transactionIndex == 0 ? (.tokenApproval, .null) : (.swap, metadata)
             case .none: (.swap, transferData.type.metadata)
             }
+        case .earn:
+            switch transactionData.metadata.earnData?.approval {
+            case .some: transactionIndex == 0 ? (.tokenApproval, .null) : (transferData.type.transactionType, metadata)
+            case .none: (transferData.type.transactionType, metadata)
+            }
         default: (transferData.type.transactionType, metadata)
         }
         let value = amount.value.description

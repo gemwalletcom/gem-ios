@@ -13,6 +13,7 @@ extension Balance {
         pending: BigInt = .zero,
         rewards: BigInt = .zero,
         reserved: BigInt = .zero,
+        earn: BigInt = .zero,
         withdrawable: BigInt = .zero
     ) -> Balance {
         Balance(
@@ -23,6 +24,7 @@ extension Balance {
             pending: pending,
             rewards: rewards,
             reserved: reserved,
+            earn: earn,
             withdrawable: withdrawable
         )
     }

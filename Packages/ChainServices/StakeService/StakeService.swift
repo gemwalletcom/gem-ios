@@ -12,7 +12,7 @@ public struct StakeService: StakeServiceable {
     private let addressStore: AddressStore
     private let chainServiceFactory: ChainServiceFactory
     private let assetsService: GemAPIStaticService
-    
+
     public init(
         store: StakeStore,
         addressStore: AddressStore,
@@ -24,13 +24,13 @@ public struct StakeService: StakeServiceable {
         self.chainServiceFactory = chainServiceFactory
         self.assetsService = assetsService
     }
-    
+
     public func stakeApr(assetId: AssetId) throws -> Double? {
         try store.getStakeApr(assetId: assetId)
     }
-    
+
     public func update(walletId: WalletId, chain: Chain, address: String) async throws {
-        let validators = try store.getValidators(assetId: chain.assetId)
+        let validators = try store.getValidators(assetId: chain.assetId, providerType: .stake)
         if validators.isEmpty {
             try await updateValidators(chain: chain)
             try await updateDelegations(walletId: walletId, chain: chain, address: address)
@@ -41,17 +41,17 @@ public struct StakeService: StakeServiceable {
     }
 
     public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
-        try store.getValidatorsActive(assetId: assetId)
+        try store.getValidatorsActive(assetId: assetId, providerType: .stake)
     }
 
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
         try store.getValidator(assetId: assetId, validatorId: validatorId)
     }
-    
+
     public func clearDelegations() throws {
         try store.clearDelegations()
     }
-    
+
     public func clearValidators() throws {
         try store.clearValidators()
     }
@@ -79,37 +79,43 @@ extension StakeService {
                 name: name,
                 isActive: $0.isActive,
                 commission: $0.commission,
-                apr: $0.apr
+                apr: $0.apr,
+                providerType: $0.providerType
             )
         }
         try store.updateValidators(updateValidators)
-        
+
         let addressNames = updateValidators.map { AddressName(chain: $0.chain, address: $0.id, name: $0.name)}
         try addressStore.addAddressNames(addressNames)
     }
 
     private func updateDelegations(walletId: WalletId, chain: Chain, address: String) async throws {
         let delegations = try await getDelegations(chain: chain, address: address)
-        let existingDelegationsIds = try store.getDelegations(walletId: walletId, assetId: chain.assetId).map { $0.id }.asSet()
-        let delegationsIds = delegations.map { $0.id }.asSet()
-        let deleteDelegationsIds = existingDelegationsIds.subtracting(delegationsIds).asArray()
+        let existingIds = try store
+            .getDelegations(walletId: walletId, assetId: chain.assetId, providerType: .stake)
+            .map(\.id)
+            .asSet()
+        let delegationsIds = delegations.map(\.id).asSet()
+        let deleteIds = existingIds.subtracting(delegationsIds).asArray()
 
-        // validators
-        let validatorsIds = try store.getValidators(assetId: chain.assetId).map { $0.id }.asSet()
+        let validatorsIds = try store.getValidators(assetId: chain.assetId, providerType: .stake).map { $0.id }.asSet()
         let delegationsValidatorIds = delegations.map { $0.validatorId }.asSet()
         let missingValidatorIds = delegationsValidatorIds.subtracting(validatorsIds)
 
-        //TODO: Might need to fetch in the future.
         if !missingValidatorIds.isEmpty {
             debugLog("missingValidatorIds \(missingValidatorIds)")
         }
-        let updateDelegations = delegations.filter { validatorsIds.contains($0.validatorId) }
 
-        try store.updateAndDelete(walletId: walletId, delegations: updateDelegations, deleteIds: deleteDelegationsIds)
+        let updateDelegations = delegations
+            .filter { validatorsIds.contains($0.validatorId) }
+            .map { $0 }
+
+        try store.updateAndDelete(walletId: walletId, delegations: updateDelegations, deleteIds: deleteIds)
     }
 
     private func getDelegations(chain: Chain, address: String) async throws -> [DelegationBase] {
         let service = chainServiceFactory.service(for: chain)
         return try await service.getStakeDelegations(address: address)
     }
+
 }

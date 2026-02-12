@@ -159,4 +159,12 @@ public extension NewBanner {
             state: .active
         )
     }
+
+    static func earn(assetId: AssetId) -> NewBanner {
+        NewBanner(
+            assetId: assetId,
+            event: .earn,
+            state: .active
+        )
+    }
 }
