@@ -7,10 +7,10 @@ import PrimitivesTestKit
 
 public struct GemAPIDeviceServiceMock: GemAPIDeviceService {
     public init () {}
-    public func getDevice(deviceId: String) async throws -> Device? { Device.mock() }
+    public func getDevice() async throws -> Device? { Device.mock() }
     public func addDevice(device: Device) async throws -> Device { Device.mock() }
     public func updateDevice(device: Device) async throws -> Device { Device.mock() }
-    public func isDeviceRegistered(deviceId: String) async throws -> Bool { true }
+    public func isDeviceRegistered() async throws -> Bool { true }
     public func migrateDevice(request: MigrateDeviceIdRequest) async throws -> Device { Device.mock() }
-    public func getDeviceToken(deviceId: String) async throws -> DeviceToken { DeviceToken(token: "", expiresAt: 0) }
+    public func getDeviceToken() async throws -> DeviceToken { .init(token: "", expiresAt: 0) }
 }

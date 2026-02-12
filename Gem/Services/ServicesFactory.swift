@@ -48,8 +48,10 @@ struct ServicesFactory {
         let storeManager = StoreManager(db: storages.db)
         let securePreferences = SecurePreferences()
         let signer = Self.makeRequestSigner(securePreferences: securePreferences)
-        let interceptor: (@Sendable (inout URLRequest) throws -> Void)? = if let signer {
-            { try signer.sign(request: &$0) }
+        let interceptor: (@Sendable (inout URLRequest, GemDeviceAPI) throws -> Void)? = if let signer {
+            { request, target in
+                try signer.sign(request: &request, walletId: target.walletId ?? "")
+            }
         } else {
             nil
         }
@@ -231,7 +233,7 @@ struct ServicesFactory {
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
         let authService = AuthService(apiService: apiService, keystore: storages.keystore)
-        let rewardsService = RewardsService(apiService: apiService, authService: authService, securePreferences: securePreferences)
+        let rewardsService = RewardsService(apiService: apiService, authService: authService)
         let eventPresenterService = EventPresenterService()
         let walletSearchService = WalletSearchService(
             assetsService: assetsService,
@@ -246,7 +248,6 @@ struct ServicesFactory {
         )
         let inAppNotificationService = InAppNotificationService(
             apiService: apiService,
-            deviceService: deviceService,
             walletService: walletService,
             store: storeManager.inAppNotificationStore
         )

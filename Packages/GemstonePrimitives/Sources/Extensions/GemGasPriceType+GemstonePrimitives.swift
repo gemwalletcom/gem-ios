@@ -12,8 +12,8 @@ extension GemGasPriceType {
             return GasPriceType.regular(gasPrice: try BigInt.from(string: gasPrice))
         case .eip1559(let gasPrice, let priorityFee):
             return GasPriceType.eip1559(gasPrice: try BigInt.from(string: gasPrice), priorityFee: try BigInt.from(string: priorityFee))
-        case .solana(let gasPrice, let priorityFee, let unitPrice, let jitoTip):
-            return GasPriceType.solana(gasPrice: try BigInt.from(string: gasPrice), priorityFee: try BigInt.from(string: priorityFee), unitPrice: try BigInt.from(string: unitPrice), jitoTip: jitoTip)
+        case .solana(let gasPrice, let priorityFee, let unitPrice):
+            return GasPriceType.solana(gasPrice: try BigInt.from(string: gasPrice), priorityFee: try BigInt.from(string: priorityFee), unitPrice: try BigInt.from(string: unitPrice))
         }
     }
 }
@@ -25,8 +25,8 @@ extension GasPriceType {
             return .regular(gasPrice: gasPrice.description)
         case .eip1559(let gasPrice, let priorityFee):
             return .eip1559(gasPrice: gasPrice.description, priorityFee: priorityFee.description)
-        case .solana(let gasPrice, let priorityFee, let unitPrice, let jitoTip):
-            return .solana(gasPrice: gasPrice.description, priorityFee: priorityFee.description, unitPrice: unitPrice.description, jitoTip: jitoTip)
+        case .solana(let gasPrice, let priorityFee, let unitPrice):
+            return .solana(gasPrice: gasPrice.description, priorityFee: priorityFee.description, unitPrice: unitPrice.description)
         }
     }
 }

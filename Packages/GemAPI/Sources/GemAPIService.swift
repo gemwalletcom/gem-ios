@@ -9,8 +9,8 @@ public protocol GemAPIConfigService: Sendable {
 }
 
 public protocol GemAPIFiatService: Sendable {
-    func getQuotes(deviceId: String, walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote]
-    func getQuoteUrl(deviceId: String, walletId: String, quoteId: String) async throws -> FiatQuoteUrl
+    func getQuotes(walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote]
+    func getQuoteUrl(walletId: String, quoteId: String) async throws -> FiatQuoteUrl
 }
 
 public protocol GemAPIPricesService: Sendable {
@@ -18,7 +18,7 @@ public protocol GemAPIPricesService: Sendable {
 }
 
 public protocol GemAPIAssetsListService: Sendable {
-    func getDeviceAssets(deviceId: String, walletId: String, fromTimestamp: Int) async throws -> [AssetId]
+    func getDeviceAssets(walletId: String, fromTimestamp: Int) async throws -> [AssetId]
     func getBuyableFiatAssets() async throws -> FiatAssets
     func getSellableFiatAssets() async throws -> FiatAssets
     func getSwapAssets() async throws -> FiatAssets
@@ -39,38 +39,38 @@ public protocol GemAPIChartService: Sendable {
 }
 
 public protocol GemAPIDeviceService: Sendable {
-    func getDevice(deviceId: String) async throws -> Device?
+    func getDevice() async throws -> Device?
     func addDevice(device: Device) async throws -> Device
     func updateDevice(device: Device) async throws -> Device
-    func isDeviceRegistered(deviceId: String) async throws -> Bool
+    func isDeviceRegistered() async throws -> Bool
     func migrateDevice(request: MigrateDeviceIdRequest) async throws -> Device
-    func getDeviceToken(deviceId: String) async throws -> DeviceToken
+    func getDeviceToken() async throws -> DeviceToken
 }
 
 public protocol GemAPISubscriptionService: Sendable {
-    func getSubscriptions(deviceId: String) async throws -> [WalletSubscriptionChains]
-    func addSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws
-    func deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscriptionChains]) async throws
+    func getSubscriptions() async throws -> [WalletSubscriptionChains]
+    func addSubscriptions(subscriptions: [WalletSubscription]) async throws
+    func deleteSubscriptions(subscriptions: [WalletSubscriptionChains]) async throws
 }
 
 public protocol GemAPITransactionService: Sendable {
-    func getDeviceTransactions(deviceId: String, walletId: String, fromTimestamp: Int) async throws -> TransactionsResponse
-    func getDeviceTransactionsForAsset(deviceId: String, walletId: String, asset: AssetId, fromTimestamp: Int) async throws -> TransactionsResponse
+    func getDeviceTransactions(walletId: String, fromTimestamp: Int) async throws -> TransactionsResponse
+    func getDeviceTransactionsForAsset(walletId: String, asset: AssetId, fromTimestamp: Int) async throws -> TransactionsResponse
 }
 
 public protocol GemAPIPriceAlertService: Sendable {
-    func getPriceAlerts(deviceId: String, assetId: String?) async throws -> [PriceAlert]
-    func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
-    func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
+    func getPriceAlerts(assetId: String?) async throws -> [PriceAlert]
+    func addPriceAlerts(priceAlerts: [PriceAlert]) async throws
+    func deletePriceAlerts(priceAlerts: [PriceAlert]) async throws
 }
 
 public protocol GemAPINFTService: Sendable {
-    func getDeviceNFTAssets(deviceId: String, walletId: String) async throws -> [NFTData]
-    func reportNft(deviceId: String, report: ReportNft) async throws
+    func getDeviceNFTAssets(walletId: String) async throws -> [NFTData]
+    func reportNft(report: ReportNft) async throws
 }
 
 public protocol GemAPIScanService: Sendable {
-    func getScanTransaction(deviceId: String, payload: ScanTransactionPayload) async throws -> ScanTransaction
+    func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction
 }
 
 public protocol GemAPIMarketService: Sendable {
@@ -78,16 +78,16 @@ public protocol GemAPIMarketService: Sendable {
 }
 
 public protocol GemAPIAuthService: Sendable {
-    func getAuthNonce(deviceId: String) async throws -> AuthNonce
+    func getAuthNonce() async throws -> AuthNonce
 }
 
 public protocol GemAPIRewardsService: Sendable {
-    func getRewards(deviceId: String, walletId: String) async throws -> Rewards
-    func getRewardsEvents(deviceId: String, walletId: String) async throws -> [RewardEvent]
-    func createReferral(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
-    func useReferralCode(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws
-    func getRedemptionOption(deviceId: String, code: String) async throws -> RewardRedemptionOption
-    func redeem(deviceId: String, walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
+    func getRewards(walletId: String) async throws -> Rewards
+    func getRewardsEvents(walletId: String) async throws -> [RewardEvent]
+    func createReferral(walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
+    func useReferralCode(walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws
+    func getRedemptionOption(code: String) async throws -> RewardRedemptionOption
+    func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult
 }
 
 public protocol GemAPISearchService: Sendable {
@@ -95,8 +95,8 @@ public protocol GemAPISearchService: Sendable {
 }
 
 public protocol GemAPINotificationService: Sendable {
-    func getNotifications(deviceId: String, fromTimestamp: Int) async throws -> [Primitives.InAppNotification]
-    func markNotificationsRead(deviceId: String) async throws
+    func getNotifications(fromTimestamp: Int) async throws -> [Primitives.InAppNotification]
+    func markNotificationsRead() async throws
 }
 
 public struct GemAPIService {
@@ -118,10 +118,10 @@ public struct GemAPIService {
 
     public static func createDeviceProvider(devicePrivateKey: Data) throws -> Provider<GemDeviceAPI> {
         let signer = try DeviceRequestSigner(privateKey: devicePrivateKey)
-        let options = ProviderOptions(
+        let options = ProviderOptions<GemDeviceAPI>(
             baseUrl: nil,
-            requestInterceptor: { request in
-                try signer.sign(request: &request)
+            requestInterceptor: { request, target in
+                try signer.sign(request: &request, walletId: target.walletId ?? "")
             }
         )
         return Provider<GemDeviceAPI>(options: options)
@@ -129,16 +129,16 @@ public struct GemAPIService {
 }
 
 extension GemAPIService: GemAPIFiatService {
-    public func getQuotes(deviceId: String, walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote] {
+    public func getQuotes(walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote] {
         try await deviceProvider
-            .request(.getFiatQuotes(deviceId: deviceId, walletId: walletId, type: type, assetId: assetId, request: request))
+            .request(.getFiatQuotes(walletId: walletId, type: type, assetId: assetId, request: request))
             .mapResponse(as: FiatQuotes.self)
             .quotes
     }
 
-    public func getQuoteUrl(deviceId: String, walletId: String, quoteId: String) async throws -> FiatQuoteUrl {
+    public func getQuoteUrl(walletId: String, quoteId: String) async throws -> FiatQuoteUrl {
         try await deviceProvider
-            .request(.getFiatQuoteUrl(deviceId: deviceId, walletId: walletId, quoteId: quoteId))
+            .request(.getFiatQuoteUrl(walletId: walletId, quoteId: quoteId))
             .mapResponse(as: FiatQuoteUrl.self)
     }
 }
@@ -168,9 +168,9 @@ extension GemAPIService: GemAPIChartService {
 }
 
 extension GemAPIService: GemAPIDeviceService {
-    public func getDevice(deviceId: String) async throws -> Device? {
+    public func getDevice() async throws -> Device? {
         try await deviceProvider
-            .request(.getDevice(deviceId: deviceId))
+            .request(.getDevice)
             .mapOrCatch(as: Device?.self, codes: [404], result: nil)
     }
 
@@ -186,9 +186,9 @@ extension GemAPIService: GemAPIDeviceService {
             .mapResponse(as: Device.self)
     }
 
-    public func isDeviceRegistered(deviceId: String) async throws -> Bool {
+    public func isDeviceRegistered() async throws -> Bool {
         try await deviceProvider
-            .request(.isDeviceRegistered(deviceId: deviceId))
+            .request(.isDeviceRegistered)
             .mapResponse(as: Bool.self)
     }
 
@@ -198,51 +198,51 @@ extension GemAPIService: GemAPIDeviceService {
             .mapResponse(as: Device.self)
     }
 
-    public func getDeviceToken(deviceId: String) async throws -> DeviceToken {
+    public func getDeviceToken() async throws -> DeviceToken {
         try await deviceProvider
-            .request(.getDeviceToken(deviceId: deviceId))
+            .request(.getDeviceToken)
             .mapResponse(as: DeviceToken.self)
     }
 }
 
 extension GemAPIService: GemAPISubscriptionService {
-    public func getSubscriptions(deviceId: String) async throws -> [WalletSubscriptionChains] {
+    public func getSubscriptions() async throws -> [WalletSubscriptionChains] {
         try await deviceProvider
-            .request(.getSubscriptions(deviceId: deviceId))
+            .request(.getSubscriptions)
             .mapResponse(as: [WalletSubscriptionChains].self)
     }
 
-    public func addSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws {
+    public func addSubscriptions(subscriptions: [WalletSubscription]) async throws {
         try await deviceProvider
-            .request(.addSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
+            .request(.addSubscriptions(subscriptions: subscriptions))
             .mapResponse(as: Int.self)
     }
 
-    public func deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscriptionChains]) async throws {
+    public func deleteSubscriptions(subscriptions: [WalletSubscriptionChains]) async throws {
         try await deviceProvider
-            .request(.deleteSubscriptions(deviceId: deviceId, subscriptions: subscriptions))
+            .request(.deleteSubscriptions(subscriptions: subscriptions))
             .mapResponse(as: Int.self)
     }
 }
 
 extension GemAPIService: GemAPITransactionService {
-    public func getDeviceTransactionsForAsset(deviceId: String, walletId: String, asset: Primitives.AssetId, fromTimestamp: Int) async throws -> TransactionsResponse {
+    public func getDeviceTransactionsForAsset(walletId: String, asset: Primitives.AssetId, fromTimestamp: Int) async throws -> TransactionsResponse {
         try await deviceProvider
-            .request(.getTransactions(deviceId: deviceId, walletId: walletId, assetId: asset.identifier, fromTimestamp: fromTimestamp))
+            .request(.getTransactions(walletId: walletId, assetId: asset.identifier, fromTimestamp: fromTimestamp))
             .mapResponse(as: TransactionsResponse.self)
     }
 
-    public func getDeviceTransactions(deviceId: String, walletId: String, fromTimestamp: Int) async throws -> TransactionsResponse {
+    public func getDeviceTransactions(walletId: String, fromTimestamp: Int) async throws -> TransactionsResponse {
         try await deviceProvider
-            .request(.getTransactions(deviceId: deviceId, walletId: walletId, assetId: nil, fromTimestamp: fromTimestamp))
+            .request(.getTransactions(walletId: walletId, assetId: nil, fromTimestamp: fromTimestamp))
             .mapResponse(as: TransactionsResponse.self)
     }
 }
 
 extension GemAPIService: GemAPIAssetsListService {
-    public func getDeviceAssets(deviceId: String, walletId: String, fromTimestamp: Int) async throws -> [Primitives.AssetId] {
+    public func getDeviceAssets(walletId: String, fromTimestamp: Int) async throws -> [Primitives.AssetId] {
         try await deviceProvider
-            .request(.getAssetsList(deviceId: deviceId, walletId: walletId, fromTimestamp: fromTimestamp))
+            .request(.getAssetsList(walletId: walletId, fromTimestamp: fromTimestamp))
             .mapResponse(as: [String].self)
             .compactMap { try? AssetId(id: $0) }
     }
@@ -287,42 +287,42 @@ extension GemAPIService: GemAPIAssetsService {
 }
 
 extension GemAPIService: GemAPIPriceAlertService {
-    public func getPriceAlerts(deviceId: String, assetId: String?) async throws -> [PriceAlert] {
+    public func getPriceAlerts(assetId: String?) async throws -> [PriceAlert] {
         try await deviceProvider
-            .request(.getPriceAlerts(deviceId: deviceId, assetId: assetId))
+            .request(.getPriceAlerts(assetId: assetId))
             .mapResponse(as: [PriceAlert].self)
     }
 
-    public func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
+    public func addPriceAlerts(priceAlerts: [PriceAlert]) async throws {
         let _ = try await deviceProvider
-            .request(.addPriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
+            .request(.addPriceAlerts(priceAlerts: priceAlerts))
             .mapResponse(as: Int.self)
     }
 
-    public func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
+    public func deletePriceAlerts(priceAlerts: [PriceAlert]) async throws {
         let _ = try await deviceProvider
-            .request(.deletePriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
+            .request(.deletePriceAlerts(priceAlerts: priceAlerts))
             .mapResponse(as: Int.self)
     }
 }
 
 extension GemAPIService: GemAPINFTService {
-    public func getDeviceNFTAssets(deviceId: String, walletId: String) async throws -> [NFTData] {
+    public func getDeviceNFTAssets(walletId: String) async throws -> [NFTData] {
         try await deviceProvider
-            .request(.getDeviceNFTAssets(deviceId: deviceId, walletId: walletId))
+            .request(.getDeviceNFTAssets(walletId: walletId))
             .mapResponse(as: [NFTData].self)
     }
 
-    public func reportNft(deviceId: String, report: ReportNft) async throws {
+    public func reportNft(report: ReportNft) async throws {
         _ = try await deviceProvider
-            .request(.reportNft(deviceId: deviceId, report: report))
+            .request(.reportNft(report: report))
     }
 }
 
 extension GemAPIService: GemAPIScanService {
-    public func getScanTransaction(deviceId: String, payload: ScanTransactionPayload) async throws -> ScanTransaction {
+    public func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction {
         try await deviceProvider
-            .request(.scanTransaction(deviceId: deviceId, payload: payload))
+            .request(.scanTransaction(payload: payload))
             .mapResponse(as: ScanTransaction.self)
     }
 }
@@ -344,47 +344,47 @@ extension GemAPIService: GemAPIPricesService {
 }
 
 extension GemAPIService: GemAPIAuthService {
-    public func getAuthNonce(deviceId: String) async throws -> AuthNonce {
+    public func getAuthNonce() async throws -> AuthNonce {
         try await deviceProvider
-            .request(.getAuthNonce(deviceId: deviceId))
+            .request(.getAuthNonce)
             .mapResponse(as: AuthNonce.self)
     }
 }
 
 extension GemAPIService: GemAPIRewardsService {
-    public func getRewards(deviceId: String, walletId: String) async throws -> Rewards {
+    public func getRewards(walletId: String) async throws -> Rewards {
         try await deviceProvider
-            .request(.getDeviceRewards(deviceId: deviceId, walletId: walletId))
+            .request(.getDeviceRewards(walletId: walletId))
             .mapResponse(as: Rewards.self)
     }
 
-    public func getRewardsEvents(deviceId: String, walletId: String) async throws -> [RewardEvent] {
+    public func getRewardsEvents(walletId: String) async throws -> [RewardEvent] {
         try await deviceProvider
-            .request(.getDeviceRewardsEvents(deviceId: deviceId, walletId: walletId))
+            .request(.getDeviceRewardsEvents(walletId: walletId))
             .mapResponse(as: [RewardEvent].self)
     }
 
-    public func createReferral(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards {
+    public func createReferral(walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards {
         try await deviceProvider
-            .request(.createDeviceReferral(deviceId: deviceId, walletId: walletId, request: request))
+            .request(.createDeviceReferral(walletId: walletId, request: request))
             .mapResponse(as: Rewards.self)
     }
 
-    public func useReferralCode(deviceId: String, walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws {
+    public func useReferralCode(walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws {
         _ = try await deviceProvider
-            .request(.useDeviceReferralCode(deviceId: deviceId, walletId: walletId, request: request))
+            .request(.useDeviceReferralCode(walletId: walletId, request: request))
             .mapResponse(as: [RewardEvent].self)
     }
 
-    public func getRedemptionOption(deviceId: String, code: String) async throws -> RewardRedemptionOption {
+    public func getRedemptionOption(code: String) async throws -> RewardRedemptionOption {
         try await deviceProvider
-            .request(.getDeviceRedemptionOption(deviceId: deviceId, code: code))
+            .request(.getDeviceRedemptionOption(code: code))
             .mapResponse(as: RewardRedemptionOption.self)
     }
 
-    public func redeem(deviceId: String, walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
+    public func redeem(walletId: String, request: AuthenticatedRequest<RedemptionRequest>) async throws -> RedemptionResult {
         try await deviceProvider
-            .request(.redeemDeviceRewards(deviceId: deviceId, walletId: walletId, request: request))
+            .request(.redeemDeviceRewards(walletId: walletId, request: request))
             .mapResponse(as: RedemptionResult.self)
     }
 }
@@ -398,15 +398,15 @@ extension GemAPIService: GemAPISearchService {
 }
 
 extension GemAPIService: GemAPINotificationService {
-    public func getNotifications(deviceId: String, fromTimestamp: Int) async throws -> [Primitives.InAppNotification] {
+    public func getNotifications(fromTimestamp: Int) async throws -> [Primitives.InAppNotification] {
         try await deviceProvider
-            .request(.getNotifications(deviceId: deviceId, fromTimestamp: fromTimestamp))
+            .request(.getNotifications(fromTimestamp: fromTimestamp))
             .mapResponse(as: [Primitives.InAppNotification].self)
     }
 
-    public func markNotificationsRead(deviceId: String) async throws {
+    public func markNotificationsRead() async throws {
         _ = try await deviceProvider
-            .request(.markNotificationsRead(deviceId: deviceId))
+            .request(.markNotificationsRead)
     }
 }
 
