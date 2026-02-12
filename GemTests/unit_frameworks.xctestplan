@@ -300,6 +300,16 @@
         "identifier" : "AppServiceTests",
         "name" : "AppServiceTests"
       }
+    },
+    {
+      "skippedTests" : [
+        "WebSocketTests"
+      ],
+      "target" : {
+        "containerPath" : "container:Packages\/ChainServices",
+        "identifier" : "WalletConnectorServiceTests",
+        "name" : "WalletConnectorServiceTests"
+      }
     }
   ],
   "version" : 1
