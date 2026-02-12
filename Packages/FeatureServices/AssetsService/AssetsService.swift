@@ -9,12 +9,12 @@ public final class AssetsService: Sendable {
     public let assetStore: AssetStore
     let balanceStore: BalanceStore
     let assetsProvider: any GemAPIAssetsService
-    let chainServiceFactory: ChainServiceFactory
+    let chainServiceFactory: any ChainServiceFactorable
 
     public init(
         assetStore: AssetStore,
         balanceStore: BalanceStore,
-        chainServiceFactory: ChainServiceFactory,
+        chainServiceFactory: any ChainServiceFactorable,
         assetsProvider: any GemAPIAssetsService = GemAPIService.shared
     ) {
         self.assetStore = assetStore

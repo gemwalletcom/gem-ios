@@ -6,11 +6,11 @@ import Blockchain
 
 public struct AddressStatusService: Sendable {
     
-    private let chainServiceFactory: ChainServiceFactory
+    private let chainServiceFactory: any ChainServiceFactorable
     private let chains: [Chain] = [.tron]
 
     public init(
-        chainServiceFactory: ChainServiceFactory
+        chainServiceFactory: any ChainServiceFactorable
     ) {
         self.chainServiceFactory = chainServiceFactory 
     }

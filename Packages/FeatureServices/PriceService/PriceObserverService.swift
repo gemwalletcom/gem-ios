@@ -32,6 +32,18 @@ public actor PriceObserverService: Sendable {
         self.webSocket = WebSocketConnection(configuration: configuration)
     }
 
+    public init(
+        priceService: PriceService,
+        preferences: Preferences,
+        securePreferences: SecurePreferences = SecurePreferences(),
+        webSocket: any WebSocketConnectable
+    ) {
+        self.priceService = priceService
+        self.preferences = preferences
+        self.securePreferences = securePreferences
+        self.webSocket = webSocket
+    }
+
     deinit {
         observeTask?.cancel()
     }
