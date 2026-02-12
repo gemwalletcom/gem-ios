@@ -51,13 +51,13 @@ public struct StakeStore: Sendable {
         }
     }
 
-    public func getValidatorsActive(assetId: AssetId, providerType: GrowthProviderType) throws -> [DelegationValidator] {
+    public func getValidatorsActive(assetId: AssetId, providerType: EarnProviderType) throws -> [DelegationValidator] {
         try db.read { db in
             try ValidatorsRequest(chain: assetId.chain, providerType: providerType).fetch(db)
         }
     }
 
-    public func getValidators(assetId: AssetId, providerType: GrowthProviderType) throws -> [DelegationValidator] {
+    public func getValidators(assetId: AssetId, providerType: EarnProviderType) throws -> [DelegationValidator] {
         try db.read { db in
             try StakeValidatorRecord
                 .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)
@@ -76,7 +76,7 @@ public struct StakeStore: Sendable {
         }
     }
 
-    public func getDelegations(walletId: WalletId, assetId: AssetId, providerType: GrowthProviderType) throws -> [Delegation] {
+    public func getDelegations(walletId: WalletId, assetId: AssetId, providerType: EarnProviderType) throws -> [Delegation] {
         try db.read { db in
             try DelegationsRequest(walletId: walletId, assetId: assetId, providerType: providerType).fetch(db)
         }

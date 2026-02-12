@@ -10,9 +10,9 @@ public struct ValidatorsRequest: ValueObservationQueryable {
     public static var defaultValue: [DelegationValidator] { [] }
 
     private let chain: Chain
-    private let providerType: GrowthProviderType
+    private let providerType: EarnProviderType
 
-    public init(chain: Chain, providerType: GrowthProviderType) {
+    public init(chain: Chain, providerType: EarnProviderType) {
         self.chain = chain
         self.providerType = providerType
     }

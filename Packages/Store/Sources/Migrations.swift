@@ -409,7 +409,7 @@ struct Migrations {
         migrator.registerMigration("Add providerType to stake_validators") { db in
             try? db.alter(table: "stake_validators") {
                 $0.add(column: "providerType", .text)
-                    .defaults(to: GrowthProviderType.stake.rawValue)
+                    .defaults(to: EarnProviderType.stake.rawValue)
             }
         }
 
