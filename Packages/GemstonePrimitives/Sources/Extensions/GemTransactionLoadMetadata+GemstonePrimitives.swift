@@ -52,7 +52,15 @@ extension GemTransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let stakeData):
+        case .tron(
+            let blockNumber,
+            let blockVersion,
+            let blockTimestamp,
+            let transactionTreeRoot,
+            let parentHash,
+            let witnessAddress,
+            let stakeData
+        ):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
@@ -118,7 +126,15 @@ extension TransactionLoadMetadata {
                 transactionVersion: transactionVersion,
                 period: UInt64(period)
             )
-        case .tron(let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot, let parentHash, let witnessAddress, let stakeData):
+        case .tron(
+            let blockNumber,
+            let blockVersion,
+            let blockTimestamp,
+            let transactionTreeRoot,
+            let parentHash,
+            let witnessAddress,
+            let stakeData
+        ):
             return .tron(
                 blockNumber: UInt64(blockNumber),
                 blockVersion: UInt64(blockVersion),
@@ -203,4 +219,3 @@ extension HyperliquidOrder {
         )
     }
 }
-
