@@ -5,12 +5,6 @@ import Gemstone
 import Primitives
 
 extension GemYieldProvider {
-    public var displayName: String {
-        switch self {
-        case .yo: "Yo"
-        }
-    }
-
     public func map() -> YieldProvider {
         switch self {
         case .yo: .yo

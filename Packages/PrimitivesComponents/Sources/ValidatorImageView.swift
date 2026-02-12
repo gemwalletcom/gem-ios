@@ -23,7 +23,7 @@ public struct ValidatorImageView: View {
                 placeholder: .letter(validator.name.first ?? " ")
             )
         case .earn:
-            let image = YieldProvider(rawValue: validator.id)?.image ?? Images.Logo.logo
+            let image = YieldProvider(rawValue: validator.id).map { YieldProviderViewModel(provider: $0).image } ?? Images.Logo.logo
             image
                 .resizable()
                 .frame(width: Sizing.image.asset, height: Sizing.image.asset)

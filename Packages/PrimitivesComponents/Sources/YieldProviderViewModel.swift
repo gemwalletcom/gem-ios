@@ -4,15 +4,22 @@ import SwiftUI
 import Primitives
 import Style
 
-extension YieldProvider {
+public struct YieldProviderViewModel {
+
+    public let provider: YieldProvider
+
+    public init(provider: YieldProvider) {
+        self.provider = provider
+    }
+
     public var image: Image {
-        switch self {
+        switch provider {
         case .yo: Images.EarnProviders.yo
         }
     }
 
     public var displayName: String {
-        switch self {
+        switch provider {
         case .yo: "Yo"
         }
     }

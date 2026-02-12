@@ -124,7 +124,8 @@ public struct DelegationViewModel: Sendable {
     public var validatorText: String {
         switch delegation.validator.providerType {
         case .earn:
-            return YieldProvider(rawValue: delegation.validator.id)?.displayName ?? delegation.validator.name
+            guard let provider = YieldProvider(rawValue: delegation.validator.id) else { return delegation.validator.name }
+            return YieldProviderViewModel(provider: provider).displayName
         case .stake:
             if delegation.validator.name.isEmpty {
                 return AddressFormatter(style: .short, address: delegation.validator.id, chain: asset.chain).value()
@@ -141,7 +142,7 @@ public struct DelegationViewModel: Sendable {
                 imageURL: validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
             )
         case .earn:
-            return AssetImage(placeholder: YieldProvider(rawValue: delegation.validator.id)?.image)
+            return AssetImage(placeholder: YieldProvider(rawValue: delegation.validator.id).map { YieldProviderViewModel(provider: $0).image })
         }
     }
 
