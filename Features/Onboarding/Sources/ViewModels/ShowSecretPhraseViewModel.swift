@@ -20,7 +20,7 @@ struct ShowSecretPhraseViewModel: SecretPhraseViewableModel {
     }
     
     var title: String {
-        Localized.Common.secretPhrase
+        Localized.Wallet.Import.secretPhrase
     }
 
     var type: SecretPhraseDataType {
