@@ -1,19 +1,19 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
+import AssetsService
+import BannerService
+import BigInt
+import Components
 import Foundation
 import Localization
-import Preferences
-import BannerService
-import StakeService
-import AssetsService
-import TransactionsService
-import Primitives
-import BigInt
-import PriceService
 import PerpetualService
-import Components
+import Preferences
+import PriceService
+import Primitives
 import PrimitivesComponents
+import StakeService
+import SwiftUI
+import TransactionsService
 
 @Observable
 @MainActor
@@ -74,9 +74,7 @@ public final class DeveloperViewModel {
             URLCache.shared.removeAllCachedResponses()
         }
     }
-    
-    // database
-    
+
     func clearTransactions() {
         performAction {
             try transactionsService.transactionStore.clear()
@@ -146,7 +144,7 @@ public final class DeveloperViewModel {
             Preferences.standard.perpetualMarketsUpdatedAt = .none
         }
     }
-    
+
     func addTransactions() {
         let solAddress = "7nVDzZUjrBA3gHs3gNcHidhmR96CH7KpKsU8pyBZGHUr"
         let ethAddress = "0xf1158986419F6058231b0Dbd7A78Ff0674ebBc50"
@@ -163,9 +161,9 @@ public final class DeveloperViewModel {
                 .swap,
                 BigInt(76767623311111111),
                 .encode(TransactionSwapMetadata(
-                    fromAsset: AssetId.init(chain: .sui),
+                    fromAsset: AssetId(chain: .sui),
                     fromValue: BigInt(2767611111).description,
-                    toAsset: AssetId.init(chain: .solana),
+                    toAsset: AssetId(chain: .solana),
                     toValue: BigInt(812312312).description,
                     provider: .none
                 )),
@@ -229,9 +227,9 @@ public final class DeveloperViewModel {
                 .swap,
                 BigInt(76767623311111111),
                 .encode(TransactionSwapMetadata(
-                    fromAsset: AssetId.init(chain: .ethereum),
+                    fromAsset: AssetId(chain: .ethereum),
                     fromValue: BigInt(276767623311111111).description,
-                    toAsset: AssetId.init(chain: .bitcoin),
+                    toAsset: AssetId(chain: .bitcoin),
                     toValue: BigInt(32312312).description,
                     provider: .none
                 )),
@@ -258,8 +256,8 @@ public final class DeveloperViewModel {
                 createdAt: Date().addingTimeInterval(-1464401)
             ),
         ]
-        
-        let transactions = data.enumerated().map { (index, element) in
+
+        let transactions = data.enumerated().map { index, element in
             Transaction(
                 id: TransactionId(chain: element.assetId.chain, hash: "\(index)"),
                 assetId: element.assetId,
@@ -291,7 +289,7 @@ public final class DeveloperViewModel {
             Preferences.standard.swapAssetsVersion = 0
         }
     }
-    
+
     func deeplink(deeplink: DeepLink) {
         Task { @MainActor in
             await UIApplication.shared.open(deeplink.localUrl, options: [:])

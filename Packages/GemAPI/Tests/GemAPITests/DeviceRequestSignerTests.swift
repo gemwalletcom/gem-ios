@@ -45,73 +45,80 @@ final class DeviceRequestSignerTests: XCTestCase {
         XCTAssertThrowsError(try DeviceRequestSigner(privateKeyHex: "not_valid_hex"))
     }
 
-    func testSignatureIsValidBase64With64Bytes() throws {
+    func testSignSetsAuthorizationHeader() throws {
         let keyPair = DeviceKeyPair()
         let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
-        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v2/devices")!)
         request.httpMethod = "GET"
 
         try signer.sign(request: &request)
 
-        let signature = request.value(forHTTPHeaderField: "x-device-signature")!
-        let sigData = Data(base64Encoded: signature)
-        XCTAssertNotNil(sigData)
-        XCTAssertEqual(sigData?.count, 64)
+        let auth = request.value(forHTTPHeaderField: "Authorization")!
+        XCTAssertTrue(auth.hasPrefix("Gem "))
     }
 
     func testSignatureVerifiesWithPublicKey() throws {
-        let keyPair = DeviceKeyPair()
-        let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
-        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
+        let (signer, keyPair) = try makeSigner()
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v2/devices")!)
         request.httpMethod = "GET"
 
         try signer.sign(request: &request)
 
-        let signature = request.value(forHTTPHeaderField: "x-device-signature")!
-        let timestamp = request.value(forHTTPHeaderField: "x-device-timestamp")!
-        let bodyHash = request.value(forHTTPHeaderField: "x-device-body-hash")!
-        let message = "v1.\(timestamp).GET./v1/devices/abc.\(bodyHash)"
+        let parts = try decodePayload(from: request)
+        XCTAssertEqual(parts.count, 5)
+        XCTAssertEqual(parts[0], keyPair.publicKeyHex)
+        XCTAssertEqual(parts[2], "")
 
-        let pubKeyData = try Data.from(hex: keyPair.publicKeyHex)
-        let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: pubKeyData)
-        let sigData = Data(base64Encoded: signature)!
+        let message = "\(parts[1]).GET./v2/devices.\(parts[2]).\(parts[3])"
+        let sigData = try Data.from(hex: parts[4])
+        let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: Data.from(hex: keyPair.publicKeyHex))
 
         XCTAssertTrue(publicKey.isValidSignature(sigData, for: Data(message.utf8)))
     }
 
-    func testSignRequestSetsHeaders() throws {
-        let keyPair = DeviceKeyPair()
-        let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
-        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
+    func testSignWithWalletId() throws {
+        let (signer, _) = try makeSigner()
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v2/devices/rewards")!)
         request.httpMethod = "GET"
 
-        try signer.sign(request: &request)
+        try signer.sign(request: &request, walletId: "multicoin_0xabc")
 
-        XCTAssertNotNil(request.value(forHTTPHeaderField: "x-device-signature"))
-        XCTAssertNotNil(request.value(forHTTPHeaderField: "x-device-timestamp"))
-        XCTAssertNotNil(request.value(forHTTPHeaderField: "x-device-body-hash"))
+        let parts = try decodePayload(from: request)
+        XCTAssertEqual(parts[2], "multicoin_0xabc")
 
-        let timestamp = request.value(forHTTPHeaderField: "x-device-timestamp")!
-        XCTAssertNotNil(Int(timestamp))
-        XCTAssertGreaterThan(Int(timestamp)!, 1_000_000_000_000)
+        let message = "\(parts[1]).GET./v2/devices/rewards.\(parts[2]).\(parts[3])"
+        let sigData = try Data.from(hex: parts[4])
+        let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: Data.from(hex: parts[0]))
 
-        let emptyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-        XCTAssertEqual(request.value(forHTTPHeaderField: "x-device-body-hash"), emptyHash)
+        XCTAssertTrue(publicKey.isValidSignature(sigData, for: Data(message.utf8)))
     }
 
-    func testSignRequestWithBody() throws {
-        let keyPair = DeviceKeyPair()
-        let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
-        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v1/devices/abc")!)
+    func testSignWithBody() throws {
+        let (signer, _) = try makeSigner()
+        var request = URLRequest(url: URL(string: "https://api.gemwallet.com/v2/devices")!)
         request.httpMethod = "POST"
         request.httpBody = Data("{\"test\":true}".utf8)
 
         try signer.sign(request: &request)
 
-        let bodyHash = request.value(forHTTPHeaderField: "x-device-body-hash")!
+        let parts = try decodePayload(from: request)
         let emptyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-        XCTAssertNotEqual(bodyHash, emptyHash)
-        XCTAssertEqual(bodyHash.count, 64)
+        XCTAssertNotEqual(parts[3], emptyHash)
+        XCTAssertEqual(parts[3].count, 64)
     }
 
+    // MARK: - Helpers
+
+    private func makeSigner() throws -> (DeviceRequestSigner, DeviceKeyPair) {
+        let keyPair = DeviceKeyPair()
+        let signer = try DeviceRequestSigner(privateKeyHex: keyPair.privateKeyHex)
+        return (signer, keyPair)
+    }
+
+    private func decodePayload(from request: URLRequest) throws -> [String] {
+        let auth = try XCTUnwrap(request.value(forHTTPHeaderField: "Authorization"))
+        let encoded = String(auth.dropFirst("Gem ".count))
+        let decoded = String(data: try XCTUnwrap(Data(base64Encoded: encoded)), encoding: .utf8)!
+        return decoded.split(separator: ".", maxSplits: 4, omittingEmptySubsequences: false).map(String.init)
+    }
 }

@@ -5,7 +5,6 @@ import Keystore
 import Primitives
 import WalletCore
 
-internal import Gemstone
 internal import BigInt
 
 struct SolanaSigner: Signable {
@@ -73,7 +72,6 @@ struct SolanaSigner: Signable {
 
     private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
         let unitPrice = input.fee.gasPriceType.unitPrice
-        let jitoTip = input.fee.gasPriceType.jitoTip
 
         let signingInput = try SolanaSigningInput.with {
             $0.transactionType = type
@@ -95,58 +93,11 @@ struct SolanaSigner: Signable {
         }
 
         let encoded = try transcodeBase58ToBase64(output.encoded)
-        if jitoTip > 0 {
-            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
-            guard let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) else {
-                throw AnyError("unable to insert Jito tip instruction")
-            }
-            return try signRawTransaction(transaction: transaction, privateKey: privateKey)
-        }
         return try signRawTransaction(transaction: encoded, privateKey: privateKey)
     }
 
-    func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        guard
-            case .generic(_, _, let extra) = input.type,
-            let string = String(data: extra.data!, encoding: .utf8),
-            let bytes = Base64.decode(string: string)
-        else {
-            throw AnyError("not data input")
-        }
-        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType)
-    }
-
-    func signData(bytes: Data, privateKey: Data, outputType: Primitives.TransferDataOutputType) throws -> String {
-        let rawTxDecoder = SolanaRawTxDecoder(rawData: bytes)
-        let numRequiredSignatures = rawTxDecoder.signatureCount()
-        var signatures: [Data] = rawTxDecoder.signatures()
-
-        guard signatures[0] == Data(repeating: 0x0, count: 64) else {
-            throw AnyError("user signature should be first")
-        }
-
-        // read message to sign
-        let message = rawTxDecoder.messageData()
-        guard
-            let signature = PrivateKey(data: privateKey)?.sign(digest: message, curve: .ed25519)
-        else {
-            throw AnyError("fail to sign data")
-        }
-
-        switch outputType {
-        case .signature:
-            return Base58.encodeNoCheck(data: signature)
-        case .encodedTransaction:
-            // update user's signature
-            signatures[0] = signature
-
-            var signed = Data([numRequiredSignatures])
-            for sig in signatures {
-                signed.append(sig)
-            }
-            signed.append(message)
-            return signed.base64EncodedString()
-        }
+    func signData(input: SignerInput, privateKey: Data) throws -> String {
+        try ChainSigner(chain: .solana).signData(input: input, privateKey: privateKey)
     }
 
     func signRawTransaction(transaction: String, privateKey: Data) throws -> String {
@@ -170,47 +121,7 @@ struct SolanaSigner: Signable {
     }
 
     func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let (_, _, data) = try input.type.swap()
-        let encodedTx = data.data.data
-        let unitPrice = input.fee.gasPriceType.unitPrice
-        let jitoTip = input.fee.gasPriceType.jitoTip
-
-        guard
-            let encodedTxData = Base64.decode(string: encodedTx),
-            !encodedTxData.isEmpty
-        else {
-            throw AnyError("unable to decode base64 string or empty transaction data")
-        }
-
-        let rawTxDecoder = SolanaRawTxDecoder(rawData: encodedTxData)
-        let numRequiredSignatures = rawTxDecoder.signatureCount()
-        if numRequiredSignatures > 1 {
-            // other signers' signatures already prefilled, changing instructions would lead signature verification failure
-            return try [
-                signRawTransaction(transaction: encodedTx, privateKey: privateKey),
-            ]
-        }
-
-        // Only user's signature is needed, safe to modify instructions
-        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: encodedTx, price: unitPrice.description) else {
-            throw AnyError("unable to set compute unit price")
-        }
-        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: input.fee.gasLimit.description) else {
-            throw AnyError("unable to set compute unit limit")
-        }
-
-        var finalTransaction = transaction
-        if jitoTip > 0 {
-            let instructionJson = Gemstone.solanaCreateJitoTipInstruction(from: input.senderAddress, lamports: jitoTip)
-            guard let tx = SolanaTransaction.insertInstruction(encodedTx: transaction, insertAt: -1, instruction: instructionJson) else {
-                throw AnyError("unable to insert Jito tip instruction")
-            }
-            finalTransaction = tx
-        }
-
-        return try [
-            signRawTransaction(transaction: finalTransaction, privateKey: privateKey),
-        ]
+        try ChainSigner(chain: .solana).signSwap(input: input, privateKey: privateKey)
     }
 
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
@@ -276,39 +187,3 @@ extension String {
     }
 }
 
-struct SolanaRawTxDecoder {
-    let rawData: Data
-
-    /// Decode a “short-vec” (compact-U16) length at `offset`, advancing the offset.
-    private func decodeShortVecLength(offset: inout Int) -> UInt8 {
-        let byte = rawData[offset]
-        offset += 1
-        return byte & 0x7F
-    }
-
-    func signatureCount() -> UInt8 {
-        var offset = 0
-        return decodeShortVecLength(offset: &offset)
-    }
-
-    func signatures() -> [Data] {
-        var offset = 0
-        let count = decodeShortVecLength(offset: &offset)
-        var result: [Data] = []
-        for _ in 0..<count {
-            let sig = rawData.subdata(in: offset..<(offset + 64))
-            result.append(sig)
-            offset += 64
-        }
-        return result
-    }
-
-    /// The serialized message bytes that every signer signs.
-    /// (Everything after the sig-array: length byte + N×64-byte sigs.)
-    func messageData() -> Data {
-        var offset = 0
-        let sigCount = Int(decodeShortVecLength(offset: &offset))
-        offset += sigCount * 64
-        return rawData.subdata(in: offset..<rawData.count)
-    }
-}

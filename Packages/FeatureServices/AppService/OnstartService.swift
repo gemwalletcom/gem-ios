@@ -94,8 +94,10 @@ extension OnstartService {
 
     private func configureScreenshots() {
         if ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"] != nil {
-            if let currency = Locale.current.currency {
-                Preferences.standard.currency = currency.identifier
+            if let currency = Locale.current.currency, let currency = Currency(rawValue: currency.identifier) {
+                Preferences.standard.currency = currency.rawValue
+            } else {
+                Preferences.standard.currency = Currency.usd.rawValue
             }
         }
     }

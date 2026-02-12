@@ -14,6 +14,7 @@ public final class ChainSettingsSceneViewModel {
     private let explorerService: ExplorerService
 
     let nodeService: NodeService
+    let chainServiceFactory: ChainServiceFactory
     let chain: Chain
 
     var selectedExplorer: String?
@@ -30,10 +31,12 @@ public final class ChainSettingsSceneViewModel {
 
     public init(
         nodeService: NodeService,
+        chainServiceFactory: ChainServiceFactory,
         explorerService: ExplorerService = .standard,
         chain: Chain
     ) {
         self.nodeService = nodeService
+        self.chainServiceFactory = chainServiceFactory
         self.explorerService = explorerService
 
         self.chain = chain
@@ -160,8 +163,8 @@ extension ChainSettingsSceneViewModel {
         guard let url = URL(string: node.node.url) else {
             return .error(error: URLError(.badURL))
         }
-        let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
-        let service = provider.service(for: chain)
+        let nodeProvider = CustomNodeULRFetchable(url: url, requestInterceptor: chainServiceFactory.requestInterceptor)
+        let service = ChainServiceFactory(nodeProvider: nodeProvider).service(for: chain)
 
         do {
             let nodeStatus = try await service.getNodeStatus(url: node.node.url)

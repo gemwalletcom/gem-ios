@@ -7,4 +7,5 @@ public protocol DeviceServiceable: Sendable {
     // returns same device ID as getDeviceId(), but making sure subscriptions has been updated.
     func getSubscriptionsDeviceId() async throws -> String
     func update() async throws
+    func updateAuthTokenIfNeeded() async throws
 }

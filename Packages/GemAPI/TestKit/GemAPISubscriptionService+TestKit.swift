@@ -6,7 +6,7 @@ import Primitives
 
 public struct GemAPISubscriptionServiceMock: GemAPISubscriptionService {
     public init() {}
-    public func getSubscriptions(deviceId: String) async throws -> [WalletSubscriptionChains] { [] }
-    public func addSubscriptions(deviceId: String, subscriptions: [WalletSubscription]) async throws {}
-    public func deleteSubscriptions(deviceId: String, subscriptions: [WalletSubscriptionChains]) async throws {}
+    public func getSubscriptions() async throws -> [WalletSubscriptionChains] { [] }
+    public func addSubscriptions(subscriptions: [WalletSubscription]) async throws {}
+    public func deleteSubscriptions(subscriptions: [WalletSubscriptionChains]) async throws {}
 }

@@ -5,7 +5,7 @@ import class Gemstone.Hyperliquid
 import struct Gemstone.GemPerpetualBalance
 import struct Gemstone.GemPerpetualPosition
 import struct Gemstone.GemHyperliquidOpenOrder
-import struct Gemstone.GemChartCandleStick
+import struct Gemstone.GemChartCandleUpdate
 import Primitives
 import WebSocketClient
 
@@ -167,8 +167,8 @@ public actor HyperliquidObserverService: PerpetualObservable {
         )
     }
 
-    private func handleCandle(candle: GemChartCandleStick) async throws {
-        await chartService.yield(try candle.map())
+    private func handleCandle(candle: GemChartCandleUpdate) async throws {
+        await chartService.yield(candle.map())
     }
 
     private func defaultSubscriptions(for address: String) -> [HyperliquidSubscription] {

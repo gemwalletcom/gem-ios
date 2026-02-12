@@ -7,8 +7,8 @@ public struct DeviceServiceMock: DeviceServiceable {
     
     public init() {}
 
-    public func update() async throws {
-    }
+    public func update() async throws {}
+    public func updateAuthTokenIfNeeded() async throws {}
     
     public func getDeviceId() throws -> String { .empty }
     public func getSubscriptionsDeviceId() async throws -> String {

@@ -11,7 +11,7 @@ import WalletsService
 import ScanService
 import WalletConnector
 import WalletService
-import NodeService
+import ChainService
 import StakeService
 import NameService
 import BalanceService
@@ -29,7 +29,7 @@ import GemAPI
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
-    let nodeService: NodeService
+    let chainServiceFactory: ChainServiceFactory
     let scanService: ScanService
     let swapService: SwapService
     let walletsService: WalletsService
@@ -46,7 +46,7 @@ public struct ViewModelFactory: Sendable {
 
     public init(
         keystore: any Keystore,
-        nodeService: NodeService,
+        chainServiceFactory: ChainServiceFactory,
         scanService: ScanService,
         swapService: SwapService,
         walletsService: WalletsService,
@@ -62,7 +62,7 @@ public struct ViewModelFactory: Sendable {
         fiatService: any GemAPIFiatService
     ) {
         self.keystore = keystore
-        self.nodeService = nodeService
+        self.chainServiceFactory = chainServiceFactory
         self.scanService = scanService
         self.swapService = swapService
         self.walletsService = walletsService
@@ -87,7 +87,7 @@ public struct ViewModelFactory: Sendable {
     ) -> ConfirmTransferSceneViewModel {
         let confirmService = ConfirmServiceFactory.create(
             keystore: keystore,
-            nodeService: nodeService,
+            chainServiceFactory: chainServiceFactory,
             walletsService: walletsService,
             scanService: scanService,
             balanceService: balanceService,

@@ -8,7 +8,7 @@ import NativeProviderService
 
 public extension ScanService {
     static func mock() -> ScanService {
-        let mockProvider = NativeProvider(url: Constants.apiURL)
+        let mockProvider = NativeProvider(url: Constants.apiURL, requestInterceptor: EmptyRequestInterceptor())
         let gatewayService = GatewayService(provider: mockProvider)
         return ScanService(gatewayService: gatewayService)
     }

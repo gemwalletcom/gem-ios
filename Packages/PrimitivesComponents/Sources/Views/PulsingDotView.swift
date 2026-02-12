@@ -65,7 +65,7 @@ private struct PulseRingView: View {
     let delay: Double
     let isAnimated: Bool
 
-    private let duration: Double = 1.8
+    private let duration: Double = .AnimationDuration.verySlow
 
     var body: some View {
         TimelineView(.animation(paused: !isAnimated)) { timeline in

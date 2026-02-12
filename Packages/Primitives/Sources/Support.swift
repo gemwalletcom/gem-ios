@@ -4,16 +4,6 @@
 
 import Foundation
 
-public struct NewSupportDevice: Codable, Equatable, Sendable {
-	public let supportDeviceId: String
-	public let deviceId: String
-
-	public init(supportDeviceId: String, deviceId: String) {
-		self.supportDeviceId = supportDeviceId
-		self.deviceId = deviceId
-	}
-}
-
 public struct SupportDevice: Codable, Equatable, Sendable {
 	public let supportDeviceId: String
 	public let unread: Int32
@@ -21,13 +11,5 @@ public struct SupportDevice: Codable, Equatable, Sendable {
 	public init(supportDeviceId: String, unread: Int32) {
 		self.supportDeviceId = supportDeviceId
 		self.unread = unread
-	}
-}
-
-public struct SupportDeviceRequest: Codable, Equatable, Sendable {
-	public let supportDeviceId: String
-
-	public init(supportDeviceId: String) {
-		self.supportDeviceId = supportDeviceId
 	}
 }

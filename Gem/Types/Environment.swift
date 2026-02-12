@@ -33,8 +33,6 @@ import AddressNameService
 import ActivityService
 import RewardsService
 import EventPresenterService
-import Support
-
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
     @Entry var keystore: any Keystore = AppResolver.main.storages.keystore
@@ -71,5 +69,4 @@ extension EnvironmentValues {
     @Entry var walletSearchService: WalletSearchService = AppResolver.main.services.walletSearchService
     @Entry var assetSearchService: AssetSearchService = AppResolver.main.services.assetSearchService
     @Entry var inAppNotificationService: InAppNotificationService = AppResolver.main.services.inAppNotificationService
-    @Entry var supportService: SupportService = AppResolver.main.services.supportService
 }

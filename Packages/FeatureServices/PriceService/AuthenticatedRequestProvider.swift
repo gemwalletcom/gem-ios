@@ -15,13 +15,11 @@ struct AuthenticatedRequestProvider: WebSocketRequestProvider {
     }
 
     func makeRequest() throws -> URLRequest {
-        let deviceId = try securePreferences.getDeviceId()
         let keyPair = try DeviceService.getOrCreateKeyPair(securePreferences: securePreferences)
         let signer = try DeviceRequestSigner(privateKey: keyPair.privateKey)
 
         var request = URLRequest(url: Constants.deviceStreamWebSocketURL)
         request.httpMethod = "GET"
-        request.setValue(deviceId, forHTTPHeaderField: "x-device-id")
         try signer.sign(request: &request)
         return request
     }

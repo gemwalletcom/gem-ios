@@ -2,14 +2,12 @@
 
 import Foundation
 
-public struct ProviderOptions: Sendable {
+public struct ProviderOptions<T: TargetType>: Sendable {
     public let baseUrl: URL?
-    public let requestInterceptor: (@Sendable (inout URLRequest) throws -> Void)?
+    public let requestInterceptor: (@Sendable (inout URLRequest, T) throws -> Void)?
 
-    public init(baseUrl: URL?, requestInterceptor: (@Sendable (inout URLRequest) throws -> Void)? = nil) {
+    public init(baseUrl: URL?, requestInterceptor: (@Sendable (inout URLRequest, T) throws -> Void)? = nil) {
         self.baseUrl = baseUrl
         self.requestInterceptor = requestInterceptor
     }
-
-    public static let defaultOptions = ProviderOptions(baseUrl: .none)
 }

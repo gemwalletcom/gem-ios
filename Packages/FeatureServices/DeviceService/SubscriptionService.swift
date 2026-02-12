@@ -29,7 +29,7 @@ public struct SubscriptionService: Sendable {
         preferences.incrementSubscriptionVersion()
     }
 
-    public func update(deviceId: String) async throws {
+    public func update() async throws {
         let local = try walletStore.getWallets().map { wallet in
             WalletSubscription(
                 walletId: wallet.id,
@@ -37,7 +37,7 @@ public struct SubscriptionService: Sendable {
                 subscriptions: wallet.accounts.map { ChainAddress(chain: $0.chain, address: $0.address) }
             )
         }
-        let remote = try await subscriptionProvider.getSubscriptions(deviceId: deviceId)
+        let remote = try await subscriptionProvider.getSubscriptions()
         let changes = Self.calculateChanges(local: local, remote: remote)
 
         guard changes.hasChanges else {
@@ -46,11 +46,11 @@ public struct SubscriptionService: Sendable {
         }
 
         if !changes.toAdd.isEmpty {
-            try await subscriptionProvider.addSubscriptions(deviceId: deviceId, subscriptions: changes.toAdd)
+            try await subscriptionProvider.addSubscriptions(subscriptions: changes.toAdd)
         }
 
         if !changes.toDelete.isEmpty {
-            try await subscriptionProvider.deleteSubscriptions(deviceId: deviceId, subscriptions: changes.toDelete)
+            try await subscriptionProvider.deleteSubscriptions(subscriptions: changes.toDelete)
         }
 
         preferences.subscriptionsVersionHasChange = false

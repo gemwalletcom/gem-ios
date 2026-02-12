@@ -73,11 +73,11 @@ public struct PriceAlertService: Sendable {
     }
     
     private func getPriceAlerts() async throws -> [PriceAlert] {
-        try await apiService.getPriceAlerts(deviceId: try deviceService.getDeviceId(), assetId: .none)
+        try await apiService.getPriceAlerts(assetId: .none)
     }
 
     private func getPriceAlerts(for assetId: String) async throws -> [PriceAlert] {
-        try await apiService.getPriceAlerts(deviceId: try deviceService.getDeviceId(), assetId: assetId)
+        try await apiService.getPriceAlerts(assetId: assetId)
     }
 
     public func add(priceAlert: PriceAlert) async throws {
@@ -87,7 +87,7 @@ public struct PriceAlertService: Sendable {
     }
     
     public func add(priceAlerts: [PriceAlert]) async throws {
-        try await apiService.addPriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: priceAlerts)
+        try await apiService.addPriceAlerts(priceAlerts: priceAlerts)
     }
     
     public func enablePriceAlerts() async throws {
@@ -99,6 +99,6 @@ public struct PriceAlertService: Sendable {
 
     public func delete(priceAlerts: [PriceAlert]) async throws {
         try store.deletePriceAlerts(priceAlerts.ids )
-        try await apiService.deletePriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: priceAlerts)
+        try await apiService.deletePriceAlerts(priceAlerts: priceAlerts)
     }
 }

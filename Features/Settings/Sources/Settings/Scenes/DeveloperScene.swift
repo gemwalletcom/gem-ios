@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import SwiftUI
 import Components
+import Foundation
 import Localization
 import Primitives
 import PrimitivesComponents
+import SwiftUI
 
 public struct DeveloperScene: View {
     @State private var model: DeveloperViewModel
@@ -33,7 +33,7 @@ public struct DeveloperScene: View {
                     action: model.clearCache
                 )
             }
-            
+
             Section("Database") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear Transactions"),
@@ -86,7 +86,7 @@ public struct DeveloperScene: View {
                 )
                 #endif
             }
-            
+
             Section("Deeplinks") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Open Asset (Bitcoin)"),
@@ -100,7 +100,7 @@ public struct DeveloperScene: View {
                         model.deeplink(deeplink: .rewards(code: "gemcoder"))
                     }
                 )
-                
+
                 NavigationCustomLink(
                     with: ListItemView(title: "Open Gift (code)"),
                     action: {
@@ -108,14 +108,14 @@ public struct DeveloperScene: View {
                     }
                 )
             }
-            
+
             Section("Preferences") {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear Swap Assets Version"),
-                    action: model.clearAssetsVersion 
+                    action: model.clearAssetsVersion
                 )
             }
-            
+
             Section {
                 NavigationCustomLink(with: ListItemView(title: "Reset"), action: model.reset)
             }

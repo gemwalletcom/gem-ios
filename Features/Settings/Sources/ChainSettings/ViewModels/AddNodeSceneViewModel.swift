@@ -15,6 +15,7 @@ import Style
 @Observable
 final class AddNodeSceneViewModel {
     private let nodeService: NodeService
+    private let chainServiceFactory: ChainServiceFactory
     private let addNodeService: AddNodeService
 
     let chain: Chain
@@ -23,11 +24,12 @@ final class AddNodeSceneViewModel {
     var state: StateViewType<AddNodeResultViewModel> = .noData
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
-    var debounceInterval: Duration? = .milliseconds(250)
+    var debounceInterval: Duration? = .Debounce.normal
 
-    init(chain: Chain, nodeService: NodeService) {
+    init(chain: Chain, nodeService: NodeService, chainServiceFactory: ChainServiceFactory) {
         self.chain = chain
         self.nodeService = nodeService
+        self.chainServiceFactory = chainServiceFactory
         self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
 
@@ -59,7 +61,7 @@ final class AddNodeSceneViewModel {
 
 extension AddNodeSceneViewModel {
     func onChangeInput(_ text: String) async {
-        debounceInterval = .milliseconds(250)
+        debounceInterval = .Debounce.normal
 
         guard text.isNotEmpty, urlInputModel.isValid else {
             state = .noData
@@ -96,8 +98,8 @@ extension AddNodeSceneViewModel {
         }
 
         state = .loading
-        let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
-        let service = provider.service(for: chain)
+        let nodeProvider = CustomNodeULRFetchable(url: url, requestInterceptor: chainServiceFactory.requestInterceptor)
+        let service = ChainServiceFactory(nodeProvider: nodeProvider).service(for: chain)
 
         do {
             let nodeStatus = try await service.getNodeStatus(url: urlInputModel.text)

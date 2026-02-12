@@ -46,7 +46,7 @@ private struct ActivityIndicatorOverlay: ViewModifier {
                     }
                 }
             }
-            .animation(.easeInOut(duration: 0.2), value: isLoading)
+            .animation(.easeInOut(duration: .AnimationDuration.normal), value: isLoading)
     }
 }
 

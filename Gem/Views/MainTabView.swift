@@ -171,8 +171,8 @@ extension MainTabView {
             switch type {
             case .nft:
                 if navigationState.selectedTab == .collections {
-                    navigationState.collections.removeAll()
-                    navigationState.activity.removeAll()
+                    navigationState.collections.reset()
+                    navigationState.activity.reset()
                     navigationState.selectedTab = .activity
                 }
             case .asset:
@@ -185,9 +185,9 @@ extension MainTabView {
 
                 switch navigationState.selectedTab {
                 case .wallet:
-                    navigationState.wallet = NavigationPath([Scenes.Asset(asset: asset)])
+                    navigationState.wallet.setPath([Scenes.Asset(asset: asset)])
                 case .activity:
-                    navigationState.wallet = NavigationPath([Scenes.Asset(asset: asset)])
+                    navigationState.wallet.setPath([Scenes.Asset(asset: asset)])
                     navigationState.selectedTab = .wallet
                 case .markets, .settings, .collections:
                     break

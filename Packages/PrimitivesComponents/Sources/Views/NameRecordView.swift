@@ -11,7 +11,7 @@ public struct NameRecordView: View {
 
     @Binding var state: NameRecordState
     @Binding var address: String
-    let debounceTimeout = Duration.seconds(1)
+    let debounceTimeout: Duration = .Debounce.slow
 
     @State var nameResolveTask: Task<NameRecord, any Error>?
 

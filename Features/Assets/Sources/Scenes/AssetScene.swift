@@ -158,7 +158,7 @@ public struct AssetScene: View {
                 .cleanListRow()
             }
         }
-        .refreshable {
+        .refreshableTimer(every: .minutes(5)) {
             await model.fetch()
         }
         .taskOnce(model.fetchOnce)

@@ -85,6 +85,17 @@ struct TransferDataTypeTests {
     }
 
     @Test
+    func withGasLimit() throws {
+        let type = TransferDataType.swap(.mock(), .mock(), .mock(data: SwapQuoteData(to: "", dataType: .contract, value: "", data: "", memo: nil, approval: nil, gasLimit: "0")))
+
+        let (_, _, swapBefore) = try type.swap()
+        #expect(swapBefore.data.gasLimit == "0")
+
+        let (_, _, swapAfter) = try type.withGasLimit("21000").swap()
+        #expect(swapAfter.data.gasLimit == "21000")
+    }
+
+    @Test
     func freezeMetadata() {
         let bandwidth = TransferDataType.stake(.mock(), .freeze(FreezeData(freezeType: .freeze, resource: .bandwidth)))
         let energy = TransferDataType.stake(.mock(), .freeze(FreezeData(freezeType: .freeze, resource: .energy)))

@@ -14,6 +14,8 @@ import BalanceServiceTestKit
 import PriceServiceTestKit
 import TransactionStateServiceTestKit
 import NodeServiceTestKit
+import NodeService
+import ChainService
 import Localization
 import AddressNameService
 import AddressNameServiceTestKit
@@ -336,7 +338,7 @@ private extension ConfirmTransferSceneViewModel {
             data: data,
             confirmService: ConfirmServiceFactory.create(
                 keystore: KeystoreMock(),
-                nodeService: .mock(),
+                chainServiceFactory: ChainServiceFactory(nodeProvider: NodeService.mock()),
                 walletsService: .mock(),
                 scanService: .mock(),
                 balanceService: .mock(),

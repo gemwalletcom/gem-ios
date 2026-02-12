@@ -124,13 +124,11 @@ public struct NFTData: Codable, Equatable, Hashable, Sendable {
 }
 
 public struct ReportNft: Codable, Sendable {
-	public let deviceId: String
 	public let collectionId: String
 	public let assetId: String?
 	public let reason: String?
 
-	public init(deviceId: String, collectionId: String, assetId: String?, reason: String?) {
-		self.deviceId = deviceId
+	public init(collectionId: String, assetId: String?, reason: String?) {
 		self.collectionId = collectionId
 		self.assetId = assetId
 		self.reason = reason

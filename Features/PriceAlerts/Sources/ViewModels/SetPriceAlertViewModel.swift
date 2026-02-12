@@ -59,7 +59,7 @@ public final class SetPriceAlertViewModel {
         return roundingFormatter.roundedValues(for: currentPrice, byPercent: priceSuggestionPercent).map { value in
             PriceSuggestion(
                 title: currencyFormatter.string(value),
-                value: String(value)
+                value: value
             )
         }
     }

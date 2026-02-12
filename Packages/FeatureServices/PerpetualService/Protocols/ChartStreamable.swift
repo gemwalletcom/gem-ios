@@ -4,6 +4,6 @@ import Foundation
 import Primitives
 
 public protocol ChartStreamable: Actor {
-    func makeStream() -> AsyncStream<ChartCandleStick>
-    func yield(_ candle: ChartCandleStick)
+    func makeStream() -> AsyncStream<ChartCandleUpdate>
+    func yield(_ update: ChartCandleUpdate)
 }

@@ -5,7 +5,7 @@ import Primitives
 import SwiftHTTPClient
 
 public struct ProviderFactory {
-    public static func create<T: TargetType>(options: ProviderOptions) -> Provider<T> {
+    public static func create<T: TargetType>(options: ProviderOptions<T>) -> Provider<T> {
         return Provider<T>(options: options)
     }
     

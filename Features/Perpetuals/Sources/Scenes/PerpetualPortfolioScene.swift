@@ -7,7 +7,6 @@ import Style
 import PrimitivesComponents
 
 struct PerpetualPortfolioScene: View {
-    private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
     @State private var model: PerpetualPortfolioSceneViewModel
 
     init(model: PerpetualPortfolioSceneViewModel) {
@@ -54,13 +53,8 @@ struct PerpetualPortfolioScene: View {
             .task {
                 await model.fetch()
             }
-            .refreshable {
+            .refreshableTimer(every: .minutes(1)) {
                 await model.fetch()
-            }
-            .onReceive(fetchTimer) { _ in
-                Task {
-                    await model.fetch()
-                }
             }
             .listSectionSpacing(.compact)
         }

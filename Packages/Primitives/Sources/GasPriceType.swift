@@ -6,13 +6,13 @@ import BigInt
 public enum GasPriceType: Equatable, Sendable {
     case regular(gasPrice: BigInt)
     case eip1559(gasPrice: BigInt, priorityFee: BigInt)
-    case solana(gasPrice: BigInt, priorityFee: BigInt, unitPrice: BigInt, jitoTip: UInt64)
+    case solana(gasPrice: BigInt, priorityFee: BigInt, unitPrice: BigInt)
 
     public var gasPrice: BigInt {
         switch self {
         case .regular(let gasPrice): gasPrice
         case .eip1559(let gasPrice, _): gasPrice
-        case .solana(let gasPrice, _, _, _): gasPrice
+        case .solana(let gasPrice, _, _): gasPrice
         }
     }
 
@@ -20,7 +20,7 @@ public enum GasPriceType: Equatable, Sendable {
         switch self {
         case .regular: .zero
         case .eip1559(_, let priorityFee): priorityFee
-        case .solana(_, let priorityFee, _, _): priorityFee
+        case .solana(_, let priorityFee, _): priorityFee
         }
     }
 
@@ -28,20 +28,12 @@ public enum GasPriceType: Equatable, Sendable {
         switch self {
         case .regular: .zero
         case .eip1559: .zero
-        case .solana(_, _, let unitPrice, _): unitPrice
-        }
-    }
-
-    public var jitoTip: UInt64 {
-        switch self {
-        case .regular: 0
-        case .eip1559: 0
-        case .solana(_, _, _, let jitoTip): jitoTip
+        case .solana(_, _, let unitPrice): unitPrice
         }
     }
 
     public var totalFee: BigInt {
-        gasPrice + priorityFee + BigInt(jitoTip)
+        gasPrice + priorityFee
     }
 }
 
