@@ -19,15 +19,13 @@ public struct AssetData: Codable, Equatable, Hashable, Sendable {
     public let price: Price?
     public let priceAlerts: [PriceAlert]
     public let metadata: AssetMetaData
-    public let isEarnable: Bool
 
-    public init(asset: Asset, balance: Balance, account: Account, price: Price?, priceAlerts: [PriceAlert], metadata: AssetMetaData, isEarnable: Bool = false) {
+    public init(asset: Asset, balance: Balance, account: Account, price: Price?, priceAlerts: [PriceAlert], metadata: AssetMetaData) {
         self.asset = asset
         self.balance = balance
         self.account = account
         self.price = price
         self.priceAlerts = priceAlerts
         self.metadata = metadata
-        self.isEarnable = isEarnable
     }
 }

@@ -178,8 +178,7 @@ extension AssetRecordInfo {
             account: account.mapToAccount(),
             price: price?.mapToPrice(),
             priceAlerts: priceAlerts.or([]).compactMap { $0.map() },
-            metadata: metadata,
-            isEarnable: asset.isEarnable
+            metadata: metadata
         )
     }
 

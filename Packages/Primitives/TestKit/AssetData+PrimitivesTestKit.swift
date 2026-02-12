@@ -24,7 +24,6 @@ public extension AssetData {
             isActive: true,
             rankScore: 42
         ),
-        isEarnable: Bool = false
     ) -> AssetData {
         AssetData(
             asset: asset,
@@ -32,8 +31,7 @@ public extension AssetData {
             account: account,
             price: price,
             priceAlerts: priceAlerts,
-            metadata: metadata,
-            isEarnable: isEarnable
+            metadata: metadata
         )
     }
 }

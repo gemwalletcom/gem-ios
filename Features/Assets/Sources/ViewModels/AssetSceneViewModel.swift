@@ -134,7 +134,7 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     var showEarnButton: Bool {
-        assetData.isEarnable && !wallet.isViewOnly && !hasEarnPosition
+        assetData.metadata.isEarnEnabled && !wallet.isViewOnly && !hasEarnPosition
     }
 
     var hasEarnPosition: Bool {

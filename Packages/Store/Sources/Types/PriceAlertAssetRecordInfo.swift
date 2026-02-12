@@ -32,12 +32,11 @@ extension PriceAlertAssetRecordInfo {
                 isStakeEnabled: asset.isStakeable,
                 stakingApr: asset.stakingApr,
                 isEarnEnabled: asset.isEarnable,
-                earnApr: nil,
+                earnApr: asset.earnApr,
                 isPinned: false,
                 isActive: false,
                 rankScore: asset.rank.asInt32
-            ),
-            isEarnable: asset.isEarnable
+            )
         )
     }
 }
