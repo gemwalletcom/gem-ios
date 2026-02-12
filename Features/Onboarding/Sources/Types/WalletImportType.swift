@@ -23,7 +23,7 @@ extension WalletImportType {
 
     var description: String {
         switch self {
-        case .phrase: Localized.Common.secretPhrase
+        case .phrase: Localized.Wallet.Import.secretPhrase
         case .privateKey: Localized.Common.privateKey
         case .address: Localized.Common.address
         }
