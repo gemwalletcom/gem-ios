@@ -15,6 +15,7 @@ public actor NativeProvider {
     private let session: URLSession
     private let nodeProvider: any NodeURLFetchable
     private let cache: any ProviderCache
+    private let requestInterceptor: any RequestInterceptable
 
     public init(
         session: URLSession = .shared,
@@ -23,12 +24,14 @@ public actor NativeProvider {
         self.session = session
         self.nodeProvider = nodeProvider
         self.cache = MemoryCache()
+        self.requestInterceptor = nodeProvider.requestInterceptor
     }
 
-    public init(session: URLSession = .shared, url: URL) {
+    public init(session: URLSession = .shared, url: URL, requestInterceptor: any RequestInterceptable) {
         self.session = session
         self.nodeProvider = StaticNode(url: url)
         self.cache = MemoryCache()
+        self.requestInterceptor = requestInterceptor
     }
 }
 
@@ -50,7 +53,9 @@ extension NativeProvider: AlienProvider {
             return AlienResponse(status: 200, data: data)
         }
         do {
-            let (data, response) = try await self.session.data(for: target.asRequest())
+            var request = try target.asRequest()
+            requestInterceptor.intercept(request: &request)
+            let (data, response) = try await self.session.data(for: request)
             let statusCode = (response as? HTTPURLResponse)?.statusCode
             
             if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {

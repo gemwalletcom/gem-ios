@@ -33,7 +33,6 @@ let package = Package(
         .package(name: "Preferences", path: "../Preferences"),
         .package(name: "NativeProviderService", path: "../NativeProviderService"),
         .package(name: "reown-swift", path: "../../Submodules/reown-swift"),
-        .package(name: "Starscream", path: "../../Submodules/Starscream"),
     ],
     targets: [
         .target(
@@ -111,10 +110,10 @@ let package = Package(
                 "GemstonePrimitives",
                 .product(name: "WalletConnect", package: "reown-swift"),
                 .product(name: "ReownWalletKit", package: "reown-swift"),
-                .product(name: "Starscream", package: "Starscream"),
+                .product(name: "WalletConnectNetworking", package: "reown-swift"),
             ],
             path: "WalletConnectorService",
-            exclude: ["TestKit"]
+            exclude: ["TestKit", "Tests"]
         ),
         .target(
             name: "WalletConnectorServiceTestKit",
@@ -168,6 +167,13 @@ let package = Package(
                 "Blockchain",
             ],
             path: "ChainService/TestKit"
+        ),
+        .testTarget(
+            name: "WalletConnectorServiceTests",
+            dependencies: [
+                "WalletConnectorService",
+            ],
+            path: "WalletConnectorService/Tests"
         ),
     ]
 )
