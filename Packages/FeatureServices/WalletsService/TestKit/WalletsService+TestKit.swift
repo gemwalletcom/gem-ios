@@ -23,7 +23,6 @@ public extension WalletsService {
         walletSessionService: WalletSessionService = WalletSessionService(walletStore: .mock(), preferences: .mock()),
         assetsService: AssetsService = .mock(),
         balanceService: BalanceService = .mock(),
-        priceService: PriceService = .mock(),
         priceObserver: PriceObserverService = .mock(),
         deviceService: DeviceService = .mock(),
         discoverAssetsService: DiscoverAssetsService = .mock()
@@ -32,7 +31,6 @@ public extension WalletsService {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
-            priceService: priceService,
             priceObserver: priceObserver,
             deviceService: deviceService,
             discoverAssetsService: discoverAssetsService

@@ -177,7 +177,6 @@ struct ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
-            priceService: priceService,
             priceObserver: priceObserverService,
             deviceService: deviceService,
             discoverAssetsService: discoverAssetsService
@@ -224,7 +223,7 @@ struct ServicesFactory {
             preferences: preferences
         )
         let hyperliquidObserverService = HyperliquidObserverService(
-            nodeProvider: PerpetualNodeService(preferences: preferences),
+            nodeProvider: PerpetualNodeService(nodeProvider: nodeProvider),
             perpetualService: perpetualService
         )
 
@@ -503,7 +502,6 @@ extension ServicesFactory {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: DeviceService,
         discoverAssetsService: DiscoverAssetsService
@@ -512,7 +510,6 @@ extension ServicesFactory {
             walletSessionService: walletSessionService,
             assetsService: assetsService,
             balanceService: balanceService,
-            priceService: priceService,
             priceObserver: priceObserver,
             deviceService: deviceService,
             discoverAssetsService: discoverAssetsService

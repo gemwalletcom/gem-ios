@@ -23,7 +23,6 @@ public struct WalletsService: Sendable {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: any DeviceServiceable,
         discoverAssetsService: DiscoverAssetsService
@@ -32,7 +31,7 @@ public struct WalletsService: Sendable {
             balanceService: balanceService,
             walletSessionService: walletSessionService
         )
-        let priceUpdater = PriceUpdateService(priceObserver: priceObserver)
+        let priceUpdater = priceObserver
         let assetsEnabler = AssetsEnablerService(
             assetsService: assetsService,
             balanceUpdater: balanceUpdater,
@@ -47,7 +46,7 @@ public struct WalletsService: Sendable {
             assetsEnabler: assetsEnabler
         )
         self.walletSessionService = walletSessionService
-        self.assetsVisibilityManager = AssetVisibilityManager(service: balanceService)
+        self.assetsVisibilityManager = balanceService
         self.assetsEnabler = assetsEnabler
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
@@ -133,7 +132,7 @@ extension WalletsService: BalanceUpdater {
     }
 }
 
-// MARK: - AssetVisibilityManager
+// MARK: - AssetVisibilityServiceable
 
 extension WalletsService: AssetVisibilityServiceable {
     public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {

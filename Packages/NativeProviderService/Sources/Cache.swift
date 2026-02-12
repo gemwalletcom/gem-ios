@@ -2,12 +2,7 @@
 
 import Foundation
 
-protocol ProviderCache: Sendable {
-    func set(key: String, value: Data, ttl: Duration) async
-    func get(key: String) async -> Data?
-}
-
-actor MemoryCache: ProviderCache {
+actor MemoryCache {
     
     private var map = [String: Data]()
     
