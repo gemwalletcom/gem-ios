@@ -7,7 +7,7 @@ public final class Preferences: @unchecked Sendable {
     public enum Constants {
         public static let appGroupIdentifier = "group.com.gemwallet.ios"
     }
-    
+
     public struct Keys {
         static let currency = "currency"
         static let importFiatMappingsVersion = "migrate_fiat_mappings_version"
@@ -40,37 +40,37 @@ public final class Preferences: @unchecked Sendable {
 
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
     public var currency: String
-    
+
     @ConfigurableDefaults(key: Keys.importFiatMappingsVersion, defaultValue: 0)
     public var importFiatMappingsVersion: Int
-    
+
     @ConfigurableDefaults(key: Keys.importFiatPurchaseAssetsVersion, defaultValue: 0)
     public var importFiatPurchaseAssetsVersion: Int
-    
+
     @ConfigurableDefaults(key: Keys.localAssetsVersion, defaultValue: 0)
     public var localAssetsVersion: Int
-    
+
     @ConfigurableDefaults(key: Keys.fiatOnRampAssetsVersion, defaultValue: 0)
     public var fiatOnRampAssetsVersion: Int
-    
+
     @ConfigurableDefaults(key: Keys.fiatOffRampAssetsVersion, defaultValue: 0)
     public var fiatOffRampAssetsVersion: Int
-    
+
     @ConfigurableDefaults(key: Keys.swapAssetsVersion, defaultValue: 0)
     public var swapAssetsVersion: Int
-    
+
     @ConfigurableDefaults(key: Keys.launchesCount, defaultValue: 0)
     public var launchesCount: Int
-    
+
     @ConfigurableDefaults(key: Keys.subscriptionsVersion, defaultValue: 0)
     public var subscriptionsVersion: Int
-    
+
     @ConfigurableDefaults(key: Keys.subscriptionsVersionHasChange, defaultValue: true)
     public var subscriptionsVersionHasChange: Bool
-    
+
     @ConfigurableDefaults(key: Keys.currentWalletId, defaultValue: .none)
     public var currentWalletId: String?
-    
+
     @ConfigurableDefaults(key: Keys.isPushNotificationsEnabled, defaultValue: false)
     public var isPushNotificationsEnabled: Bool
 
@@ -79,7 +79,7 @@ public final class Preferences: @unchecked Sendable {
 
     @ConfigurableDefaults(key: Keys.isSubscriptionsEnabled, defaultValue: true)
     public var isSubscriptionsEnabled: Bool
-    
+
     @ConfigurableDefaults(key: Keys.rateApplicationShown, defaultValue: false)
     public var rateApplicationShown: Bool
 
@@ -91,22 +91,22 @@ public final class Preferences: @unchecked Sendable {
 
     @ConfigurableDefaults(key: Keys.isHideBalanceEnabled, defaultValue: false)
     public var isHideBalanceEnabled: Bool
-    
+
     @ConfigurableDefaults(key: Keys.isAcceptTermsCompleted, defaultValue: false)
     public var isAcceptTermsCompleted: Bool
-    
+
     @ConfigurableDefaults(key: Keys.skippedReleaseVersion, defaultValue: nil)
     public var skippedReleaseVersion: String?
-    
+
     @ConfigurableDefaults(key: Keys.isWalletConnectActivated, defaultValue: nil)
     public var isWalletConnectActivated: Bool?
-    
+
     @ConfigurableDefaults(key: Keys.perpetualsMarketsUpdatedAt, defaultValue: nil)
     public var perpetualMarketsUpdatedAt: Date?
 
     @ConfigurableDefaults(key: Keys.perpetualPricesUpdatedAt, defaultValue: nil)
     public var perpetualPricesUpdatedAt: Date?
-    
+
     @ConfigurableDefaults(key: Keys.isPerpetualEnabled, defaultValue: false)
     public var isPerpetualEnabled: Bool
 
@@ -129,7 +129,7 @@ public final class Preferences: @unchecked Sendable {
 
     private func configureAllProperties(with defaults: UserDefaults) {
         let sharedDefaults = UserDefaults(suiteName: Constants.appGroupIdentifier)
-        
+
         func configure<T>(_ keyPath: ReferenceWritableKeyPath<Preferences, ConfigurableDefaults<T>>, key: String, defaultValue: T, sharedDefaults: UserDefaults? = nil) {
             self[keyPath: keyPath] = ConfigurableDefaults(key: key, defaultValue: defaultValue, defaults: defaults, sharedDefaults: sharedDefaults)
         }
@@ -171,11 +171,11 @@ public final class Preferences: @unchecked Sendable {
     }
 
     public func clear() {
-        defaults.dictionaryRepresentation().keys.forEach {
-            defaults.removeObject(forKey: $0)
+        for key in defaults.dictionaryRepresentation().keys {
+            defaults.removeObject(forKey: key)
         }
     }
-    
+
     public func incrementSubscriptionVersion() {
         subscriptionsVersion += 1
         subscriptionsVersionHasChange = true
