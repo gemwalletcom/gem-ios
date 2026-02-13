@@ -90,7 +90,11 @@ public final class ReceiveViewModel: Sendable {
     }
     
     func enableAsset() async {
-        await walletsService.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
+        do {
+            try await walletsService.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
+        } catch {
+            debugLog("ReceiveViewModel enableAsset error: \(error)")
+        }
     }
     
     func generateQRCode() async -> UIImage? {
