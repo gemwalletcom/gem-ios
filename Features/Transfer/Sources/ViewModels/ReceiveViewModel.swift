@@ -60,10 +60,19 @@ public final class ReceiveViewModel: Sendable {
     }
     
     var warningMessage: AttributedString {
-        guard let message = try? AttributedString(markdown: Localized.Receive.warning(assetModel.symbol.boldMarkdown(), assetModel.networkFullName.boldMarkdown())) else {
+        let warning = Localized.Receive.warning(assetModel.symbol.boldMarkdown(), assetModel.networkFullName.boldMarkdown())
+        guard let message = try? AttributedString(markdown: [warning, memoWarningText].compactMap { $0 }.joined(separator: " ")) else {
             return AttributedString()
         }
         return message
+    }
+
+    private var memoWarningText: String? {
+        switch assetModel.asset.chain {
+        case .xrp where assetModel.asset.chain.isMemoSupported: Localized.Wallet.Receive.noDestinationTagRequired
+        case _ where assetModel.asset.chain.isMemoSupported: Localized.Wallet.Receive.noMemoRequired
+        default: nil
+        }
     }
 
     var copyModel: CopyTypeViewModel {
