@@ -123,7 +123,6 @@ struct MainTabView: View {
         }
         .toast(message: $model.isPresentingToastMessage)
         .bindQuery(model.transactionsQuery)
-        .onChange(of: model.walletId, onWalletIdChange)
     }
 }
 
@@ -144,11 +143,6 @@ extension MainTabView {
 extension MainTabView {
     private func onSelect(tab: TabItem) {
         navigationState.select(tab: tab)
-    }
-
-    private func onWalletIdChange() {
-        navigationState.clearAll()
-        navigationState.selectedTab = .wallet
     }
 
     private func onSetPriceAlertComplete(message: String) {

@@ -185,6 +185,11 @@ extension NavigationHandler {
             assetAddress: AssetAddress(asset: account.chain.asset, address: account.address)
         )
     }
+
+    func resetNavigation() {
+        navigationState.clearAll()
+        navigationState.selectedTab = .wallet
+    }
 }
 
 // MARK: - TabItem Selection
