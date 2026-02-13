@@ -19,17 +19,31 @@ public actor PriceObserverService: Sendable {
     private var subscribedAssetIds: Set<AssetId> = []
     private var currentWalletId: WalletId?
 
+    private init(
+        priceService: PriceService,
+        preferences: Preferences,
+        securePreferences: SecurePreferences = SecurePreferences(),
+        socket: any WebSocketConnectable
+    ) {
+        self.priceService = priceService
+        self.preferences = preferences
+        self.securePreferences = securePreferences
+        self.webSocket = socket
+    }
+
     public init(
         priceService: PriceService,
         preferences: Preferences,
         securePreferences: SecurePreferences = SecurePreferences()
     ) {
-        self.priceService = priceService
-        self.preferences = preferences
-        self.securePreferences = securePreferences
         let requestProvider = AuthenticatedRequestProvider(securePreferences: securePreferences)
         let configuration = WebSocketConfiguration(requestProvider: requestProvider)
-        self.webSocket = WebSocketConnection(configuration: configuration)
+        self.init(
+            priceService: priceService,
+            preferences: preferences,
+            securePreferences: securePreferences,
+            socket: WebSocketConnection(configuration: configuration)
+        )
     }
 
     public init(
@@ -38,10 +52,12 @@ public actor PriceObserverService: Sendable {
         securePreferences: SecurePreferences = SecurePreferences(),
         webSocket: any WebSocketConnectable
     ) {
-        self.priceService = priceService
-        self.preferences = preferences
-        self.securePreferences = securePreferences
-        self.webSocket = webSocket
+        self.init(
+            priceService: priceService,
+            preferences: preferences,
+            securePreferences: securePreferences,
+            socket: webSocket
+        )
     }
 
     deinit {

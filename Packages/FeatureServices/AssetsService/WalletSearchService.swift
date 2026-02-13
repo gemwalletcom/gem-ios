@@ -31,14 +31,11 @@ public struct WalletSearchService: Sendable {
     }
 
     public func search(wallet: Wallet, query: String, tag: AssetTag? = nil) async throws {
-        let chains: [Chain] = {
-            switch wallet.type {
-            case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
-            case .multicoin: []
-            }
-        }()
-
-        let response = try await searchProvider.search(query: query, chains: chains, tags: [tag].compactMap { $0 })
+        let response = try await searchProvider.search(
+            query: query,
+            chains: WalletSearchScope.chains(for: wallet),
+            tags: [tag].compactMap { $0 }
+        )
         let prices: [AssetPrice] = response.assets.compactMap { asset in
             guard let price = asset.price else { return nil }
             return AssetPrice(
