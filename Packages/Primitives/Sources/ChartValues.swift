@@ -60,8 +60,4 @@ public struct ChartValues: Sendable {
     public var lastValue: Double { charts.last?.value ?? 0 }
     public var firstNonZeroValue: Double? { charts.first(where: { $0.value != 0 })?.value }
     public var baseValue: Double { firstNonZeroValue ?? firstValue }
-
-    public func percentageChange(from base: Double, to value: Double) -> Double {
-        base == 0 ? 0 : (value - base) / base * 100
-    }
 }

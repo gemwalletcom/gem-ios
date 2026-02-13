@@ -42,12 +42,12 @@ public struct ChartValuesViewModel: Sendable {
         guard let price else { return nil }
         let priceChangePercentage = period == Self.defaultPeriod
             ? price.priceChangePercentage24h
-            : values.percentageChange(from: values.baseValue, to: price.price)
+            : PriceChangeCalculator.calculate(.percentage(from: values.baseValue, to: price.price))
         return ChartPriceViewModel(period: period, date: nil, price: price.price, priceChangePercentage: priceChangePercentage, formatter: formatter, type: type)
     }
 
     func priceViewModel(for element: ChartDateValue) -> ChartPriceViewModel {
-        let priceChangePercentage = values.percentageChange(from: values.baseValue, to: element.value)
+        let priceChangePercentage = PriceChangeCalculator.calculate(.percentage(from: values.baseValue, to: element.value))
         return ChartPriceViewModel(period: period, date: element.date, price: element.value, priceChangePercentage: priceChangePercentage, formatter: formatter, type: type)
     }
 }

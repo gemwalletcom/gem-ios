@@ -48,13 +48,22 @@ public struct WalletHeaderView: View {
             .padding(.bottom, .space10)
 
             if let subtitle = model.subtitle {
-                PrivacyText(
-                    subtitle,
-                    isEnabled: $isPrivacyEnabled
-                )
-                .font(.system(size: 16))
-                .fontWeight(.medium)
-                .foregroundStyle(Colors.gray)
+                HStack(spacing: Spacing.space6) {
+                    if let subtitleImage = model.subtitleImage, !isPrivacyEnabled {
+                        subtitleImage
+                            .resizable()
+                            .frame(width: 8, height: 6)
+                            .foregroundStyle(model.subtitleColor)
+                            .offset(y: model.subtitleImageOffset)
+                    }
+
+                    PrivacyText(
+                        subtitle,
+                        isEnabled: $isPrivacyEnabled
+                    )
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(model.subtitleColor)
+                }
                 .numericTransition(for: model.subtitle)
                 .padding(.bottom, .space10)
             }
@@ -107,7 +116,7 @@ public struct WalletHeaderView: View {
 #Preview {
     let model = WalletHeaderViewModel(
         walletType: .multicoin,
-        value: 1_000,
+        totalValue: TotalFiatValue(value: 1_000, pnlAmount: 50, pnlPercentage: 5.26),
         currencyCode: Currency.usd.rawValue,
         bannerEventsViewModel: HeaderBannerEventViewModel(events: [])
     )

@@ -48,7 +48,7 @@ public struct AutocloseEstimator {
     }
 
     public func calculatePriceChangePercent(price: Double) -> Double {
-        let rawChange = ((price - entryPrice) / entryPrice) * 100
+        let rawChange = PriceChangeCalculator.calculate(.percentage(from: entryPrice, to: price))
         return direction == .short ? -rawChange : rawChange
     }
 

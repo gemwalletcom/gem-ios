@@ -2,6 +2,7 @@
 
 import Foundation
 import GRDB
+import Primitives
 
 struct AssetRecordInfo: FetchableRecord, Codable {
     var asset: AssetRecord
@@ -16,13 +17,4 @@ struct AssetRecordInfoMinimal: FetchableRecord, Codable {
     var price: PriceRecord?
     var rate: FiatRateRecord?
     var balance: BalanceRecord
-}
-
-extension AssetRecordInfoMinimal {
-    var totalFiatAmount: Double {
-        guard let price else {
-            return 0
-        }
-        return balance.totalAmount * price.price
-    }
 }

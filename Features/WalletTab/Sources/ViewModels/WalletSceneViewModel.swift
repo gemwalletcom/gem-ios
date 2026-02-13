@@ -32,7 +32,7 @@ public final class WalletSceneViewModel: Sendable {
     public var bannersRequest: BannersRequest
 
     // db observed values
-    public var totalFiatValue: Double = .zero
+    public var totalFiatValue: TotalFiatValue = .zero
     public var assets: [AssetData] = []
     public var banners: [Banner] = []
 
@@ -117,7 +117,7 @@ public final class WalletSceneViewModel: Sendable {
     var walletHeaderModel: WalletHeaderViewModel {
         WalletHeaderViewModel(
             walletType: wallet.type,
-            value: totalFiatValue,
+            totalValue: totalFiatValue,
             currencyCode: currencyCode,
             bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
         )
@@ -126,7 +126,7 @@ public final class WalletSceneViewModel: Sendable {
     var walletBannersModel: WalletSceneBannersViewModel {
         WalletSceneBannersViewModel(
             banners: banners,
-            totalFiatValue: totalFiatValue
+            totalFiatValue: totalFiatValue.value
         )
     }
 }
