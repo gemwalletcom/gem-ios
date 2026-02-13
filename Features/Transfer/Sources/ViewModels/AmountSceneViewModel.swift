@@ -26,8 +26,8 @@ public final class AmountSceneViewModel {
 
     let provider: AmountDataProvider
 
-    var assetData: AssetData = .empty
-    var assetRequest: AssetRequest
+    public let assetQuery: ObservableQuery<AssetRequest>
+    var assetData: AssetData { assetQuery.value }
     var amountInputModel: InputValidationViewModel
     var isPresentingSheet: AmountSheetType?
 
@@ -45,7 +45,7 @@ public final class AmountSceneViewModel {
         self.onTransferAction = onTransferAction
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: preferences.currency)
         self.provider = .make(from: input)
-        self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: input.asset.id)
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: wallet.walletId, assetId: input.asset.id), initialValue: .with(asset: input.asset))
         self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: [])
         amountInputModel.update(validators: inputValidators)
 

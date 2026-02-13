@@ -12,16 +12,17 @@ import PriceAlertServiceTestKit
 import BannerServiceTestKit
 
 @testable import Assets
+@testable import Store
 
 @MainActor
 struct AssetSceneViewModelTests {
-    
+
     @Test
     func showManageToken() {
         #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isBalanceEnabled: true))).showManageToken == false)
         #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isBalanceEnabled: false))).showManageToken == true)
     }
-    
+
     @Test
     func showStatus() {
         #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(rankScore: 42))).showStatus == false)
@@ -57,11 +58,8 @@ struct AssetSceneViewModelTests {
 // MARK: - Mock Extensions
 
 extension AssetSceneViewModel {
-    static func mock(
-        _ assetData: AssetData = AssetData.mock(),
-        banners: [Banner] = []
-    ) -> AssetSceneViewModel {
-        let viewModel = AssetSceneViewModel(
+    static func mock(_ assetData: AssetData = AssetData.mock()) -> AssetSceneViewModel {
+        let model = AssetSceneViewModel(
             walletsService: .mock(),
             assetsService: .mock(),
             transactionsService: .mock(),
@@ -74,11 +72,10 @@ extension AssetSceneViewModel {
             ),
             isPresentingSelectedAssetInput: .constant(.none)
         )
-        viewModel.chainAssetData = ChainAssetData(
+        model.assetQuery.value = ChainAssetData(
             assetData: assetData,
             feeAssetData: AssetData.with(asset: assetData.asset.chain.asset)
         )
-        viewModel.banners = banners
-        return viewModel
+        return model
     }
 }

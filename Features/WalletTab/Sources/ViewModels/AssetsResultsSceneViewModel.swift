@@ -22,8 +22,8 @@ public final class AssetsResultsSceneViewModel {
 
     let onSelectAssetAction: AssetAction
 
-    var request: WalletSearchRequest
-    var searchResult: WalletSearchResult = .empty
+    public let searchQuery: ObservableQuery<WalletSearchRequest>
+    var searchResult: WalletSearchResult { searchQuery.value }
     var isPresentingToastMessage: ToastMessage?
 
     public init(
@@ -36,7 +36,7 @@ public final class AssetsResultsSceneViewModel {
         self.wallet = wallet
         self.walletsService = walletsService
         self.preferences = preferences
-        self.request = request
+        self.searchQuery = ObservableQuery(request, initialValue: .empty)
         self.onSelectAssetAction = onSelectAsset
     }
 

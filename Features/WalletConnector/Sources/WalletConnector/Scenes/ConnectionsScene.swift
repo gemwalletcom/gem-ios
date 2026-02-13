@@ -49,10 +49,7 @@ public struct ConnectionsScene: View {
                 }
             }
         }
-        .observeQuery(
-            request: $model.request,
-            value: $model.connections
-        )
+        .bindQuery(model.query)
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .overlay {
             if model.sections.isEmpty {

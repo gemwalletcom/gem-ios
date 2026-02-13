@@ -1,9 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Combine
 import Foundation
 import GRDB
-import GRDBQuery
 import Primitives
 
 public struct WalletSearchResult: Equatable, Sendable {
@@ -18,8 +16,7 @@ public struct WalletSearchResult: Equatable, Sendable {
     public static let empty = WalletSearchResult(assets: [], perpetuals: [])
 }
 
-public struct WalletSearchRequest: ValueObservationQueryable, Hashable {
-    public static var defaultValue: WalletSearchResult { .empty }
+public struct WalletSearchRequest: DatabaseQueryable, Hashable {
 
     public var walletId: WalletId
     public var searchBy: String

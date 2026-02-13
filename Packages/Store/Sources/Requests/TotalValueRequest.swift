@@ -2,8 +2,6 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
 public enum BalanceType: Sendable {
@@ -11,8 +9,7 @@ public enum BalanceType: Sendable {
     case perpetual
 }
 
-public struct TotalValueRequest: ValueObservationQueryable {
-    public static var defaultValue: Double { 0 }
+public struct TotalValueRequest: DatabaseQueryable {
 
     public var walletId: WalletId
     public var type: BalanceType
@@ -56,3 +53,5 @@ public struct TotalValueRequest: ValueObservationQueryable {
             .reduce(0, +)
     }
 }
+
+extension TotalValueRequest: Equatable {}

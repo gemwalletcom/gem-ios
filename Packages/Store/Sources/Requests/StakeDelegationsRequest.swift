@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct StakeDelegationsRequest: ValueObservationQueryable {
-    public static var defaultValue: [Delegation] { [] }
+public struct StakeDelegationsRequest: DatabaseQueryable {
 
     private let walletId: WalletId
     private let assetId: AssetId
@@ -29,3 +26,5 @@ public struct StakeDelegationsRequest: ValueObservationQueryable {
             .map { $0.mapToDelegation() }
     }
 }
+
+extension StakeDelegationsRequest: Equatable {}

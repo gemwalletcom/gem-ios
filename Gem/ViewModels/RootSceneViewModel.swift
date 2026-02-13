@@ -136,9 +136,11 @@ extension RootSceneViewModel {
 
 extension RootSceneViewModel {
     func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
-        if let newWallet {
-            setup(wallet: newWallet)
+        guard let newWallet else { return }
+        if oldWallet?.walletId != newWallet.walletId {
+            navigationHandler.resetNavigation()
         }
+        setup(wallet: newWallet)
     }
 
     func handleOpenUrl(_ url: URL) async {

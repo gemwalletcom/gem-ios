@@ -1,5 +1,6 @@
 import Testing
 import Primitives
+import PrimitivesTestKit
 import PriceAlertServiceTestKit
 
 @testable import PriceAlerts
@@ -56,7 +57,7 @@ fileprivate extension SetPriceAlertViewModel {
     static func mock() -> SetPriceAlertViewModel {
         SetPriceAlertViewModel(
             walletId: WalletId.mock(),
-            assetId: .mock(),
+            asset: .mock(),
             priceAlertService: .mock(),
             onComplete: { _ in }
         )

@@ -25,18 +25,7 @@ struct StakeNavigationView: View {
         StakeScene(
             model: model
         )
-        .observeQuery(
-            request: $model.request,
-            value: $model.delegations
-        )
-        .observeQuery(
-            request: $model.assetRequest,
-            value: $model.assetData
-        )
-        .observeQuery(
-            request: $model.validatorsRequest,
-            value: $model.validators
-        )
+        .bindQuery(model.delegationsQuery, model.assetQuery, model.validatorsQuery)
         .ifLet(model.stakeInfoUrl, content: { view, url in
             view.toolbarInfoButton(url: url)
         })

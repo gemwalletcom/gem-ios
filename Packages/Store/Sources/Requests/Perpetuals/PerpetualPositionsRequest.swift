@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct PerpetualPositionsRequest: ValueObservationQueryable {
-    public static var defaultValue: [PerpetualPositionData] { [] }
+public struct PerpetualPositionsRequest: DatabaseQueryable {
 
     public var walletId: WalletId
     public var filter: PositionsRequestFilter?
@@ -58,3 +55,5 @@ public struct PerpetualPositionsRequest: ValueObservationQueryable {
             }
     }
 }
+
+extension PerpetualPositionsRequest: Equatable {}

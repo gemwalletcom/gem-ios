@@ -14,11 +14,12 @@ public final class RecentsSceneViewModel {
     private let activityService: ActivityService
     private let walletId: WalletId
 
-    var request: RecentActivityRequest
+    public let query: ObservableQuery<RecentActivityRequest>
     public let onSelect: (Asset) -> Void
 
-    var recentAssets: [RecentAsset] = []
     var searchQuery: String = ""
+
+    public var recentAssets: [RecentAsset] { query.value }
 
     public init(
         walletId: WalletId,
@@ -29,12 +30,7 @@ public final class RecentsSceneViewModel {
     ) {
         self.walletId = walletId
         self.activityService = activityService
-        self.request = RecentActivityRequest(
-            walletId: walletId,
-            limit: .max,
-            types: types,
-            filters: filters
-        )
+        self.query = ObservableQuery(RecentActivityRequest(walletId: walletId, limit: .max, types: types, filters: filters), initialValue: [])
         self.onSelect = onSelect
     }
 

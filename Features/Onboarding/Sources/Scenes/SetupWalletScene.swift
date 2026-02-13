@@ -51,7 +51,7 @@ public struct SetupWalletScene: View {
                 action: model.onComplete
             )
         }
-        .observeQuery(request: $model.walletRequest, value: $model.wallet)
+        .bindQuery(model.query)
         .onChange(of: model.nameInput, model.onChangeWalletName)
         .navigationTitle(model.title)
     }

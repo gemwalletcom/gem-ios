@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Store
 
 extension View {
     func inject(resolver: AppResolver) -> some View {
@@ -39,7 +40,7 @@ extension View {
     
     private func inject(storages: AppResolver.Storages) -> some View {
         self
-            .databaseContext(.readWrite { storages.db.dbQueue })
+            .databaseQueue(storages.db.dbQueue)
             .environment(\.keystore, storages.keystore)
             .environment(\.observablePreferences, storages.observablePreferences)
     }

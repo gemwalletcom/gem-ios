@@ -17,9 +17,9 @@ public final class SetupWalletViewModel: Sendable {
     private let onSelectImageAction: (Wallet) -> Void
     private let onCompleteAction: (Wallet) -> Void
 
-    var wallet: Wallet?
+    public let query: ObservableQuery<WalletRequest>
+    var wallet: Wallet? { query.value }
     var nameInput: String
-    var walletRequest: WalletRequest
 
     public init(
         wallet: Wallet,
@@ -27,10 +27,9 @@ public final class SetupWalletViewModel: Sendable {
         onSelectImage: @escaping (Wallet) -> Void,
         onComplete: @escaping (Wallet) -> Void
     ) {
-        self.wallet = wallet
         self.walletService = walletService
         self.nameInput = wallet.name
-        self.walletRequest = WalletRequest(walletId: wallet.walletId)
+        self.query = ObservableQuery(WalletRequest(walletId: wallet.walletId), initialValue: wallet)
         self.onSelectImageAction = onSelectImage
         self.onCompleteAction = onComplete
     }

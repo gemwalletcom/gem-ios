@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct PerpetualWalletBalanceRequest: ValueObservationQueryable {
-    public static var defaultValue: WalletBalance { .zero }
+public struct PerpetualWalletBalanceRequest: DatabaseQueryable {
 
     private let totalValueRequest: TotalValueRequest
 
@@ -19,3 +16,5 @@ public struct PerpetualWalletBalanceRequest: ValueObservationQueryable {
         try totalValueRequest.fetchWalletBalance(db)
     }
 }
+
+extension PerpetualWalletBalanceRequest: Equatable {}

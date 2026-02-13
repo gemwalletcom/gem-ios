@@ -28,4 +28,26 @@ public struct AssetData: Codable, Equatable, Hashable, Sendable {
         self.priceAlerts = priceAlerts
         self.metadata = metadata
     }
+
+    public static func with(asset: Asset) -> AssetData {
+        AssetData(
+            asset: asset,
+            balance: .zero,
+            account: Account(chain: asset.chain, address: "", derivationPath: "", extendedPublicKey: nil),
+            price: nil,
+            priceAlerts: [],
+            metadata: AssetMetaData(
+                isEnabled: false,
+                isBalanceEnabled: false,
+                isBuyEnabled: false,
+                isSellEnabled: false,
+                isSwapEnabled: false,
+                isStakeEnabled: false,
+                isPinned: false,
+                isActive: true,
+                stakingApr: nil,
+                rankScore: 0
+            )
+        )
+    }
 }

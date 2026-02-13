@@ -34,7 +34,7 @@ public struct AssetsResultsScene: View {
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
-        .observeQuery(request: $model.request, value: $model.searchResult)
+        .bindQuery(model.searchQuery)
         .toast(message: $model.isPresentingToastMessage)
     }
 

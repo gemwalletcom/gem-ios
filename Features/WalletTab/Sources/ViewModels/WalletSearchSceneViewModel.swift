@@ -32,11 +32,12 @@ public final class WalletSearchSceneViewModel: Sendable {
     private var state: StateViewType<Bool> = .noData
 
     var searchModel: WalletSearchModel
-    var searchResult: WalletSearchResult = .empty
-    var recents: [RecentAsset] = []
 
-    var searchRequest: WalletSearchRequest
-    var recentsRequest: RecentActivityRequest
+    public let searchQuery: ObservableQuery<WalletSearchRequest>
+    public let recentsQuery: ObservableQuery<RecentActivityRequest>
+
+    var searchResult: WalletSearchResult { searchQuery.value }
+    var recents: [RecentAsset] { recentsQuery.value }
 
     var isPresentingToastMessage: ToastMessage? = nil
     var isSearching: Bool = false
@@ -69,15 +70,21 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.searchModel = WalletSearchModel(selectType: .manage)
 
         let isPerpetualEnabled = preferences.isPerpetualEnabled
-        self.searchRequest = WalletSearchRequest(
-            walletId: wallet.walletId,
-            limit: WalletSearchModel.initialFetchLimit(isPerpetualEnabled: isPerpetualEnabled),
-            types: WalletSearchModel.searchItemTypes(isPerpetualEnabled: isPerpetualEnabled)
+        self.searchQuery = ObservableQuery(
+            WalletSearchRequest(
+                walletId: wallet.walletId,
+                limit: WalletSearchModel.initialFetchLimit(isPerpetualEnabled: isPerpetualEnabled),
+                types: WalletSearchModel.searchItemTypes(isPerpetualEnabled: isPerpetualEnabled)
+            ),
+            initialValue: .empty
         )
-        self.recentsRequest = RecentActivityRequest(
-            walletId: wallet.walletId,
-            limit: 10,
-            types: WalletSearchModel.recentActivityTypes(isPerpetualEnabled: isPerpetualEnabled)
+        self.recentsQuery = ObservableQuery(
+            RecentActivityRequest(
+                walletId: wallet.walletId,
+                limit: 10,
+                types: WalletSearchModel.recentActivityTypes(isPerpetualEnabled: isPerpetualEnabled)
+            ),
+            initialValue: []
         )
     }
 
@@ -108,8 +115,8 @@ public final class WalletSearchSceneViewModel: Sendable {
     var recentsModel: RecentsSceneViewModel {
         RecentsSceneViewModel(
             walletId: wallet.walletId,
-            types: recentsRequest.types,
-            filters: recentsRequest.filters,
+            types: recentsQuery.request.types,
+            filters: recentsQuery.request.filters,
             activityService: activityService,
             onSelect: onSelectRecent
         )
@@ -117,8 +124,8 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     var assetsResultsDestination: Scenes.AssetsResults {
         Scenes.AssetsResults(
-            searchQuery: searchRequest.searchBy,
-            tag: searchRequest.tag
+            searchQuery: searchQuery.request.searchBy,
+            tag: searchQuery.request.tag
         )
     }
 
@@ -156,7 +163,7 @@ extension WalletSearchSceneViewModel {
     func onSelectTag(tag: AssetTagSelection) {
         searchModel.tagsViewModel.selectedTag = tag
         searchModel.focus = .tags
-        searchRequest.tag = tag.tag?.rawValue
+        searchQuery.request.tag = tag.tag?.rawValue
         updateRequest()
         Task {
             await search(query: .empty, tag: tag.tag)
@@ -221,16 +228,16 @@ extension WalletSearchSceneViewModel {
     }
 
     func onChangePerpetualsEnabled(_: Bool, _: Bool) {
-        recentsRequest.types = WalletSearchModel.recentActivityTypes(isPerpetualEnabled: isPerpetualEnabled)
-        searchRequest.types = WalletSearchModel.searchItemTypes(isPerpetualEnabled: isPerpetualEnabled)
-        searchRequest.limit = searchModel.fetchLimit(tag: searchRequest.tag, isPerpetualEnabled: isPerpetualEnabled)
+        recentsQuery.request.types = WalletSearchModel.recentActivityTypes(isPerpetualEnabled: isPerpetualEnabled)
+        searchQuery.request.types = WalletSearchModel.searchItemTypes(isPerpetualEnabled: isPerpetualEnabled)
+        searchQuery.request.limit = searchModel.fetchLimit(tag: searchQuery.request.tag, isPerpetualEnabled: isPerpetualEnabled)
     }
 
     func onChangeFocus(_: Bool, isSearching: Bool) {
         if isSearching {
             searchModel.focus = .search
             searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
-            searchRequest.tag = nil
+            searchQuery.request.tag = nil
             updateRequest()
         }
     }
@@ -246,7 +253,7 @@ extension WalletSearchSceneViewModel {
 
 extension WalletSearchSceneViewModel {
     private var assetsPreviewLimit: Int {
-        searchModel.assetsLimit(tag: searchRequest.tag, isPerpetualEnabled: preferences.isPerpetualEnabled)
+        searchModel.assetsLimit(tag: searchQuery.request.tag, isPerpetualEnabled: preferences.isPerpetualEnabled)
     }
 
     private func activityData(for asset: Asset) -> RecentActivityData {
@@ -272,11 +279,11 @@ extension WalletSearchSceneViewModel {
         if searchModel.searchableQuery.isNotEmpty && searchModel.focus == .tags {
             searchModel.focus = .search
             searchModel.tagsViewModel.selectedTag = AssetTagSelection.all
-            searchRequest.tag = nil
+            searchQuery.request.tag = nil
         }
-        searchRequest.searchBy = searchModel.searchableQuery
-        searchRequest.limit = searchModel.fetchLimit(tag: searchRequest.tag, isPerpetualEnabled: preferences.isPerpetualEnabled)
-        state = searchModel.searchableQuery.isNotEmpty || searchRequest.tag != nil ? .loading : .noData
+        searchQuery.request.searchBy = searchModel.searchableQuery
+        searchQuery.request.limit = searchModel.fetchLimit(tag: searchQuery.request.tag, isPerpetualEnabled: preferences.isPerpetualEnabled)
+        state = searchModel.searchableQuery.isNotEmpty || searchQuery.request.tag != nil ? .loading : .noData
     }
 
     private func search(query: String, tag: AssetTag? = nil) async {

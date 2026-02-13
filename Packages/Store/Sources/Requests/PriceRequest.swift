@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct PriceRequest: ValueObservationQueryable {
-    public static var defaultValue: PriceData? { nil }
+public struct PriceRequest: DatabaseQueryable {
 
     public var assetId: AssetId
 
@@ -26,3 +23,5 @@ public struct PriceRequest: ValueObservationQueryable {
             .map { $0.priceData }
     }
 }
+
+extension PriceRequest: Equatable {}

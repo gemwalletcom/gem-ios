@@ -56,16 +56,8 @@ public struct SwapScene: View {
                 )
         }
         .navigationTitle(model.title)
-        .onChangeObserveQuery(
-            request: $model.fromAssetRequest,
-            value: $model.fromAsset,
-            action: model.onChangeFromAsset
-        )
-        .onChangeObserveQuery(
-            request: $model.toAssetRequest,
-            value: $model.toAsset,
-            action: model.onChangeToAsset
-        )
+        .onChangeBindQuery(model.fromAssetQuery, action: model.onChangeFromAsset)
+        .onChangeBindQuery(model.toAssetQuery, action: model.onChangeToAsset)
         .debounce(
             value: model.swapState.fetch,
             interval: model.swapState.fetch.delay,

@@ -2,13 +2,10 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct PerpetualsRequest: ValueObservationQueryable {
+public struct PerpetualsRequest: DatabaseQueryable {
     static let defaultQueryLimit = 100
-    public static var defaultValue: [PerpetualData] { [] }
 
     public let searchQuery: String
 
@@ -34,3 +31,5 @@ public struct PerpetualsRequest: ValueObservationQueryable {
             .map { $0.mapToPerpetualData() }
     }
 }
+
+extension PerpetualsRequest: Equatable {}

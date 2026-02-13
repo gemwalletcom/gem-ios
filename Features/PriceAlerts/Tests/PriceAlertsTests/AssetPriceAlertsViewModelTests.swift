@@ -8,6 +8,7 @@ import Primitives
 import PrimitivesTestKit
 
 @testable import PriceAlerts
+@testable import Store
 
 @MainActor
 struct AssetPriceAlertsViewModelTests {
@@ -17,23 +18,22 @@ struct AssetPriceAlertsViewModelTests {
         let alert2 = PriceAlertData.mock(priceAlert: .mock(price: 200, priceDirection: .down))
         let alert3 = PriceAlertData.mock(priceAlert: .mock(price: 200, priceDirection: .up))
         let autoAlert = PriceAlertData.mock(priceAlert: .mock(priceDirection: nil))
-        
+
         let model = AssetPriceAlertsViewModel.mock()
-        model.priceAlerts = [alert1, alert2, alert3, autoAlert]
-        
+        model.query.value = [alert1, alert2, alert3, autoAlert]
+
         #expect(model.alertsModel.map { $0.data } == [alert3, alert2, alert1])
         #expect(model.autoAlertModel?.data == autoAlert)
     }
-    
+
     @Test
     func showEmptyState() {
-        let model = AssetPriceAlertsViewModel.mock()
+        let emptyModel = AssetPriceAlertsViewModel.mock()
+        #expect(emptyModel.showEmptyState == true)
 
-        #expect(model.showEmptyState == true)
-
-        model.priceAlerts = [PriceAlertData.mock()]
-
-        #expect(model.showEmptyState == false)
+        let modelWithAlerts = AssetPriceAlertsViewModel.mock()
+        modelWithAlerts.query.value = [PriceAlertData.mock()]
+        #expect(modelWithAlerts.showEmptyState == false)
     }
 }
 

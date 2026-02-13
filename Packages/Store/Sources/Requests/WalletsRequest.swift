@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct WalletsRequest: ValueObservationQueryable {
-    public static var defaultValue: [Wallet] { [] }
+public struct WalletsRequest: DatabaseQueryable {
     
     private let isPinned: Bool
     
@@ -25,3 +22,5 @@ public struct WalletsRequest: ValueObservationQueryable {
             .compactMap { $0.mapToWallet() }
     }
 }
+
+extension WalletsRequest: Equatable {}

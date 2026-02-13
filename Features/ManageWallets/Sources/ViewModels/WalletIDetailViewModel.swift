@@ -23,6 +23,9 @@ public final class WalletDetailViewModel {
     var isPresentingDeleteConfirmation: Bool?
     var isPresentingExportWallet: ExportWalletType?
 
+    public let walletQuery: ObservableQuery<WalletRequest>
+    public var dbWallet: Wallet? { walletQuery.value }
+
     public init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
@@ -37,6 +40,7 @@ public final class WalletDetailViewModel {
         self.isPresentingAlertMessage = nil
         self.isPresentingDeleteConfirmation = nil
         self.isPresentingExportWallet = nil
+        self.walletQuery = ObservableQuery(WalletRequest(walletId: wallet.walletId), initialValue: wallet)
     }
 
     var name: String {
@@ -66,10 +70,6 @@ public final class WalletDetailViewModel {
 
     func addressLink(account: SimpleAccount) -> BlockExplorerLink {
         explorerService.addressUrl(chain: account.chain, address: account.address)
-    }
-
-    var walletRequest: WalletRequest {
-        WalletRequest(walletId: wallet.walletId)
     }
     
     func avatarAssetImage(for wallet: Wallet) -> AssetImage {

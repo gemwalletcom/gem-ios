@@ -9,8 +9,8 @@ import PrimitivesComponents
 
 @MainActor
 public protocol CollectionsViewable: AnyObject, Observable {
-    var request: NFTRequest { get set }
-    var nftDataList: [NFTData] { get set }
+    var query: ObservableQuery<NFTRequest> { get }
+    var nftDataList: [NFTData] { get }
 
     var title: String { get }
     var columns: [GridItem] { get }
@@ -44,7 +44,7 @@ extension CollectionsViewable {
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet, wallet != newWallet {
             wallet = newWallet
-            request = NFTRequest(walletId: newWallet.walletId, filter: .all)
+            query.request = NFTRequest(walletId: newWallet.walletId, filter: .all)
         }
     }
 

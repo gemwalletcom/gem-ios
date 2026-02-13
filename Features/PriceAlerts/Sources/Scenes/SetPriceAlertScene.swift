@@ -2,7 +2,6 @@
 
 import Foundation
 import SwiftUI
-import GRDBQuery
 import Store
 import Primitives
 import Components
@@ -12,17 +11,13 @@ import PrimitivesComponents
 
 struct SetPriceAlertScene: View {
     @State private var model: SetPriceAlertViewModel
-    
+
     @FocusState private var focusedField: Bool
 
-    @Query<AssetRequest>
-    private var assetData: AssetData
-    
     init(model: SetPriceAlertViewModel) {
         _model = State(initialValue: model)
-        _assetData = Query(constant: model.assetRequest)
     }
-    
+
     var body: some View {
         List {
             Section {
@@ -32,7 +27,7 @@ struct SetPriceAlertScene: View {
 
                     CurrencyInputView(
                         text: $model.state.amount,
-                        config: model.currencyInputConfig(for: assetData)
+                        config: model.currencyInputConfig(for: model.assetData)
                     )
                     .focused($focusedField)
                 }
@@ -40,9 +35,10 @@ struct SetPriceAlertScene: View {
             .cleanListRow()
 
             Section {
-                ListAssetItemView(model: model.assetItemViewModel(for: assetData))
+                ListAssetItemView(model: model.assetItemViewModel(for: model.assetData))
             }
         }
+        .bindQuery(model.assetQuery)
         .safeAreaView {
             safeAreaContent
         }
@@ -55,7 +51,7 @@ struct SetPriceAlertScene: View {
         .onChange(of: model.state.amount, onChangeAmount)
         .onAppear {
             focusedField = true
-            model.setAlertDirection(for: assetData.price)
+            model.setAlertDirection(for: model.assetData.price)
         }
     }
 }
@@ -85,9 +81,9 @@ extension SetPriceAlertScene {
     var safeAreaContent: some View {
         switch model.state.type {
         case .price:
-            inputAccessoryView(model.priceSuggestions(for: assetData.price))
+            inputAccessoryView(model.priceSuggestions(for: model.assetData.price))
         case .percentage:
-            inputAccessoryView(model.percentageSuggestions(for: assetData.price))
+            inputAccessoryView(model.percentageSuggestions(for: model.assetData.price))
         }
     }
 
@@ -106,7 +102,7 @@ extension SetPriceAlertScene {
 
 extension SetPriceAlertScene {
     func onChangeAmount(_: String, _: String) {
-        model.setAlertDirection(for: assetData.price)
+        model.setAlertDirection(for: model.assetData.price)
     }
 
     func onSelectSuggestion(_ suggestion: some SuggestionViewable) {

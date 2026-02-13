@@ -10,16 +10,16 @@ import Store
 final class PerpetualsPreviewViewModel {
     
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
-    
-    var positions: [PerpetualPositionData] = []
-    var walletBalance: WalletBalance = .zero
-    
-    var positionsRequest: PerpetualPositionsRequest
-    var walletBalanceRequest: PerpetualWalletBalanceRequest
-    
+
+    let positionsQuery: ObservableQuery<PerpetualPositionsRequest>
+    let walletBalanceQuery: ObservableQuery<PerpetualWalletBalanceRequest>
+
+    var positions: [PerpetualPositionData] { positionsQuery.value }
+    var walletBalance: WalletBalance { walletBalanceQuery.value }
+
     init(walletId: WalletId) {
-        self.positionsRequest = PerpetualPositionsRequest(walletId: walletId)
-        self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: walletId)
+        self.positionsQuery = ObservableQuery(PerpetualPositionsRequest(walletId: walletId), initialValue: [])
+        self.walletBalanceQuery = ObservableQuery(PerpetualWalletBalanceRequest(walletId: walletId), initialValue: .zero)
     }
     
     var tradePerpetualsSubtitle: String {
@@ -31,7 +31,7 @@ final class PerpetualsPreviewViewModel {
     }
     
     func updateWallet(walletId: WalletId) {
-        positionsRequest = PerpetualPositionsRequest(walletId: walletId)
-        walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: walletId)
+        positionsQuery.request = PerpetualPositionsRequest(walletId: walletId)
+        walletBalanceQuery.request = PerpetualWalletBalanceRequest(walletId: walletId)
     }
 }

@@ -1,11 +1,8 @@
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct AssetsRequest: ValueObservationQueryable {
-    public static var defaultValue: [AssetData] { [] }
+public struct AssetsRequest: DatabaseQueryable {
 
     static let defaultQueryLimit = 100
 
@@ -189,3 +186,5 @@ extension AssetsRequest {
             .fetchAll(db)
     }
 }
+
+extension AssetsRequest: Equatable {}

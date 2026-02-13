@@ -10,6 +10,7 @@ import PriceAlertServiceTestKit
 import ActivityServiceTestKit
 
 @testable import Assets
+@testable import Store
 
 extension SelectAssetViewModel {
     @MainActor
@@ -27,7 +28,7 @@ extension SelectAssetViewModel {
             priceAlertService: .mock(),
             activityService: .mock()
         )
-        model.assets = assets
+        model.assetsQuery.value = assets
         model.state = state
         return model
     }

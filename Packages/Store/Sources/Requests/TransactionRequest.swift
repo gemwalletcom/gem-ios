@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct TransactionRequest: ValueObservationQueryable {
-    public static var defaultValue: TransactionExtended { .empty }
+public struct TransactionRequest: DatabaseQueryable {
 
     private let walletId: WalletId
     private let transactionId: String
@@ -32,6 +29,8 @@ public struct TransactionRequest: ValueObservationQueryable {
         ).first ?? .empty
     }
 }
+
+extension TransactionRequest: Equatable {}
 
 extension TransactionExtended {
     public static let empty: TransactionExtended = {

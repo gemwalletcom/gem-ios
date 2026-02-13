@@ -16,8 +16,8 @@ public final class TransactionSceneViewModel {
     private let preferences: Preferences
     private let explorerService: ExplorerService
 
-    var request: TransactionRequest
-    var transactionExtended: TransactionExtended
+    public let query: ObservableQuery<TransactionRequest>
+    var transactionExtended: TransactionExtended { query.value }
     var isPresentingTransactionSheet: TransactionSheetType?
 
     public init(
@@ -28,8 +28,7 @@ public final class TransactionSceneViewModel {
     ) {
         self.preferences = preferences
         self.explorerService = explorerService
-        self.transactionExtended = transaction
-        self.request = TransactionRequest(walletId: walletId, transactionId: transaction.id)
+        self.query = ObservableQuery(TransactionRequest(walletId: walletId, transactionId: transaction.id), initialValue: transaction)
     }
 
     var title: String { model.titleTextValue.text }

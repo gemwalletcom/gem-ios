@@ -15,9 +15,9 @@ import GemstonePrimitives
 public final class ConnectionsViewModel {
     let service: ConnectionsService
     let walletConnectorPresenter: WalletConnectorPresenter?
-    
-    var request: ConnectionsRequest
-    var connections: [WalletConnection] = []
+
+    public let query: ObservableQuery<ConnectionsRequest>
+    var connections: [WalletConnection] { query.value }
 
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
@@ -29,7 +29,7 @@ public final class ConnectionsViewModel {
     ) {
         self.service = service
         self.walletConnectorPresenter = walletConnectorPresenter
-        self.request = ConnectionsRequest()
+        self.query = ObservableQuery(ConnectionsRequest(), initialValue: [])
     }
 
     var title: String { Localized.WalletConnect.title }

@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct PerpetualRequest: ValueObservationQueryable {
-    public static var defaultValue: PerpetualData { .empty }
+public struct PerpetualRequest: DatabaseQueryable {
 
     public let assetId: AssetId
 
@@ -28,6 +25,8 @@ public struct PerpetualRequest: ValueObservationQueryable {
 }
 
 // MARK: - Models Extensions
+
+extension PerpetualRequest: Equatable {}
 
 extension PerpetualData {
     public static var empty: PerpetualData {

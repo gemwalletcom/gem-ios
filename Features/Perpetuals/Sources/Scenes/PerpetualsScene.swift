@@ -58,8 +58,8 @@ struct PerpetualsScene: View {
             RecentsScene(
                 model: RecentsSceneViewModel(
                     walletId: model.wallet.walletId,
-                    types: model.recentsRequest.types,
-                    filters: model.recentsRequest.filters,
+                    types: model.recentsQuery.request.types,
+                    filters: model.recentsQuery.request.filters,
                     activityService: model.activityService,
                     onSelect: model.onSelectRecent
                 )

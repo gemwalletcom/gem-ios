@@ -14,8 +14,7 @@ import PrimitivesComponents
 @MainActor
 @Observable
 public final class SetPriceAlertViewModel {
-    private let walletId: WalletId
-    private let assetId: AssetId
+    private let asset: Asset
     private let priceAlertService: PriceAlertService
     private let onComplete: StringAction
     private let preferences = Preferences.standard
@@ -25,26 +24,22 @@ public final class SetPriceAlertViewModel {
     private let priceSuggestionPercent: Double = 5
 
     var state: SetPriceAlertViewModelState
-    
+
+    public let assetQuery: ObservableQuery<AssetRequest>
+    var assetData: AssetData { assetQuery.value }
+
     public init(
         walletId: WalletId,
-        assetId: AssetId,
+        asset: Asset,
         priceAlertService: PriceAlertService,
         price: Double? = nil,
         onComplete: StringAction
     ) {
-        self.walletId = walletId
-        self.assetId = assetId
+        self.asset = asset
         self.priceAlertService = priceAlertService
         self.onComplete = onComplete
         self.state = SetPriceAlertViewModelState(price: price)
-    }
-
-    var assetRequest: AssetRequest {
-        AssetRequest(
-            walletId: walletId,
-            assetId: assetId
-        )
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: walletId, assetId: asset.id), initialValue: .with(asset: asset))
     }
     
     func percentageSuggestions(for price: Price?) -> [PercentageSuggestion] {
@@ -178,7 +173,7 @@ public final class SetPriceAlertViewModel {
             }
         }()
         return PriceAlert(
-            assetId: assetId,
+            assetId: asset.id,
             currency: preferences.currency,
             price: price,
             pricePercentChange: pricePercentChange,
