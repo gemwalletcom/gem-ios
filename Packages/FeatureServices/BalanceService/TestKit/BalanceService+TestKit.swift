@@ -13,7 +13,7 @@ public extension BalanceService {
     static func mock(
         balanceStore: BalanceStore = .mock(),
         assetsService: AssetsService = .mock(),
-        chainServiceFactory: ChainServiceFactory = .mock()
+        chainServiceFactory: any ChainServiceFactorable = ChainServiceFactoryMock()
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,

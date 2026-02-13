@@ -18,7 +18,7 @@ import EventPresenterService
 public struct ConfirmServiceFactory {
     public static func create(
         keystore: any Keystore,
-        chainServiceFactory: ChainServiceFactory,
+        chainServiceFactory: any ChainServiceFactorable,
         walletsService: WalletsService,
         scanService: ScanService,
         balanceService: BalanceService,

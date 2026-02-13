@@ -165,6 +165,7 @@ let package = Package(
                 "Primitives",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "Blockchain",
+                .product(name: "BlockchainTestKit", package: "Blockchain"),
             ],
             path: "ChainService/TestKit"
         ),
