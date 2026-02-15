@@ -32,6 +32,7 @@ final class NavigationHandler: Sendable {
         self.walletService = walletService
     }
 
+    @MainActor
     func handlePush(_ userInfo: [AnyHashable: Any]) async {
         do {
             let notification = try PushNotification(from: userInfo)
@@ -101,30 +102,20 @@ extension NavigationHandler {
         switch notification {
         case .asset(let assetId):
             try await navigateToAsset(assetId)
-
         case .transaction(let walletId, let assetId, let transaction):
             try await navigateToTransaction(walletId: walletId, assetId: assetId, transaction: transaction)
-
         case .priceAlert(let assetId):
             let asset = try await assetsService.getOrFetchAsset(for: assetId)
             navigationState.wallet.append(Scenes.AssetPriceAlert(asset: asset, price: nil))
-
         case .buyAsset(let assetId, let amount):
             try await presentBuy(assetId: assetId, amount: amount)
-            return
-
         case .swapAsset(let fromId, let toId):
             try await presentSwap(from: fromId, to: toId)
-            return
-
         case .support:
             presenter.isPresentingSupport.wrappedValue = true
-
         case .rewards:
             navigationState.settings.append(Scenes.Referral(code: nil))
-
-        case .test, .unknown:
-            return
+        case .test, .unknown: break
         }
 
         selectTab(for: notification.selectTab)
@@ -149,11 +140,18 @@ extension NavigationHandler {
         guard let _ = try? walletService.getWallet(walletId: walletId) else {
             return
         }
-        walletService.setCurrent(for: walletId)
+
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
         try transactionsService.addTransaction(walletId: walletId, transaction: transaction)
         let transactionExtended = try transactionsService.getTransaction(walletId: walletId, transactionId: transaction.id.identifier)
+
+        if walletService.currentWalletId != walletId {
+            walletService.setCurrent(for: walletId)
+            await Task.yield()
+        }
+
         navigationState.wallet.setPath([Scenes.Asset(asset: asset), Scenes.Transaction(transaction: transactionExtended)])
+        navigationState.selectedTab = .wallet
     }
 
     private func presentSwap(from fromId: AssetId, to toId: AssetId?) async throws {
