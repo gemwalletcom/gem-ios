@@ -202,4 +202,16 @@ public struct Scenes {
             self.price = price
         }
     }
+
+    public struct Contacts: Hashable, Codable {
+        public init() {}
+    }
+
+    public struct ManageContact: Hashable, Codable {
+        public let contact: Primitives.Contact?
+
+        public init(contact: Primitives.Contact? = nil) {
+            self.contact = contact
+        }
+    }
 }

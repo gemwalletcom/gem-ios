@@ -39,6 +39,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case .activity: Localized.Activity.State.Empty.searchTitle
             }
         case .recents: Localized.RecentActivity.State.Empty.title
+        case .contacts: "No Contacts"
         }
     }
 
@@ -67,6 +68,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .markets: .none
         case .recents: Localized.RecentActivity.State.Empty.description
         case .notifications: Localized.Notifications.Inapp.State.Empty.description
+        case .contacts: "Add contacts to quickly send to your favorite addresses"
         }
     }
 
@@ -80,6 +82,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .search: Images.EmptyContent.search
         case .markets, .recents: Images.EmptyContent.activity
         case .notifications: Images.System.bell
+        case .contacts: Images.EmptyContent.contacts
         }
     }
 
@@ -87,7 +90,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         let actions: [EmptyAction]
 
         switch type {
-        case .priceAlerts, .stake, .walletConnect, .markets, .notifications, .recents:
+        case .priceAlerts, .stake, .walletConnect, .markets, .notifications, .recents, .contacts:
             actions = []
         case let .asset(_, buy, swap, isViewOnly):
             switch isViewOnly {

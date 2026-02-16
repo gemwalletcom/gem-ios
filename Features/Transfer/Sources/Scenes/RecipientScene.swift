@@ -5,6 +5,7 @@ import Style
 import Components
 import Primitives
 import PrimitivesComponents
+import Store
 
 struct RecipientScene: View {
     enum Field: Int, Hashable, Identifiable {
@@ -101,6 +102,7 @@ struct RecipientScene: View {
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .navigationTitle(model.tittle)
+        .observeQuery(request: $model.contactsRequest, value: $model.contacts)
         .onChange(of: model.addressInputModel.text, model.onChangeAddressText)
         .onChange(of: model.nameResolveState, model.onChangeNameResolverState)
     }

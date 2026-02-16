@@ -41,6 +41,7 @@ import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
 import SwiftHTTPClient
+import ContactService
 
 
 struct ServicesFactory {
@@ -251,6 +252,8 @@ struct ServicesFactory {
             store: storeManager.inAppNotificationStore
         )
 
+        let contactService = ContactService(store: storeManager.contactStore)
+
         let appLifecycleService = AppLifecycleService(
             preferences: preferences,
             connectionsService: connectionsService,
@@ -321,7 +324,8 @@ struct ServicesFactory {
             assetSearchService: assetSearchService,
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
-            fiatService: apiService
+            fiatService: apiService,
+            contactService: contactService
         )
     }
 }

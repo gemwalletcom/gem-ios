@@ -4,6 +4,7 @@ import Foundation
 
 enum RecipientAddressType: CaseIterable {
     case pinned
+    case contacts
     case wallets
     case view
 }

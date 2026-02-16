@@ -55,6 +55,7 @@ struct Migrations {
             // others
             try BannerRecord.create(db: db)
             try PriceAlertRecord.create(db: db)
+            try ContactRecord.create(db: db)
             
             // nft
             try NFTCollectionRecord.create(db: db)
@@ -386,6 +387,10 @@ struct Migrations {
             try? db.alter(table: AssetRecord.databaseTableName) {
                 $0.add(column: AssetRecord.Columns.hasImage.name, .boolean).defaults(to: false)
             }
+        }
+
+        migrator.registerMigration("Create \(ContactRecord.databaseTableName)") { db in
+            try? ContactRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

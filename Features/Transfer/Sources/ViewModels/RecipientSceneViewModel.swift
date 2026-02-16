@@ -15,6 +15,7 @@ import NodeService
 import SwiftUI
 import ScanService
 import Formatters
+import Store
 
 public typealias RecipientDataAction = ((RecipientData) -> Void)?
 
@@ -37,6 +38,9 @@ public final class RecipientSceneViewModel {
     var memo: String = ""
     var amount: String = ""
     var addressInputModel: InputValidationViewModel
+
+    public var contactsRequest: ContactsRequest
+    public var contacts: [Contact] = []
 
     public init(
         wallet: Wallet,
@@ -62,6 +66,8 @@ public final class RecipientSceneViewModel {
                 .address(asset)
             ]
         )
+
+        self.contactsRequest = ContactsRequest(chain: asset.chain)
     }
 
     var tittle: String { Localized.Transfer.Recipient.title }
@@ -183,7 +189,7 @@ extension RecipientSceneViewModel {
             recipient: Recipient(
                 name: recipient.name,
                 address: recipient.address,
-                memo: nil // TODO: - add memo later
+                memo: recipient.memo
             ),
             amount: .none
         )
@@ -227,27 +233,37 @@ extension RecipientSceneViewModel {
     }
 
     private func sectionRecipients(for section: RecipientAddressType) -> [ListItemValue<RecipientAddress>] {
-        walletService.wallets
-            .filter { $0.id != wallet.id }
-            .filter {
-                switch section {
-                case .view:
-                    $0.type == .view && !$0.isPinned && $0.accounts.first?.chain == asset.chain
-                case .wallets:
-                    ($0.type == .multicoin || $0.type == .single) && !$0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
-                case .pinned:
-                    $0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
+        switch section {
+        case .contacts:
+            contacts.map {
+                ListItemValue(value: RecipientAddress(name: $0.name, address: $0.address, memo: $0.memo))
+            }
+        case .pinned, .wallets, .view:
+            walletService.wallets
+                .filter { $0.id != wallet.id }
+                .filter {
+                    switch section {
+                    case .view:
+                        $0.type == .view && !$0.isPinned && $0.accounts.first?.chain == asset.chain
+                    case .wallets:
+                        ($0.type == .multicoin || $0.type == .single) && !$0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
+                    case .pinned:
+                        $0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
+                    case .contacts:
+                        false
+                    }
                 }
-            }
-            .compactMap {
-                guard let account = $0.accounts.first(where: { $0.chain == asset.chain }) else { return nil }
-                return ListItemValue(value: RecipientAddress(name: $0.name, address: account.address))
-            }
+                .compactMap {
+                    guard let account = $0.accounts.first(where: { $0.chain == asset.chain }) else { return nil }
+                    return ListItemValue(value: RecipientAddress(name: $0.name, address: account.address))
+                }
+        }
     }
 
     private func sectionTitle(for type: RecipientAddressType) -> String {
         switch type {
         case .pinned: Localized.Common.pinned
+        case .contacts: "Contacts"
         case .wallets: Localized.Transfer.Recipient.myWallets
         case .view: Localized.Transfer.Recipient.viewWallets
         }
@@ -256,6 +272,7 @@ extension RecipientSceneViewModel {
     private func sectionImage(for type: RecipientAddressType) -> Image {
         switch type {
         case .pinned: Images.System.pin
+        case .contacts: Images.System.person
         case .wallets: Images.System.wallet
         case .view: Images.System.eye
         }

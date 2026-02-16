@@ -19,4 +19,5 @@ public enum EmptyContentType {
     case markets
     case recents
     case notifications
+    case contacts
 }

@@ -12,12 +12,9 @@ public struct SystemImage {
     public static let paperplane = "paperplane"
     public static let chevronDown = "chevron.down"
     public static let chevronRight = "chevron.right"
-    public static let checklist = "checklist.unchecked"
     public static let clear = "multiply.circle.fill"
     public static let hide = "eye.slash.fill"
-    public static let list = "list.bullet"
     public static let faceid = "faceid"
-    public static let touchid = "touchid"
     public static let network = "network"
     public static let globe = "globe"
     public static let share = "square.and.arrow.up"
@@ -27,12 +24,10 @@ public struct SystemImage {
     public static let ellipsis = "ellipsis"
     public static let info = "info.circle"
     public static let eyeglasses = "eyeglasses"
-    public static let lockOpen = "lock.open"
     public static let plus = "plus"
     public static let plusCircle = "plus.circle"
     public static let minusCircle = "minus.circle"
     public static let eye = "eye.fill"
-    public static let searchNoResults = "exclamationmark.magnifyingglass"
     public static let search = "magnifyingglass"
     public static let exclamationmarkTriangleFill = "exclamationmark.triangle.fill"
     public static let exclamationmarkTriangle = "exclamationmark.triangle"
@@ -50,14 +45,13 @@ public struct SystemImage {
     public static let starFill = "star.fill"
     public static let textPageFill = "text.page.fill"
     public static let emoji = "face.smiling"
-    public static let pencil = "pencil"
-    public static let pencilLine = "pencil.line"
     public static let checkmarkCircle = "checkmark.circle"
     public static let circle = "circle"
     public static let dollarsign = "dollarsign"
     public static let wallet = "wallet.pass"
-    public static let eyeCircle = "eye.circle"
     public static let bitcoin = "bitcoinsign.arrow.trianglehead.counterclockwise.rotate.90"
+    public static let person = "person"
+    public static let personBadgePlus = "person.crop.circle.badge.plus"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
@@ -72,12 +66,9 @@ public struct SystemImage {
         (SystemImage.paste, "Paste"),
         (SystemImage.copy, "Copy"),
         (SystemImage.chevronDown, "Chevron Down"),
-        (SystemImage.checklist, "Checklist"),
         (SystemImage.clear, "Clear"),
         (SystemImage.hide, "Hide"),
-        (SystemImage.list, "List"),
         (SystemImage.faceid, "Face ID"),
-        (SystemImage.touchid, "Touch ID"),
         (SystemImage.network, "Network"),
         (SystemImage.globe, "Globe"),
         (SystemImage.share, "Share"),
@@ -87,10 +78,8 @@ public struct SystemImage {
         (SystemImage.ellipsis, "Ellipsis"),
         (SystemImage.info, "Info"),
         (SystemImage.eyeglasses, "Eyeglasses"),
-        (SystemImage.lockOpen, "Lock Open"),
         (SystemImage.plus, "Plus"),
         (SystemImage.eye, "Eye"),
-        (SystemImage.searchNoResults, "No Results"),
         (SystemImage.errorOccurred, "Error Ocurred"),
         (SystemImage.gallery, "Gallery"),
         (SystemImage.xmarkCircle, "X MarkCircle"),

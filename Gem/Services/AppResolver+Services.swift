@@ -30,6 +30,7 @@ import RewardsService
 import EventPresenterService
 import NotificationService
 import GemAPI
+import ContactService
 
 extension AppResolver {
     struct Services: Sendable {
@@ -78,6 +79,7 @@ extension AppResolver {
         let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
         let fiatService: any GemAPIFiatService
+        let contactService: ContactService
 
         init(
             assetsService: AssetsService,
@@ -123,7 +125,8 @@ extension AppResolver {
             assetSearchService: AssetSearchService,
             appLifecycleService: AppLifecycleService,
             inAppNotificationService: InAppNotificationService,
-            fiatService: any GemAPIFiatService
+            fiatService: any GemAPIFiatService,
+            contactService: ContactService
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -169,6 +172,7 @@ extension AppResolver {
             self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
             self.fiatService = fiatService
+            self.contactService = contactService
         }
     }
 }
