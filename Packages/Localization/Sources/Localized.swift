@@ -837,6 +837,8 @@ public enum Localized {
     public static let allTimePnl = Localized.tr("Localizable", "perpetual.all_time_pnl", fallback: "All Time PnL")
     /// Auto Close
     public static let autoClose = Localized.tr("Localizable", "perpetual.auto_close", fallback: "Auto Close")
+    /// Close
+    public static let close = Localized.tr("Localizable", "perpetual.close", fallback: "Close")
     /// Close %@
     public static func closeDirection(_ p1: Any) -> String {
       return Localized.tr("Localizable", "perpetual.close_direction", String(describing: p1), fallback: "Close %@")
@@ -847,6 +849,8 @@ public enum Localized {
     public static let direction = Localized.tr("Localizable", "perpetual.direction", fallback: "Direction")
     /// Entry Price
     public static let entryPrice = Localized.tr("Localizable", "perpetual.entry_price", fallback: "Entry Price")
+    /// High
+    public static let high = Localized.tr("Localizable", "perpetual.high", fallback: "High")
     /// Increase %@
     public static func increaseDirection(_ p1: Any) -> String {
       return Localized.tr("Localizable", "perpetual.increase_direction", String(describing: p1), fallback: "Increase %@")
@@ -857,6 +861,8 @@ public enum Localized {
     public static let leverage = Localized.tr("Localizable", "perpetual.leverage", fallback: "Leverage")
     /// Long
     public static let long = Localized.tr("Localizable", "perpetual.long", fallback: "Long")
+    /// Low
+    public static let low = Localized.tr("Localizable", "perpetual.low", fallback: "Low")
     /// Margin
     public static let margin = Localized.tr("Localizable", "perpetual.margin", fallback: "Margin")
     /// Margin Usage
@@ -867,6 +873,8 @@ public enum Localized {
     public static let modify = Localized.tr("Localizable", "perpetual.modify", fallback: "Modify")
     /// Modify Position
     public static let modifyPosition = Localized.tr("Localizable", "perpetual.modify_position", fallback: "Modify Position")
+    /// Open
+    public static let `open` = Localized.tr("Localizable", "perpetual.open", fallback: "Open")
     /// Open %@
     public static func openDirection(_ p1: Any) -> String {
       return Localized.tr("Localizable", "perpetual.open_direction", String(describing: p1), fallback: "Open %@")

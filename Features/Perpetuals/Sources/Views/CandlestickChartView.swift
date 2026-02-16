@@ -6,6 +6,7 @@ import Style
 import Primitives
 import PrimitivesComponents
 import Formatters
+import Components
 
 private struct ChartKey {
     static let date = "Date"
@@ -23,7 +24,7 @@ struct CandlestickChartView: View {
     private let lineModels: [ChartLineViewModel]
     private let formatter: CurrencyFormatter
 
-    @State private var selectedCandle: ChartPriceViewModel? {
+    @State private var selectedCandle: ChartCandleStick? {
         didSet {
             if let selectedCandle, selectedCandle.date != oldValue?.date {
                 vibrate()
@@ -44,26 +45,26 @@ struct CandlestickChartView: View {
         self.lineModels = lineModels
         self.formatter = formatter
     }
-    
+
     var body: some View {
         VStack {
             priceHeader
             chartView(bounds: ChartBounds(candles: data, lines: lineModels))
         }
     }
-    
+
     private var priceHeader: some View {
         VStack {
-            if let selectedCandle {
-                ChartPriceView(model: selectedCandle)
-            } else if let currentPrice = currentPriceModel {
-                ChartPriceView(model: currentPrice)
+            if let selectedPriceModel {
+                ChartPriceView(model: selectedPriceModel)
+            } else if let currentPriceModel {
+                ChartPriceView(model: currentPriceModel)
             }
         }
         .padding(.top, Spacing.small)
         .padding(.bottom, Spacing.tiny)
     }
-    
+
     private func chartView(bounds: ChartBounds) -> some View {
         let dateRange = (data.first?.date ?? Date())...(data.last?.date ?? Date())
 
@@ -81,13 +82,17 @@ struct CandlestickChartView: View {
                         DragGesture(minimumDistance: 0)
                             .onChanged { value in
                                 if let candle = findCandle(location: value.location, proxy: proxy, geometry: geometry) {
-                                    selectedCandle = createPriceModel(for: candle)
+                                    selectedCandle = candle
                                 }
                             }
                             .onEnded { _ in
                                 selectedCandle = nil
                             }
                     )
+
+                if let selectedCandle {
+                    tooltipOverlay(for: selectedCandle, proxy: proxy, geometry: geometry)
+                }
             }
         }
         .chartXAxis {
@@ -133,7 +138,7 @@ struct CandlestickChartView: View {
 
     private var currentPriceColor: Color {
         guard let lastCandle = data.last else { return Colors.gray }
-        return lastCandle.close >= lastCandle.open ? Colors.green : Colors.red
+        return PriceChangeColor.color(for: lastCandle.close - lastCandle.open)
     }
 
     @ChartContentBuilder
@@ -145,7 +150,7 @@ struct CandlestickChartView: View {
                 yEnd: .value(ChartKey.high, candle.high)
             )
             .lineStyle(StrokeStyle(lineWidth: 1))
-            .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
+            .foregroundStyle(PriceChangeColor.color(for: candle.close - candle.open))
 
             RectangleMark(
                 x: .value(ChartKey.date, candle.date),
@@ -153,7 +158,7 @@ struct CandlestickChartView: View {
                 yEnd: .value(ChartKey.close, candle.close),
                 width: .fixed(4)
             )
-            .foregroundStyle(candle.close >= candle.open ? Colors.green : Colors.red)
+            .foregroundStyle(PriceChangeColor.color(for: candle.close - candle.open))
         }
     }
 
@@ -192,12 +197,10 @@ struct CandlestickChartView: View {
 
     @ChartContentBuilder
     private var selectionMarks: some ChartContent {
-        if let selectedCandle,
-           let selectedDate = selectedCandle.date,
-           let selectedCandleData = data.first(where: { abs($0.date.timeIntervalSince(selectedDate)) < 1 }) {
+        if let selectedCandle {
             PointMark(
-                x: .value(ChartKey.date, selectedDate),
-                y: .value(ChartKey.price, selectedCandleData.close)
+                x: .value(ChartKey.date, selectedCandle.date),
+                y: .value(ChartKey.price, selectedCandle.close)
             )
             .symbol {
                 Circle()
@@ -206,45 +209,61 @@ struct CandlestickChartView: View {
                     .frame(width: 12)
             }
 
-            RuleMark(x: .value(ChartKey.date, selectedDate))
+            RuleMark(x: .value(ChartKey.date, selectedCandle.date))
                 .foregroundStyle(Colors.blue)
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
         }
     }
-    
+
     private var currentPriceModel: ChartPriceViewModel? {
-        guard let lastCandle = data.last,
-              let base = basePrice else { return nil }
-        return ChartPriceViewModel(
-            period: period,
-            date: nil,
-            price: lastCandle.close,
-            priceChangePercentage: PriceChangeCalculator.calculate(.percentage(from: base, to: lastCandle.close)),
-            formatter: formatter
-        )
+        guard let lastCandle = data.last, let base = basePrice else { return nil }
+        return priceModel(for: lastCandle, base: base)
     }
 
-    private func createPriceModel(for candle: ChartCandleStick) -> ChartPriceViewModel {
-        let base = basePrice ?? data.first?.close ?? candle.close
-        return ChartPriceViewModel(
+    private var selectedPriceModel: ChartPriceViewModel? {
+        guard let selectedCandle else { return nil }
+        let base = basePrice ?? data.first?.close ?? selectedCandle.close
+        return priceModel(for: selectedCandle, base: base, date: selectedCandle.date)
+    }
+
+    private func priceModel(for candle: ChartCandleStick, base: Double, date: Date? = nil) -> ChartPriceViewModel {
+        ChartPriceViewModel(
             period: period,
-            date: candle.date,
+            date: date,
             price: candle.close,
             priceChangePercentage: PriceChangeCalculator.calculate(.percentage(from: base, to: candle.close)),
             formatter: formatter
         )
     }
-    
+
+    @ViewBuilder
+    private func tooltipOverlay(for candle: ChartCandleStick, proxy: ChartProxy, geometry: GeometryProxy) -> some View {
+        let isRightHalf: Bool = {
+            guard let plotFrame = proxy.plotFrame,
+                  let xPosition = proxy.position(forX: candle.date) else { return false }
+            return xPosition > geometry[plotFrame].size.width / 2
+        }()
+
+        CandleTooltipView(model: CandleTooltipViewModel(candle: candle, formatter: formatter))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isRightHalf ? .topLeading : .topTrailing)
+            .padding(.leading, Spacing.small)
+            .padding(.top, Spacing.small)
+            .padding(.trailing, Spacing.extraLarge + Spacing.medium)
+            .transition(.opacity)
+            .animation(.easeInOut(duration: 0.15), value: isRightHalf)
+            .allowsHitTesting(false)
+    }
+
     private func findCandle(location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) -> ChartCandleStick? {
         guard let plotFrame = proxy.plotFrame else { return nil }
-        
+
         let relativeXPosition = location.x - geometry[plotFrame].origin.x
-        
+
         if let date = proxy.value(atX: relativeXPosition) as Date? {
             // Find the closest candle
             var minDistance: TimeInterval = .infinity
             var closestCandle: ChartCandleStick?
-            
+
             for candle in data {
                 let distance = abs(candle.date.timeIntervalSince(date))
                 if distance < minDistance {
@@ -252,13 +271,13 @@ struct CandlestickChartView: View {
                     closestCandle = candle
                 }
             }
-            
+
             return closestCandle
         }
-        
+
         return nil
     }
-    
+
     private func vibrate() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
