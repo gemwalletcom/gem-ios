@@ -512,7 +512,6 @@ struct TransferAmountCalculatorTests {
         }
     }
 
-
     @Test
     func testPerpetualOpen() {
         #expect(throws: Never.self) {

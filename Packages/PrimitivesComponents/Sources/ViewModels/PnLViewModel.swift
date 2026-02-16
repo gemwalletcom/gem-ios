@@ -3,6 +3,7 @@
 import Foundation
 import Formatters
 import Localization
+import Primitives
 import Style
 import SwiftUI
 import Components
@@ -38,7 +39,7 @@ public struct PnLViewModel {
 
     public var percent: Double {
         guard let pnl, marginAmount > 0 else { return 0 }
-        return (pnl / marginAmount) * 100
+        return PriceChangeCalculator.calculate(.percentage(from: marginAmount, to: marginAmount + pnl))
     }
 
     public var color: Color { valueChange.color }

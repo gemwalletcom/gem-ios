@@ -105,7 +105,6 @@ public struct ListItemView: View {
     }
 }
 
-
 // MARK: - UI Components
 
 // MARK: - TitleView
@@ -204,8 +203,6 @@ extension ListItemView {
         }
     }
 }
-
-
 
 // MARK: - Previews
 

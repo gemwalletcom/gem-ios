@@ -37,7 +37,6 @@ extension WalletImportType {
     }
 }
 
-
 extension WalletImportType: Equatable {
     public static func == (lhs: WalletImportType, rhs: WalletImportType) -> Bool {
         lhs.id == rhs.id

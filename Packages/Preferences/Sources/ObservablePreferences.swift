@@ -110,5 +110,3 @@ extension EnvironmentValues {
     @Entry public var observablePreferences: ObservablePreferences = .default
 }
 
-
-

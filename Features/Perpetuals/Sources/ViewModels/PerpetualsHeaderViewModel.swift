@@ -1,11 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import SwiftUI
 import Components
 import Primitives
 import PrimitivesComponents
 import Formatters
 import Localization
+import Style
 
 struct PerpetualsHeaderViewModel {
     let walletType: WalletType
@@ -31,6 +33,7 @@ extension PerpetualsHeaderViewModel: HeaderViewModel {
         Localized.Wallet
             .availableBalance(currencyFormatter.string(balance.available))
     }
+    var subtitleColor: Color { Colors.gray }
 
     var buttons: [HeaderButton] {
         [

@@ -1,9 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import SwiftUI
 import Components
 import Primitives
 import PrimitivesComponents
+import Style
 
 struct AssetHeaderViewModel: Sendable {
     let assetDataModel: AssetDataViewModel
@@ -15,21 +17,23 @@ extension AssetHeaderViewModel: HeaderViewModel {
     var isWatchWallet: Bool {
         walletModel.wallet.type == .view
     }
-    
+
     var assetImage: AssetImage? {
         assetDataModel.assetImage
     }
-    
+
     var title: String {
         assetDataModel.totalBalanceTextWithSymbol
     }
-    
+
     var subtitle: String? {
         if assetDataModel.fiatBalanceText.isEmpty {
             return .none
         }
         return assetDataModel.fiatBalanceText
     }
+
+    var subtitleColor: Color { Colors.gray }
 
     var buttons: [HeaderButton] {
         let values: [(type: HeaderButtonType, isShown: Bool, isEnabled: Bool)] = [

@@ -47,6 +47,10 @@ spm-resolve:
 spm-resolve-all:
     @sh scripts/spm-resolve-all.sh
 
+lint:
+    @echo "==> Running SwiftLint"
+    @swiftlint --fix --quiet
+
 _build action extra_flags="":
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \

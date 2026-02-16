@@ -7,7 +7,6 @@ import WalletCore
 internal import BigInt
 
 struct TronSigner: Signable {
-
     func sign(
         input: SignerInput,
         contract: WalletCore.TronTransaction.OneOf_ContractOneof,
@@ -16,8 +15,14 @@ struct TronSigner: Signable {
         privateKey: Data
     ) throws -> String {
         guard case .tron(
-            let blockNumber, let blockVersion, let blockTimestamp, let transactionTreeRoot,
-            let parentHash, let witnessAddress, _) = input.metadata
+            let blockNumber,
+            let blockVersion,
+            let blockTimestamp,
+            let transactionTreeRoot,
+            let parentHash,
+            let witnessAddress,
+            _
+        ) = input.metadata
         else {
             throw AnyError("Missing tron metadata")
         }
@@ -90,8 +95,13 @@ struct TronSigner: Signable {
         )
     }
 
+    func signData(input: SignerInput, privateKey: Data) throws -> String {
+        try ChainSigner(chain: input.asset.chain)
+            .signData(input: input, privateKey: privateKey)
+    }
+
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case let .stake(_, stakeType) = input.type else {
+        guard case .stake(_, let stakeType) = input.type else {
             throw AnyError("Invalid input type for staking")
         }
         guard case .tron(_, _, _, _, _, _, let stakeData) = input.metadata else {
@@ -129,12 +139,14 @@ struct TronSigner: Signable {
             contract = .withdrawBalance(
                 TronWithdrawBalanceContract.with {
                     $0.ownerAddress = input.senderAddress
-                })
+                }
+            )
         case .withdraw:
             contract = .withdrawExpireUnfreeze(
                 TronWithdrawExpireUnfreezeContract.with {
                     $0.ownerAddress = input.senderAddress
-                })
+                }
+            )
         case .freeze(let data):
             switch data.freezeType {
             case .freeze:
@@ -143,14 +155,16 @@ struct TronSigner: Signable {
                         $0.ownerAddress = input.senderAddress
                         $0.frozenBalance = input.value.asInt64
                         $0.resource = data.resource.key
-                    })
+                    }
+                )
             case .unfreeze:
                 contract = .unfreezeBalanceV2(
                     TronUnfreezeBalanceV2Contract.with {
                         $0.ownerAddress = input.senderAddress
                         $0.unfreezeBalance = input.value.asInt64
                         $0.resource = data.resource.key
-                    })
+                    }
+                )
             }
         }
         return try [

@@ -18,8 +18,6 @@ struct ChartValuesTests {
         #expect(values.firstValue == 100)
         #expect(values.lastValue == 120)
         #expect(values.baseValue == 100)
-        #expect(values.percentageChange(from: 100, to: 150) == 50)
-        #expect(values.percentageChange(from: 0, to: 100) == 0)
 
         #expect(throws: Error.self) { _ = try ChartValues.from(charts: []) }
         #expect(ChartValues.mock(values: [100, 100]).hasVariation == false)

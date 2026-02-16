@@ -113,7 +113,6 @@ extension WalletsService: PriceUpdater {
 
 // MARK: - BalanceUpdater
 
-
 extension WalletsService: BalanceUpdater {
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
         try await assetSyncService.updateAssets(walletId: walletId, assetIds: assetIds)

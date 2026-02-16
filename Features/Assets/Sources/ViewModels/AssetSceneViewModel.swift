@@ -201,7 +201,6 @@ public final class AssetSceneViewModel: Sendable {
     }
 }
 
-
 // MARK: - Business Logic
 
 extension AssetSceneViewModel {

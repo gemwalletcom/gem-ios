@@ -52,7 +52,6 @@ public final class SwapDetailsViewModel {
         self.swapProviderSelectAction = swapProviderSelectAction
     }
     
-    
     // MARK: - Provider
     var providerText: String { providerViewModel.providerText }
     var providerImage: AssetImage { providerViewModel.providerImage }

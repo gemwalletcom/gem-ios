@@ -25,7 +25,6 @@ public enum ChainCoreError: String, Error, Equatable {
         }
     }
     
-    
     public static func fromError(_ error: Error) -> ChainCoreError? {
         for errorCase in [ChainCoreError.dustThreshold, .feeRateMissed, .cantEstimateFee, .incorrectAmount] {
             if error.localizedDescription.contains(errorCase.rawValue) {

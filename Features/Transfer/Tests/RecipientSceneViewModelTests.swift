@@ -144,6 +144,3 @@ extension RecipientSceneViewModel {
     }
 }
 
-
-
-

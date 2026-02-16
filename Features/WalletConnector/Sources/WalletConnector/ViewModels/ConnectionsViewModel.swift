@@ -38,7 +38,6 @@ public final class ConnectionsViewModel {
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
     var docsUrl: URL { Docs.url(.walletConnect) }
     
-    
     var sections: [ListSection<WalletConnection>] {
         let grouped = Dictionary(grouping: connections, by: { $0.wallet })
         return grouped.keys
