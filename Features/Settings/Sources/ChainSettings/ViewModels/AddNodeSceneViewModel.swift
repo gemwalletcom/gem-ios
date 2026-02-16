@@ -24,7 +24,7 @@ final class AddNodeSceneViewModel {
     var state: StateViewType<AddNodeResultViewModel> = .noData
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
-    var debounceInterval: Duration? = .Debounce.normal
+    var debounceInterval: Duration? = .debounce
 
     init(chain: Chain, nodeService: NodeService, chainServiceFactory: ChainServiceFactory) {
         self.chain = chain
@@ -61,7 +61,7 @@ final class AddNodeSceneViewModel {
 
 extension AddNodeSceneViewModel {
     func onChangeInput(_ text: String) async {
-        debounceInterval = .Debounce.normal
+        debounceInterval = .debounce
 
         guard text.isNotEmpty, urlInputModel.isValid else {
             state = .noData

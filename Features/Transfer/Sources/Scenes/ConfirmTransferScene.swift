@@ -31,7 +31,7 @@ public struct ConfirmTransferScene: View {
         .frame(maxWidth: .infinity)
         .debounce(
             value: model.feeModel.priority,
-            interval: nil,
+            interval: .none,
             action: model.onChangeFeePriority
         )
         .taskOnce { model.fetch() }

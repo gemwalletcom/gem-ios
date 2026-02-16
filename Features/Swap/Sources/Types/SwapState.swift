@@ -6,17 +6,14 @@ import Primitives
 import struct Gemstone.SwapperQuote
 
 public struct SwapState: Sendable {
-    public var fetch: SwapFetchState
     public var quotes: StateViewType<[SwapperQuote]>
     public var swapTransferData: StateViewType<TransferData>
 
     public init(
-        fetch: SwapFetchState = .idle,
-        availability: StateViewType<[SwapperQuote]> = .noData,
+        quotes: StateViewType<[SwapperQuote]> = .noData,
         swapTransferData: StateViewType<TransferData> = .noData
     ) {
-        self.fetch = fetch
-        self.quotes = availability
+        self.quotes = quotes
         self.swapTransferData = swapTransferData
     }
 

@@ -21,7 +21,6 @@ import Validators
 @Observable
 public final class SwapSceneViewModel {
     static let inputPercentSuggestions = [25, 50, 100].map { PercentageSuggestion(value: $0) }
-    static let quoteTaskDebounceTimeout: Duration = .Debounce.fast
 
     public let wallet: Wallet
     public let walletsService: WalletsService
@@ -44,6 +43,7 @@ public final class SwapSceneViewModel {
     var selectedSwapQuote: SwapperQuote?
     var amountInputModel: InputValidationViewModel = InputValidationViewModel(mode: .onDemand)
     var toValue: String = ""
+    var fetchTrigger: SwapFetchTrigger?
 
     private let onSwap: TransferDataAction
     private let swapQuotesProvider: any SwapQuotesProvidable
@@ -177,35 +177,9 @@ public final class SwapSceneViewModel {
 // MARK: - Business Logic
 
 extension SwapSceneViewModel {
-    func fetch(delay: Duration? = nil) {
-        do {
-            resetToValue()
-            let input = try SwapQuoteInput.create(
-                fromAsset: fromAsset,
-                toAsset: toAsset,
-                fromValue: amountInputModel.text,
-                formatter: formatter
-            )
-            swapState.fetch = .fetch(
-                input: input,
-                delay: delay
-            )
-        } catch {
-            swapState.quotes = .noData
-            swapState.swapTransferData = .noData
-            swapState.fetch = .idle
-            selectedSwapQuote = nil
-        }
-        
-        Task {
-            let assetIds = [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
-            try await walletsService.addPrices(assetIds: assetIds)
-        }
-    }
-
-    func onFetchStateChange(state: SwapFetchState) async {
-        guard case let .fetch(input, _) = state else { return }
-        await performFetch(input: input)
+    func fetch() async {
+        guard let currentInput else { return }
+        await performFetch(input: currentInput)
     }
 
     func onChangePair(_ _: SwapPairSelectorViewModel, _ newModel: SwapPairSelectorViewModel) {
@@ -219,7 +193,10 @@ extension SwapSceneViewModel {
     }
 
     func onChangeFromValue(_: String, _: String) {
-        fetch(delay: SwapSceneViewModel.quoteTaskDebounceTimeout)
+        if let input = fetchTrigger?.input, input == currentInput {
+            return
+        }
+        setFetchTrigger(isImmediate: false)
     }
 
     func onChangeFromAsset(old: AssetData?, new: AssetData?) {
@@ -227,8 +204,8 @@ extension SwapSceneViewModel {
 
         resetValues()
         selectedSwapQuote = nil
-        fetch()
         updateValidators(for: new)
+        setFetchTrigger(isImmediate: true)
     }
 
     func onChangeToAsset(old: AssetData?, new: AssetData?) {
@@ -236,7 +213,7 @@ extension SwapSceneViewModel {
 
         resetToValue()
         selectedSwapQuote = nil
-        fetch()
+        setFetchTrigger(isImmediate: true)
     }
 
     func onSelectFromMaxBalance() {
@@ -246,6 +223,7 @@ extension SwapSceneViewModel {
     func onSelectPercent(_ percent: Int) {
         guard let fromAsset else { return }
         applyPercentToFromValue(percent: percent, assetData: fromAsset)
+        setFetchTrigger(isImmediate: true)
     }
 
     func onSelectSwapConfirmation() {
@@ -259,6 +237,7 @@ extension SwapSceneViewModel {
     func onSelectPriceImpactInfo() {
         isPresentingInfoSheet = .info(.priceImpact)
     }
+
 
     func onSelectAssetPay() {
         isPresentingInfoSheet = .selectAsset(.pay)
@@ -299,6 +278,15 @@ extension SwapSceneViewModel {
 // MARK: - Private
 
 extension SwapSceneViewModel {
+    private var currentInput: SwapQuoteInput? {
+        try? SwapQuoteInput.create(
+            fromAsset: fromAsset,
+            toAsset: toAsset,
+            fromValue: amountInputModel.text,
+            formatter: formatter
+        )
+    }
+
     private func resetValues() {
         resetToValue()
         amountInputModel.text = .empty
@@ -329,6 +317,23 @@ extension SwapSceneViewModel {
     private func applyMinAmount(_ minAmount: String, asset: Asset) {
         guard let value = BigInt(minAmount) else { return }
         amountInputModel.text = formatter.format(value: value, decimals: asset.decimals.asInt)
+        setFetchTrigger(isImmediate: true)
+    }
+
+    private func setFetchTrigger(isImmediate: Bool) {
+        guard let input = currentInput else {
+            swapState.quotes = .noData
+            swapState.swapTransferData = .noData
+            selectedSwapQuote = nil
+            fetchTrigger = nil
+            return
+        }
+        fetchTrigger = SwapFetchTrigger(input: input, isImmediate: isImmediate)
+
+        Task {
+            let assetIds = [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
+            try await walletsService.addPrices(assetIds: assetIds)
+        }
     }
 
     private func swap() {
@@ -360,9 +365,9 @@ extension SwapSceneViewModel {
     }
     private func performFetch(input: SwapQuoteInput) async {
         do {
-            // reset transfer data on quotes fetch
             swapState.swapTransferData = .noData
             swapState.quotes = .loading
+            resetToValue()
             let swapQuotes = try await swapQuotesProvider.fetchQuotes(
                 wallet: wallet,
                 fromAsset: input.fromAsset,
@@ -371,7 +376,6 @@ extension SwapSceneViewModel {
                 useMaxAmount: input.useMaxAmount
             )
 
-            swapState.fetch = .data(quotes: swapQuotes)
             swapState.quotes = .data(swapQuotes)
             selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
             if let selectedSwapQuote, let asset = toAsset?.asset {
@@ -380,7 +384,6 @@ extension SwapSceneViewModel {
         } catch {
             if !error.isCancelled && !Task.isCancelled {
                 swapState.quotes = .error(error)
-                swapState.fetch = .data(quotes: [])
                 selectedSwapQuote = nil
                 amountInputModel.update(error: nil)
                 debugLog("SwapScene get quotes error: \(error)")
@@ -415,7 +418,7 @@ extension SwapSceneViewModel {
 
     private func onSelectActionButton() {
         switch buttonViewModel.buttonAction {
-        case .retryQuotes: fetch()
+        case .retryQuotes: setFetchTrigger(isImmediate: true)
         case .retrySwap: swap()
         case .insufficientBalance: break
         case .swap:

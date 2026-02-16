@@ -66,11 +66,9 @@ public struct SwapScene: View {
             value: $model.toAsset,
             action: model.onChangeToAsset
         )
-        .debounce(
-            value: model.swapState.fetch,
-            interval: model.swapState.fetch.delay,
-            action: model.onFetchStateChange
-        )
+        .debouncedTask(id: model.fetchTrigger, interval: .debounce) {
+            await model.fetch()
+        }
         .debounce(
             value: model.assetIds,
             initial: true,
