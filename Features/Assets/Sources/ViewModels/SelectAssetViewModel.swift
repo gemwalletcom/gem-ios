@@ -238,7 +238,11 @@ extension SelectAssetViewModel {
     func handleAction(assetId: AssetId, enabled: Bool) async {
         switch selectType {
         case .manage:
-            await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
+            do {
+                try await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
+            } catch {
+                debugLog("SelectAssetViewModel handleAction error: \(error)")
+            }
         case .send, .receive, .buy, .swap, .priceAlert, .deposit, .withdraw: break
         }
     }

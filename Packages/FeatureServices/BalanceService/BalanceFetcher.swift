@@ -5,9 +5,9 @@ import ChainService
 import Primitives
 
 struct BalanceFetcher: Sendable {
-    private let chainServiceFactory: ChainServiceFactory
+    private let chainServiceFactory: any ChainServiceFactorable
     
-    init(chainServiceFactory: ChainServiceFactory) {
+    init(chainServiceFactory: any ChainServiceFactorable) {
         self.chainServiceFactory = chainServiceFactory
     }
     

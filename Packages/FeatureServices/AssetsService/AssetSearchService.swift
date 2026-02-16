@@ -22,16 +22,9 @@ public struct AssetSearchService: Sendable {
         priorityAssetsQuery: String?,
         tag: AssetTag?
     ) async throws -> [AssetBasic] {
-        let chains: [Chain] = {
-            switch wallet.type {
-            case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
-            case .multicoin: []
-            }
-        }()
-
         let assets = try await assetsService.searchAssets(
             query: query,
-            chains: chains,
+            chains: WalletSearchScope.chains(for: wallet),
             tags: [tag].compactMap { $0 }
         )
 

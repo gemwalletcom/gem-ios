@@ -244,7 +244,11 @@ public final class RewardsViewModel: Sendable {
             toastMessage = ToastMessage.success(Localized.Common.done)
             if let asset = result.redemption.option.asset {
                 Task {
-                    await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id)
+                    do {
+                        try await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id)
+                    } catch {
+                        debugLog("RewardsViewModel enable reward asset error: \(error)")
+                    }
                 }
             }
         } catch {

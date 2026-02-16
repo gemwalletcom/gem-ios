@@ -30,9 +30,5 @@ public struct Constants {
         )
     }
 
-    public static let nodesWebSocketURL = URL(string: "wss://gemnodes.com")!
-    public static let nodesWebSocketEuropeURL = URL(string: "wss://eu.gemnodes.com")!
-    public static let nodesWebSocketAsiaURL = URL(string: "wss://asia.gemnodes.com")!
-
     public static let deviceStreamWebSocketURL = URL(string: "wss://api.gemwallet.com/v2/devices/stream")!
 }

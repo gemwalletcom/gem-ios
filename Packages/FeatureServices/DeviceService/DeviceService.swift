@@ -90,9 +90,11 @@ public struct DeviceService: DeviceServiceable {
     }
 
     public func updateAuthTokenIfNeeded() async throws {
-        guard preferences.isDeviceRegistered, shouldUpdateAuthToken() else { return }
-        let token = try await deviceProvider.getDeviceToken()
-        try securePreferences.setAuthToken(token)
+        try await Self.serialExecutor.execute {
+            guard preferences.isDeviceRegistered, shouldUpdateAuthToken() else { return }
+            let token = try await deviceProvider.getDeviceToken()
+            try securePreferences.setAuthToken(token)
+        }
     }
 
     private func shouldUpdateAuthToken() -> Bool {
