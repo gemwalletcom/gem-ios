@@ -66,7 +66,7 @@ public struct SwapScene: View {
             value: $model.toAsset,
             action: model.onChangeToAsset
         )
-        .debouncedTask(id: model.fetchTrigger, interval: .Debounce.fast) {
+        .debouncedTask(id: model.fetchTrigger, interval: .debounce) {
             await model.fetch()
         }
         .debounce(

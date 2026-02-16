@@ -5,7 +5,7 @@ import SwiftUI
 public extension View {
     func debouncedTask<T: DebouncableTrigger>(
         id trigger: T?,
-        interval: Duration = .Debounce.normal,
+        interval: Duration = .debounce,
         action: @Sendable @escaping () async -> Void
     ) -> some View {
         task(id: trigger) {
