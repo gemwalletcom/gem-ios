@@ -9,4 +9,5 @@ public enum WalletConnectorTransaction {
     case sui(String, TransferDataOutputType)
     case ton(String, TransferDataOutputType)
     case bitcoin(String, TransferDataOutputType)
+    case tron(String, TransferDataOutputType)
 }

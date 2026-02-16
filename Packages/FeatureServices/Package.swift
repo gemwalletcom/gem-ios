@@ -105,7 +105,6 @@ let package = Package(
                 "Formatters",
                 .product(name: "ChainService", package: "ChainServices"),
                 "AssetsService",
-                "Formatters"
             ],
             path: "BalanceService",
             exclude: ["TestKit"]
