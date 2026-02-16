@@ -8,11 +8,13 @@ import Primitives
 import SwiftUI
 import PrimitivesComponents
 import struct Gemstone.SwapperQuote
+import enum Gemstone.SwapperError
 
 enum SwapButtonAction: Equatable {
     case retryQuotes
     case retrySwap
     case insufficientBalance(asset: Asset)
+    case useMinAmount(amount: String, asset: Asset)
     case swap
 }
 
@@ -39,11 +41,13 @@ struct SwapButtonViewModel: StateButtonViewable {
         switch buttonAction {
         case .retryQuotes, .retrySwap: Localized.Common.tryAgain
         case .insufficientBalance(let asset): Localized.Transfer.insufficientBalance(asset.symbol)
+        case .useMinAmount: Localized.Swap.useMinimumAmount
         case .swap: Localized.Wallet.swap
         }
     }
 
     var buttonAction: SwapButtonAction {
+        if let useMinAmount { return useMinAmount }
         if canRetryQuotes { return .retryQuotes }
         if canRetrySwap { return .retrySwap }
         if !isAmountValid, let fromAsset { return .insufficientBalance(asset: fromAsset.asset) }
@@ -55,6 +59,7 @@ struct SwapButtonViewModel: StateButtonViewable {
         switch buttonAction {
         case .retryQuotes: swapState.quotes.isLoading ? .primary(swapState.quotes) : .primary(.normal)
         case .insufficientBalance: .primary(.disabled)
+        case .useMinAmount: .primary(.normal)
         case .retrySwap: swapState.swapTransferData.isLoading ? .primary(swapState.swapTransferData) : .primary(.normal)
         case .swap: swapState.swapTransferData.isLoading ? .primary(swapState.swapTransferData) : .primary(swapState.quotes)
         }
@@ -67,6 +72,14 @@ struct SwapButtonViewModel: StateButtonViewable {
 // MARK: - Private
 
 extension SwapButtonViewModel {
+    private var useMinAmount: SwapButtonAction? {
+        guard case .error(let error) = swapState.quotes,
+              case .InputAmountError(let amount) = error as? SwapperError,
+              let amount,
+              let fromAsset else { return nil }
+        return .useMinAmount(amount: amount, asset: fromAsset.asset)
+    }
+
     private var canRetryQuotes: Bool {
         guard case .error(let error) = swapState.quotes,
               let retryableError = error as? RetryableError else { return false }
