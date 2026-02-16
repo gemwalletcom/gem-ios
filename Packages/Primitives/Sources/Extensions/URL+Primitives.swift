@@ -45,4 +45,15 @@ extension URL {
             host == domain || host.hasSuffix(".\(domain)")
         }
     }
+
+    public func toWebSocketURL() -> URL {
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
+            return self
+        }
+
+        components.scheme = components.scheme?
+            .lowercased()
+            .replacingOccurrences(of: "http", with: "ws")
+        return components.url ?? self
+    }
 }

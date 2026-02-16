@@ -21,7 +21,7 @@ public extension TransactionStateService {
         stakeService: StakeService = .mock(),
         earnService: any EarnServiceable = MockEarnService(),
         nftService: NFTService = .mock(),
-        chainServiceFactory: ChainServiceFactory = .mock()
+        chainServiceFactory: any ChainServiceFactorable = ChainServiceFactoryMock()
     ) -> TransactionStateService {
         TransactionStateService(
             transactionStore: transactionStore,

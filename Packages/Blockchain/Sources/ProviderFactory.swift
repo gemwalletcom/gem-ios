@@ -48,23 +48,4 @@ extension Chain {
             )
         )
     }
-
-    public var defaultWebSocketUrl: URL {
-        Constants.nodesWebSocketURL.appending(path: webSocketPath)
-    }
-
-    public var europeWebSocketUrl: URL {
-        Constants.nodesWebSocketEuropeURL.appending(path: webSocketPath)
-    }
-
-    public var asiaWebSocketUrl: URL {
-        Constants.nodesWebSocketAsiaURL.appending(path: webSocketPath)
-    }
-
-    private var webSocketPath: String {
-        switch self {
-        case .hyperCore: "hyperliquid/ws"
-        default: "\(rawValue.lowercased())/ws"
-        }
-    }
 }

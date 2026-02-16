@@ -13,14 +13,14 @@ import GemstonePrimitives
 @Observable
 @MainActor
 public final class AddTokenViewModel {
-    let service: AddTokenService
+    private let service: any AddTokenServable
 
     var state: StateViewType<AddAssetViewModel> = .noData
     var input: AddTokenInput
 
     var isPresentingScanner = false
 
-    public init(wallet: Wallet, service: AddTokenService) {
+    public init(wallet: Wallet, service: any AddTokenServable) {
         self.service = service
         self.input = AddTokenInput(chains: wallet.chainsWithTokens)
     }

@@ -5,7 +5,6 @@ import Components
 import Primitives
 import SwiftUI
 import Style
-import WalletsService
 import BigInt
 import Formatters
 

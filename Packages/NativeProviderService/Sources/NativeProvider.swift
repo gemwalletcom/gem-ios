@@ -4,7 +4,6 @@ import Foundation
 
 internal import CryptoKit
 import protocol Gemstone.AlienProvider
-import struct Gemstone.AlienResponse
 import struct Gemstone.AlienTarget
 import struct Gemstone.AlienResponse
 import enum Gemstone.AlienError
@@ -14,24 +13,38 @@ import Primitives
 public actor NativeProvider {
     private let session: URLSession
     private let nodeProvider: any NodeURLFetchable
-    private let cache: any ProviderCache
+    private let cache: MemoryCache
     private let requestInterceptor: any RequestInterceptable
+
+    private init(
+        session: URLSession,
+        nodeProvider: any NodeURLFetchable,
+        requestInterceptor: any RequestInterceptable,
+        cache: MemoryCache = MemoryCache()
+    ) {
+        self.session = session
+        self.nodeProvider = nodeProvider
+        self.cache = cache
+        self.requestInterceptor = requestInterceptor
+    }
 
     public init(
         session: URLSession = .shared,
         nodeProvider: any NodeURLFetchable
     ) {
-        self.session = session
-        self.nodeProvider = nodeProvider
-        self.cache = MemoryCache()
-        self.requestInterceptor = nodeProvider.requestInterceptor
+        self.init(
+            session: session,
+            nodeProvider: nodeProvider,
+            requestInterceptor: nodeProvider.requestInterceptor
+        )
     }
 
     public init(session: URLSession = .shared, url: URL, requestInterceptor: any RequestInterceptable) {
-        self.session = session
-        self.nodeProvider = StaticNode(url: url)
-        self.cache = MemoryCache()
-        self.requestInterceptor = requestInterceptor
+        self.init(
+            session: session,
+            nodeProvider: StaticNode(url: url),
+            requestInterceptor: requestInterceptor
+        )
     }
 }
 

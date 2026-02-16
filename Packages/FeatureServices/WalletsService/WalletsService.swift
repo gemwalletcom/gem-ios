@@ -7,15 +7,13 @@ import Preferences
 import BalanceService
 import AssetsService
 import DiscoverAssetsService
-import Store
 import WalletSessionService
 import DeviceService
 
 public struct WalletsService: Sendable {
     private let walletSessionService: any WalletSessionManageable
-    private let discoveryProcessor: any DiscoveryAssetsProcessing
     private let assetsEnabler: any AssetsEnabler
-    private let priceUpdater: any PriceUpdater
+    private let assetSyncService: WalletAssetSyncService
     private let balanceUpdater: any BalanceUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
 
@@ -23,7 +21,6 @@ public struct WalletsService: Sendable {
         walletSessionService: WalletSessionService,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        priceService: PriceService,
         priceObserver: PriceObserverService,
         deviceService: any DeviceServiceable,
         discoverAssetsService: DiscoverAssetsService
@@ -32,26 +29,27 @@ public struct WalletsService: Sendable {
             balanceService: balanceService,
             walletSessionService: walletSessionService
         )
-        let priceUpdater = PriceUpdateService(priceObserver: priceObserver)
+        let priceUpdater = priceObserver
         let assetsEnabler = AssetsEnablerService(
             assetsService: assetsService,
             balanceUpdater: balanceUpdater,
             priceUpdater: priceUpdater
         )
-        let processor = DiscoveryAssetsProcessor(
+        let assetSyncService = WalletAssetSyncService(
             deviceService: deviceService,
             discoverAssetService: discoverAssetsService,
             assetService: assetsService,
             priceUpdater: priceUpdater,
+            balanceUpdater: balanceUpdater,
+            assetsEnabler: assetsEnabler,
             walletSessionService: walletSessionService,
-            assetsEnabler: assetsEnabler
         )
+
         self.walletSessionService = walletSessionService
-        self.assetsVisibilityManager = AssetVisibilityManager(service: balanceService)
+        self.assetsVisibilityManager = balanceService
         self.assetsEnabler = assetsEnabler
         self.balanceUpdater = balanceUpdater
-        self.priceUpdater = priceUpdater
-        self.discoveryProcessor = processor
+        self.assetSyncService = assetSyncService
     }
 
     public func walletsCount() throws -> Int {
@@ -63,14 +61,11 @@ public struct WalletsService: Sendable {
     }
 
     public func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
-        try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
+        try await assetSyncService.updateAssets(walletId: walletId, assetIds: assetIds)
     }
 
     public func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
-        async let updateAssets: () = try updateAssets(walletId: walletId, assetIds: assetIds)
-        async let assets: () = try await discoveryProcessor.discoverAssets(for: walletId, preferences: WalletPreferences(walletId: walletId))
-
-        let _ = try await [updateAssets, assets]
+        try await assetSyncService.fetch(walletId: walletId, assetIds: assetIds)
     }
 
     public func setup(wallet: Wallet) throws {
@@ -96,27 +91,23 @@ public struct WalletsService: Sendable {
 
 extension WalletsService: DiscoveryAssetsProcessing {
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
-        try await discoveryProcessor.discoverAssets(for: walletId, preferences: preferences)
+        try await assetSyncService.discoverAssets(for: walletId, preferences: preferences)
     }
 }
 
 // MARK: - AssetsEnabler
 
 extension WalletsService: AssetsEnabler {
-    public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async {
-        await assetsEnabler.enableAssets(walletId: walletId, assetIds: assetIds, enabled: enabled)
-    }
+    public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool, shouldRefresh: Bool) async throws { try await assetsEnabler.enableAssets(walletId: walletId, assetIds: assetIds, enabled: enabled, shouldRefresh: shouldRefresh) }
 
-    public func enableAssetId(walletId: WalletId, assetId: AssetId) async {
-        await assetsEnabler.enableAssetId(walletId: walletId, assetId: assetId)
-    }
+    public func enableAssetId(walletId: WalletId, assetId: AssetId) async throws { try await assetsEnabler.enableAssetId(walletId: walletId, assetId: assetId) }
 }
 
 // MARK: - PriceUpdater
 
 extension WalletsService: PriceUpdater {
     public func addPrices(assetIds: [AssetId]) async throws {
-        try await priceUpdater.addPrices(assetIds: assetIds)
+        try await assetSyncService.addPrices(assetIds: assetIds)
     }
 }
 
@@ -125,7 +116,7 @@ extension WalletsService: PriceUpdater {
 
 extension WalletsService: BalanceUpdater {
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
-        try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
+        try await assetSyncService.updateAssets(walletId: walletId, assetIds: assetIds)
     }
 
     public func addBalancesIfMissing(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
@@ -133,7 +124,7 @@ extension WalletsService: BalanceUpdater {
     }
 }
 
-// MARK: - AssetVisibilityManager
+// MARK: - AssetVisibilityServiceable
 
 extension WalletsService: AssetVisibilityServiceable {
     public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {

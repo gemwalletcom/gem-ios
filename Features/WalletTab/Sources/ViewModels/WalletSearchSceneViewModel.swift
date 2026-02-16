@@ -183,8 +183,12 @@ extension WalletSearchSceneViewModel {
 
     func onSelectAddToWallet(_ asset: Asset) {
         Task {
-            await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
-            isPresentingToastMessage = .addedToWallet()
+            do {
+                try await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
+                isPresentingToastMessage = .addedToWallet()
+            } catch {
+                debugLog("WalletSearchSceneViewModel add to wallet error: \(error)")
+            }
         }
     }
 

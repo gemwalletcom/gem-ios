@@ -10,13 +10,13 @@ import Blockchain
 public struct StakeService: StakeServiceable {
     private let store: StakeStore
     private let addressStore: AddressStore
-    private let chainServiceFactory: ChainServiceFactory
+    private let chainServiceFactory: any ChainServiceFactorable
     private let assetsService: GemAPIStaticService
 
     public init(
         store: StakeStore,
         addressStore: AddressStore,
-        chainServiceFactory: ChainServiceFactory,
+        chainServiceFactory: any ChainServiceFactorable,
         assetsService: GemAPIStaticService = GemAPIStaticService()
     ) {
         self.store = store

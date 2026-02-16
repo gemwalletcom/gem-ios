@@ -4,7 +4,12 @@ import Foundation
 import Primitives
 import Blockchain
 
-public final class ChainServiceFactory: Sendable {
+public protocol ChainServiceFactorable: Sendable {
+    var requestInterceptor: any RequestInterceptable { get }
+    func service(for chain: Chain) -> any ChainServiceable
+}
+
+public final class ChainServiceFactory: ChainServiceFactorable, Sendable {
 
     private let nodeProvider: any NodeURLFetchable
 

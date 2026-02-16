@@ -20,7 +20,7 @@ public struct TransactionStateService: Sendable {
         stakeService: StakeService,
         earnService: any EarnServiceable,
         nftService: NFTService,
-        chainServiceFactory: ChainServiceFactory,
+        chainServiceFactory: any ChainServiceFactorable,
         balanceUpdater: any BalancerUpdater
     ) {
         self.transactionStore = transactionStore

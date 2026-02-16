@@ -377,8 +377,12 @@ extension AssetSceneViewModel {
     public func onSelectEnable() {
         Task {
             let enabled = !assetData.metadata.isBalanceEnabled
-            isPresentingToastMessage = .showAsset(visible: enabled)
-            await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: enabled)
+            do {
+                try await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: enabled)
+                isPresentingToastMessage = .showAsset(visible: enabled)
+            } catch {
+                debugLog("onSelectEnable error: \(error)")
+            }
         }
     }
 }

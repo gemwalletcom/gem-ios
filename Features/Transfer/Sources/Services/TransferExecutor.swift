@@ -67,12 +67,13 @@ public struct TransferExecutor: TransferExecutable {
 
                 try transactionStateService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
-                    try walletsService.addBalancesIfMissing(
-                        for: input.wallet.walletId,
-                        assetIds: assetIds,
-                        isEnabled: true
-                    )
-                    await walletsService.enableAssets(walletId: input.wallet.walletId, assetIds: assetIds, enabled: true)
+                    let walletId = input.wallet.walletId
+                    do {
+                        try walletsService.addBalancesIfMissing(for: walletId, assetIds: assetIds, isEnabled: true)
+                        try await walletsService.enableAssets(walletId: walletId, assetIds: assetIds, enabled: true)
+                    } catch {
+                        debugLog("TransferExecutor post-transfer asset update error: \(error)")
+                    }
                 }
 
                 if signedData.count > 1, transactionData != signedData.last {

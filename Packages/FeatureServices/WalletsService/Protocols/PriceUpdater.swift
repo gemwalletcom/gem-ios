@@ -2,14 +2,14 @@
 
 import Foundation
 import Primitives
+import PriceService
 
 protocol PriceUpdater: Sendable {
     func addPrices(assetIds: [AssetId]) async throws
-    func clear() throws
 }
 
-extension PriceUpdater {
-    public func clear() throws {
-        fatalError("unplemented")
+extension PriceObserverService: PriceUpdater {
+    func addPrices(assetIds: [AssetId]) async throws {
+        try await addAssets(assets: assetIds)
     }
 }
