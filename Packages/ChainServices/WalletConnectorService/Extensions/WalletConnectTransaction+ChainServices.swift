@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
+
 import enum Gemstone.WalletConnectTransaction
 import struct Gemstone.WcEthereumTransactionData
 import struct Gemstone.WcSolanaTransactionData
 import struct Gemstone.WcSuiTransactionData
-import Primitives
 
 extension WalletConnectTransaction {
     func map() -> WalletConnectorTransaction {
