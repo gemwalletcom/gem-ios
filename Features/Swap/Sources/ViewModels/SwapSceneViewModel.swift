@@ -125,34 +125,12 @@ public final class SwapSceneViewModel {
     }
     
     var errorInfoAction: VoidAction {
-        guard case .error(let error) = swapState.quotes, let swapperError = error.swapperError else {
+        guard case .error(let error) = swapState.quotes,
+              case .NoQuoteAvailable = error.swapperError else {
             return nil
         }
-
-        switch swapperError {
-        case .NoQuoteAvailable:
-            return VoidAction { [weak self] in
-                self?.isPresentingInfoSheet = .info(.noQuote)
-            }
-        case .InputAmountError(let minAmount):
-            guard let minAmount, let fromAsset else { return nil }
-            return VoidAction { [weak self] in
-                self?.applyMinAmount(minAmount, asset: fromAsset.asset)
-            }
-        default:
-            return nil
-        }
-    }
-
-    var errorInfoActionButtonTitle: String? {
-        guard case .error(let error) = swapState.quotes else {
-            return nil
-        }
-        switch error.swapperError {
-        case .InputAmountError:
-            return Localized.Swap.useMinimumAmount
-        default:
-            return nil
+        return VoidAction { [weak self] in
+            self?.isPresentingInfoSheet = .info(.noQuote)
         }
     }
 
@@ -314,8 +292,8 @@ extension SwapSceneViewModel {
         )
     }
 
-    private func applyMinAmount(_ minAmount: String, asset: Asset) {
-        guard let value = BigInt(minAmount) else { return }
+    private func applyMinAmount(_ amount: String, asset: Asset) {
+        guard let value = BigInt(amount) else { return }
         amountInputModel.text = formatter.format(value: value, decimals: asset.decimals.asInt)
         setFetchTrigger(isImmediate: true)
     }
@@ -421,6 +399,7 @@ extension SwapSceneViewModel {
         case .retryQuotes: setFetchTrigger(isImmediate: true)
         case .retrySwap: swap()
         case .insufficientBalance: break
+        case .useMinAmount(let amount, let asset): applyMinAmount(amount, asset: asset)
         case .swap:
             if let priceImpactModel = swapDetailsViewModel?.priceImpactModel,
                let warningText = priceImpactModel.highImpactWarningDescription,
