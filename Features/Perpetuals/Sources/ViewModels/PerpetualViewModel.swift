@@ -21,7 +21,6 @@ public struct PerpetualViewModel {
         return formatter
     }()
     
-    
     public init(perpetual: Perpetual, currencyStyle: CurrencyFormatterType = .abbreviated) {
         self.perpetual = perpetual
         self.currencyFormatter = CurrencyFormatter(type: currencyStyle, currencyCode: Currency.usd.rawValue)

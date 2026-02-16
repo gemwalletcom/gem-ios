@@ -36,7 +36,6 @@ struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
 
 extension NFTCollectionRecord: CreateTable {
 
-
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
             $0.column(Columns.id.name, .text)

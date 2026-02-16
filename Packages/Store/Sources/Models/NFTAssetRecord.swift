@@ -45,7 +45,6 @@ struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
 
 extension NFTAssetRecord: CreateTable {
     
-
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
             $0.column(Columns.id.name, .text)

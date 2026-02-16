@@ -26,4 +26,3 @@ public extension Primitives.SwapData {
     }
 }
 
-

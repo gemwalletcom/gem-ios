@@ -245,7 +245,6 @@ extension WalletSceneViewModel {
     }
 }
 
-
 // MARK: - Private
 
 extension WalletSceneViewModel {

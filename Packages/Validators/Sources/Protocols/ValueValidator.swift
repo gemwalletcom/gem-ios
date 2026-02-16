@@ -22,7 +22,6 @@ private struct SilentValueValidator<V: ValueValidator>: ValueValidator, SilentVa
 
     let validator: V
 
-
     func validate(_ value: Formatted) throws {
         do { try validator.validate(value) }
         catch { throw SilentValidationError() }

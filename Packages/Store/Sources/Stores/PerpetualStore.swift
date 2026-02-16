@@ -11,7 +11,6 @@ public struct PerpetualStore: Sendable {
         self.db = db.dbQueue
     }
     
-    
     public func upsertPerpetuals(_ perpetuals: [Perpetual]) throws {
         try db.write { db in
             for perpetual in perpetuals {
@@ -30,7 +29,6 @@ public struct PerpetualStore: Sendable {
             }
         }
     }
-    
     
     public func getPerpetuals() throws -> [Perpetual] {
         try db.read { db in

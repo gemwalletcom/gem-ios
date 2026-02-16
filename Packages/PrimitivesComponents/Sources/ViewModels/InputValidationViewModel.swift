@@ -18,7 +18,6 @@ public final class InputValidationViewModel {
 
     public private(set) var error: (any Error)?
     
-
     private let mode: InputValidationMode
     private var validators: [any TextValidator]
 

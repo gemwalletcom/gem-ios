@@ -41,7 +41,6 @@ public protocol ChainBroadcastable: Sendable {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String
 }
 
-
 public protocol ChainTransactionStateFetchable: Sendable {
     func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges
 }

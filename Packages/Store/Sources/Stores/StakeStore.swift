@@ -52,7 +52,6 @@ public struct StakeStore: Sendable {
         }
     }
     
-    
     public func getValidatorsActive(assetId: AssetId) throws -> [DelegationValidator] {
         return try db.read { db in
             try Self.getValidatorsActive(db: db, assetId: assetId)
