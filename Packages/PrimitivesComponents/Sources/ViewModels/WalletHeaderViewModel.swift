@@ -39,19 +39,12 @@ extension WalletHeaderViewModel: HeaderViewModel {
     }
     public var subtitleColor: Color { totalValueViewModel.pnlColor }
 
+    public var subtitleImageOffset: CGFloat { 1 }
     public var subtitleImage: Image? {
         switch totalValue.pnlAmount {
         case _ where totalValue.pnlAmount > 0: Images.System.arrowTriangleUp
         case _ where totalValue.pnlAmount < 0: Images.System.arrowTriangleDown
         default: nil
-        }
-    }
-
-    public var subtitleImageOffset: CGFloat {
-        switch totalValue.pnlAmount {
-        case _ where totalValue.pnlAmount > 0: -1
-        case _ where totalValue.pnlAmount < 0: 1
-        default: .zero
         }
     }
 
