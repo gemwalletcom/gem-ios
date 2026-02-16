@@ -82,7 +82,6 @@ public struct BalanceStore: Sendable {
                     return items
                 }()
 
-
                 let assignments = balanceFields + defaultFields
                 
                 try BalanceRecord

@@ -79,7 +79,6 @@ public final class StakeSceneViewModel {
     var freezeTitle: String { Localized.Transfer.Freeze.title }
     var unfreezeTitle: String { Localized.Transfer.Unfreeze.title }
 
-
     var lockTimeTitle: String { Localized.Stake.lockTime }
     var lockTimeValue: String {
         let now = Date.now

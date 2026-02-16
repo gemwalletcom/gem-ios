@@ -1,13 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 import Preferences
+import Primitives
 import WebSocketClient
 import GemAPI
 
 public actor PriceObserverService: Sendable {
-
     private let priceService: PriceService
     private let preferences: Preferences
     private let securePreferences: SecurePreferences

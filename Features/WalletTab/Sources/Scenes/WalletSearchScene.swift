@@ -47,7 +47,6 @@ public struct WalletSearchScene: View {
         .autocorrectionDisabled(true)
         .debounce(
             value: $model.searchModel.searchableQuery.wrappedValue,
-            interval: .Debounce.normal,
             action: model.onSearch(query:)
         )
         .onChange(of: model.searchModel.searchableQuery, model.onChangeSearchQuery)

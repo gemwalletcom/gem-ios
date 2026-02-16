@@ -267,7 +267,6 @@ extension ConfirmTransferSceneViewModel {
         }
     }
 
-
     private func fetch() async {
         state = .loading
         feeModel.reset()

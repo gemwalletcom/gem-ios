@@ -1,0 +1,6 @@
+only_rules:
+  - empty_parameters
+  - vertical_whitespace
+
+excluded: 
+  - Submodules

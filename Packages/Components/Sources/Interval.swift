@@ -21,12 +21,5 @@ public extension Interval {
 }
 
 public extension Duration {
-    struct Debounce {
-        /// 150ms
-        public static let fast: Duration = .milliseconds(150)
-        /// 250ms
-        public static let normal: Duration = .milliseconds(250)
-        /// 1s
-        public static let slow: Duration = .seconds(1)
-    }
+    static let debounce: Duration = .milliseconds(250)
 }

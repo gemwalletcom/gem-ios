@@ -33,7 +33,6 @@ extension Primitives.SwapQuoteData {
     }
 }
 
-
 extension Primitives.SwapQuoteDataType {
     func map() -> Gemstone.GemSwapQuoteDataType {
         switch self {

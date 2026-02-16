@@ -62,7 +62,7 @@ struct SwapSceneViewModelTests {
         let model = SwapSceneViewModel.mock(swapper: swapper)
 
         let task = Task {
-            await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+            await model.fetch()
         }
 
         try await Task.sleep(for: .milliseconds(50))
@@ -83,7 +83,7 @@ struct SwapSceneViewModelTests {
         let model = SwapSceneViewModel.mock(swapper: swapper)
 
         let task = Task {
-            await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+            await model.fetch()
         }
 
         try await Task.sleep(for: .milliseconds(50))
@@ -95,14 +95,46 @@ struct SwapSceneViewModelTests {
         #expect(model.swapState.quotes.isNoData)
     }
 
+    @Test
+    func fetchTriggerIsImmediate() {
+        let model = SwapSceneViewModel.mock()
+
+        model.fetchTrigger = nil
+        model.onChangeFromValue("1", "2")
+
+        #expect(model.fetchTrigger?.isImmediate == false)
+
+        model.fetchTrigger = nil
+        model.onSelectPercent(50)
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+
+        model.fetchTrigger = nil
+        model.onChangeToAsset(old: .mock(asset: .mockEthereum()), new: .mock(asset: .mockEthereumUSDT()))
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+
+        model.fetchTrigger = nil
+        model.swapState.quotes = .error(SwapperError.NoQuoteAvailable)
+        model.buttonViewModel.action()
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+
+        model.fetchTrigger = nil
+        model.swapState.quotes = .error(SwapperError.InputAmountError(minAmount: "1000000000000000000"))
+        model.errorInfoAction?()
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+    }
+
     // MARK: - Private methods
-    
+
     private func model(
         toValueMock: String = "250000000000"
     ) async -> SwapSceneViewModel {
         let swapper = GemSwapperMock(quotes: [.mock(toValue: toValueMock)])
         let model = SwapSceneViewModel.mock(swapper: swapper)
-        await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+        await model.fetch()
         return model
     }
 }
@@ -119,20 +151,11 @@ extension SwapSceneViewModel {
             swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper)),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: LocalKeystore.mock(), swapService: .mock(swapper: swapper))
         )
-        model.fromAssetQuery.value = .mock(asset: .mockEthereum())
+        model.fromAssetQuery.value = .mock(asset: .mockEthereum(), balance: .mock())
         model.toAssetQuery.value = .mock(asset: .mockEthereumUSDT())
-        return model
-    }
-}
+        model.amountInputModel.text = "1"
 
-extension SwapQuoteInput {
-    static func mock() -> SwapQuoteInput {
-        SwapQuoteInput(
-            fromAsset: .mockEthereum(),
-            toAsset: .mockEthereumUSDT(),
-            value: 1000000000000000000,
-            useMaxAmount: false
-        )
+        return model
     }
 }
 

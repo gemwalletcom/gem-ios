@@ -32,7 +32,7 @@ public final class WalletSceneViewModel: Sendable {
     public let bannersQuery: ObservableQuery<BannersRequest>
 
     // db observed values
-    public var totalFiatValue: Double { totalFiatQuery.value }
+    public var totalFiatValue: TotalFiatValue { totalFiatQuery.value }
     public var assets: [AssetData] { assetsQuery.value }
     public var banners: [Banner] { bannersQuery.value }
 
@@ -106,7 +106,7 @@ public final class WalletSceneViewModel: Sendable {
     var walletHeaderModel: WalletHeaderViewModel {
         WalletHeaderViewModel(
             walletType: wallet.type,
-            value: totalFiatValue,
+            totalValue: totalFiatValue,
             currencyCode: currencyCode,
             bannerEventsViewModel: HeaderBannerEventViewModel(events: banners.map(\.event))
         )
@@ -115,7 +115,7 @@ public final class WalletSceneViewModel: Sendable {
     var walletBannersModel: WalletSceneBannersViewModel {
         WalletSceneBannersViewModel(
             banners: banners,
-            totalFiatValue: totalFiatValue
+            totalFiatValue: totalFiatValue.value
         )
     }
 }
@@ -233,7 +233,6 @@ extension WalletSceneViewModel {
         isPresentingToastMessage = .priceAlert(message: message)
     }
 }
-
 
 // MARK: - Private
 

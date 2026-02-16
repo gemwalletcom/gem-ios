@@ -84,7 +84,6 @@ extension ButtonStyle where Self == ColorButtonStyle {
         )
     }
     
-
     public static func gray(
         paddingHorizontal: CGFloat = .button.paddingHorizontal,
         paddingVertical: CGFloat = .button.paddingVertical,

@@ -36,7 +36,7 @@ public final class PerpetualSceneViewModel {
 
     public var positions: [PerpetualPositionData] { positionsQuery.value }
     public var perpetualData: PerpetualData { perpetualQuery.value }
-    public var perpetualTotalValue: Double { perpetualTotalValueQuery.value }
+    public var perpetualTotalValue: TotalFiatValue { perpetualTotalValueQuery.value }
     public var transactions: [TransactionExtended] { transactionsQuery.value }
 
     public var state: StateViewType<[ChartCandleStick]> = .loading
