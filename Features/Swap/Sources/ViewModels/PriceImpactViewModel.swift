@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import Primitives
 import Localization
 import BigInt
@@ -77,7 +76,7 @@ extension PriceImpactViewModel {
             return nil
         }
 
-        return calculatePriceImpact(fromValue: fromValue, expectedValue: toValue)
+        return PriceChangeCalculator.calculate(.percentage(from: fromValue, to: toValue))
     }
 
     private func getSwapAmount(value: String, decimals: Int) -> Double? {
@@ -110,10 +109,5 @@ extension PriceImpactViewModel {
         default:
             return PriceImpactValue(type: .high, value: priceImpactPercentage)
         }
-    }
-
-    private func calculatePriceImpact(fromValue: Double, expectedValue: Double) -> Double {
-        guard fromValue > 0 else { return .zero }
-        return ((expectedValue / fromValue) - 1 ) * 100
     }
 }

@@ -1,35 +1,28 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import SwiftUI
 import Primitives
-import BigInt
 import Style
 import Components
 import Formatters
 
 public struct WalletHeaderViewModel {
-    //Remove WalletType from here
-    let walletType: WalletType
-    let value: Double
-    let bannerEventsViewModel: HeaderBannerEventViewModel
-    
-    let currencyFormatter: CurrencyFormatter
+    private let walletType: WalletType
+    private let totalValue: TotalFiatValue
+    private let bannerEventsViewModel: HeaderBannerEventViewModel
+    private let totalValueViewModel: TotalValueViewModel
 
     public init(
         walletType: WalletType,
-        value: Double,
+        totalValue: TotalFiatValue,
         currencyCode: String,
         bannerEventsViewModel: HeaderBannerEventViewModel
     ) {
         self.walletType = walletType
-        self.value = value
+        self.totalValue = totalValue
         self.bannerEventsViewModel = bannerEventsViewModel
-        self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
-    }
-    
-    public var totalValueText: String {
-        currencyFormatter.string(value)
+        let formatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
+        self.totalValueViewModel = TotalValueViewModel(totalValue: totalValue, currencyFormatter: formatter)
     }
 }
 
@@ -37,9 +30,30 @@ public struct WalletHeaderViewModel {
 
 extension WalletHeaderViewModel: HeaderViewModel {
     public var isWatchWallet: Bool { walletType == .view }
-    public var title: String { totalValueText }
+    public var title: String { totalValueViewModel.title }
     public var assetImage: AssetImage? { .none }
-    public var subtitle: String? { .none }
+    public var subtitle: String? {
+        guard let amount = totalValueViewModel.pnlAmountText else { return nil }
+        guard let percentage = totalValueViewModel.pnlPercentageText else { return amount }
+        return "\(amount) (\(percentage))"
+    }
+    public var subtitleColor: Color { totalValueViewModel.pnlColor }
+
+    public var subtitleImage: Image? {
+        switch totalValue.pnlAmount {
+        case _ where totalValue.pnlAmount > 0: Images.System.arrowTriangleUp
+        case _ where totalValue.pnlAmount < 0: Images.System.arrowTriangleDown
+        default: nil
+        }
+    }
+
+    public var subtitleImageOffset: CGFloat {
+        switch totalValue.pnlAmount {
+        case _ where totalValue.pnlAmount > 0: -1
+        case _ where totalValue.pnlAmount < 0: 1
+        default: .zero
+        }
+    }
 
     public var buttons: [HeaderButton] {
         [

@@ -1,8 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import SwiftUI
 import Components
 import Primitives
+import Style
 
 struct TransactionAmountHeaderViewModel: HeaderViewModel {
 
@@ -22,4 +24,6 @@ struct TransactionAmountHeaderViewModel: HeaderViewModel {
     var subtitle: String? {
         display.fiat?.text
     }
+
+    var subtitleColor: Color { Colors.gray }
 }

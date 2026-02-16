@@ -129,7 +129,7 @@ extension PerpetualPortfolioSceneViewModel {
         let valueChange = values.lastValue - values.firstValue
         let price = Price(
             price: valueChange,
-            priceChangePercentage24h: values.percentageChange(from: values.firstValue, to: values.lastValue),
+            priceChangePercentage24h: PriceChangeCalculator.calculate(.percentage(from: values.firstValue, to: values.lastValue)),
             updatedAt: .now
         )
         return ChartValuesViewModel(
