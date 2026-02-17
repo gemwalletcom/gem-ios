@@ -98,7 +98,9 @@ extension WalletsService: DiscoveryAssetsProcessing {
 // MARK: - AssetsEnabler
 
 extension WalletsService: AssetsEnabler {
-    public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool, shouldRefresh: Bool) async throws { try await assetsEnabler.enableAssets(walletId: walletId, assetIds: assetIds, enabled: enabled, shouldRefresh: shouldRefresh) }
+    public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async throws {
+        try await assetsEnabler.enableAssets(walletId: walletId, assetIds: assetIds, enabled: enabled)
+    }
 
     public func enableAssetId(walletId: WalletId, assetId: AssetId) async throws { try await assetsEnabler.enableAssetId(walletId: walletId, assetId: assetId) }
 }

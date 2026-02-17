@@ -63,12 +63,10 @@ actor WalletAssetSyncService: DiscoveryAssetsProcessing {
 
         if assetIds.isNotEmpty {
             try await assetService.prefetchAssets(assetIds: assetIds)
-            try await addPrices(assetIds: assetIds)
             try await assetsEnabler.enableAssets(
                 walletId: wallet.walletId,
                 assetIds: assetIds,
-                enabled: true,
-                shouldRefresh: false
+                enabled: true
             )
         }
 
