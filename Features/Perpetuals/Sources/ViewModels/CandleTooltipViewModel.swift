@@ -34,7 +34,7 @@ struct CandleTooltipViewModel {
         )
     }
 
-    var volumeTitle: TextValue { TextValue(text: "Vol", style: StyleDefaults.label) }
+    var volumeTitle: TextValue { TextValue(text: "Volume", style: StyleDefaults.label) }
     var volumeValue: TextValue { TextValue(text: Self.volumeFormatter.string(candle.volume * candle.close), style: StyleDefaults.small) }
 
     var rangeBar: RangeBarViewModel {

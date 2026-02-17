@@ -25,7 +25,9 @@ struct CandleTooltipView: View {
                 }
             }
             RangeBarView(model: model.rangeBar)
+                .padding(.bottom, Spacing.extraSmall)
             Divider()
+                .padding(.bottom, Spacing.extraSmall)
             HStack {
                 Text(model.volumeTitle.text)
                     .textStyle(model.volumeTitle.style)
