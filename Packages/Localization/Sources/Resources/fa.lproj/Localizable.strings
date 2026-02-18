@@ -542,3 +542,5 @@
 "contacts.title" = "مخاطبین";
 "contacts.contact" = "تماس";
 "contacts.addresses" = "آدرس‌ها";
+"contacts.state.empty.title" = "بدون مخاطب";
+"contacts.state.empty.description" = "آدرس‌های پرکاربرد خود را ذخیره کنید";

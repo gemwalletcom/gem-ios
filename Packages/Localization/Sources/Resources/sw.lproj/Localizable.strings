@@ -542,3 +542,5 @@
 "contacts.title" = "Anwani";
 "contacts.contact" = "Mawasiliano";
 "contacts.addresses" = "Anwani";
+"contacts.state.empty.title" = "Hakuna Anwani";
+"contacts.state.empty.description" = "Hifadhi anwani zako zinazotumiwa mara kwa mara";

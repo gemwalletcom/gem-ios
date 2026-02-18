@@ -542,3 +542,5 @@
 "contacts.title" = "جهات الاتصال";
 "contacts.contact" = "اتصال";
 "contacts.addresses" = "العناوين";
+"contacts.state.empty.title" = "لا توجد جهات اتصال";
+"contacts.state.empty.description" = "احفظ عناوينك التي تستخدمها بشكل متكرر";

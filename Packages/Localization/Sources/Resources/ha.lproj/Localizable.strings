@@ -542,3 +542,5 @@
 "contacts.title" = "Lambobin Sadarwa";
 "contacts.contact" = "Tuntuɓi";
 "contacts.addresses" = "Adiresoshi";
+"contacts.state.empty.title" = "Babu Lambobin Sadarwa";
+"contacts.state.empty.description" = "Ajiye adiresoshin da ake yawan amfani da su";

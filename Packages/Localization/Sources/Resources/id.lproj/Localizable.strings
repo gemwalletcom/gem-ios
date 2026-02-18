@@ -542,3 +542,5 @@
 "contacts.title" = "Kontak";
 "contacts.contact" = "Kontak";
 "contacts.addresses" = "Alamat";
+"contacts.state.empty.title" = "Tidak ada kontak";
+"contacts.state.empty.description" = "Simpan alamat yang sering Anda gunakan.";

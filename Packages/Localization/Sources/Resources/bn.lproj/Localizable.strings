@@ -542,3 +542,5 @@
 "contacts.title" = "পরিচিতি";
 "contacts.contact" = "যোগাযোগ";
 "contacts.addresses" = "ঠিকানা";
+"contacts.state.empty.title" = "কোনও পরিচিতি নেই";
+"contacts.state.empty.description" = "আপনার ঘন ঘন ব্যবহৃত ঠিকানাগুলি সংরক্ষণ করুন";

@@ -542,3 +542,5 @@
 "contacts.title" = "İletişim";
 "contacts.contact" = "Temas etmek";
 "contacts.addresses" = "Adresler";
+"contacts.state.empty.title" = "İletişim yok";
+"contacts.state.empty.description" = "Sık kullandığınız adresleri kaydedin.";

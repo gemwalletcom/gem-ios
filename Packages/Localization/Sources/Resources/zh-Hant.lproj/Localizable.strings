@@ -542,3 +542,5 @@
 "contacts.title" = "聯絡方式";
 "contacts.contact" = "接觸";
 "contacts.addresses" = "地址";
+"contacts.state.empty.title" = "無聯絡方式";
+"contacts.state.empty.description" = "儲存您常用的地址";

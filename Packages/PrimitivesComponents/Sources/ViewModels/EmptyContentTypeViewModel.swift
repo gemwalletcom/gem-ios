@@ -39,7 +39,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case .activity: Localized.Activity.State.Empty.searchTitle
             }
         case .recents: Localized.RecentActivity.State.Empty.title
-        case .contacts: "No Contacts"
+        case .contacts: Localized.Contacts.State.Empty.title
         }
     }
 
@@ -68,7 +68,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .markets: .none
         case .recents: Localized.RecentActivity.State.Empty.description
         case .notifications: Localized.Notifications.Inapp.State.Empty.description
-        case .contacts: "Add contacts to quickly send to your favorite addresses"
+        case .contacts: Localized.Contacts.State.Empty.description
         }
     }
 

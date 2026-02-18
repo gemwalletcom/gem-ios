@@ -542,3 +542,5 @@
 "contacts.title" = "אנשי קשר";
 "contacts.contact" = "מַגָע";
 "contacts.addresses" = "כתובות";
+"contacts.state.empty.title" = "אין אנשי קשר";
+"contacts.state.empty.description" = "שמור את הכתובות שאתה משתמש בהן לעתים קרובות";

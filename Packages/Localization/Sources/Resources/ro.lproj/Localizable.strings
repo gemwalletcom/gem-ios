@@ -542,3 +542,5 @@
 "contacts.title" = "Contacte";
 "contacts.contact" = "Contact";
 "contacts.addresses" = "Adrese";
+"contacts.state.empty.title" = "Niciun contact";
+"contacts.state.empty.description" = "Salvați adresele utilizate frecvent";

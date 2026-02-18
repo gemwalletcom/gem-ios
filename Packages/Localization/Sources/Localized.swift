@@ -337,6 +337,14 @@ public enum Localized {
     public static let contact = Localized.tr("Localizable", "contacts.contact", fallback: "Contact")
     /// Contacts
     public static let title = Localized.tr("Localizable", "contacts.title", fallback: "Contacts")
+    public enum State {
+      public enum Empty {
+        /// Save your frequently used addresses
+        public static let description = Localized.tr("Localizable", "contacts.state.empty.description", fallback: "Save your frequently used addresses")
+        /// No Contacts
+        public static let title = Localized.tr("Localizable", "contacts.state.empty.title", fallback: "No Contacts")
+      }
+    }
   }
   public enum Date {
     /// Today

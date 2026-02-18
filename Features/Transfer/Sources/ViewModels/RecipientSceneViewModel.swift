@@ -260,7 +260,7 @@ extension RecipientSceneViewModel {
     private func sectionTitle(for type: RecipientAddressType) -> String {
         switch type {
         case .pinned: Localized.Common.pinned
-        case .contacts: "Contacts"
+        case .contacts: Localized.Contacts.title
         case .wallets: Localized.Transfer.Recipient.myWallets
         case .view: Localized.Transfer.Recipient.viewWallets
         }

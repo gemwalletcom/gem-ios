@@ -542,3 +542,5 @@
 "contacts.title" = "Mga Kontak";
 "contacts.contact" = "Makipag-ugnayan";
 "contacts.addresses" = "Mga Address";
+"contacts.state.empty.title" = "Walang Mga Kontak";
+"contacts.state.empty.description" = "I-save ang iyong mga madalas gamiting address";

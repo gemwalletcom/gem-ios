@@ -542,3 +542,5 @@
 "contacts.title" = "Liên hệ";
 "contacts.contact" = "Liên hệ";
 "contacts.addresses" = "Địa chỉ";
+"contacts.state.empty.title" = "Không có liên hệ";
+"contacts.state.empty.description" = "Lưu lại những địa chỉ bạn thường dùng.";

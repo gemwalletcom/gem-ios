@@ -542,3 +542,5 @@
 "contacts.title" = "संपर्क";
 "contacts.contact" = "संपर्क";
 "contacts.addresses" = "पतों";
+"contacts.state.empty.title" = "कोई संपर्क नहीं";
+"contacts.state.empty.description" = "अपने अक्सर इस्तेमाल होने वाले पतों को सेव करें";

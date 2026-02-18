@@ -542,3 +542,5 @@
 "contacts.title" = "連絡先";
 "contacts.contact" = "接触";
 "contacts.addresses" = "住所";
+"contacts.state.empty.title" = "連絡先なし";
+"contacts.state.empty.description" = "よく使うアドレスを保存する";

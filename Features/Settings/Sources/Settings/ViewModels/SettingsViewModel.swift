@@ -89,6 +89,6 @@ public final class SettingsViewModel {
     var developerModeTitle: String { Localized.Settings.developer }
     var developerModeImage: AssetImage { AssetImage.image(Images.Settings.developer) }
 
-    var contactsTitle: String { "Contacts" }
+    var contactsTitle: String { Localized.Contacts.title }
     var contactsImage: AssetImage { AssetImage.image(Images.Settings.contacts) }
 }

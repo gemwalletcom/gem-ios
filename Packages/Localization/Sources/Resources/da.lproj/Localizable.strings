@@ -542,3 +542,5 @@
 "contacts.title" = "Kontakter";
 "contacts.contact" = "Kontakte";
 "contacts.addresses" = "Adresser";
+"contacts.state.empty.title" = "Ingen kontakter";
+"contacts.state.empty.description" = "Gem dine ofte brugte adresser";

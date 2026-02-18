@@ -542,3 +542,5 @@
 "contacts.title" = "Contacts";
 "contacts.contact" = "Contact";
 "contacts.addresses" = "Addresses";
+"contacts.state.empty.title" = "No Contacts";
+"contacts.state.empty.description" = "Save your frequently used addresses";

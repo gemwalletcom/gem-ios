@@ -542,3 +542,5 @@
 "contacts.title" = "콘택트 렌즈";
 "contacts.contact" = "연락하다";
 "contacts.addresses" = "구애";
+"contacts.state.empty.title" = "연락처 없음";
+"contacts.state.empty.description" = "자주 사용하는 주소를 저장하세요";

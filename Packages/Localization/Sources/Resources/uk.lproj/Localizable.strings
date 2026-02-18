@@ -542,3 +542,5 @@
 "contacts.title" = "Контакти";
 "contacts.contact" = "Контакти";
 "contacts.addresses" = "Адреси";
+"contacts.state.empty.title" = "Немає контактів";
+"contacts.state.empty.description" = "Збережіть часто використовувані адреси";

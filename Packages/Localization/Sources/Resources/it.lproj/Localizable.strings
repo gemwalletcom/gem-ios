@@ -542,3 +542,5 @@
 "contacts.title" = "Contatti";
 "contacts.contact" = "Contatto";
 "contacts.addresses" = "Indirizzi";
+"contacts.state.empty.title" = "Nessun contatto";
+"contacts.state.empty.description" = "Salva gli indirizzi che usi più frequentemente";

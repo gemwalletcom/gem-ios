@@ -542,3 +542,5 @@
 "contacts.title" = "Контакты";
 "contacts.contact" = "Контакт";
 "contacts.addresses" = "Адреса";
+"contacts.state.empty.title" = "Нет контактов";
+"contacts.state.empty.description" = "Сохраните часто используемые адреса.";

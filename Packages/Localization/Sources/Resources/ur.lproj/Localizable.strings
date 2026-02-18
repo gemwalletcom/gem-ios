@@ -542,3 +542,5 @@
 "contacts.title" = "رابطے";
 "contacts.contact" = "رابطہ کریں۔";
 "contacts.addresses" = "پتے";
+"contacts.state.empty.title" = "کوئی رابطے نہیں";
+"contacts.state.empty.description" = "اپنے اکثر استعمال ہونے والے پتے محفوظ کریں۔";

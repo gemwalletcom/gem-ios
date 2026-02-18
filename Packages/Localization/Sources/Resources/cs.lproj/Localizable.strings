@@ -542,3 +542,5 @@
 "contacts.title" = "Kontakty";
 "contacts.contact" = "Kontakt";
 "contacts.addresses" = "Adresy";
+"contacts.state.empty.title" = "Žádné kontakty";
+"contacts.state.empty.description" = "Uložte si často používané adresy";
