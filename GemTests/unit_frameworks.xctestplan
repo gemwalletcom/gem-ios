@@ -310,6 +310,20 @@
         "identifier" : "WalletConnectorServiceTests",
         "name" : "WalletConnectorServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/ChainServices",
+        "identifier" : "NodeServiceTests",
+        "name" : "NodeServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/FeatureServices",
+        "identifier" : "DeviceServiceTests",
+        "name" : "DeviceServiceTests"
+      }
     }
   ],
   "version" : 1
