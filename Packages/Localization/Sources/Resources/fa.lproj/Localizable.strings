@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "حداقل مبلغ معامله %@لطفا مبلغ بیشتری وارد کنید.";
 "swap.use_minimum_amount" = "از حداقل مقدار استفاده کنید";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "موقعیت‌های شما اینجا نمایش داده می‌شوند";
+"earn.state.empty.description" = "اولین واریز خود را انجام دهید %@";
+"contacts.title" = "مخاطبین";
+"contacts.contact" = "تماس";
+"contacts.addresses" = "آدرس‌ها";

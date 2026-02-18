@@ -56,6 +56,7 @@ struct Migrations {
             try BannerRecord.create(db: db)
             try PriceAlertRecord.create(db: db)
             try ContactRecord.create(db: db)
+            try ContactAddressRecord.create(db: db)
             
             // nft
             try NFTCollectionRecord.create(db: db)
@@ -389,8 +390,9 @@ struct Migrations {
             }
         }
 
-        migrator.registerMigration("Create \(ContactRecord.databaseTableName)") { db in
+        migrator.registerMigration("Create \(ContactRecord.databaseTableName) and \(ContactAddressRecord.databaseTableName)") { db in
             try? ContactRecord.create(db: db)
+            try? ContactAddressRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

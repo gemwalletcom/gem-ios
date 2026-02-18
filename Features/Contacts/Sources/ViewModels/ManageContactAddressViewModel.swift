@@ -1,0 +1,156 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import Foundation
+import SwiftUI
+import UIKit
+import Primitives
+import PrimitivesComponents
+import Validators
+import GemstonePrimitives
+import Components
+import Style
+import Localization
+
+@Observable
+@MainActor
+public final class ManageContactAddressViewModel {
+    public enum Mode {
+        case add
+        case edit(ContactAddress)
+    }
+
+    private let mode: Mode
+    private let contactId: String
+    private let addressId: String
+    private let onComplete: (ContactAddress) -> Void
+
+    var chain: Chain
+    var memo: String = ""
+    var description: String = ""
+    var addressInputModel: InputValidationViewModel
+    var isPresentingScanner = false
+
+    public init(
+        contactId: String,
+        mode: Mode,
+        onComplete: @escaping (ContactAddress) -> Void
+    ) {
+        self.contactId = contactId
+        self.mode = mode
+        self.onComplete = onComplete
+
+        self.addressInputModel = InputValidationViewModel(mode: .manual, validators: [])
+
+        switch mode {
+        case .add:
+            self.addressId = UUID().uuidString
+            self.chain = .bitcoin
+        case .edit(let address):
+            self.addressId = address.id
+            self.chain = address.chain
+            self.memo = address.memo ?? ""
+            self.description = address.description ?? ""
+            self.addressInputModel.text = address.address
+        }
+
+        updateAddressValidators(for: chain)
+    }
+
+    var title: String { Localized.Common.address }
+    var buttonTitle: String { Localized.Transfer.confirm }
+    var networkTitle: String { Localized.Transfer.network }
+    var addressTitle: String { Localized.Common.address }
+    var memoTitle: String { Localized.Transfer.memo }
+    var descriptionTitle: String { Localized.Common.description }
+    var showMemo: Bool { chain.isMemoSupported }
+    var pasteImage: Image { Images.System.paste }
+    var qrImage: Image { Images.System.qrCodeViewfinder }
+    var shouldShowInputActions: Bool { addressInputModel.text.isEmpty }
+
+    var networkSelectorModel: NetworkSelectorViewModel {
+        NetworkSelectorViewModel(
+            state: .data(.plain(Chain.allCases)),
+            selectedItems: [chain],
+            selectionType: .checkmark
+        )
+    }
+
+    var buttonState: ButtonState {
+        guard addressInputModel.isValid,
+              addressInputModel.text.isNotEmpty else {
+            return .disabled
+        }
+
+        switch mode {
+        case .add:
+            return .normal
+        case .edit(let address):
+            return currentAddress != address ? .normal : .disabled
+        }
+    }
+
+    private var currentAddress: ContactAddress {
+        ContactAddress(
+            id: addressId,
+            contactId: contactId,
+            address: addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
+            chain: chain,
+            memo: memo.isEmpty ? nil : memo,
+            description: description.isEmpty ? nil : description
+        )
+    }
+}
+
+// MARK: - Actions
+
+extension ManageContactAddressViewModel {
+    func onSelectChain(_ chain: Chain) {
+        self.chain = chain
+        self.memo = ""
+        updateAddressValidators(for: chain)
+    }
+
+    func onSelectPaste() {
+        guard let address = UIPasteboard.general.string else { return }
+        addressInputModel.update(text: address)
+    }
+
+    func onSelectScan() {
+        isPresentingScanner = true
+    }
+
+    func onHandleScan(_ result: String) {
+        addressInputModel.update(text: result)
+    }
+
+    func complete() {
+        onComplete(currentAddress)
+    }
+}
+
+// MARK: - Private
+
+extension ManageContactAddressViewModel {
+    private func updateAddressValidators(for chain: Chain) {
+        let currentText = addressInputModel.text
+        let asset = Asset(
+            id: AssetId(chain: chain, tokenId: nil),
+            name: .empty,
+            symbol: .empty,
+            decimals: 0,
+            type: .native
+        )
+        addressInputModel = InputValidationViewModel(
+            mode: .manual,
+            validators: [
+                .required(requireName: Localized.Common.address),
+                .address(asset)
+            ]
+        )
+        addressInputModel.text = currentText
+
+        if currentText.isNotEmpty {
+            addressInputModel.update()
+        }
+    }
+}

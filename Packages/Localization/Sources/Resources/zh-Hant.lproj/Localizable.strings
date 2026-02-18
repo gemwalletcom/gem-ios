@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "最低交易金額為 %@請輸入更高的金額。";
 "swap.use_minimum_amount" = "使用最低金額";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "您的持倉將顯示在此。";
+"earn.state.empty.description" = "存入您的第一筆款項 %@";
+"contacts.title" = "聯絡方式";
+"contacts.contact" = "接觸";
+"contacts.addresses" = "地址";

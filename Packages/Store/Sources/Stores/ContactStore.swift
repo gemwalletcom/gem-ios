@@ -12,15 +12,18 @@ public struct ContactStore: Sendable {
         self.db = db.dbQueue
     }
 
-    public func addContact(_ contact: Contact) throws {
+    public func saveContact(_ contact: Contact, addresses: [ContactAddress]) throws {
         try db.write { db in
-            try contact.record.insert(db)
-        }
-    }
+            try contact.record.upsert(db)
 
-    public func updateContact(_ contact: Contact) throws {
-        try db.write { db in
-            try contact.record.update(db)
+            try ContactAddressRecord
+                .filter(ContactAddressRecord.Columns.contactId == contact.id)
+                .filter(!addresses.map { $0.id }.contains(ContactAddressRecord.Columns.id))
+                .deleteAll(db)
+
+            for address in addresses {
+                try address.record.upsert(db)
+            }
         }
     }
 

@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Mafi ƙarancin adadin ciniki shine %@. Da fatan a shigar da adadin da ya fi girma.";
 "swap.use_minimum_amount" = "Yi amfani da Mafi ƙarancin Adadin";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Matsayinka zai bayyana a nan";
+"earn.state.empty.description" = "Ajiye kuɗin farko %@";
+"contacts.title" = "Lambobin Sadarwa";
+"contacts.contact" = "Tuntuɓi";
+"contacts.addresses" = "Adiresoshi";

@@ -11,12 +11,8 @@ public struct ContactService: Sendable {
         self.store = store
     }
 
-    public func addContact(_ contact: Contact) throws {
-        try store.addContact(contact)
-    }
-
-    public func updateContact(_ contact: Contact) throws {
-        try store.updateContact(contact)
+    public func saveContact(_ contact: Contact, addresses: [ContactAddress]) throws {
+        try store.saveContact(contact, addresses: addresses)
     }
 
     public func deleteContact(id: String) throws {

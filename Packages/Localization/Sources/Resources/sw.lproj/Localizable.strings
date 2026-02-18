@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Kiwango cha chini cha biashara ni %@Tafadhali weka kiasi cha juu zaidi.";
 "swap.use_minimum_amount" = "Tumia Kiasi cha Chini Zaidi";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Nafasi zako zitaonekana hapa";
+"earn.state.empty.description" = "Weka pesa zako kwanza %@";
+"contacts.title" = "Anwani";
+"contacts.contact" = "Mawasiliano";
+"contacts.addresses" = "Anwani";

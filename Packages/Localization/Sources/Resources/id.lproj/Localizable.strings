@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Jumlah transaksi minimum adalah %@Silakan masukkan jumlah yang lebih tinggi.";
 "swap.use_minimum_amount" = "Gunakan Jumlah Minimum";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Posisi Anda akan muncul di sini.";
+"earn.state.empty.description" = "Setorkan pertama Anda %@";
+"contacts.title" = "Kontak";
+"contacts.contact" = "Kontak";
+"contacts.addresses" = "Alamat";

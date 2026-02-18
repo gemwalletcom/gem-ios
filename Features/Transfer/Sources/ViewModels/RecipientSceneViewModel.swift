@@ -40,7 +40,7 @@ public final class RecipientSceneViewModel {
     var addressInputModel: InputValidationViewModel
 
     public var contactsRequest: ContactsRequest
-    public var contacts: [Contact] = []
+    public var contacts: [ContactData] = []
 
     public init(
         wallet: Wallet,
@@ -235,9 +235,7 @@ extension RecipientSceneViewModel {
     private func sectionRecipients(for section: RecipientAddressType) -> [ListItemValue<RecipientAddress>] {
         switch section {
         case .contacts:
-            contacts.map {
-                ListItemValue(value: RecipientAddress(name: $0.name, address: $0.address, memo: $0.memo))
-            }
+            contacts.flatMap { ContactRecipientViewModel(contactData: $0).listItems }
         case .pinned, .wallets, .view:
             walletService.wallets
                 .filter { $0.id != wallet.id }

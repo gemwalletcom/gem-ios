@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "최소 거래 금액은 %@더 높은 금액을 입력해 주세요.";
 "swap.use_minimum_amount" = "최소 금액을 사용하세요";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "귀하의 직책이 여기에 표시됩니다.";
+"earn.state.empty.description" = "첫 입금 %@";
+"contacts.title" = "콘택트 렌즈";
+"contacts.contact" = "연락하다";
+"contacts.addresses" = "구애";

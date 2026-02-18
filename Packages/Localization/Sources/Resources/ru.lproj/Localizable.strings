@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Минимальная сумма сделки — %@. Введите, пожалуйста, сумму побольше.";
 "swap.use_minimum_amount" = "Использовать минимальное количество";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Ваши вакансии будут отображаться здесь.";
+"earn.state.empty.description" = "Внесите свой первый депозит %@";
+"contacts.title" = "Контакты";
+"contacts.contact" = "Контакт";
+"contacts.addresses" = "Адреса";

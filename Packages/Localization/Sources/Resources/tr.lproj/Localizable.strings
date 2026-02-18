@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Minimum işlem tutarı %@. Lütfen daha yüksek bir tutar girin.";
 "swap.use_minimum_amount" = "Minimum Tutarı Kullanın";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Pozisyonlarınız burada görünecektir.";
+"earn.state.empty.description" = "İlk para yatırma işleminizi gerçekleştirin. %@";
+"contacts.title" = "İletişim";
+"contacts.contact" = "Temas etmek";
+"contacts.addresses" = "Adresler";

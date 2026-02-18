@@ -24,6 +24,7 @@ let package = Package(
         .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
+        .package(name: "QRScanner", path: "../../Packages/QRScanner"),
     ],
     targets: [
         .target(
@@ -38,9 +39,21 @@ let package = Package(
                 "Validators",
                 "Formatters",
                 "GemstonePrimitives",
+                "QRScanner",
                 .product(name: "ContactService", package: "FeatureServices"),
             ],
             path: "Sources"
+        ),
+        .testTarget(
+            name: "ContactsTests",
+            dependencies: [
+                "Contacts",
+                "Primitives",
+                "PrimitivesComponents",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "ContactService", package: "FeatureServices"),
+            ]
         ),
     ]
 )

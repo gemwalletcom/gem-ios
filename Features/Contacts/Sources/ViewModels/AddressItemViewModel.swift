@@ -4,31 +4,35 @@ import Foundation
 import Primitives
 import Components
 import PrimitivesComponents
-import Style
 import Formatters
 
-struct ContactViewModel {
-    let contact: Contact
+struct AddressItemViewModel {
+    let address: ContactAddress
 
     var listItemModel: ListItemModel {
         ListItemModel(
-            title: contact.name,
-            titleStyle: .body.weight(.semibold),
+            title: title,
             titleExtra: formattedAddress,
-            titleStyleExtra: .calloutSecondary,
             imageStyle: .asset(assetImage: assetImage)
         )
     }
 
+    private var title: String {
+        if let description = address.description, !description.isEmpty {
+            return description
+        }
+        return address.chain.asset.name
+    }
+
     private var assetImage: AssetImage {
-        AssetImage.image(ChainImage(chain: contact.chain).placeholder)
+        AssetIdViewModel(assetId: address.chain.assetId).assetImage
     }
 
     private var formattedAddress: String {
         AddressFormatter(
             style: .short,
-            address: contact.address,
-            chain: contact.chain
+            address: address.address,
+            chain: address.chain
         ).value()
     }
 }

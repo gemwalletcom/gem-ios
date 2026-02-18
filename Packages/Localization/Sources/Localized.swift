@@ -330,11 +330,31 @@ public enum Localized {
     /// Yes
     public static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
   }
+  public enum Contacts {
+    /// Addresses
+    public static let addresses = Localized.tr("Localizable", "contacts.addresses", fallback: "Addresses")
+    /// Contact
+    public static let contact = Localized.tr("Localizable", "contacts.contact", fallback: "Contact")
+    /// Contacts
+    public static let title = Localized.tr("Localizable", "contacts.title", fallback: "Contacts")
+  }
   public enum Date {
     /// Today
     public static let today = Localized.tr("Localizable", "date.today", fallback: "Today")
     /// Yesterday
     public static let yesterday = Localized.tr("Localizable", "date.yesterday", fallback: "Yesterday")
+  }
+  public enum Earn {
+    public enum State {
+      public enum Empty {
+        /// Deposit your first %@
+        public static func description(_ p1: Any) -> String {
+          return Localized.tr("Localizable", "earn.state.empty.description", String(describing: p1), fallback: "Deposit your first %@")
+        }
+        /// Your positions will appear here
+        public static let title = Localized.tr("Localizable", "earn.state.empty.title", fallback: "Your positions will appear here")
+      }
+    }
   }
   public enum Errors {
     /// Camera permission not granted. Please enable camera access in settings to scan QR code.

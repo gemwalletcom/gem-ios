@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "کم از کم تجارتی رقم ہے۔ %@. براہ کرم زیادہ رقم درج کریں۔";
 "swap.use_minimum_amount" = "کم سے کم رقم استعمال کریں۔";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "آپ کی پوزیشنیں یہاں ظاہر ہوں گی۔";
+"earn.state.empty.description" = "اپنی پہلی جمع کروائیں۔ %@";
+"contacts.title" = "رابطے";
+"contacts.contact" = "رابطہ کریں۔";
+"contacts.addresses" = "پتے";

@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "न्यूनतम व्यापार राशि है %@कृपया अधिक राशि दर्ज करें।";
 "swap.use_minimum_amount" = "न्यूनतम राशि का प्रयोग करें";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "आपके पद यहां दिखाई देंगे";
+"earn.state.empty.description" = "अपनी पहली राशि जमा करें %@";
+"contacts.title" = "संपर्क";
+"contacts.contact" = "संपर्क";
+"contacts.addresses" = "पतों";

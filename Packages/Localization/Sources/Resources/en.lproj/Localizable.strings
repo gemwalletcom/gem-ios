@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
 "swap.use_minimum_amount" = "Use Minimum Amount";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Your positions will appear here";
+"earn.state.empty.description" = "Deposit your first %@";
+"contacts.title" = "Contacts";
+"contacts.contact" = "Contact";
+"contacts.addresses" = "Addresses";

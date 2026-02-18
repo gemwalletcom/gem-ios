@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Minimální částka obchodu je %@Zadejte prosím vyšší částku.";
 "swap.use_minimum_amount" = "Použijte minimální množství";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Vaše pozice se zde zobrazí";
+"earn.state.empty.description" = "Vložte svůj první vklad %@";
+"contacts.title" = "Kontakty";
+"contacts.contact" = "Kontakt";
+"contacts.addresses" = "Adresy";

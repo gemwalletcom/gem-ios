@@ -15,139 +15,112 @@ import Localization
 @Observable
 @MainActor
 public final class ManageContactViewModel {
+
+    public enum Mode {
+        case add
+        case edit(ContactData)
+    }
+
     private let service: ContactService
-    private let contact: Contact?
+    private let mode: Mode
     private let onComplete: (() -> Void)?
 
-    var chain: Chain?
-    var memo: String = ""
-    var description: String = ""
-    var addressInputModel: InputValidationViewModel
+    let contactId: String
+
     var nameInputModel: InputValidationViewModel
+    var description: String = ""
+    var addresses: [ContactAddress] = []
+    var isPresentingAddAddress = false
+    var isPresentingManageAddress: ContactAddress?
 
     public init(
         service: ContactService,
-        contact: Contact? = nil,
+        mode: Mode,
         onComplete: (() -> Void)? = nil
     ) {
         self.service = service
-        self.contact = contact
+        self.mode = mode
         self.onComplete = onComplete
 
-        self.nameInputModel = InputValidationViewModel(mode: .onDemand, validators: [.required(requireName: Localized.Wallet.name)])
-        self.addressInputModel = InputValidationViewModel(mode: .manual, validators: [])
-        self.chain = contact?.chain ?? Chain.allCases.first
+        self.nameInputModel = InputValidationViewModel(
+            mode: .onDemand,
+            validators: [.required(requireName: Localized.Wallet.name)]
+        )
 
-        if let contact {
-            self.memo = contact.memo ?? ""
-            self.description = contact.description ?? ""
-            self.nameInputModel.text = contact.name
-            self.addressInputModel.text = contact.address
-        }
-
-        if let chain {
-            updateAddressValidators(for: chain)
+        switch mode {
+        case .add:
+            self.contactId = UUID().uuidString
+        case .edit(let contactData):
+            self.contactId = contactData.contact.id
+            self.nameInputModel.text = contactData.contact.name
+            self.description = contactData.contact.description ?? ""
+            self.addresses = contactData.addresses
         }
     }
 
-    var isEditing: Bool { contact != nil }
-    var title: String { isEditing ? "Edit Contact" : "Add Contact" }
-    var saveButtonTitle: String { Localized.Transfer.confirm }
-    var networkTitle: String { Localized.Transfer.network }
+    var title: String { Localized.Contacts.contact }
+
+    var isAddMode: Bool {
+        switch mode {
+        case .add: true
+        case .edit: false
+        }
+    }
+    var buttonTitle: String { Localized.Common.save }
     var nameTitle: String { Localized.Wallet.name }
-    var addressTitle: String { Localized.Common.address }
-    var memoTitle: String { Localized.Transfer.memo }
     var descriptionTitle: String { Localized.Common.description }
-    var showMemo: Bool { chain?.isMemoSupported ?? false }
-    var pasteImage: Image { Images.System.paste }
-    var shouldShowInputActions: Bool { addressInputModel.text.isEmpty }
-    
-    var networkSelectorModel: NetworkSelectorViewModel {
-        NetworkSelectorViewModel(
-            state: .data(.plain(Chain.allCases)),
-            selectedItems: [chain].compactMap { $0 },
-            selectionType: .checkmark
+    var contactSectionTitle: String { Localized.Contacts.contact }
+    var addressesSectionTitle: String { Localized.Contacts.addresses }
+
+    var buttonState: ButtonState {
+        guard nameInputModel.isValid,
+              nameInputModel.text.isNotEmpty,
+              addresses.isNotEmpty else {
+            return .disabled
+        }
+
+        switch mode {
+        case .add:
+            return .normal
+        case .edit(let contactData):
+            return currentContactData != contactData ? .normal : .disabled
+        }
+    }
+
+    private var currentContactData: ContactData {
+        ContactData(contact: currentContact, addresses: addresses)
+    }
+
+    private var currentContact: Contact {
+        Contact(
+            id: contactId,
+            name: nameInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
+            description: description.isEmpty ? nil : description
         )
     }
 
-    var saveButtonState: ButtonState {
-        guard chain != nil,
-              nameInputModel.isValid,
-              nameInputModel.text.isNotEmpty,
-              addressInputModel.isValid,
-              addressInputModel.text.isNotEmpty else {
-            return .disabled
+    func onAddAddressComplete(_ address: ContactAddress) {
+        addresses.append(address)
+        isPresentingAddAddress = false
+    }
+
+    func onManageAddressComplete(_ address: ContactAddress) {
+        if let index = addresses.firstIndex(where: { $0.id == address.id }) {
+            addresses[index] = address
         }
-        return .normal
-    }
-}
-
-// MARK: - Actions
-
-extension ManageContactViewModel {
-    func onSelectChain(_ chain: Chain) {
-        self.chain = chain
-        self.memo = ""
-        updateAddressValidators(for: chain)
+        isPresentingManageAddress = nil
     }
 
-    func onSelectPaste() {
-        guard let address = UIPasteboard.general.string else { return }
-        addressInputModel.update(text: address)
+    func deleteAddress(at offsets: IndexSet) {
+        addresses.remove(atOffsets: offsets)
     }
 
     func onSave() {
-        guard let chain else { return }
-
-        nameInputModel.update()
-        addressInputModel.update()
-
-        guard nameInputModel.isValid, addressInputModel.isValid else { return }
-
-        let contact = Contact(
-            name: nameInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
-            address: addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
-            chain: chain,
-            memo: memo.isEmpty ? nil : memo,
-            description: description.isEmpty ? nil : description
-        )
-
         do {
-            if isEditing {
-                try service.updateContact(contact)
-            } else {
-                try service.addContact(contact)
-            }
+            try service.saveContact(currentContact, addresses: addresses)
             onComplete?()
         } catch {
             debugLog("ManageContactViewModel save error: \(error)")
-        }
-    }
-}
-
-// MARK: - Private
-
-extension ManageContactViewModel {
-    private func updateAddressValidators(for chain: Chain) {
-        let currentText = addressInputModel.text
-        let asset = Asset(
-            id: AssetId(chain: chain, tokenId: nil),
-            name: .empty,
-            symbol: .empty,
-            decimals: 0,
-            type: .native
-        )
-        addressInputModel = InputValidationViewModel(
-            mode: .manual,
-            validators: [
-                .required(requireName: Localized.Common.address),
-                .address(asset)
-            ]
-        )
-        addressInputModel.text = currentText
-
-        if currentText.isNotEmpty {
-            addressInputModel.update()
         }
     }
 }

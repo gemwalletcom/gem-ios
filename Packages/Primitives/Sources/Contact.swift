@@ -4,18 +4,42 @@
 
 import Foundation
 
-public struct Contact: Codable, Equatable, Hashable, Sendable {
+public struct Contact: Codable, Equatable, Hashable, Identifiable, Sendable {
+	public let id: String
 	public let name: String
+	public let description: String?
+
+	public init(id: String, name: String, description: String?) {
+		self.id = id
+		self.name = name
+		self.description = description
+	}
+}
+
+public struct ContactAddress: Codable, Equatable, Hashable, Identifiable, Sendable {
+	public let id: String
+	public let contactId: String
 	public let address: String
 	public let chain: Chain
 	public let memo: String?
 	public let description: String?
 
-	public init(name: String, address: String, chain: Chain, memo: String?, description: String?) {
-		self.name = name
+	public init(id: String, contactId: String, address: String, chain: Chain, memo: String?, description: String?) {
+		self.id = id
+		self.contactId = contactId
 		self.address = address
 		self.chain = chain
 		self.memo = memo
 		self.description = description
+	}
+}
+
+public struct ContactData: Codable, Equatable, Hashable, Sendable {
+	public let contact: Contact
+	public let addresses: [ContactAddress]
+
+	public init(contact: Contact, addresses: [ContactAddress]) {
+		self.contact = contact
+		self.addresses = addresses
 	}
 }

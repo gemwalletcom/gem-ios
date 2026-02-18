@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Minimalna kwota transakcji wynosi %@. Proszę wprowadzić wyższą kwotę.";
 "swap.use_minimum_amount" = "Użyj minimalnej kwoty";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Twoje pozycje będą widoczne tutaj";
+"earn.state.empty.description" = "Wpłać swoją pierwszą wpłatę %@";
+"contacts.title" = "Łączność";
+"contacts.contact" = "Kontakt";
+"contacts.addresses" = "Adresy";

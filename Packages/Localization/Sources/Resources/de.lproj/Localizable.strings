@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Der Mindesthandelsbetrag beträgt %@Bitte geben Sie einen höheren Betrag ein.";
 "swap.use_minimum_amount" = "Mindestmenge verwenden";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Ihre Positionen werden hier angezeigt.";
+"earn.state.empty.description" = "Zahlen Sie Ihre erste %@";
+"contacts.title" = "Kontakte";
+"contacts.contact" = "Kontakt";
+"contacts.addresses" = "Adressen";

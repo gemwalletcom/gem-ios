@@ -5,7 +5,7 @@ import Components
 import Primitives
 import PrimitivesComponents
 import Style
-import GemstonePrimitives
+import Localization
 
 public struct ManageContactScene: View {
 
@@ -16,8 +16,6 @@ public struct ManageContactScene: View {
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case name
-        case address
-        case memo
         case description
     }
 
@@ -27,18 +25,13 @@ public struct ManageContactScene: View {
 
     public var body: some View {
         List {
-            chainSection
-            nameSection
-            addressSection
-            if model.showMemo {
-                memoSection
-            }
-            descriptionSection
+            contactSection
+            addressesSection
         }
         .safeAreaButton {
             StateButton(
-                text: model.saveButtonTitle,
-                type: .primary(model.saveButtonState),
+                text: model.buttonTitle,
+                type: .primary(model.buttonState),
                 action: onSave
             )
         }
@@ -46,23 +39,25 @@ public struct ManageContactScene: View {
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: onAddAddress) {
+                    Images.System.plus
+                }
+            }
+        }
+        .onAppear {
+            if model.isAddMode {
+                focusedField = .name
+            }
+        }
     }
 }
 
 // MARK: - UI Components
 
 extension ManageContactScene {
-    private var chainSection: some View {
-        Section(model.networkTitle) {
-            if let chain = model.chain {
-                NavigationLink(value: Scenes.NetworksSelector()) {
-                    ChainView(model: ChainViewModel(chain: chain))
-                }
-            }
-        }
-    }
-
-    private var nameSection: some View {
+    private var contactSection: some View {
         Section {
             InputValidationField(
                 model: $model.nameInputModel,
@@ -71,52 +66,36 @@ extension ManageContactScene {
             )
             .focused($focusedField, equals: .name)
             .textInputAutocapitalization(.words)
-        }
-    }
 
-    private var addressSection: some View {
-        Section {
-            InputValidationField(
-                model: $model.addressInputModel,
-                placeholder: model.addressTitle,
-                allowClean: true,
-                trailingView: {
-                    if model.shouldShowInputActions {
-                        ListButton(
-                            image: model.pasteImage,
-                            action: onSelectPaste
-                        )
-                    }
-                }
-            )
-            .focused($focusedField, equals: .address)
-            .keyboardType(.alphabet)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-        }
-    }
-
-    private var memoSection: some View {
-        Section {
-            FloatTextField(
-                model.memoTitle,
-                text: $model.memo,
-                allowClean: focusedField == .memo
-            )
-            .focused($focusedField, equals: .memo)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-        }
-    }
-
-    private var descriptionSection: some View {
-        Section {
             FloatTextField(
                 model.descriptionTitle,
                 text: $model.description,
-                allowClean: focusedField == .description
+                allowClean: true
             )
             .focused($focusedField, equals: .description)
+        } header: {
+            Text(model.contactSectionTitle)
+        }
+    }
+
+    private var addressesSection: some View {
+        Section {
+            ForEach(model.addresses, id: \.id) { address in
+                NavigationCustomLink(
+                    with: ListItemView(model: AddressItemViewModel(address: address).listItemModel),
+                    action: { model.isPresentingManageAddress = address }
+                )
+            }
+            .onDelete(perform: model.deleteAddress)
+
+            Button(action: onAddAddress) {
+                HStack {
+                    Images.System.plus
+                    Text(Localized.Common.address)
+                }
+            }
+        } header: {
+            Text(model.addressesSectionTitle)
         }
     }
 }
@@ -124,9 +103,9 @@ extension ManageContactScene {
 // MARK: - Actions
 
 extension ManageContactScene {
-    private func onSelectPaste() {
-        model.onSelectPaste()
+    private func onAddAddress() {
         focusedField = nil
+        model.isPresentingAddAddress = true
     }
 
     private func onSave() {
@@ -135,3 +114,4 @@ extension ManageContactScene {
         dismiss()
     }
 }
+

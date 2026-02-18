@@ -18,10 +18,10 @@ public struct ContactsScene: View {
 
     public var body: some View {
         List {
-            ForEach(model.contacts, id: \.id) { contact in
+            ForEach(model.contacts) { contactData in
                 NavigationCustomLink(
-                    with: ListItemView(model: ContactViewModel(contact: contact).listItemModel),
-                    action: { model.isPresentingManageContact = contact }
+                    with: ListItemView(model: ContactItemViewModel(contactData: contactData).listItemModel),
+                    action: { model.isPresentingManageContact = contactData }
                 )
             }
             .onDelete(perform: model.deleteContacts)
@@ -48,15 +48,16 @@ public struct ContactsScene: View {
             ManageContactNavigationStack(
                 model: ManageContactViewModel(
                     service: model.service,
+                    mode: .add,
                     onComplete: model.onAddContactComplete
                 )
             )
         }
-        .sheet(item: $model.isPresentingManageContact) { contact in
+        .sheet(item: $model.isPresentingManageContact) { contactData in
             ManageContactNavigationStack(
                 model: ManageContactViewModel(
                     service: model.service,
-                    contact: contact,
+                    mode: .edit(contactData),
                     onComplete: model.onManageContactComplete
                 )
             )

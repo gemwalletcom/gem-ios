@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Het minimale handelsbedrag is %@Voer een hoger bedrag in.";
 "swap.use_minimum_amount" = "Gebruik de minimale hoeveelheid";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Uw posities verschijnen hier.";
+"earn.state.empty.description" = "Stort uw eerste %@";
+"contacts.title" = "Contacten";
+"contacts.contact" = "Contact";
+"contacts.addresses" = "Adressen";

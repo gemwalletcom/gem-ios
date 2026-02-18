@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "Minimumsbeløbet for handel er %@Indtast venligst et højere beløb.";
 "swap.use_minimum_amount" = "Brug minimumsbeløb";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Dine stillinger vil blive vist her";
+"earn.state.empty.description" = "Indbetal din første %@";
+"contacts.title" = "Kontakter";
+"contacts.contact" = "Kontakte";
+"contacts.addresses" = "Adresser";

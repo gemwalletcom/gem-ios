@@ -537,3 +537,8 @@
 "errors.swap.minimum_amount" = "最低取引金額は %@より高い金額を入力してください。";
 "swap.use_minimum_amount" = "最小量を使用する";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "あなたのポジションはここに表示されます";
+"earn.state.empty.description" = "最初の入金 %@";
+"contacts.title" = "連絡先";
+"contacts.contact" = "接触";
+"contacts.addresses" = "住所";

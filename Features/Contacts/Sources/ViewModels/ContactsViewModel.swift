@@ -3,9 +3,9 @@
 import Foundation
 import Primitives
 import ContactService
-import Components
 import PrimitivesComponents
 import Store
+import Localization
 
 @Observable
 @MainActor
@@ -13,9 +13,9 @@ public final class ContactsViewModel {
     let service: ContactService
 
     public var request: ContactsRequest
-    public var contacts: [Contact] = []
+    public var contacts: [ContactData] = []
 
-    var isPresentingManageContact: Contact?
+    var isPresentingManageContact: ContactData?
     var isPresentingAddContact = false
 
     public init(service: ContactService) {
@@ -23,13 +23,11 @@ public final class ContactsViewModel {
         self.request = ContactsRequest()
     }
 
-    var title: String { "Contacts" }
+    var title: String { Localized.Contacts.title }
 
     var emptyContent: EmptyContentTypeViewModel {
         EmptyContentTypeViewModel(type: .contacts)
     }
-
-    // MARK: - Actions
 
     func onAddContactComplete() {
         isPresentingAddContact = false
@@ -41,7 +39,7 @@ public final class ContactsViewModel {
 
     func deleteContacts(at offsets: IndexSet) {
         for index in offsets {
-            try? service.deleteContact(id: contacts[index].id)
+            try? service.deleteContact(id: contacts[index].contact.id)
         }
     }
 }
