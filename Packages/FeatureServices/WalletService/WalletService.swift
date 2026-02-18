@@ -24,7 +24,7 @@ public struct WalletService: Sendable {
         self.keystore = keystore
         self.walletStore = walletStore
         self.avatarService = avatarService
-        walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
+        self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
         self.preferences = preferences
     }
 
@@ -103,6 +103,7 @@ public struct WalletService: Sendable {
         try await keystore.deleteKey(for: wallet)
         try walletStore.deleteWallet(for: wallet.walletId)
         try avatarService.remove(for: wallet)
+        try FileManager.default.removeItem(at: WalletPreferences.preferencesURL(walletId: wallet.walletId))
 
         await MainActor.run {
             if currentWalletId == wallet.walletId {

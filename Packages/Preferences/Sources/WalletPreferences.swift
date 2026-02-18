@@ -16,7 +16,7 @@ public final class WalletPreferences: @unchecked Sendable {
     private let defaults: UserDefaults
 
     public init(walletId: WalletId) {
-        self.defaults = Self.suite(walletId: walletId.id)
+        self.defaults = UserDefaults(suiteName: Self.suiteName(walletId: walletId.id))!
     }
 
     public var completeInitialLoadAssets: Bool {
@@ -78,7 +78,11 @@ public final class WalletPreferences: @unchecked Sendable {
         return .none
     }
 
-    private static func suite(walletId: String) -> UserDefaults {
-        UserDefaults(suiteName: "wallet_preferences_\(walletId)_v2")!
+    private static func suiteName(walletId: String) -> String {
+        "wallet_preferences_\(walletId)_v2"
+    }
+
+    public static func preferencesURL(walletId: WalletId) -> URL {
+        FileManager.Directory.library(.preferences).url.appendingPathComponent("\(suiteName(walletId: walletId.id)).plist")
     }
 }

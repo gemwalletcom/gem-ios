@@ -60,6 +60,27 @@ struct WalletPreferencesTests {
         #expect(!preferences.completeInitialLoadAssets)
         #expect(!preferences.completeInitialAddressStatus)
         #expect(preferences.transactionsForAssetTimestamp(assetId: asset.id.identifier) == 0)
+    }
 
+    @Test
+    func preferencesURL() {
+        let walletId = WalletId(id: "test-id")
+        let url = WalletPreferences.preferencesURL(walletId: walletId)
+        let expectedURL = FileManager.Directory.library(.preferences).url.appendingPathComponent("wallet_preferences_test-id_v2.plist")
+
+        #expect(url == expectedURL)
+    }
+
+    @Test
+    func removePreferencesFile() throws {
+        let walletId = WalletId(id: UUID().uuidString)
+        let preferences = WalletPreferences(walletId: walletId)
+        preferences.assetsTimestamp = 1
+        let url = WalletPreferences.preferencesURL(walletId: walletId)
+
+        #expect(FileManager.default.fileExists(atPath: url.path))
+
+        try FileManager.default.removeItem(at: url)
+        #expect(FileManager.default.fileExists(atPath: url.path) == false)
     }
 }
