@@ -25,11 +25,19 @@ struct AssetDetailsInfoViewModel {
         }
     }
 
-    var showMarketValues: Bool { !marketValues.isEmpty }
-
     var marketValues: [MarketValueViewModel] {
         guard let market else { return [contractViewModel].withValues() }
-        return [market.marketCap, market.circulatingSupply, market.totalSupply, contractViewModel].withValues()
+        return [contractViewModel, market.marketCap, market.tradingVolume, market.fdv].withValues()
+    }
+
+    var supplyValues: [MarketValueViewModel] {
+        guard let market else { return [] }
+        return [market.circulatingSupply, market.totalSupply, market.maxSupply].withValues()
+    }
+
+    var allTimeValues: [MarketValueViewModel] {
+        guard let market else { return [] }
+        return [market.allTimeHigh, market.allTimeLow].withValues()
     }
 
     var showLinks: Bool { !priceData.links.isEmpty }
