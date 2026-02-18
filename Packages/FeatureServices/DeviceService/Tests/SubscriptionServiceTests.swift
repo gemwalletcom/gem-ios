@@ -10,7 +10,7 @@ struct SubscriptionServiceTests {
     func addNewChainToExisting() {
         let local = [
             WalletSubscription(
-                wallet_id: "wallet1",
+                walletId: "wallet1",
                 source: .import,
                 subscriptions: [
                     ChainAddress(chain: .bitcoin, address: "btc1"),
@@ -19,15 +19,15 @@ struct SubscriptionServiceTests {
             )
         ]
         let remote = [
-            WalletSubscriptionChains(wallet_id: "wallet1", chains: [.bitcoin])
+            WalletSubscriptionChains(walletId: "wallet1", chains: [.bitcoin])
         ]
 
         let changes = SubscriptionService.calculateChanges(local: local, remote: remote)
 
         #expect(changes.toAdd.count == 1)
-        #expect(changes.toAdd[0].wallet_id == "wallet1")
+        #expect(changes.toAdd[0].walletId == "wallet1")
         #expect(changes.toAdd[0].subscriptions.count == 1)
-        #expect(changes.toAdd[0].subscriptions[0].chain == .ethereum)
+        #expect(changes.toAdd[0].subscriptions[0].chain == Chain.ethereum)
         #expect(changes.toDelete.isEmpty)
     }
 
@@ -35,7 +35,7 @@ struct SubscriptionServiceTests {
     func removeChainFromExisting() {
         let local = [
             WalletSubscription(
-                wallet_id: "wallet1",
+                walletId: "wallet1",
                 source: .import,
                 subscriptions: [
                     ChainAddress(chain: .bitcoin, address: "btc1")
@@ -43,37 +43,37 @@ struct SubscriptionServiceTests {
             )
         ]
         let remote = [
-            WalletSubscriptionChains(wallet_id: "wallet1", chains: [.bitcoin, .ethereum])
+            WalletSubscriptionChains(walletId: "wallet1", chains: [.bitcoin, .ethereum])
         ]
 
         let changes = SubscriptionService.calculateChanges(local: local, remote: remote)
 
         #expect(changes.toAdd.isEmpty)
         #expect(changes.toDelete.count == 1)
-        #expect(changes.toDelete[0].wallet_id == "wallet1")
-        #expect(changes.toDelete[0].chains == [.ethereum])
+        #expect(changes.toDelete[0].walletId == "wallet1")
+        #expect(changes.toDelete[0].chains == [Chain.ethereum])
     }
 
     @Test
     func deleteEntireWallet() {
         let local: [WalletSubscription] = []
         let remote = [
-            WalletSubscriptionChains(wallet_id: "wallet1", chains: [.bitcoin, .ethereum])
+            WalletSubscriptionChains(walletId: "wallet1", chains: [.bitcoin, .ethereum])
         ]
 
         let changes = SubscriptionService.calculateChanges(local: local, remote: remote)
 
         #expect(changes.toAdd.isEmpty)
         #expect(changes.toDelete.count == 1)
-        #expect(changes.toDelete[0].wallet_id == "wallet1")
-        #expect(changes.toDelete[0].chains.sorted() == [.bitcoin, .ethereum].sorted())
+        #expect(changes.toDelete[0].walletId == "wallet1")
+        #expect(Set(changes.toDelete[0].chains) == Set([Chain.bitcoin, Chain.ethereum]))
     }
 
     @Test
     func addNewWallet() {
         let local = [
             WalletSubscription(
-                wallet_id: "wallet1",
+                walletId: "wallet1",
                 source: .import,
                 subscriptions: [
                     ChainAddress(chain: .bitcoin, address: "btc1"),
@@ -86,7 +86,7 @@ struct SubscriptionServiceTests {
         let changes = SubscriptionService.calculateChanges(local: local, remote: remote)
 
         #expect(changes.toAdd.count == 1)
-        #expect(changes.toAdd[0].wallet_id == "wallet1")
+        #expect(changes.toAdd[0].walletId == "wallet1")
         #expect(changes.toAdd[0].subscriptions.count == 2)
         #expect(changes.toDelete.isEmpty)
     }
@@ -95,7 +95,7 @@ struct SubscriptionServiceTests {
     func noChanges() {
         let local = [
             WalletSubscription(
-                wallet_id: "wallet1",
+                walletId: "wallet1",
                 source: .import,
                 subscriptions: [
                     ChainAddress(chain: .bitcoin, address: "btc1"),
@@ -104,7 +104,7 @@ struct SubscriptionServiceTests {
             )
         ]
         let remote = [
-            WalletSubscriptionChains(wallet_id: "wallet1", chains: [.bitcoin, .ethereum])
+            WalletSubscriptionChains(walletId: "wallet1", chains: [.bitcoin, .ethereum])
         ]
 
         let changes = SubscriptionService.calculateChanges(local: local, remote: remote)
@@ -118,14 +118,14 @@ struct SubscriptionServiceTests {
     func multipleWalletsWithChanges() {
         let local = [
             WalletSubscription(
-                wallet_id: "wallet1",
+                walletId: "wallet1",
                 source: .import,
                 subscriptions: [
                     ChainAddress(chain: .bitcoin, address: "btc1")
                 ]
             ),
             WalletSubscription(
-                wallet_id: "wallet2",
+                walletId: "wallet2",
                 source: .import,
                 subscriptions: [
                     ChainAddress(chain: .ethereum, address: "eth1"),
@@ -134,31 +134,31 @@ struct SubscriptionServiceTests {
             )
         ]
         let remote = [
-            WalletSubscriptionChains(wallet_id: "wallet1", chains: [.bitcoin, .ethereum]),
-            WalletSubscriptionChains(wallet_id: "wallet3", chains: [.solana])
+            WalletSubscriptionChains(walletId: "wallet1", chains: [.bitcoin, .ethereum]),
+            WalletSubscriptionChains(walletId: "wallet3", chains: [.solana])
         ]
 
         let changes = SubscriptionService.calculateChanges(local: local, remote: remote)
 
         #expect(changes.toAdd.count == 1)
-        #expect(changes.toAdd[0].wallet_id == "wallet2")
+        #expect(changes.toAdd[0].walletId == "wallet2")
 
         #expect(changes.toDelete.count == 2)
-        let deleteWalletIds = changes.toDelete.map(\.wallet_id).sorted()
+        let deleteWalletIds = changes.toDelete.map(\.walletId).sorted()
         #expect(deleteWalletIds == ["wallet1", "wallet3"])
 
-        let wallet1Delete = changes.toDelete.first { $0.wallet_id == "wallet1" }
-        #expect(wallet1Delete?.chains == [.ethereum])
+        let wallet1Delete = changes.toDelete.first { $0.walletId == "wallet1" }
+        #expect(wallet1Delete?.chains == [Chain.ethereum])
 
-        let wallet3Delete = changes.toDelete.first { $0.wallet_id == "wallet3" }
-        #expect(wallet3Delete?.chains == [.solana])
+        let wallet3Delete = changes.toDelete.first { $0.walletId == "wallet3" }
+        #expect(wallet3Delete?.chains == [Chain.solana])
     }
 
     @Test
     func chainOrderDoesNotMatter() {
         let local = [
             WalletSubscription(
-                wallet_id: "wallet1",
+                walletId: "wallet1",
                 source: .import,
                 subscriptions: [
                     ChainAddress(chain: .ethereum, address: "eth1"),
@@ -167,7 +167,7 @@ struct SubscriptionServiceTests {
             )
         ]
         let remote = [
-            WalletSubscriptionChains(wallet_id: "wallet1", chains: [.bitcoin, .ethereum])
+            WalletSubscriptionChains(walletId: "wallet1", chains: [.bitcoin, .ethereum])
         ]
 
         let changes = SubscriptionService.calculateChanges(local: local, remote: remote)
