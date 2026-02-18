@@ -7,47 +7,36 @@ import Style
 import Components
 
 struct CandleTooltipViewModel {
-    struct StyleDefaults {
-        static let label = TextStyle(font: .system(size: .space8), color: Colors.secondaryText, fontWeight: .medium)
-        static let value = TextStyle(font: .caption2, color: Colors.black, fontWeight: .semibold)
-        static let small = TextStyle(font: .system(size: .space8), color: Colors.black, fontWeight: .medium)
-        static let rangePrice = TextStyle(font: .system(size: .space10), color: Colors.black, fontWeight: .semibold)
-    }
+    private static let titleStyle = TextStyle(font: .caption2, color: Colors.secondaryText, fontWeight: .medium)
+    private static let subtitleStyle = TextStyle(font: .caption2.monospacedDigit(), color: Colors.black, fontWeight: .semibold)
+    private static let volumeFormatter = CurrencyFormatter(type: .abbreviated, currencyCode: Currency.usd.rawValue)
 
     private let candle: ChartCandleStick
     private let formatter: CurrencyFormatter
-    private static let volumeFormatter = CurrencyFormatter(type: .abbreviated, currencyCode: Currency.usd.rawValue)
 
     init(candle: ChartCandleStick, formatter: CurrencyFormatter) {
         self.candle = candle
         self.formatter = formatter
     }
 
-    var openTitle: TextValue { TextValue(text: "Open", style: StyleDefaults.label) }
-    var openValue: TextValue { TextValue(text: formatter.string(double: candle.open), style: StyleDefaults.value) }
+    var openTitle: TextValue { TextValue(text: "Open", style: Self.titleStyle, lineLimit: 1) }
+    var openValue: TextValue { TextValue(text: formatter.string(double: candle.open), style: Self.subtitleStyle, lineLimit: 1) }
 
-    var closeTitle: TextValue { TextValue(text: "Close", style: StyleDefaults.label) }
-    var closeValue: TextValue {
-        TextValue(
-            text: formatter.string(double: candle.close),
-            style: TextStyle(font: .caption2, color: PriceChangeColor.color(for: candle.close - candle.open), fontWeight: .semibold)
-        )
+    var closeTitle: TextValue { TextValue(text: "Close", style: Self.titleStyle, lineLimit: 1) }
+    var closeValue: TextValue { TextValue(text: formatter.string(double: candle.close), style: Self.subtitleStyle, lineLimit: 1) }
+
+    var highTitle: TextValue { TextValue(text: "High", style: Self.titleStyle, lineLimit: 1) }
+    var highValue: TextValue { TextValue(text: formatter.string(double: candle.high), style: Self.subtitleStyle, lineLimit: 1) }
+
+    var lowTitle: TextValue { TextValue(text: "Low", style: Self.titleStyle, lineLimit: 1) }
+    var lowValue: TextValue { TextValue(text: formatter.string(double: candle.low), style: Self.subtitleStyle, lineLimit: 1) }
+
+    var changeTitle: TextValue { TextValue(text: "Change", style: Self.titleStyle, lineLimit: 1) }
+    var changeValue: TextValue {
+        let change = PriceChangeCalculator.calculate(.percentage(from: candle.open, to: candle.close))
+        return TextValue(text: CurrencyFormatter.percent.string(change), style: TextStyle(font: .caption2.monospacedDigit(), color: PriceChangeColor.color(for: change), fontWeight: .semibold), lineLimit: 1)
     }
 
-    var volumeTitle: TextValue { TextValue(text: "Volume", style: StyleDefaults.label) }
-    var volumeValue: TextValue { TextValue(text: Self.volumeFormatter.string(candle.volume * candle.close), style: StyleDefaults.small) }
-
-    var rangeBar: RangeBarViewModel {
-        let closePosition: Double = {
-            let range = candle.high - candle.low
-            return range > 0 ? (candle.close - candle.low) / range : 0.5
-        }()
-        return RangeBarViewModel(
-            lowTitle: TextValue(text: "Low", style: TextStyle(font: .system(size: .space8), color: Colors.red, fontWeight: .medium)),
-            highTitle: TextValue(text: "High", style: TextStyle(font: .system(size: .space8), color: Colors.green, fontWeight: .medium)),
-            lowValue: TextValue(text: formatter.string(double: candle.low), style: StyleDefaults.rangePrice),
-            highValue: TextValue(text: formatter.string(double: candle.high), style: StyleDefaults.rangePrice),
-            closePosition: closePosition
-        )
-    }
+    var volumeTitle: TextValue { TextValue(text: "Volume", style: Self.titleStyle, lineLimit: 1) }
+    var volumeValue: TextValue { TextValue(text: Self.volumeFormatter.string(candle.volume * candle.close), style: Self.subtitleStyle, lineLimit: 1) }
 }

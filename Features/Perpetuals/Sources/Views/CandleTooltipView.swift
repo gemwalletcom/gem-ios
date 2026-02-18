@@ -8,32 +8,16 @@ struct CandleTooltipView: View {
     let model: CandleTooltipViewModel
 
     var body: some View {
-        VStack(spacing: Spacing.extraSmall) {
-            HStack {
-                VStack(alignment: .leading, spacing: Spacing.extraSmall) {
-                    Text(model.openTitle.text)
-                        .textStyle(model.openTitle.style)
-                    Text(model.openValue.text)
-                        .textStyle(model.openValue.style)
-                }
-                Spacer(minLength: Spacing.medium)
-                VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
-                    Text(model.closeTitle.text)
-                        .textStyle(model.closeTitle.style)
-                    Text(model.closeValue.text)
-                        .textStyle(model.closeValue.style)
-                }
+        VStack(spacing: Spacing.small) {
+            VStack(spacing: Spacing.extraSmall) {
+                ListItemView(title: model.openTitle, subtitle: model.openValue)
+                ListItemView(title: model.highTitle, subtitle: model.highValue)
+                ListItemView(title: model.lowTitle, subtitle: model.lowValue)
+                ListItemView(title: model.closeTitle, subtitle: model.closeValue)
             }
-            RangeBarView(model: model.rangeBar)
-                .padding(.bottom, Spacing.extraSmall)
-            Divider()
-                .padding(.bottom, Spacing.extraSmall)
-            HStack {
-                Text(model.volumeTitle.text)
-                    .textStyle(model.volumeTitle.style)
-                Spacer()
-                Text(model.volumeValue.text)
-                    .textStyle(model.volumeValue.style)
+            VStack(spacing: Spacing.extraSmall) {
+                ListItemView(title: model.changeTitle, subtitle: model.changeValue)
+                ListItemView(title: model.volumeTitle, subtitle: model.volumeValue)
             }
         }
         .padding(Spacing.small)
