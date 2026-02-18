@@ -19,29 +19,22 @@ struct AssetsEnablerService: AssetsEnabler {
         self.priceUpdater = priceUpdater
     }
 
-    func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async {
-        do {
-            for assetId in assetIds {
-                try assetsService.addBalanceIfMissing(walletId: walletId, assetId: assetId)
-            }
-            try assetsService.updateEnabled(walletId: walletId, assetIds: assetIds, enabled: enabled)
-            // If enabling, also update balances and prices
-            if enabled {
-                async let balanceUpdate: () = balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
-                async let priceUpdate: () = priceUpdater.addPrices(assetIds: assetIds)
-                _ = try await (balanceUpdate, priceUpdate)
-            }
-        } catch {
-            debugLog("enableAssets error: \(error)")
+    func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async throws {
+        for assetId in assetIds {
+            try assetsService.addBalanceIfMissing(walletId: walletId, assetId: assetId)
         }
+
+        try assetsService.updateEnabled(walletId: walletId, assetIds: assetIds, enabled: enabled)
+
+        guard enabled else { return }
+
+        async let balanceUpdate: () = balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
+        async let priceUpdate: () = priceUpdater.addPrices(assetIds: assetIds)
+        _ = try await (balanceUpdate, priceUpdate)
     }
 
-    func enableAssetId(walletId: WalletId, assetId: AssetId) async {
-        do {
-            let asset = try await assetsService.getOrFetchAsset(for: assetId)
-            await enableAssets(walletId: walletId, assetIds: [asset.id], enabled: true)
-        } catch {
-            debugLog("enableAssetId error: \(error)")
-        }
+    func enableAssetId(walletId: WalletId, assetId: AssetId) async throws {
+        let asset = try await assetsService.getOrFetchAsset(for: assetId)
+        try await enableAssets(walletId: walletId, assetIds: [asset.id], enabled: true)
     }
 }

@@ -48,6 +48,8 @@ public extension Images {
         public static let dollar = Image(systemName: SystemImage.dollarsign)
         public static let wallet = Image(systemName: SystemImage.wallet)
         public static let bitcoin = Image(systemName: SystemImage.bitcoin)
+        public static let arrowTriangleUp = Image(systemName: SystemImage.arrowTriangleUp)
+        public static let arrowTriangleDown = Image(systemName: SystemImage.arrowTriangleDown)
         public static let person = Image(systemName: SystemImage.person)
         public static let personBadgePlus = Image(systemName: SystemImage.personBadgePlus)
     }

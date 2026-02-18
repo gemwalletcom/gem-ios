@@ -102,7 +102,8 @@ let package = Package(
                 "Primitives",
                 "Store",
                 .product(name: "ChainService", package: "ChainServices"),
-                "AssetsService"
+                "AssetsService",
+                "Formatters"
             ],
             path: "BalanceService",
             exclude: ["TestKit"]
@@ -345,14 +346,11 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
-                "BannerService",
                 "PriceService",
                 "Preferences",
                 "BalanceService",
                 "AssetsService",
-                "TransactionStateService",
                 "DiscoverAssetsService",
-                .product(name: "ChainService", package: "ChainServices"),
                 "WalletSessionService",
                 "DeviceService"
             ],

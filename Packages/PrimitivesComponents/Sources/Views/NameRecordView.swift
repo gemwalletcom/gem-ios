@@ -11,7 +11,6 @@ public struct NameRecordView: View {
 
     @Binding var state: NameRecordState
     @Binding var address: String
-    let debounceTimeout: Duration = .Debounce.slow
 
     @State var nameResolveTask: Task<NameRecord, any Error>?
 
@@ -41,7 +40,7 @@ public struct NameRecordView: View {
                     state = .loading
                     do {
                         let task = Task.detached { @Sendable in
-                            try await Task.sleep(for: debounceTimeout)
+                            try await Task.sleep(for: .debounce)
                             return try await model.resolveName(name: address)
                         }
                         nameResolveTask = task

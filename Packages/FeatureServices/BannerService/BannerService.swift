@@ -53,7 +53,6 @@ public struct BannerService: Sendable {
     }
 }
 
-
 // MARK: - Actions
 
 extension BannerService {

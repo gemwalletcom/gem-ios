@@ -20,13 +20,14 @@ struct WalletIdMigration {
     ]
 
     private static let currentWalletKey = "currentWallet"
+    private static let subscriptionsVersionHasChangeKey = "subscriptions_version_has_change"
 
     static func migrate(db: Database, userDefaults: UserDefaults = .standard) throws {
         let mappings = try buildWalletMappings(db: db)
         if mappings.isEmpty {
             return
         }
-        
+
         try db.execute(sql: "PRAGMA foreign_keys = OFF")
 
         let groups = Dictionary(grouping: mappings, by: { $0.newId })
@@ -60,6 +61,7 @@ struct WalletIdMigration {
         try db.execute(sql: "PRAGMA foreign_keys = ON")
 
         migrateCurrentWalletPreference(mappings: remainingMappings, userDefaults: userDefaults)
+        userDefaults.set(true, forKey: subscriptionsVersionHasChangeKey)
     }
 
     private static func cleanupOrphanedRecords(db: Database) {

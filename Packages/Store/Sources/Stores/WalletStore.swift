@@ -72,7 +72,6 @@ public struct WalletStore: Sendable {
         }
     }
     
-    
     @discardableResult
     public func deleteWallet(for walletId: WalletId) throws -> Bool {
         try db.write { db in

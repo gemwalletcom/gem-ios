@@ -30,7 +30,7 @@ public extension View {
     func debounce<T: Hashable & Sendable>(
         value: T,
         initial: Bool = false,
-        interval: Duration?,
+        interval: Duration? = .debounce,
         action: @Sendable @escaping (T) async -> Void
     ) -> some View {
         modifier(

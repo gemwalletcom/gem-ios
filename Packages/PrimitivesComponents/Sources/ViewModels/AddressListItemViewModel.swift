@@ -44,7 +44,6 @@ public struct AddressListItemViewModel {
         account.assetImage
     }
 
-
     public var addressExplorerText: String {
         Localized.Transaction.viewOn(addressLink.name)
     }

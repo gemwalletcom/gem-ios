@@ -14,7 +14,7 @@ struct SwapButtonViewModelTests {
     
     @Test
     func retryQuotesWhenQuotesFail() {
-        let swapState = SwapState(availability: .error(MockRetryableError()))
+        let swapState = SwapState(quotes: .error(MockRetryableError()))
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
         
         #expect(viewModel.buttonAction == SwapButtonAction.retryQuotes)
@@ -25,7 +25,7 @@ struct SwapButtonViewModelTests {
     
     @Test
     func retrySwapWhenTransferDataFails() {
-        let swapState = SwapState(availability: .data([]), swapTransferData: .error(MockRetryableError()))
+        let swapState = SwapState(quotes: .data([]), swapTransferData: .error(MockRetryableError()))
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
         
         #expect(viewModel.buttonAction == SwapButtonAction.retrySwap)
@@ -36,7 +36,7 @@ struct SwapButtonViewModelTests {
     
     @Test
     func retrySwapShowsLoadingWhenInProgress() {
-        let swapState = SwapState(availability: .data([]), swapTransferData: .loading)
+        let swapState = SwapState(quotes: .data([]), swapTransferData: .loading)
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
 
         #expect(viewModel.type == ButtonType.primary(.loading()))
@@ -46,7 +46,7 @@ struct SwapButtonViewModelTests {
     @Test
     func insufficientBalanceWhenAmountInvalid() {
         let asset = AssetData.mock(asset: .mock(symbol: "BTC"))
-        let swapState = SwapState(availability: .data([]))
+        let swapState = SwapState(quotes: .data([]))
         let viewModel = SwapButtonViewModel.mock(swapState: swapState, isAmountValid: false, fromAsset: asset)
         
         #expect(viewModel.buttonAction == SwapButtonAction.insufficientBalance(asset: asset.asset))
@@ -57,7 +57,7 @@ struct SwapButtonViewModelTests {
     
     @Test
     func swapWhenReadyToExecute() {
-        let swapState = SwapState(availability: .data([]))
+        let swapState = SwapState(quotes: .data([]))
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
         
         #expect(viewModel.buttonAction == SwapButtonAction.swap)
@@ -68,7 +68,7 @@ struct SwapButtonViewModelTests {
     
     @Test
     func hiddenWhenNoQuotes() {
-        let swapState = SwapState(availability: .noData)
+        let swapState = SwapState(quotes: .noData)
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
         
         #expect(viewModel.isVisible == false)
@@ -76,7 +76,7 @@ struct SwapButtonViewModelTests {
     
     @Test
     func showLoadingWhenFetchingQuotes() {
-        let swapState = SwapState(availability: .loading)
+        let swapState = SwapState(quotes: .loading)
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
         
         #expect(viewModel.type == ButtonType.primary(.loading()))
@@ -86,7 +86,7 @@ struct SwapButtonViewModelTests {
     @Test
     func canRetryLogicEdgeCase() {
         let swapState = SwapState(
-            availability: .error(MockNonRetryableError()),
+            quotes: .error(MockNonRetryableError()),
             swapTransferData: .error(MockRetryableError())
         )
         let viewModel = SwapButtonViewModel.mock(swapState: swapState)
@@ -96,7 +96,7 @@ struct SwapButtonViewModelTests {
 
 extension SwapButtonViewModel {
     static func mock(
-        swapState: SwapState = SwapState(availability: .noData),
+        swapState: SwapState = SwapState(quotes: .noData),
         isAmountValid: Bool = true,
         fromAsset: AssetData? = .mock()
     ) -> SwapButtonViewModel {

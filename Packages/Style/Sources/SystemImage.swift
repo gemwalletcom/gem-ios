@@ -50,6 +50,8 @@ public struct SystemImage {
     public static let dollarsign = "dollarsign"
     public static let wallet = "wallet.pass"
     public static let bitcoin = "bitcoinsign.arrow.trianglehead.counterclockwise.rotate.90"
+    public static let arrowTriangleUp = "arrowtriangle.up.fill"
+    public static let arrowTriangleDown = "arrowtriangle.down.fill"
     public static let person = "person"
     public static let personBadgePlus = "person.crop.circle.badge.plus"
 

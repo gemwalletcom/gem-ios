@@ -9,7 +9,6 @@ struct PerpetualPriceFormatterTests {
 
     let formatter = PerpetualFormatter(provider: PerpetualProvider.hypercore)
     
-
     @Test
     func formatInputPrice() {
         let usLocale = Locale(identifier: "en_US")
@@ -45,7 +44,6 @@ struct PerpetualPriceFormatterTests {
 
         let esLocale = Locale(identifier: "es_ES")
         #expect(formatter.formatInputPrice(999.99, decimals: 0, locale: esLocale) == "999,99")
-
 
         let ukLocale = Locale(identifier: "en_GB")
         #expect(formatter.formatInputPrice(100.1, decimals: 0, locale: ukLocale) == "100.1")

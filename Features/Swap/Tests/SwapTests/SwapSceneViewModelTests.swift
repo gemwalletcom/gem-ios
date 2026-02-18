@@ -47,6 +47,9 @@ struct SwapSceneViewModelTests {
         model.swapState.quotes = .error(TestError())
         #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retryQuotes)
 
+        model.swapState.quotes = .error(SwapperError.InputAmountError(minAmount: "1000"))
+        #expect(model.buttonViewModel.buttonAction == SwapButtonAction.useMinAmount(amount: "1000", asset: .mockEthereum()))
+
         model.swapState.quotes = .data([])
         model.swapState.swapTransferData = .error(TestError())
         #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retrySwap)
@@ -61,7 +64,7 @@ struct SwapSceneViewModelTests {
         let model = SwapSceneViewModel.mock(swapper: swapper)
 
         let task = Task {
-            await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+            await model.fetch()
         }
 
         try await Task.sleep(for: .milliseconds(50))
@@ -82,7 +85,7 @@ struct SwapSceneViewModelTests {
         let model = SwapSceneViewModel.mock(swapper: swapper)
 
         let task = Task {
-            await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+            await model.fetch()
         }
 
         try await Task.sleep(for: .milliseconds(50))
@@ -94,14 +97,46 @@ struct SwapSceneViewModelTests {
         #expect(model.swapState.quotes.isNoData)
     }
 
+    @Test
+    func fetchTriggerIsImmediate() {
+        let model = SwapSceneViewModel.mock()
+
+        model.fetchTrigger = nil
+        model.onChangeFromValue("1", "2")
+
+        #expect(model.fetchTrigger?.isImmediate == false)
+
+        model.fetchTrigger = nil
+        model.onSelectPercent(50)
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+
+        model.fetchTrigger = nil
+        model.onChangeToAsset(old: .mock(asset: .mockEthereum()), new: .mock(asset: .mockEthereumUSDT()))
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+
+        model.fetchTrigger = nil
+        model.swapState.quotes = .error(SwapperError.NoQuoteAvailable)
+        model.buttonViewModel.action()
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+
+        model.fetchTrigger = nil
+        model.swapState.quotes = .error(SwapperError.InputAmountError(minAmount: "1000000000000000000"))
+        model.buttonViewModel.action()
+
+        #expect(model.fetchTrigger?.isImmediate == true)
+    }
+
     // MARK: - Private methods
-    
+
     private func model(
         toValueMock: String = "250000000000"
     ) async -> SwapSceneViewModel {
         let swapper = GemSwapperMock(quotes: [.mock(toValue: toValueMock)])
         let model = SwapSceneViewModel.mock(swapper: swapper)
-        await model.onFetchStateChange(state: .fetch(input: .mock(), delay: nil))
+        await model.fetch()
         return model
     }
 }
@@ -119,21 +154,11 @@ extension SwapSceneViewModel {
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: LocalKeystore.mock(), swapService: .mock(swapper: swapper))
         )
 
-        model.fromAsset = .mock(asset: .mockEthereum())
+        model.fromAsset = .mock(asset: .mockEthereum(), balance: .mock())
         model.toAsset = .mock(asset: .mockEthereumUSDT())
-        
-        return model
-    }
-}
+        model.amountInputModel.text = "1"
 
-extension SwapQuoteInput {
-    static func mock() -> SwapQuoteInput {
-        SwapQuoteInput(
-            fromAsset: .mockEthereum(),
-            toAsset: .mockEthereumUSDT(),
-            value: 1000000000000000000,
-            useMaxAmount: false
-        )
+        return model
     }
 }
 

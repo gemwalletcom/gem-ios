@@ -24,7 +24,7 @@ final class AddNodeSceneViewModel {
     var state: StateViewType<AddNodeResultViewModel> = .noData
     var isPresentingScanner: Bool = false
     var isPresentingAlertMessage: AlertMessage?
-    var debounceInterval: Duration? = .Debounce.normal
+    var fetchTrigger: AddNodeFetchTrigger?
 
     init(chain: Chain, nodeService: NodeService, chainServiceFactory: ChainServiceFactory) {
         self.chain = chain
@@ -60,19 +60,24 @@ final class AddNodeSceneViewModel {
 // MARK: - Business Logic
 
 extension AddNodeSceneViewModel {
-    func onChangeInput(_ text: String) async {
-        debounceInterval = .Debounce.normal
-
-        guard text.isNotEmpty, urlInputModel.isValid else {
-            state = .noData
-            return
-        }
-        await fetch()
+    func onChangeInput() {
+        guard fetchTrigger?.url != urlInputModel.text else { return }
+        setFetchTrigger(isImmediate: false)
     }
 
     func setInput(_ text: String) {
-        debounceInterval = nil
         urlInputModel.text = text
+        setFetchTrigger(isImmediate: true)
+    }
+
+    private func setFetchTrigger(isImmediate: Bool) {
+        let text = urlInputModel.text
+        guard text.isNotEmpty, urlInputModel.isValid else {
+            state = .noData
+            fetchTrigger = nil
+            return
+        }
+        fetchTrigger = AddNodeFetchTrigger(url: text, isImmediate: isImmediate)
     }
 
     func importFoundNode() throws {

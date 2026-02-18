@@ -10,7 +10,6 @@ import Components
 import Style
 import NameService
 import Keystore
-import WalletsService
 import NodeService
 import SwiftUI
 import ScanService
