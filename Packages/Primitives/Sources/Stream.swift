@@ -22,16 +22,6 @@ public struct StreamMessagePrices: Codable, Sendable {
 	}
 }
 
-public struct StreamNewAssetsUpdate: Codable, Sendable {
-	public let walletId: WalletId
-	public let assets: [AssetId]
-
-	public init(walletId: WalletId, assets: [AssetId]) {
-		self.walletId = walletId
-		self.assets = assets
-	}
-}
-
 public struct StreamNftUpdate: Codable, Sendable {
 	public let walletId: WalletId
 
@@ -84,7 +74,6 @@ public enum StreamEvent: Codable, Sendable {
 	case nft(StreamNftUpdate)
 	case perpetual(StreamPerpetualUpdate)
 	case inAppNotification(StreamNotificationlUpdate)
-	case newAssets(StreamNewAssetsUpdate)
 
 	enum CodingKeys: String, CodingKey, Codable {
 		case prices,
@@ -93,8 +82,7 @@ public enum StreamEvent: Codable, Sendable {
 			priceAlerts,
 			nft,
 			perpetual,
-			inAppNotification,
-			newAssets
+			inAppNotification
 	}
 
 	private enum ContainerCodingKeys: String, CodingKey {
@@ -140,11 +128,6 @@ public enum StreamEvent: Codable, Sendable {
 					self = .inAppNotification(content)
 					return
 				}
-			case .newAssets:
-				if let content = try? container.decode(StreamNewAssetsUpdate.self, forKey: .data) {
-					self = .newAssets(content)
-					return
-				}
 			}
 		}
 		throw DecodingError.typeMismatch(StreamEvent.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for StreamEvent"))
@@ -173,9 +156,6 @@ public enum StreamEvent: Codable, Sendable {
 			try container.encode(content, forKey: .data)
 		case .inAppNotification(let content):
 			try container.encode(CodingKeys.inAppNotification, forKey: .event)
-			try container.encode(content, forKey: .data)
-		case .newAssets(let content):
-			try container.encode(CodingKeys.newAssets, forKey: .event)
 			try container.encode(content, forKey: .data)
 		}
 	}
