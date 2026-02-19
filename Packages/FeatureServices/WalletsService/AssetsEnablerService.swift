@@ -19,14 +19,14 @@ struct AssetsEnablerService: AssetsEnabler {
         self.priceUpdater = priceUpdater
     }
 
-    func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool, shouldRefresh: Bool) async throws {
+    func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async throws {
         for assetId in assetIds {
             try assetsService.addBalanceIfMissing(walletId: walletId, assetId: assetId)
         }
 
         try assetsService.updateEnabled(walletId: walletId, assetIds: assetIds, enabled: enabled)
 
-        guard enabled, shouldRefresh else { return }
+        guard enabled else { return }
 
         async let balanceUpdate: () = balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
         async let priceUpdate: () = priceUpdater.addPrices(assetIds: assetIds)
@@ -35,6 +35,6 @@ struct AssetsEnablerService: AssetsEnabler {
 
     func enableAssetId(walletId: WalletId, assetId: AssetId) async throws {
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
-        try await enableAssets(walletId: walletId, assetIds: [asset.id], enabled: true, shouldRefresh: true)
+        try await enableAssets(walletId: walletId, assetIds: [asset.id], enabled: true)
     }
 }

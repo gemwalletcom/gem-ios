@@ -29,11 +29,12 @@ struct AddNodeScene: View {
             inputView
             nodeInfoView
         }
-        .debounce(
-            value: model.urlInputModel.text,
-            interval: model.debounceInterval,
-            action: model.onChangeInput(_:)
-        )
+        .onChange(of: model.urlInputModel.text) {
+            model.onChangeInput()
+        }
+        .debouncedTask(id: model.fetchTrigger) {
+            await model.fetch()
+        }
         .safeAreaButton {
             StateButton(
                 text: model.actionButtonTitle,
@@ -70,7 +71,7 @@ extension AddNodeScene {
             InputValidationField(
                 model: $model.urlInputModel,
                 placeholder: model.inputFieldTitle,
-                onClean: { model.debounceInterval = nil }
+                onClean: { model.fetchTrigger = nil }
             ) {
                 HStack(spacing: .small) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)

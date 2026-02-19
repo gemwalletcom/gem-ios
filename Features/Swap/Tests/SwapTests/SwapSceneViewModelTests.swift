@@ -48,6 +48,9 @@ struct SwapSceneViewModelTests {
         model.swapState.quotes = .error(TestError())
         #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retryQuotes)
 
+        model.swapState.quotes = .error(SwapperError.InputAmountError(minAmount: "1000"))
+        #expect(model.buttonViewModel.buttonAction == SwapButtonAction.useMinAmount(amount: "1000", asset: .mockEthereum()))
+
         model.swapState.quotes = .data([])
         model.swapState.swapTransferData = .error(TestError())
         #expect(model.buttonViewModel.buttonAction == SwapButtonAction.retrySwap)
@@ -122,7 +125,7 @@ struct SwapSceneViewModelTests {
 
         model.fetchTrigger = nil
         model.swapState.quotes = .error(SwapperError.InputAmountError(minAmount: "1000000000000000000"))
-        model.errorInfoAction?()
+        model.buttonViewModel.action()
 
         #expect(model.fetchTrigger?.isImmediate == true)
     }

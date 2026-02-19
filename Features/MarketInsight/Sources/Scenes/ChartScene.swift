@@ -8,6 +8,7 @@ import Components
 import Store
 import PrimitivesComponents
 import Localization
+import InfoSheet
 
 public struct ChartScene: View {
     @State private var model: ChartSceneViewModel
@@ -47,35 +48,10 @@ public struct ChartScene: View {
             }
 
             if let priceDataModel = model.priceDataModel {
-                if priceDataModel.showMarketValues {
-                    Section {
-                        ForEach(priceDataModel.marketValues, id: \.title) { link in
-                            if let url = link.url {
-                                SafariNavigationLink(url: url) {
-                                    ListItemView(title: link.title, subtitle: link.subtitle)
-                                }
-                                .contextMenu(
-                                    link.value.map { [.copy(value: $0)] } ?? []
-                                )
-                            } else {
-                                ListItemView(
-                                    title: link.title,
-                                    titleTag: link.titleTag,
-                                    titleTagStyle: link.titleTagStyle ?? .body,
-                                    subtitle: link.subtitle
-                                )
-                            }
-                        }
-                        if model.hasMarketData {
-                            NavigationCustomLink(
-                                with: ListItemView(title: Localized.Wallet.more)
-                            ) {
-                                model.onSelectPriceDetails()
-                            }
-                        }
-                    }
-                }
-                
+                marketSection(priceDataModel.marketValues)
+                marketSection(priceDataModel.supplyValues)
+                marketSection(priceDataModel.allTimeValues)
+
                 if priceDataModel.showLinks {
                     Section(Localized.Social.links) {
                         SocialLinksView(model: priceDataModel.linksViewModel)
@@ -92,13 +68,34 @@ public struct ChartScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .sheet(item: $model.isPresentingMarkets) { priceData in
-            NavigationStack {
-                AssetPriceDetailsView(
-                    model: AssetPriceDetailsViewModel(priceData: priceData)
-                )
+        .sheet(item: $model.isPresentingInfoSheet) {
+            InfoSheetScene(type: $0)
+        }
+    }
+
+    private func marketSection(_ items: [MarketValueViewModel]) -> some View {
+        Section {
+            ForEach(items, id: \.title) { item in
+                if let url = item.url {
+                    SafariNavigationLink(url: url) {
+                        ListItemView(title: item.title, subtitle: item.subtitle)
+                    }
+                    .contextMenu(
+                        item.value.map { [.copy(value: $0)] } ?? []
+                    )
+                } else {
+                    ListItemView(
+                        title: item.title,
+                        titleTag: item.titleTag,
+                        titleTagStyle: item.titleTagStyle ?? .body,
+                        titleExtra: item.titleExtra,
+                        subtitle: item.subtitle,
+                        subtitleExtra: item.subtitleExtra,
+                        subtitleStyleExtra: item.subtitleExtraStyle ?? .calloutSecondary,
+                        infoAction: item.infoSheetType.map { type in { model.isPresentingInfoSheet = type } }
+                    )
+                }
             }
-            .presentationBackground(Colors.grayBackground)
         }
     }
 }

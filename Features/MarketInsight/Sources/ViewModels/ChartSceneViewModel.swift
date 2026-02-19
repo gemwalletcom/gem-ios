@@ -12,6 +12,7 @@ import Preferences
 import PriceAlertService
 import SwiftUI
 import Formatters
+import InfoSheet
 
 @MainActor
 @Observable
@@ -34,13 +35,12 @@ public final class ChartSceneViewModel {
     public let priceQuery: ObservableQuery<PriceRequest>
     var priceData: PriceData? { priceQuery.value }
 
+    var isPresentingInfoSheet: InfoSheetType?
     public var isPresentingSetPriceAlert: Binding<Asset?>
-    var isPresentingMarkets: PriceData?
 
     var title: String { assetModel.name }
     var emptyTitle: String { Localized.Common.notAvailable }
     var errorTitle: String { Localized.Errors.errorOccured }
-    var hasMarketData: Bool { priceData?.market != nil }
 
     var priceAlertsViewModel: PriceAlertsViewModel { PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? []) }
     var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts && isPriceAvailable }
@@ -111,9 +111,5 @@ extension ChartSceneViewModel {
 
     public func onSelectSetPriceAlerts() {
         isPresentingSetPriceAlert.wrappedValue = assetModel.asset
-    }
-
-    public func onSelectPriceDetails() {
-        isPresentingMarkets = priceData
     }
 }
