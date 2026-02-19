@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "최소 거래 금액은 %@더 높은 금액을 입력해 주세요.";
 "swap.use_minimum_amount" = "최소 금액을 사용하세요";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "귀하의 직책이 여기에 표시됩니다.";
+"earn.state.empty.description" = "첫 입금 %@";
+"contacts.title" = "콘택트 렌즈";
+"contacts.contact" = "연락하다";
+"contacts.addresses" = "구애";
+"contacts.state.empty.title" = "연락처 없음";
+"contacts.state.empty.description" = "자주 사용하는 주소를 저장하세요";
+"charts.price.open" = "열려 있는";
+"charts.price.close" = "닫다";
+"charts.price.high" = "높은";
+"charts.price.low" = "낮은";
+"charts.price.change" = "변화";

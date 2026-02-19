@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "จำนวนเงินขั้นต่ำในการซื้อขายคือ %@กรุณาป้อนจำนวนเงินที่สูงกว่านี้";
 "swap.use_minimum_amount" = "ใช้ในปริมาณน้อยที่สุด";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "ตำแหน่งของคุณจะปรากฏที่นี่";
+"earn.state.empty.description" = "ฝากเงินครั้งแรกของคุณ %@";
+"contacts.title" = "การติดต่อ";
+"contacts.contact" = "ติดต่อ";
+"contacts.addresses" = "ที่อยู่";
+"contacts.state.empty.title" = "ไม่มีข้อมูลติดต่อ";
+"contacts.state.empty.description" = "บันทึกที่อยู่ที่คุณใช้งานบ่อย";
+"charts.price.open" = "เปิด";
+"charts.price.close" = "ปิด";
+"charts.price.high" = "สูง";
+"charts.price.low" = "ต่ำ";
+"charts.price.change" = "เปลี่ยน";

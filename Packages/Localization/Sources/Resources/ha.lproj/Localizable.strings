@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Mafi ƙarancin adadin ciniki shine %@. Da fatan a shigar da adadin da ya fi girma.";
 "swap.use_minimum_amount" = "Yi amfani da Mafi ƙarancin Adadin";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Matsayinka zai bayyana a nan";
+"earn.state.empty.description" = "Ajiye kuɗin farko %@";
+"contacts.title" = "Lambobin Sadarwa";
+"contacts.contact" = "Tuntuɓi";
+"contacts.addresses" = "Adiresoshi";
+"contacts.state.empty.title" = "Babu Lambobin Sadarwa";
+"contacts.state.empty.description" = "Ajiye adiresoshin da ake yawan amfani da su";
+"charts.price.open" = "A buɗe";
+"charts.price.close" = "Rufe";
+"charts.price.high" = "Babban";
+"charts.price.low" = "Ƙasa";
+"charts.price.change" = "Sauyi";

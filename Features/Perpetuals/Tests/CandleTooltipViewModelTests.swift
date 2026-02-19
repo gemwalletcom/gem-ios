@@ -5,6 +5,7 @@ import Primitives
 import PrimitivesTestKit
 import PerpetualsTestKit
 import Formatters
+import Localization
 @testable import Perpetuals
 
 struct CandleTooltipViewModelTests {
@@ -13,22 +14,22 @@ struct CandleTooltipViewModelTests {
     func tooltipContent() {
         let model = CandleTooltipViewModel.mock(candle: .mock(open: 67_715, high: 68_181, low: 67_714, close: 68_087, volume: 500))
 
-        #expect(model.openTitle.text == "Open")
+        #expect(model.openTitle.text == Localized.Charts.Price.open)
         #expect(model.openValue.text == "67,715.00")
 
-        #expect(model.highTitle.text == "High")
+        #expect(model.highTitle.text == Localized.Charts.Price.high)
         #expect(model.highValue.text == "68,181.00")
 
-        #expect(model.lowTitle.text == "Low")
+        #expect(model.lowTitle.text == Localized.Charts.Price.low)
         #expect(model.lowValue.text == "67,714.00")
 
-        #expect(model.closeTitle.text == "Close")
+        #expect(model.closeTitle.text == Localized.Charts.Price.close)
         #expect(model.closeValue.text == "68,087.00")
 
-        #expect(model.changeTitle.text == "Change")
+        #expect(model.changeTitle.text == Localized.Charts.Price.change)
         #expect(model.changeValue.text == "+0.55%")
 
-        #expect(model.volumeTitle.text == "Volume")
+        #expect(model.volumeTitle.text == Localized.Perpetual.volume)
         #expect(model.volumeValue.text == "$34.04M")
     }
 

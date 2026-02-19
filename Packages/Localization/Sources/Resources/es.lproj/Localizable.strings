@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "La cantidad mínima de operación es %@. Introduce una cantidad mayor.";
 "swap.use_minimum_amount" = "Utilice la cantidad mínima";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Tus posiciones aparecerán aquí";
+"earn.state.empty.description" = "Deposite su primer %@";
+"contacts.title" = "Contactos";
+"contacts.contact" = "Contacto";
+"contacts.addresses" = "Direcciones";
+"contacts.state.empty.title" = "Sin contactos";
+"contacts.state.empty.description" = "Guarde sus direcciones de uso frecuente";
+"charts.price.open" = "Abierto";
+"charts.price.close" = "Cerca";
+"charts.price.high" = "Alto";
+"charts.price.low" = "Bajo";
+"charts.price.change" = "Cambiar";

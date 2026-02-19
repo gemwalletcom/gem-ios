@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "最低交易金額為 %@請輸入更高的金額。";
 "swap.use_minimum_amount" = "使用最低金額";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "您的持倉將顯示在此。";
+"earn.state.empty.description" = "存入您的第一筆款項 %@";
+"contacts.title" = "聯絡方式";
+"contacts.contact" = "接觸";
+"contacts.addresses" = "地址";
+"contacts.state.empty.title" = "無聯絡方式";
+"contacts.state.empty.description" = "儲存您常用的地址";
+"charts.price.open" = "打開";
+"charts.price.close" = "關閉";
+"charts.price.high" = "高的";
+"charts.price.low" = "低的";
+"charts.price.change" = "改變";

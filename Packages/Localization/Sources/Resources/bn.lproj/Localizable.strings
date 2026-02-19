@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "সর্বনিম্ন ট্রেডের পরিমাণ হল %@. অনুগ্রহ করে আরও বেশি পরিমাণ লিখুন।";
 "swap.use_minimum_amount" = "সর্বনিম্ন পরিমাণ ব্যবহার করুন";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "আপনার অবস্থানগুলি এখানে প্রদর্শিত হবে";
+"earn.state.empty.description" = "আপনার প্রথম জমা দিন %@";
+"contacts.title" = "পরিচিতি";
+"contacts.contact" = "যোগাযোগ";
+"contacts.addresses" = "ঠিকানা";
+"contacts.state.empty.title" = "কোনও পরিচিতি নেই";
+"contacts.state.empty.description" = "আপনার ঘন ঘন ব্যবহৃত ঠিকানাগুলি সংরক্ষণ করুন";
+"charts.price.open" = "খোলা";
+"charts.price.close" = "বন্ধ করা";
+"charts.price.high" = "উচ্চ";
+"charts.price.low" = "কম";
+"charts.price.change" = "পরিবর্তন";

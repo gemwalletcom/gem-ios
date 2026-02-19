@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Ang minimum na halaga ng kalakalan ay %@Mangyaring maglagay ng mas mataas na halaga.";
 "swap.use_minimum_amount" = "Gamitin ang Minimum na Halaga";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Lalabas dito ang iyong mga posisyon";
+"earn.state.empty.description" = "Ideposito ang iyong unang %@";
+"contacts.title" = "Mga Kontak";
+"contacts.contact" = "Makipag-ugnayan";
+"contacts.addresses" = "Mga Address";
+"contacts.state.empty.title" = "Walang Mga Kontak";
+"contacts.state.empty.description" = "I-save ang iyong mga madalas gamiting address";
+"charts.price.open" = "Bukas";
+"charts.price.close" = "Isara";
+"charts.price.high" = "Mataas";
+"charts.price.low" = "Mababa";
+"charts.price.change" = "Pagbabago";

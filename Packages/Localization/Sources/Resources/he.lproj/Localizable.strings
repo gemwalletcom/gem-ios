@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "סכום המסחר המינימלי הוא %@אנא הזן סכום גבוה יותר.";
 "swap.use_minimum_amount" = "השתמש בסכום מינימלי";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "המיקומים שלך יופיעו כאן";
+"earn.state.empty.description" = "הפקד את הראשון שלך %@";
+"contacts.title" = "אנשי קשר";
+"contacts.contact" = "מַגָע";
+"contacts.addresses" = "כתובות";
+"contacts.state.empty.title" = "אין אנשי קשר";
+"contacts.state.empty.description" = "שמור את הכתובות שאתה משתמש בהן לעתים קרובות";
+"charts.price.open" = "לִפְתוֹחַ";
+"charts.price.close" = "לִסְגוֹר";
+"charts.price.high" = "גָבוֹהַ";
+"charts.price.low" = "נָמוּך";
+"charts.price.change" = "לְשַׁנוֹת";

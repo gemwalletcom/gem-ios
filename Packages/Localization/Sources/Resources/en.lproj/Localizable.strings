@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Minimum trade amount is %@. Please enter a higher amount.";
 "swap.use_minimum_amount" = "Use Minimum Amount";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Your positions will appear here";
+"earn.state.empty.description" = "Deposit your first %@";
+"contacts.title" = "Contacts";
+"contacts.contact" = "Contact";
+"contacts.addresses" = "Addresses";
+"contacts.state.empty.title" = "No Contacts";
+"contacts.state.empty.description" = "Save your frequently used addresses";
+"charts.price.open" = "Open";
+"charts.price.close" = "Close";
+"charts.price.high" = "High";
+"charts.price.low" = "Low";
+"charts.price.change" = "Change";

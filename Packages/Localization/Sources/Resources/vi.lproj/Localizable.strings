@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Số tiền giao dịch tối thiểu là %@Vui lòng nhập số tiền lớn hơn.";
 "swap.use_minimum_amount" = "Sử dụng số lượng tối thiểu";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Vị trí của bạn sẽ hiển thị ở đây";
+"earn.state.empty.description" = "Gửi khoản tiền đầu tiên của bạn %@";
+"contacts.title" = "Liên hệ";
+"contacts.contact" = "Liên hệ";
+"contacts.addresses" = "Địa chỉ";
+"contacts.state.empty.title" = "Không có liên hệ";
+"contacts.state.empty.description" = "Lưu lại những địa chỉ bạn thường dùng.";
+"charts.price.open" = "Mở";
+"charts.price.close" = "Đóng";
+"charts.price.high" = "Cao";
+"charts.price.low" = "Thấp";
+"charts.price.change" = "Thay đổi";

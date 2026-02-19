@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "الحد الأدنى لمبلغ التداول هو %@يرجى إدخال مبلغ أعلى.";
 "swap.use_minimum_amount" = "استخدم الحد الأدنى من الكمية";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "ستظهر وظائفك هنا";
+"earn.state.empty.description" = "أودع أول مبلغ لك %@";
+"contacts.title" = "جهات الاتصال";
+"contacts.contact" = "اتصال";
+"contacts.addresses" = "العناوين";
+"contacts.state.empty.title" = "لا توجد جهات اتصال";
+"contacts.state.empty.description" = "احفظ عناوينك التي تستخدمها بشكل متكرر";
+"charts.price.open" = "يفتح";
+"charts.price.close" = "يغلق";
+"charts.price.high" = "عالي";
+"charts.price.low" = "قليل";
+"charts.price.change" = "يتغير";

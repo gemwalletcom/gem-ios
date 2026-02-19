@@ -217,6 +217,18 @@ public enum Localized {
     public static let week = Localized.tr("Localizable", "charts.week", fallback: "1W")
     /// 1Y
     public static let year = Localized.tr("Localizable", "charts.year", fallback: "1Y")
+    public enum Price {
+      /// Change
+      public static let change = Localized.tr("Localizable", "charts.price.change", fallback: "Change")
+      /// Close
+      public static let close = Localized.tr("Localizable", "charts.price.close", fallback: "Close")
+      /// High
+      public static let high = Localized.tr("Localizable", "charts.price.high", fallback: "High")
+      /// Low
+      public static let low = Localized.tr("Localizable", "charts.price.low", fallback: "Low")
+      /// Open
+      public static let `open` = Localized.tr("Localizable", "charts.price.open", fallback: "Open")
+    }
   }
   public enum Common {
     /// Address
@@ -330,11 +342,39 @@ public enum Localized {
     /// Yes
     public static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
   }
+  public enum Contacts {
+    /// Addresses
+    public static let addresses = Localized.tr("Localizable", "contacts.addresses", fallback: "Addresses")
+    /// Contact
+    public static let contact = Localized.tr("Localizable", "contacts.contact", fallback: "Contact")
+    /// Contacts
+    public static let title = Localized.tr("Localizable", "contacts.title", fallback: "Contacts")
+    public enum State {
+      public enum Empty {
+        /// Save your frequently used addresses
+        public static let description = Localized.tr("Localizable", "contacts.state.empty.description", fallback: "Save your frequently used addresses")
+        /// No Contacts
+        public static let title = Localized.tr("Localizable", "contacts.state.empty.title", fallback: "No Contacts")
+      }
+    }
+  }
   public enum Date {
     /// Today
     public static let today = Localized.tr("Localizable", "date.today", fallback: "Today")
     /// Yesterday
     public static let yesterday = Localized.tr("Localizable", "date.yesterday", fallback: "Yesterday")
+  }
+  public enum Earn {
+    public enum State {
+      public enum Empty {
+        /// Deposit your first %@
+        public static func description(_ p1: Any) -> String {
+          return Localized.tr("Localizable", "earn.state.empty.description", String(describing: p1), fallback: "Deposit your first %@")
+        }
+        /// Your positions will appear here
+        public static let title = Localized.tr("Localizable", "earn.state.empty.title", fallback: "Your positions will appear here")
+      }
+    }
   }
   public enum Errors {
     /// Camera permission not granted. Please enable camera access in settings to scan QR code.
