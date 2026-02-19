@@ -25,7 +25,6 @@ public extension SwapProvider {
         case .nearIntents: Images.SwapProviders.nearIntents
         case .orca: Images.SwapProviders.orca
         case .panora: Images.SwapProviders.panora
-        case .okx: Images.SwapProviders.okx
         }
     }
 }

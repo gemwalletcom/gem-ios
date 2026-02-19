@@ -3,22 +3,18 @@
 import Foundation
 import SwiftUI
 import Primitives
-import ChainService
+import Transfer
 import QRScanner
 
-public struct RecipientNavigationView: View {
+struct RecipientNavigationView: View {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @State private var model: RecipientSceneViewModel
-    private let confirmService: ConfirmService
 
-    public init(
-        confirmService: ConfirmService,
-        model: RecipientSceneViewModel
-    ) {
-        self.confirmService = confirmService
+    init(model: RecipientSceneViewModel) {
         _model = State(initialValue: model)
     }
 
-    public var body: some View {
+    var body: some View {
         RecipientScene(
             model: model
         )
@@ -29,7 +25,7 @@ public struct RecipientNavigationView: View {
         }
         .navigationDestination(for: RecipientData.self) { data in
             AmountNavigationView(
-                model: AmountSceneViewModel(
+                model: viewModelFactory.amountScene(
                     input: AmountInput(type: .transfer(recipient: data), asset: model.asset),
                     wallet: model.wallet,
                     onTransferAction: model.onTransferAction

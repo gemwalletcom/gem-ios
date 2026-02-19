@@ -103,7 +103,19 @@ public struct AssetScene: View {
                     )
 
                     if model.showStakedBalance {
-                        stakeView
+                        NavigationCustomLink(
+                            with: ListItemView(title: model.stakeTitle, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol),
+                            action: { model.onSelectHeader(.stake) }
+                        )
+                        .accessibilityIdentifier("stake")
+                    }
+
+                    if model.showEarnBalance {
+                        NavigationCustomLink(
+                            with: ListItemView(title: model.earnTitle, subtitle: model.earnBalanceText),
+                            action: { model.onSelectEarn() }
+                        )
+                        .accessibilityIdentifier("earn")
                     }
 
                     if model.showPendingUnconfirmedBalance {
@@ -126,6 +138,23 @@ public struct AssetScene: View {
             } else if model.assetDataModel.isStakeEnabled {
                 stakeViewEmpty
                     .listRowInsets(.assetListRowInsets)
+            }
+
+            if model.showEarnButton {
+                Section {
+                    NavigationCustomLink(
+                        with: HStack(spacing: Spacing.medium) {
+                            EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
+                                .frame(size: .image.asset)
+                            ListItemView(
+                                title: model.earnTitle,
+                                subtitle: model.earnAprText,
+                                subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                            )
+                        },
+                        action: { model.onSelectEarn() }
+                    )
+                }
             }
 
             if model.showResources {
@@ -179,14 +208,6 @@ extension AssetScene {
             imageSize: .list.image
         )
     }
-
-    private var stakeView: some View {
-        NavigationCustomLink(
-            with: ListItemView(title: model.stakeTitle, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol),
-            action: { model.onSelectHeader(.stake) }
-        )
-        .accessibilityIdentifier("stake")
-    }
     
     private var stakeViewEmpty: some View {
         NavigationCustomLink(
@@ -202,4 +223,5 @@ extension AssetScene {
             action: { model.onSelectHeader(.stake) }
         )
     }
+
 }

@@ -12,7 +12,6 @@ public enum SwapProvider: String, Codable, Equatable, Hashable, Sendable {
 	case panora
 	case thorchain
 	case jupiter
-	case okx
 	case across
 	case oku
 	case wagmi

@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import Staking
+import Earn
 
 struct StakeRecommendedValidatorsTests {
 

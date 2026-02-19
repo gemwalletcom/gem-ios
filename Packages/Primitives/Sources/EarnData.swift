@@ -5,14 +5,12 @@
 import Foundation
 
 public struct EarnData: Codable, Equatable, Hashable, Sendable {
-	public let provider: String?
-	public let contractAddress: String?
-	public let callData: String?
+	public let contractAddress: String
+	public let callData: String
 	public let approval: ApprovalData?
 	public let gasLimit: String?
 
-	public init(provider: String?, contractAddress: String?, callData: String?, approval: ApprovalData?, gasLimit: String?) {
-		self.provider = provider
+	public init(contractAddress: String, callData: String, approval: ApprovalData?, gasLimit: String?) {
 		self.contractAddress = contractAddress
 		self.callData = callData
 		self.approval = approval

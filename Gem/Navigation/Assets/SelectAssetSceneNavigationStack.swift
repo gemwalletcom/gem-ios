@@ -4,16 +4,10 @@ import SwiftUI
 import Primitives
 import Components
 import Style
-import Localization
 import FiatConnect
 import PrimitivesComponents
-import Keystore
 import Assets
 import Transfer
-import ChainService
-import ExplorerService
-import Signer
-import EventPresenterService
 import Recents
 
 struct SelectAssetSceneNavigationStack: View {
@@ -27,7 +21,6 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.transactionStateService) private var transactionStateService
     @Environment(\.addressNameService) private var addressNameService
     @Environment(\.activityService) private var activityService
-    @Environment(\.eventPresenterService) private var eventPresenterService
 
     @State private var isPresentingFilteringView: Bool = false
 

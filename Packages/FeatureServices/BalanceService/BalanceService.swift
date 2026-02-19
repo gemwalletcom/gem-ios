@@ -237,6 +237,12 @@ extension BalanceService {
                     metadata: metadata
                 )
             )
+        case .earn(let earn):
+            let earnValue = try UpdateBalanceValue(
+                value: earn.description,
+                amount: formatter.double(from: earn, decimals: decimals)
+            )
+            return .earn(UpdateEarnBalance(balance: earnValue))
         }
     }
 

@@ -8,7 +8,7 @@ import StakeServiceTestKit
 import PrimitivesTestKit
 import Primitives
 
-@testable import Staking
+@testable import Earn
 
 @MainActor
 struct StakeSceneViewModelTests {

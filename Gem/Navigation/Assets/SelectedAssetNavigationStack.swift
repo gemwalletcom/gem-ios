@@ -1,20 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import SwiftUI
 import Primitives
-import Localization
-import SwapService
 import FiatConnect
 import PrimitivesComponents
-import PriceAlerts
 import Swap
-import Assets
 import Transfer
-import ChainService
-import ExplorerService
-import Signer
-import EventPresenterService
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -27,7 +18,6 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.transactionStateService) private var transactionStateService
     @Environment(\.addressNameService) private var addressNameService
     @Environment(\.activityService) private var activityService
-    @Environment(\.eventPresenterService) private var eventPresenterService
 
     @State private var navigationPath = NavigationPath()
 
@@ -124,6 +114,13 @@ struct SelectedAssetNavigationStack: View  {
                             wallet: wallet,
                             chain: input.asset.id.chain
                         ),
+                        navigationPath: $navigationPath
+                    )
+                case .earn:
+                    EarnNavigationView(
+                        wallet: wallet,
+                        asset: input.asset,
+                        viewModelFactory: viewModelFactory,
                         navigationPath: $navigationPath
                     )
                 }
