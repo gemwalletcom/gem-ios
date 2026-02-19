@@ -60,6 +60,5 @@ struct WalletPreferencesTests {
         #expect(!preferences.completeInitialLoadAssets)
         #expect(!preferences.completeInitialAddressStatus)
         #expect(preferences.transactionsForAssetTimestamp(assetId: asset.id.identifier) == 0)
-
     }
 }
