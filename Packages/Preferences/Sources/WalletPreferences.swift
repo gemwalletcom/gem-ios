@@ -14,16 +14,18 @@ public final class WalletPreferences: @unchecked Sendable {
     }
 
     private let defaults: UserDefaults
+    private let suiteName: String
 
     public init(walletId: WalletId) {
-        self.defaults = Self.suite(walletId: walletId.id)
+        self.suiteName = Self.suiteName(walletId: walletId.id)
+        self.defaults = UserDefaults(suiteName: suiteName)!
     }
 
     public var completeInitialLoadAssets: Bool {
         set { defaults.setValue(newValue, forKey: Keys.completeInitialLoadAssets) }
         get { defaults.bool(forKey: Keys.completeInitialLoadAssets) }
     }
-    
+
     public var transactionsTimestamp: Int {
         set { defaults.setValue(newValue, forKey: Keys.transactionsTimestamp) }
         get { defaults.integer(forKey: Keys.transactionsTimestamp) }
@@ -38,17 +40,17 @@ public final class WalletPreferences: @unchecked Sendable {
         set { defaults.setValue(newValue, forKey: Keys.assetsTimestamp) }
         get { defaults.integer(forKey: Keys.assetsTimestamp) }
     }
-    
+
     public var completeInitialAddressStatus: Bool {
         set { defaults.setValue(newValue, forKey: Keys.completeInitialAddressStatus) }
         get { defaults.bool(forKey: Keys.completeInitialAddressStatus) }
     }
-    
+
     public func completeInitialSynchronization() {
         completeInitialAddressStatus = true
         completeInitialLoadAssets = true
     }
-    
+
     // transactions
     public func setTransactionsForAssetTimestamp(assetId: String, value: Int) {
         defaults.setValue(value, forKey: String(format: "%@_%@", Keys.transactionsForAsset, assetId))
@@ -59,26 +61,10 @@ public final class WalletPreferences: @unchecked Sendable {
     }
 
     public func clear() {
-        defaults.dictionaryRepresentation().keys.forEach {
-            defaults.removeObject(forKey: $0)
-        }
+        UserDefaults.standard.removePersistentDomain(forName: suiteName)
     }
 
-    private func encode(key: String, data: Codable) {
-        if let encoded = try? JSONEncoder().encode(data) {
-            defaults.set(encoded, forKey: key)
-        }
-    }
-    
-    private func decode<T: Codable>(key: String) -> T? {
-        if let data = defaults.object(forKey: key) as? Data,
-           let typedData = try? JSONDecoder().decode(T.self, from: data){
-            return typedData
-        }
-        return .none
-    }
-
-    private static func suite(walletId: String) -> UserDefaults {
-        UserDefaults(suiteName: "wallet_preferences_\(walletId)_v2")!
+    private static func suiteName(walletId: String) -> String {
+        "wallet_preferences_\(walletId)_v2"
     }
 }
