@@ -25,8 +25,8 @@ public final class StakeSceneViewModel {
     private let recommendedValidators = StakeRecommendedValidators()
 
     public let wallet: Wallet
-    public let delegationsQuery: ObservableQuery<StakeDelegationsRequest>
-    public let validatorsQuery: ObservableQuery<StakeValidatorsRequest>
+    public let delegationsQuery: ObservableQuery<DelegationsRequest>
+    public let validatorsQuery: ObservableQuery<ValidatorsRequest>
     public let assetQuery: ObservableQuery<AssetRequest>
 
     public var delegations: [Delegation] { delegationsQuery.value }
@@ -43,8 +43,8 @@ public final class StakeSceneViewModel {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
-        self.delegationsQuery = ObservableQuery(StakeDelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId), initialValue: [])
-        self.validatorsQuery = ObservableQuery(StakeValidatorsRequest(assetId: chain.chain.assetId), initialValue: [])
+        self.delegationsQuery = ObservableQuery(DelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId, providerType: .stake), initialValue: [])
+        self.validatorsQuery = ObservableQuery(ValidatorsRequest(chain: chain.chain, providerType: .stake), initialValue: [])
         self.assetQuery = ObservableQuery(AssetRequest(walletId: wallet.walletId, assetId: chain.chain.assetId), initialValue: .with(asset: chain.chain.asset))
     }
 
@@ -159,10 +159,10 @@ public final class StakeSceneViewModel {
 
     var stakeDestination: any Hashable {
         destination(
-            type: .stake(
+            type: .stake(.stake(
                 validators: validators,
-                recommendedValidator: recommendedCurrentValidator
-            )
+                recommended: recommendedCurrentValidator
+            ))
         )
     }
 
