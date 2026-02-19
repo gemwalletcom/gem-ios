@@ -4,6 +4,8 @@ import Foundation
 import Primitives
 import GRDB
 
+extension EarnProviderType: DatabaseValueConvertible {}
+
 struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     static let databaseTableName: String = "stake_validators"
     
@@ -15,6 +17,7 @@ struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
         static let isActive = Column("isActive")
         static let commission = Column("commission")
         static let apr = Column("apr")
+        static let providerType = Column("providerType")
     }
 
     var id: String
@@ -24,6 +27,7 @@ struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     var isActive: Bool
     var commission: Double
     var apr: Double
+    var providerType: EarnProviderType
 }
 
 extension StakeValidatorRecord: CreateTable {
@@ -45,6 +49,9 @@ extension StakeValidatorRecord: CreateTable {
                 .notNull()
             $0.column(Columns.apr.name, .double)
                 .notNull()
+            $0.column(Columns.providerType.name, .text)
+                .notNull()
+                .defaults(to: EarnProviderType.stake)
         }
     }
 }
@@ -57,7 +64,8 @@ extension StakeValidatorRecord {
             name: name,
             isActive: isActive,
             commission: commission,
-            apr: apr
+            apr: apr,
+            providerType: providerType
         )
     }
 }
@@ -77,7 +85,8 @@ extension DelegationValidator {
             name: name,
             isActive: isActive,
             commission: commission,
-            apr: apr
+            apr: apr,
+            providerType: providerType
         )
     }
 }
