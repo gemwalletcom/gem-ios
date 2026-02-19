@@ -3,10 +3,10 @@
 import Foundation
 
 public struct RelativeDateFormatter: Sendable {
-    private let relativeFormatter: DateFormatter
-    private let time: DateFormatter
-    private let dateAndTime: DateFormatter
-    private let calendar: Calendar
+    let relativeFormatter: DateFormatter
+    let time: DateFormatter
+    let dateAndTime: DateFormatter
+    let calendar: Calendar
 
     public init(locale: Locale = .current, timeZone: TimeZone = .current) {
         var calendar = Calendar.current

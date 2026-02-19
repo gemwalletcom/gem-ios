@@ -12,10 +12,7 @@ struct RelativeDateFormatterTests {
 
     init() {
         formatter = RelativeDateFormatter(locale: locale, timeZone: timeZone)
-        var calendar = Calendar.current
-        calendar.locale = locale
-        calendar.timeZone = timeZone
-        self.calendar = calendar
+        calendar = formatter.calendar
     }
 
     @Test
