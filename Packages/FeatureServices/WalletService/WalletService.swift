@@ -103,11 +103,14 @@ public struct WalletService: Sendable {
         try await keystore.deleteKey(for: wallet)
         try walletStore.deleteWallet(for: wallet.walletId)
         try avatarService.remove(for: wallet)
-        try FileManager.default.removeItem(at: WalletPreferences.preferencesURL(walletId: wallet.walletId))
+        WalletPreferences(walletId: wallet.walletId).clear()
 
         await MainActor.run {
             if currentWalletId == wallet.walletId {
                 walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+            }
+            if wallets.isEmpty {
+                Preferences.standard.clear()
             }
         }
     }
