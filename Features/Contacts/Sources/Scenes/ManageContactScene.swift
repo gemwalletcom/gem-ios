@@ -82,7 +82,7 @@ extension ManageContactScene {
         Section {
             ForEach(model.addresses, id: \.id) { address in
                 NavigationCustomLink(
-                    with: ListItemView(model: AddressItemViewModel(address: address).listItemModel),
+                    with: ListItemView(model: model.listItemModel(for: address)),
                     action: { model.isPresentingManageAddress = address }
                 )
             }

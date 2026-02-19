@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import ContactService
 import PrimitivesComponents
+import Components
 import Store
 import Localization
 
@@ -27,6 +28,14 @@ public final class ContactsViewModel {
 
     var emptyContent: EmptyContentTypeViewModel {
         EmptyContentTypeViewModel(type: .contacts)
+    }
+
+    func listItemModel(for contact: ContactData) -> ListItemModel {
+        ListItemModel(
+            title: contact.contact.name,
+            titleExtra: contact.contact.description,
+            imageStyle: .asset(assetImage: AssetImage(type: String(contact.contact.name.prefix(2))))
+        )
     }
 
     func onAddContactComplete() {

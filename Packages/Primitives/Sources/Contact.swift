@@ -8,11 +8,15 @@ public struct Contact: Codable, Equatable, Hashable, Identifiable, Sendable {
 	public let id: String
 	public let name: String
 	public let description: String?
+	public let createdAt: Date
+	public let updatedAt: Date
 
-	public init(id: String, name: String, description: String?) {
+	public init(id: String, name: String, description: String?, createdAt: Date, updatedAt: Date) {
 		self.id = id
 		self.name = name
 		self.description = description
+		self.createdAt = createdAt
+		self.updatedAt = updatedAt
 	}
 }
 
@@ -22,15 +26,13 @@ public struct ContactAddress: Codable, Equatable, Hashable, Identifiable, Sendab
 	public let address: String
 	public let chain: Chain
 	public let memo: String?
-	public let description: String?
 
-	public init(id: String, contactId: String, address: String, chain: Chain, memo: String?, description: String?) {
+	public init(id: String, contactId: String, address: String, chain: Chain, memo: String?) {
 		self.id = id
 		self.contactId = contactId
 		self.address = address
 		self.chain = chain
 		self.memo = memo
-		self.description = description
 	}
 }
 

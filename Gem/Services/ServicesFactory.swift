@@ -252,7 +252,7 @@ struct ServicesFactory {
             store: storeManager.inAppNotificationStore
         )
 
-        let contactService = ContactService(store: storeManager.contactStore)
+        let contactService = ContactService(store: storeManager.contactStore, addressStore: storeManager.addressStore)
 
         let appLifecycleService = AppLifecycleService(
             preferences: preferences,

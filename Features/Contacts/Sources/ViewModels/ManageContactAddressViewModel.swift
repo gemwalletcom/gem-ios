@@ -10,6 +10,7 @@ import GemstonePrimitives
 import Components
 import Style
 import Localization
+import WalletCorePrimitives
 
 @Observable
 @MainActor
@@ -26,7 +27,6 @@ public final class ManageContactAddressViewModel {
 
     var chain: Chain
     var memo: String = ""
-    var description: String = ""
     var addressInputModel: InputValidationViewModel
     var isPresentingScanner = false
 
@@ -49,7 +49,6 @@ public final class ManageContactAddressViewModel {
             self.addressId = address.id
             self.chain = address.chain
             self.memo = address.memo ?? ""
-            self.description = address.description ?? ""
             self.addressInputModel.text = address.address
         }
 
@@ -61,7 +60,6 @@ public final class ManageContactAddressViewModel {
     var networkTitle: String { Localized.Transfer.network }
     var addressTitle: String { Localized.Common.address }
     var memoTitle: String { Localized.Transfer.memo }
-    var descriptionTitle: String { Localized.Common.description }
     var showMemo: Bool { chain.isMemoSupported }
     var pasteImage: Image { Images.System.paste }
     var qrImage: Image { Images.System.qrCodeViewfinder }
@@ -84,8 +82,21 @@ public final class ManageContactAddressViewModel {
         switch mode {
         case .add:
             return .normal
-        case .edit(let address):
-            return currentAddress != address ? .normal : .disabled
+        case .edit:
+            return hasChanges ? .normal : .disabled
+        }
+    }
+
+    private var hasChanges: Bool {
+        switch mode {
+        case .add:
+            return true
+        case .edit(let original):
+            let trimmedAddress = addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedMemo = memo.isEmpty ? nil : memo
+            return original.address.lowercased() != trimmedAddress.lowercased()
+                || original.chain != chain
+                || original.memo != trimmedMemo
         }
     }
 
@@ -93,10 +104,9 @@ public final class ManageContactAddressViewModel {
         ContactAddress(
             id: addressId,
             contactId: contactId,
-            address: addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
+            address: chain.checksumAddress(addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)),
             chain: chain,
-            memo: memo.isEmpty ? nil : memo,
-            description: description.isEmpty ? nil : description
+            memo: memo.isEmpty ? nil : memo
         )
     }
 }

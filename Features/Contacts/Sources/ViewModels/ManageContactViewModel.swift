@@ -11,6 +11,7 @@ import GemstonePrimitives
 import Components
 import Style
 import Localization
+import Formatters
 
 @Observable
 @MainActor
@@ -82,20 +83,43 @@ public final class ManageContactViewModel {
         switch mode {
         case .add:
             return .normal
-        case .edit(let contactData):
-            return currentContactData != contactData ? .normal : .disabled
+        case .edit:
+            return hasChanges ? .normal : .disabled
         }
     }
 
-    private var currentContactData: ContactData {
-        ContactData(contact: currentContact, addresses: addresses)
+    private var hasChanges: Bool {
+        switch mode {
+        case .add:
+            return true
+        case .edit(let contactData):
+            let trimmedName = nameInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedDescription = description.isEmpty ? nil : description
+            return contactData.contact.name != trimmedName
+                || contactData.contact.description != trimmedDescription
+                || contactData.addresses != addresses
+        }
     }
 
     private var currentContact: Contact {
-        Contact(
+        let createdAt: Date = switch mode {
+        case .add: .now
+        case .edit(let contactData): contactData.contact.createdAt
+        }
+        return Contact(
             id: contactId,
             name: nameInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
-            description: description.isEmpty ? nil : description
+            description: description.isEmpty ? nil : description,
+            createdAt: createdAt,
+            updatedAt: .now
+        )
+    }
+    
+    func listItemModel(for address: ContactAddress) -> ListItemModel {
+        ListItemModel(
+            title: address.chain.asset.name,
+            titleExtra: AddressFormatter(style: .short, address: address.address, chain: address.chain).value(),
+            imageStyle: .asset(assetImage: AssetIdViewModel(assetId: address.chain.assetId).assetImage)
         )
     }
 
@@ -117,7 +141,10 @@ public final class ManageContactViewModel {
 
     func onSave() {
         do {
-            try service.saveContact(currentContact, addresses: addresses)
+            switch mode {
+            case .add: try service.addContact(currentContact, addresses: addresses)
+            case .edit: try service.updateContact(currentContact, addresses: addresses)
+            }
             onComplete?()
         } catch {
             debugLog("ManageContactViewModel save error: \(error)")

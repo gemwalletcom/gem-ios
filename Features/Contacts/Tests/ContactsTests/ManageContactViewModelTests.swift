@@ -48,7 +48,7 @@ struct ManageContactViewModelTests {
 extension ManageContactViewModel {
     static func mock(mode: Mode) -> ManageContactViewModel {
         ManageContactViewModel(
-            service: ContactService(store: .mock()),
+            service: ContactService(store: .mock(), addressStore: .mock()),
             mode: mode,
             onComplete: nil
         )

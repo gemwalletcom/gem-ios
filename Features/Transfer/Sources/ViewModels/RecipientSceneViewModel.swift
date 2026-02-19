@@ -73,6 +73,8 @@ public final class RecipientSceneViewModel {
     var recipientField: String { Localized.Transfer.Recipient.addressField }
     var memoField: String { Localized.Transfer.memo }
 
+    var assetImageTitleModel: AssetImageTitleViewModel { AssetImageTitleViewModel(asset: asset) }
+
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: ButtonState {
         switch nameResolveState {
@@ -234,26 +236,13 @@ extension RecipientSceneViewModel {
     private func sectionRecipients(for section: RecipientAddressType) -> [ListItemValue<RecipientAddress>] {
         switch section {
         case .contacts:
-            contacts.flatMap { ContactRecipientViewModel(contactData: $0).listItems }
+            ContactRecipientSectionViewModel(contacts: contacts, chain: asset.chain).listItems
         case .pinned, .wallets, .view:
-            walletService.wallets
-                .filter { $0.id != wallet.id }
-                .filter {
-                    switch section {
-                    case .view:
-                        $0.type == .view && !$0.isPinned && $0.accounts.first?.chain == asset.chain
-                    case .wallets:
-                        ($0.type == .multicoin || $0.type == .single) && !$0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
-                    case .pinned:
-                        $0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
-                    case .contacts:
-                        false
-                    }
-                }
-                .compactMap {
-                    guard let account = $0.accounts.first(where: { $0.chain == asset.chain }) else { return nil }
-                    return ListItemValue(value: RecipientAddress(name: $0.name, address: account.address))
-                }
+            WalletRecipientSectionViewModel(
+                wallets: walletService.wallets.filter { $0.id != wallet.id },
+                section: section,
+                chain: asset.chain
+            ).listItems
         }
     }
 

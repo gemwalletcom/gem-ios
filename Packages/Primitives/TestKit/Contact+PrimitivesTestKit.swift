@@ -7,9 +7,11 @@ public extension Contact {
     static func mock(
         id: String = "contact-1",
         name: String = "John Doe",
-        description: String? = nil
+        description: String? = nil,
+        createdAt: Date = .now,
+        updatedAt: Date = .now
     ) -> Contact {
-        Contact(id: id, name: name, description: description)
+        Contact(id: id, name: name, description: description, createdAt: createdAt, updatedAt: updatedAt)
     }
 }
 
@@ -19,16 +21,14 @@ public extension ContactAddress {
         contactId: String = "contact-1",
         address: String = "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
         chain: Chain = .bitcoin,
-        memo: String? = nil,
-        description: String? = nil
+        memo: String? = nil
     ) -> ContactAddress {
         ContactAddress(
             id: id,
             contactId: contactId,
             address: address,
             chain: chain,
-            memo: memo,
-            description: description
+            memo: memo
         )
     }
 }

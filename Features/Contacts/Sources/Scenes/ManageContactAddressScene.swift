@@ -15,7 +15,6 @@ public struct ManageContactAddressScene: View {
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case address
-        case description
         case memo
     }
 
@@ -30,7 +29,6 @@ public struct ManageContactAddressScene: View {
             if model.showMemo {
                 memoSection
             }
-            descriptionSection
         }
         .safeAreaButton {
             StateButton(
@@ -79,17 +77,6 @@ extension ManageContactAddressScene {
             .keyboardType(.alphabet)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
-        }
-    }
-
-    private var descriptionSection: some View {
-        Section {
-            FloatTextField(
-                model.descriptionTitle,
-                text: $model.description,
-                allowClean: true
-            )
-            .focused($focusedField, equals: .description)
         }
     }
 

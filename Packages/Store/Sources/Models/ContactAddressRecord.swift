@@ -14,7 +14,6 @@ public struct ContactAddressRecord: Codable, FetchableRecord, PersistableRecord,
         static let address = Column("address")
         static let chain = Column("chain")
         static let memo = Column("memo")
-        static let description = Column("description")
     }
 
     public var id: String
@@ -22,7 +21,6 @@ public struct ContactAddressRecord: Codable, FetchableRecord, PersistableRecord,
     public var address: String
     public var chain: Chain
     public var memo: String?
-    public var description: String?
 
     static let contact = belongsTo(ContactRecord.self).forKey("contact")
 }
@@ -41,7 +39,6 @@ extension ContactAddressRecord: CreateTable {
             $0.column(Columns.chain.name, .text)
                 .notNull()
             $0.column(Columns.memo.name, .text)
-            $0.column(Columns.description.name, .text)
         }
     }
 }
@@ -53,8 +50,7 @@ extension ContactAddressRecord {
             contactId: contactId,
             address: address,
             chain: chain,
-            memo: memo,
-            description: description
+            memo: memo
         )
     }
 }
@@ -66,8 +62,7 @@ extension ContactAddress {
             contactId: contactId,
             address: address,
             chain: chain,
-            memo: memo,
-            description: description
+            memo: memo
         )
     }
 }

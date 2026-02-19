@@ -25,6 +25,7 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "QRScanner", path: "../../Packages/QRScanner"),
+        .package(name: "WalletCore", path: "../../Packages/WalletCore"),
     ],
     targets: [
         .target(
@@ -41,6 +42,7 @@ let package = Package(
                 "GemstonePrimitives",
                 "QRScanner",
                 .product(name: "ContactService", package: "FeatureServices"),
+                .product(name: "WalletCorePrimitives", package: "WalletCore"),
             ],
             path: "Sources"
         ),

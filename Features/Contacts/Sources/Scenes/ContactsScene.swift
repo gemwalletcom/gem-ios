@@ -20,7 +20,7 @@ public struct ContactsScene: View {
         List {
             ForEach(model.contacts) { contactData in
                 NavigationCustomLink(
-                    with: ListItemView(model: ContactItemViewModel(contactData: contactData).listItemModel),
+                    with: ListItemView(model: model.listItemModel(for: contactData)),
                     action: { model.isPresentingManageContact = contactData }
                 )
             }
@@ -29,6 +29,8 @@ public struct ContactsScene: View {
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
+        .scrollContentBackground(.hidden)
+        .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .overlay {
             if model.contacts.isEmpty {
                 EmptyContentView(model: model.emptyContent)
