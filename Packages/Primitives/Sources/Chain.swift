@@ -56,4 +56,5 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Hashable, Sendable 
 	case monad
 	case xLayer = "xlayer"
 	case stable
+	case rootstock
 }

@@ -13,7 +13,8 @@ public struct ChainImage: Sendable {
 
     public var image: Image {
         switch chain {
-        case .bitcoin: Images.Chains.bitcoin
+        case .bitcoin,
+            .rootstock: Images.Chains.bitcoin
         case .bitcoinCash: Images.Chains.bitcoincash
         case .litecoin: Images.Chains.litecoin
         case .ethereum,

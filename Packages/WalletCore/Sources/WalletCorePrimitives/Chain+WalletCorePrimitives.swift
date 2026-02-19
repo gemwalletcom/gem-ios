@@ -37,7 +37,8 @@ public extension Chain {
              .hyperCore,
              .plasma,
              .xLayer,
-             .stable: .ethereum
+             .stable,
+             .rootstock: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos
