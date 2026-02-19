@@ -2,7 +2,7 @@
 
 import Foundation
 import Testing
-import Staking
+import Earn
 import PrimitivesTestKit
 import Primitives
 

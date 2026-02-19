@@ -3,15 +3,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Staking",
+    name: "Earn",
     platforms: [
         .iOS(.v17),
         .macOS(.v15)
     ],
     products: [
         .library(
-            name: "Staking",
-            targets: ["Staking"]),
+            name: "Earn",
+            targets: ["Earn"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -19,16 +19,17 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
+        .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
-        .package(name: "Formatters", path: "../../Packages/Formatters")
-
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
+        .package(name: "Style", path: "../../Packages/Style"),
     ],
     targets: [
         .target(
-            name: "Staking",
+            name: "Earn",
             dependencies: [
                 "Primitives",
                 "Components",
@@ -36,20 +37,22 @@ let package = Package(
                 "Localization",
                 .product(name: "StakeService", package: "ChainServices"),
                 .product(name: "ExplorerService", package: "ChainServices"),
+                .product(name: "EarnService", package: "FeatureServices"),
                 "Preferences",
                 "Store",
                 "InfoSheet",
                 "PrimitivesComponents",
-                "Formatters"
+                "Formatters",
+                "Style",
             ],
             path: "Sources"
         ),
         .testTarget(
-            name: "StakingTests",
+            name: "EarnTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
-                "Staking"
+                "Earn"
             ],
             path: "Tests"
         ),

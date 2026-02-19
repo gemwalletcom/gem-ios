@@ -41,6 +41,8 @@ import AuthService
 import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
+import EarnService
+import Transfer
 import SwiftHTTPClient
 import ContactService
 
@@ -95,6 +97,10 @@ struct ServicesFactory {
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
             avatarService: avatarService
+        )
+        let earnService = EarnService(
+            store: storeManager.stakeStore,
+            gatewayService: gatewayService
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
@@ -272,6 +278,8 @@ struct ServicesFactory {
             walletsService: walletsService,
             walletService: walletService,
             stakeService: stakeService,
+            earnService: earnService,
+            amountService: AmountService(earnDataProvider: earnService),
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,

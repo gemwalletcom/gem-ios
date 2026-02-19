@@ -174,6 +174,10 @@ public struct AssetDataViewModel: Sendable {
     public var stakeApr: Double? {
         assetData.metadata.stakingApr
     }
+
+    public var earnApr: Double? {
+        assetData.metadata.earnApr
+    }
     
     public var isPriceAlertsEnabled: Bool {
         assetData.isPriceAlertsEnabled

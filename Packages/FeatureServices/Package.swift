@@ -55,6 +55,8 @@ let package = Package(
         .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
         .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
         .library(name: "ContactService", targets: ["ContactService"]),
+        .library(name: "EarnService", targets: ["EarnService"]),
+        .library(name: "EarnServiceTestKit", targets: ["EarnServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -602,6 +604,25 @@ let package = Package(
                 .product(name: "WalletConnectorServiceTestKit", package: "ChainServices"),
             ],
             path: "ConnectionsService/TestKit"
+        ),
+        .target(
+            name: "EarnService",
+            dependencies: [
+                "Primitives",
+                "Store",
+                "Blockchain",
+            ],
+            path: "EarnService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "EarnServiceTestKit",
+            dependencies: [
+                "EarnService",
+                "Primitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
+            path: "EarnService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

@@ -201,6 +201,55 @@ class EthereumSigner: Signable {
         ))
     }
 
+    func signEarn(input: SignerInput, privateKey: Data) throws -> [String] {
+        let earnData = try input.type.earn().data
+        let callData = try Data.from(hex: earnData.callData)
+        let depositGasLimit = earnData.gasLimit.flatMap { BigInt($0) } ?? input.fee.gasLimit
+
+        if let approvalData = earnData.approval {
+            return try [
+                sign(coinType: input.coinType, input: buildBaseInput(
+                    input: input,
+                    transaction: .with {
+                        $0.erc20Approve = EthereumTransaction.ERC20Approve.with {
+                            $0.spender = approvalData.spender
+                            $0.amount = BigInt.MAX_256.magnitude.serialize()
+                        }
+                    },
+                    toAddress: approvalData.token,
+                    privateKey: privateKey
+                )),
+                sign(coinType: input.coinType, input: buildBaseInputCustom(
+                    input: input,
+                    transaction: .with {
+                        $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
+                            $0.amount = Data()
+                            $0.data = callData
+                        }
+                    },
+                    toAddress: earnData.contractAddress,
+                    nonce: BigInt(input.metadata.getSequence()) + 1,
+                    gasLimit: depositGasLimit,
+                    privateKey: privateKey
+                )),
+            ]
+        } else {
+            return try [sign(coinType: input.coinType, input: buildBaseInputCustom(
+                input: input,
+                transaction: .with {
+                    $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
+                        $0.amount = Data()
+                        $0.data = callData
+                    }
+                },
+                toAddress: earnData.contractAddress,
+                nonce: BigInt(input.metadata.getSequence()),
+                gasLimit: depositGasLimit,
+                privateKey: privateKey
+            ))]
+        }
+    }
+
     func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let stakeType) = input.type else {
             fatalError("Invalid type for staking")

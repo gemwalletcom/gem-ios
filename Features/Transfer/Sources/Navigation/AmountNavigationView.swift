@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI
 import Primitives
-import Staking
+import Earn
 import InfoSheet
 import Components
 import FiatConnect
@@ -53,9 +53,13 @@ public struct AmountNavigationView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(model.continueTitle, action: model.onSelectNextButton)
-                        .bold()
-                        .disabled(!model.isNextEnabled)
+                    if model.transferState.isLoading {
+                        ProgressView()
+                    } else {
+                        Button(model.continueTitle, action: model.onSelectNextButton)
+                            .bold()
+                            .disabled(!model.isNextEnabled)
+                    }
                 }
             }
             .navigationDestination(for: DelegationValidator.self) { validator in

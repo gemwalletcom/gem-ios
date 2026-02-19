@@ -13,11 +13,12 @@ import WalletConnector
 import WalletService
 import ChainService
 import StakeService
+import EarnService
+import Earn
 import NameService
 import BalanceService
 import PriceService
 import TransactionStateService
-import Staking
 import Assets
 import FiatConnect
 import WalletConnectorService
@@ -25,6 +26,7 @@ import AddressNameService
 import ActivityService
 import EventPresenterService
 import Preferences
+import PrimitivesComponents
 import GemAPI
 
 public struct ViewModelFactory: Sendable {
@@ -35,6 +37,8 @@ public struct ViewModelFactory: Sendable {
     let walletsService: WalletsService
     let walletService: WalletService
     let stakeService: StakeService
+    let earnService: EarnService
+    let amountService: AmountService
     let nameService: NameService
     let balanceService: BalanceService
     let priceService: PriceService
@@ -52,6 +56,8 @@ public struct ViewModelFactory: Sendable {
         walletsService: WalletsService,
         walletService: WalletService,
         stakeService: StakeService,
+        earnService: EarnService,
+        amountService: AmountService,
         nameService: NameService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -68,6 +74,8 @@ public struct ViewModelFactory: Sendable {
         self.walletsService = walletsService
         self.walletService = walletService
         self.stakeService = stakeService
+        self.earnService = earnService
+        self.amountService = amountService
         self.nameService = nameService
         self.balanceService = balanceService
         self.priceService = priceService
@@ -133,9 +141,10 @@ public struct ViewModelFactory: Sendable {
         wallet: Wallet,
         onTransferAction: TransferDataAction
     ) -> AmountSceneViewModel {
-        return AmountSceneViewModel(
+        AmountSceneViewModel(
             input: input,
             wallet: wallet,
+            service: amountService,
             onTransferAction: onTransferAction
         )
     }
@@ -179,6 +188,36 @@ public struct ViewModelFactory: Sendable {
             wallet: wallet,
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
             stakeService: stakeService
+        )
+    }
+
+    @MainActor
+    public func earnScene(
+        wallet: Wallet,
+        asset: Asset
+    ) -> EarnSceneViewModel {
+        EarnSceneViewModel(
+            wallet: wallet,
+            asset: asset,
+            currencyCode: Preferences.standard.currency,
+            earnService: earnService
+        )
+    }
+
+    @MainActor
+    public func earnDetailScene(
+        wallet: Wallet,
+        asset: Asset,
+        delegation: Delegation,
+        onAmountInputAction: AmountInputAction,
+        onTransferAction: TransferDataAction
+    ) -> EarnDetailSceneViewModel {
+        EarnDetailSceneViewModel(
+            wallet: wallet,
+            model: DelegationViewModel(delegation: delegation, asset: asset, formatter: .auto, currencyCode: Preferences.standard.currency),
+            asset: asset,
+            onAmountInputAction: onAmountInputAction,
+            onTransferAction: onTransferAction
         )
     }
 
