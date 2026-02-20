@@ -26,14 +26,14 @@ struct SmallCoinView: View {
                 .frame(height: Spacing.small)
 
             Text(model.name)
-                .font(.system(size: Constants.nameFontSize, weight: .regular))
+                .font(.app.Widget.body)
                 .foregroundColor(Colors.black)
 
             Spacer()
                 .frame(height: Spacing.tiny)
 
             Text(model.priceText)
-                .font(.system(size: Constants.priceFontSize, weight: .bold))
+                .font(.app.Widget.title)
                 .foregroundColor(Colors.black)
                 .minimumScaleFactor(Constants.priceMinScaleFactor)
                 .lineLimit(1)
@@ -43,7 +43,7 @@ struct SmallCoinView: View {
 
             HStack {
                 Text(model.percentageText)
-                    .font(.system(size: Constants.percentageFontSize, weight: .semibold))
+                    .font(.app.Widget.headline)
                     .foregroundColor(Colors.black)
                     .padding(.vertical, Spacing.tiny + Spacing.extraSmall)
                     .padding(.horizontal, Spacing.tiny + Spacing.extraSmall)
@@ -60,10 +60,7 @@ struct SmallCoinView: View {
 extension SmallCoinView {
     enum Constants {
         static let logoSize: CGFloat = 32
-        static let nameFontSize: CGFloat = 16
-        static let priceFontSize: CGFloat = 32
         static let priceMinScaleFactor: CGFloat = 0.5
-        static let percentageFontSize: CGFloat = 16
         static let percentageCornerRadius: CGFloat = 10
     }
 }

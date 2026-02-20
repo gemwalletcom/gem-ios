@@ -54,14 +54,12 @@ struct SwapAmountSingleView: View {
             VStack(alignment: .leading) {
                 Text(field.amount)
                     .foregroundStyle(Colors.black)
-                    .font(.system(size: 22))
-                    .fontWeight(.medium)
+                    .font(.app.title2)
                     .truncationMode(.middle)
                     .lineLimit(1)
                 if let fiatAmount = field.fiatAmount {
                     Text(fiatAmount)
-                        .font(.system(size: 12))
-                        .fontWeight(.medium)
+                        .font(.app.footnote)
                         .foregroundStyle(Colors.gray)
                 }
             }
