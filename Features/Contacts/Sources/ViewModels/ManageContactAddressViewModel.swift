@@ -22,7 +22,6 @@ public final class ManageContactAddressViewModel {
 
     private let mode: Mode
     private let contactId: String
-    private let addressId: String
     private let onComplete: (ContactAddress) -> Void
 
     var chain: Chain
@@ -43,10 +42,8 @@ public final class ManageContactAddressViewModel {
 
         switch mode {
         case .add:
-            self.addressId = UUID().uuidString
             self.chain = .bitcoin
         case .edit(let address):
-            self.addressId = address.id
             self.chain = address.chain
             self.memo = address.memo ?? ""
             self.addressInputModel.text = address.address
@@ -79,33 +76,14 @@ public final class ManageContactAddressViewModel {
             return .disabled
         }
 
-        switch mode {
-        case .add:
-            return .normal
-        case .edit:
-            return hasChanges ? .normal : .disabled
-        }
-    }
-
-    private var hasChanges: Bool {
-        switch mode {
-        case .add:
-            return true
-        case .edit(let original):
-            let trimmedAddress = addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)
-            let trimmedMemo = memo.isEmpty ? nil : memo
-            return original.address.lowercased() != trimmedAddress.lowercased()
-                || original.chain != chain
-                || original.memo != trimmedMemo
-        }
+        return .normal
     }
 
     private var currentAddress: ContactAddress {
-        ContactAddress(
-            id: addressId,
+        ContactAddress.new(
             contactId: contactId,
-            address: chain.checksumAddress(addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)),
             chain: chain,
+            address: chain.checksumAddress(addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)),
             memo: memo.isEmpty ? nil : memo
         )
     }

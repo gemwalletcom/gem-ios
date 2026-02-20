@@ -18,8 +18,7 @@ public struct ContactsRequest: ValueObservationQueryable {
     public func fetch(_ db: Database) throws -> [ContactData] {
         var addresses = ContactRecord.addresses
         if let chain {
-            let chains = Self.compatibleChains(for: chain)
-            addresses = addresses.filter(chains.map { $0.rawValue }.contains(ContactAddressRecord.Columns.chain))
+            addresses = addresses.filter(ContactAddressRecord.Columns.chain == chain.rawValue)
         }
 
         return try ContactRecord
@@ -28,12 +27,5 @@ public struct ContactsRequest: ValueObservationQueryable {
             .asRequest(of: ContactRecordInfo.self)
             .fetchAll(db)
             .map { $0.contactData }
-    }
-
-    private static func compatibleChains(for chain: Chain) -> [Chain] {
-        if chain.isEvm {
-            return Chain.allCases.filter { $0.isEvm }
-        }
-        return [chain]
     }
 }
