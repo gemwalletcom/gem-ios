@@ -5,7 +5,7 @@ import Primitives
 import Formatters
 @testable import Perpetuals
 
-extension CandleTooltipViewModel {
+public extension CandleTooltipViewModel {
     static func mock(
         candle: ChartCandleStick = .mock(),
         formatter: CurrencyFormatter = CurrencyFormatter(type: .currency, locale: Locale(identifier: "en_US"), currencyCode: "USD")
