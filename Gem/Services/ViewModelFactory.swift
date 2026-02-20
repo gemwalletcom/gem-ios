@@ -187,6 +187,7 @@ public struct ViewModelFactory: Sendable {
         StakeSceneViewModel(
             wallet: wallet,
             chain: StakeChain(rawValue: chain.rawValue)!, // Expected Only StakeChain accepted.
+            currencyCode: Preferences.standard.currency,
             stakeService: stakeService
         )
     }
@@ -242,7 +243,7 @@ public struct ViewModelFactory: Sendable {
     ) -> StakeDetailSceneViewModel {
         StakeDetailSceneViewModel(
             wallet: wallet,
-            model: StakeDelegationViewModel(delegation: delegation, formatter: .auto),
+            model: DelegationViewModel(delegation: delegation, formatter: .auto, currencyCode: Preferences.standard.currency),
             service: stakeService,
             onAmountInputAction: onAmountInputAction,
             onTransferAction: onTransferAction

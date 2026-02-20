@@ -3,10 +3,11 @@
 import Foundation
 import Primitives
 import Components
+import PrimitivesComponents
 import SwiftUI
 import Style
 import Formatters
-import Localization
+import ExplorerService
 
 public struct DelegationViewModel: Sendable {
 
@@ -14,7 +15,7 @@ public struct DelegationViewModel: Sendable {
     public let currencyCode: String
     private let asset: Asset
     private let formatter: ValueFormatter
-    private let validatorImageFormatter = AssetImageFormatter()
+    private let exploreService: ExplorerService
     private let priceFormatter: CurrencyFormatter
 
     private static let dateFormatterDefault: DateComponentsFormatter = {
@@ -37,12 +38,14 @@ public struct DelegationViewModel: Sendable {
         delegation: Delegation,
         asset: Asset? = nil,
         formatter: ValueFormatter = .short,
-        currencyCode: String
+        currencyCode: String,
+        exploreService: ExplorerService = .standard
     ) {
         self.delegation = delegation
         self.currencyCode = currencyCode
         self.asset = asset ?? delegation.base.assetId.chain.asset
         self.formatter = formatter
+        self.exploreService = exploreService
         self.priceFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
     }
 
@@ -72,15 +75,12 @@ public struct DelegationViewModel: Sendable {
 
     public var stateTextColor: Color {
         switch state {
-        case .active:
-            Colors.green
+        case .active: Colors.green
         case .pending,
             .activating,
-            .deactivating:
-            Colors.orange
+            .deactivating: Colors.orange
         case .inactive,
-            .awaitingWithdrawal:
-            Colors.red
+            .awaitingWithdrawal: Colors.red
         }
     }
 
@@ -121,30 +121,13 @@ public struct DelegationViewModel: Sendable {
         return priceFormatter.string(price.price * rewards)
     }
 
-    public var validatorText: String {
-        switch delegation.validator.providerType {
-        case .earn:
-            guard let provider = YieldProvider(rawValue: delegation.validator.id) else { return delegation.validator.name }
-            return YieldProviderViewModel(provider: provider).displayName
-        case .stake:
-            if delegation.validator.name.isEmpty {
-                return AddressFormatter(style: .short, address: delegation.validator.id, chain: asset.chain).value()
-            }
-            return delegation.validator.name
-        }
+    public var validatorModel: ValidatorViewModel {
+        ValidatorViewModel(validator: delegation.validator, exploreService: exploreService)
     }
 
-    public var validatorImage: AssetImage {
-        switch delegation.validator.providerType {
-        case .stake:
-            return AssetImage(
-                type: String(validatorText.first ?? " "),
-                imageURL: validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
-            )
-        case .earn:
-            return AssetImage(placeholder: YieldProvider(rawValue: delegation.validator.id).map { YieldProviderViewModel(provider: $0).image })
-        }
-    }
+    public var validatorText: String { validatorModel.name }
+    public var validatorImage: AssetImage { validatorModel.validatorImage }
+    public var validatorUrl: URL? { validatorModel.url }
 
     public var completionDateText: String? {
         let now = Date.now
@@ -160,4 +143,15 @@ public struct DelegationViewModel: Sendable {
 
 extension DelegationViewModel: Identifiable {
     public var id: String { delegation.id }
+}
+
+// MARK: - HeaderViewModel
+
+extension DelegationViewModel: HeaderViewModel {
+    public var isWatchWallet: Bool { false }
+    public var buttons: [HeaderButton] { [] }
+    public var assetImage: AssetImage? { validatorImage }
+    public var title: String { balanceText }
+    public var subtitle: String? { fiatValueText }
+    public var subtitleColor: Color { .secondary }
 }

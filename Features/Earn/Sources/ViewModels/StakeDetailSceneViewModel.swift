@@ -11,7 +11,7 @@ import Formatters
 import PrimitivesComponents
 
 public struct StakeDetailSceneViewModel {
-    public let model: StakeDelegationViewModel
+    public let model: DelegationViewModel
     public let onAmountInputAction: AmountInputAction
     public let onTransferAction: TransferDataAction
 
@@ -20,7 +20,7 @@ public struct StakeDetailSceneViewModel {
 
     public init(
         wallet: Wallet,
-        model: StakeDelegationViewModel,
+        model: DelegationViewModel,
         service: any StakeServiceable,
         onAmountInputAction: AmountInputAction,
         onTransferAction: TransferDataAction
@@ -43,11 +43,11 @@ public struct StakeDetailSceneViewModel {
     public var withdrawTitle: String { Localized.Transfer.Withdraw.title }
     
     public var validatorHeaderViewModel: HeaderViewModel {
-        ValidatorHeaderViewModel(model: StakeDelegationViewModel(delegation: model.delegation, formatter: .auto))
+        DelegationViewModel(delegation: model.delegation, formatter: .auto, currencyCode: model.currencyCode)
     }
 
     public var stateText: String {
-        model.state.title
+        DelegationStateViewModel(state: model.state).title
     }
     
     public var stateTextStyle: TextStyle {

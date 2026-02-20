@@ -23,6 +23,7 @@ public final class StakeSceneViewModel {
 
     private let formatter = ValueFormatter(style: .medium)
     private let recommendedValidators = StakeRecommendedValidators()
+    private let currencyCode: String
 
     public let wallet: Wallet
     public let delegationsQuery: ObservableQuery<DelegationsRequest>
@@ -38,10 +39,12 @@ public final class StakeSceneViewModel {
     public init(
         wallet: Wallet,
         chain: StakeChain,
+        currencyCode: String,
         stakeService: any StakeServiceable
     ) {
         self.wallet = wallet
         self.chain = chain
+        self.currencyCode = currencyCode
         self.stakeService = stakeService
         self.delegationsQuery = ObservableQuery(DelegationsRequest(walletId: wallet.walletId, assetId: chain.chain.assetId, providerType: .stake), initialValue: [])
         self.validatorsQuery = ObservableQuery(ValidatorsRequest(chain: chain.chain, providerType: .stake), initialValue: [])
@@ -116,6 +119,22 @@ public final class StakeSceneViewModel {
         EmptyContentTypeViewModel(type: .stake(symbol: assetModel.symbol))
     }
 
+    func navigationDestination(for delegation: DelegationViewModel) -> any Hashable {
+        switch delegation.state {
+        case .awaitingWithdrawal:
+            TransferData(
+                type: .stake(asset, .withdraw(delegation.delegation)),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: delegation.validatorText, address: delegation.delegation.validator.id, memo: ""),
+                    amount: .none
+                ),
+                value: delegation.delegation.base.balanceValue
+            )
+        case .active, .pending, .inactive, .activating, .deactivating:
+            delegation.delegation
+        }
+    }
+
     var delegationsSectionTitle: String {
         guard case .data(let delegations) = delegationsState, !delegations.isEmpty else {
             return .empty
@@ -123,9 +142,9 @@ public final class StakeSceneViewModel {
         return delegationsTitle
     }
     
-    var delegationsState: StateViewType<[StakeDelegationViewModel]> {
-        let delegationModels = delegations.map { StakeDelegationViewModel(delegation: $0) }
-        
+    var delegationsState: StateViewType<[DelegationViewModel]> {
+        let delegationModels = delegations.map { DelegationViewModel(delegation: $0, currencyCode: currencyCode) }
+
         switch delegatitonsState {
         case .noData: return .noData
         case .loading: return delegationModels.isEmpty ? .loading : .data(delegationModels)
