@@ -101,6 +101,7 @@ extension TransactionRecord: CreateTable {
                 .notNull()
             $0.column(Columns.chain.name, .text)
                 .notNull()
+                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.assetId.name, .text)
                 .notNull()
                 .indexed()
