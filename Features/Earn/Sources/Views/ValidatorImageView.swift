@@ -2,28 +2,26 @@
 
 import SwiftUI
 import Components
-import Primitives
 import Style
 
 public struct ValidatorImageView: View {
 
-    private let validator: DelegationValidator
-    private let formatter = AssetImageFormatter()
+    private let model: ValidatorViewModel
 
-    public init(validator: DelegationValidator) {
-        self.validator = validator
+    public init(model: ValidatorViewModel) {
+        self.model = model
     }
 
     public var body: some View {
-        switch validator.providerType {
+        switch model.validator.providerType {
         case .stake:
             AsyncImageView(
-                url: formatter.getValidatorUrl(chain: validator.chain, id: validator.id),
+                url: model.imageUrl,
                 size: .image.asset,
-                placeholder: .letter(validator.name.first ?? " ")
+                placeholder: .letter(model.validator.name.first ?? " ")
             )
         case .earn:
-            let image = YieldProvider(rawValue: validator.id).map { YieldProviderViewModel(provider: $0).image } ?? Images.Logo.logo
+            let image = model.image ?? Images.Logo.logo
             image
                 .resizable()
                 .frame(width: Sizing.image.asset, height: Sizing.image.asset)

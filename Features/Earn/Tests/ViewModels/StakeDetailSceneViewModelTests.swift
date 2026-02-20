@@ -21,7 +21,7 @@ struct StakeDetailSceneViewModelTests {
 extension StakeDetailSceneViewModel {
     static func mock(
         wallet: Wallet = .mock(),
-        model: StakeDelegationViewModel = StakeDelegationViewModel.mock(),
+        model: DelegationViewModel = .mock(),
         service: any StakeServiceable = MockStakeService()
     ) -> StakeDetailSceneViewModel {
         StakeDetailSceneViewModel(
@@ -33,4 +33,3 @@ extension StakeDetailSceneViewModel {
         )
     }
 }
-

@@ -85,8 +85,8 @@ extension StakeScene {
                     .id(UUID())
             case .data(let delegations):
                 ForEach(delegations) { delegation in
-                    NavigationLink(value: delegation.navigationDestination) {
-                        StakeDelegationView(delegation: delegation)
+                    NavigationLink(value: model.navigationDestination(for: delegation)) {
+                        DelegationView(delegation: delegation)
                     }
                 }
                 .listRowInsets(.assetListRowInsets)

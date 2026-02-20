@@ -47,6 +47,7 @@ extension StakeSceneViewModel {
         StakeSceneViewModel(
             wallet: wallet,
             chain: chain,
+            currencyCode: "USD",
             stakeService: stakeService
         )
     }

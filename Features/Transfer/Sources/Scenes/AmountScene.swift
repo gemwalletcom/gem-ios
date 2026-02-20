@@ -5,7 +5,7 @@ import Primitives
 import PrimitivesComponents
 import Style
 import SwiftUI
-import struct Earn.StakeValidatorViewModel
+import struct Earn.ValidatorViewModel
 import struct Earn.ValidatorView
 
 struct AmountScene: View {
@@ -64,10 +64,10 @@ struct AmountScene: View {
                 Section(stake.validatorSelection.title) {
                     if stake.validatorSelection.isEnabled {
                         NavigationLink(value: stake.validatorSelection.selected) {
-                            ValidatorView(model: StakeValidatorViewModel(validator: stake.validatorSelection.selected))
+                            ValidatorView(model: ValidatorViewModel(validator: stake.validatorSelection.selected))
                         }
                     } else {
-                        ValidatorView(model: StakeValidatorViewModel(validator: stake.validatorSelection.selected))
+                        ValidatorView(model: ValidatorViewModel(validator: stake.validatorSelection.selected))
                     }
                 }
 
@@ -115,7 +115,7 @@ struct AmountScene: View {
 
             case let .earn(earn):
                 Section(earn.providerTitle) {
-                    ValidatorView(model: StakeValidatorViewModel(validator: earn.provider))
+                    ValidatorView(model: ValidatorViewModel(validator: earn.provider))
                 }
 
             case .transfer:

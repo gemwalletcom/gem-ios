@@ -5,12 +5,11 @@ import Testing
 import Earn
 import PrimitivesTestKit
 
-struct StakeValidatorViewModelTests {
+struct ValidatorViewModelTests {
 
-    @Test func testAprText() async throws {
-        let model = StakeValidatorViewModel(validator: .mock(apr: 2.15))
-        
+    @Test func aprText() {
+        let model = ValidatorViewModel(validator: .mock(apr: 2.15))
+
         #expect(model.aprText == "APR 2.15%")
     }
 }
-

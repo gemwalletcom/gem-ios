@@ -40,7 +40,7 @@ public struct EarnDetailSceneViewModel {
     public var withdrawTitle: String { Localized.Transfer.Withdraw.title }
 
     public var headerViewModel: HeaderViewModel {
-        DelegationHeaderViewModel(model: DelegationViewModel(delegation: model.delegation, asset: asset, formatter: .auto, currencyCode: model.currencyCode))
+        DelegationViewModel(delegation: model.delegation, asset: asset, formatter: .auto, currencyCode: model.currencyCode)
     }
 
     public var providerTitle: String { Localized.Common.provider }

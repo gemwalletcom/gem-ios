@@ -85,7 +85,7 @@ public final class StakeValidatorsViewModel {
     }
     
     public func listItem(validator: DelegationValidator) -> ListItemValue<DelegationValidator> {
-        let model = StakeValidatorViewModel(validator: validator)
+        let model = ValidatorViewModel(validator: validator)
         return ListItemValue(
             title: model.name,
             subtitle: model.aprText,

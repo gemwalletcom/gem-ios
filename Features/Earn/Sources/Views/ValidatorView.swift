@@ -2,20 +2,19 @@
 
 import Foundation
 import SwiftUI
-import Style
 import Components
 
 public struct ValidatorView: View {
-    
-    private let model: StakeValidatorViewModel
-    
-    public init(model: StakeValidatorViewModel) {
+
+    private let model: ValidatorViewModel
+
+    public init(model: ValidatorViewModel) {
         self.model = model
     }
-    
+
     public var body: some View {
         HStack {
-            ValidatorImageView(validator: model.validator)
+            ValidatorImageView(model: model)
             ListItemView(
                 title: model.name,
                 subtitle: model.aprText
