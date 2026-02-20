@@ -41,10 +41,7 @@ public actor CloudSyncService {
     // MARK: - Fetch
 
     public func fetch<T: CloudSyncable>(_ type: T.Type) async throws -> [T] {
-        let query = CKQuery(recordType: T.recordType, predicate: NSPredicate(value: true))
-        let (results, _) = try await database.records(matching: query)
-
-        return try results.compactMap { _, result in
+        try await fetchAllRecords(recordType: T.recordType).compactMap { _, result in
             switch result {
             case .success(let record): try decodeRecord(record, as: type)
             case .failure: nil
@@ -63,7 +60,9 @@ public actor CloudSyncService {
     }
 
     public func deleteAll<T: CloudSyncable>(_ type: T.Type) async throws {
-        try await delete(try await fetch(type))
+        let ids = try await fetchAllRecords(recordType: T.recordType, desiredKeys: []).map { $0.0 }
+        guard !ids.isEmpty else { return }
+        _ = try await database.modifyRecords(saving: [], deleting: ids)
     }
 
     // MARK: - Private
@@ -80,6 +79,22 @@ public actor CloudSyncService {
             throw CloudSyncError.invalidRecordData
         }
         return try JSONDecoder().decode(type, from: try transformer.restore(data))
+    }
+
+    private func fetchAllRecords(
+        recordType: String,
+        desiredKeys: [CKRecord.FieldKey]? = nil
+    ) async throws -> [(CKRecord.ID, Result<CKRecord, any Error>)] {
+        let query = CKQuery(recordType: recordType, predicate: NSPredicate(value: true))
+        var (allResults, cursor) = try await database.records(matching: query, desiredKeys: desiredKeys)
+
+        while let currentCursor = cursor {
+            let (nextResults, nextCursor) = try await database.records(continuingMatchFrom: currentCursor, desiredKeys: desiredKeys)
+            allResults.append(contentsOf: nextResults)
+            cursor = nextCursor
+        }
+
+        return allResults
     }
 }
 
