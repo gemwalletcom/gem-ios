@@ -121,13 +121,8 @@ extension ManageContactAddressViewModel {
 extension ManageContactAddressViewModel {
     private func updateAddressValidators(for chain: Chain) {
         let currentText = addressInputModel.text
-        let asset = Asset(
-            id: AssetId(chain: chain, tokenId: nil),
-            name: .empty,
-            symbol: .empty,
-            decimals: 0,
-            type: .native
-        )
+        let asset = Asset(chain)
+        
         addressInputModel = InputValidationViewModel(
             mode: .manual,
             validators: [
