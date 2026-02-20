@@ -12,7 +12,7 @@
 "wallet.new.title" = "Neue Wallet";
 "receive.title" = "Empfangen %@";
 "buy.title" = "Kaufen %@";
-"wallet.import.secret_phrase" = "Geheime Phrase";
+"common.secret_phrase" = "Geheime Phrase";
 "wallet.name" = "Name";
 "wallet.import.action" = "Importieren";
 "common.next" = "Weiter";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Der Mindesthandelsbetrag beträgt %@Bitte geben Sie einen höheren Betrag ein.";
 "swap.use_minimum_amount" = "Mindestmenge verwenden";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Ihre Positionen werden hier angezeigt.";
+"earn.state.empty.description" = "Zahlen Sie Ihre erste %@";
+"contacts.title" = "Kontakte";
+"contacts.contact" = "Kontakt";
+"contacts.addresses" = "Adressen";
+"contacts.state.empty.title" = "Keine Kontakte";
+"contacts.state.empty.description" = "Speichern Sie Ihre häufig verwendeten Adressen";
+"charts.price.open" = "Offen";
+"charts.price.close" = "Schließen";
+"charts.price.high" = "Hoch";
+"charts.price.low" = "Niedrig";
+"charts.price.change" = "Ändern";

@@ -12,7 +12,7 @@
 "wallet.new.title" = "Новий Гаманець";
 "receive.title" = "Отримати %@";
 "buy.title" = "Купити %@";
-"wallet.import.secret_phrase" = "Секретна фраза";
+"common.secret_phrase" = "Секретна фраза";
 "wallet.name" = "Ім'я";
 "wallet.import.action" = "Імпорт";
 "common.next" = "Далі";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Мінімально дозволена сума угоди становить %@. Будь ласка, введіть більшу суму.";
 "swap.use_minimum_amount" = "Використовуйте мінімальну суму";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Ваші позиції з'являться тут";
+"earn.state.empty.description" = "Внесіть свій перший депозит %@";
+"contacts.title" = "Контакти";
+"contacts.contact" = "Контакти";
+"contacts.addresses" = "Адреси";
+"contacts.state.empty.title" = "Немає контактів";
+"contacts.state.empty.description" = "Збережіть часто використовувані адреси";
+"charts.price.open" = "Відкриття";
+"charts.price.close" = "Закриття";
+"charts.price.high" = "Максимум";
+"charts.price.low" = "Мінімум";
+"charts.price.change" = "Зміна";

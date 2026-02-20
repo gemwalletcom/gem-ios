@@ -12,7 +12,7 @@
 "wallet.new.title" = "Dompet Baru";
 "receive.title" = "Terima %@";
 "buy.title" = "Beli %@";
-"wallet.import.secret_phrase" = "Frasa Rahasia";
+"common.secret_phrase" = "Frasa Rahasia";
 "wallet.name" = "Nama";
 "wallet.import.action" = "Impor";
 "common.next" = "Selanjutnya";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Jumlah transaksi minimum adalah %@Silakan masukkan jumlah yang lebih tinggi.";
 "swap.use_minimum_amount" = "Gunakan Jumlah Minimum";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Posisi Anda akan muncul di sini.";
+"earn.state.empty.description" = "Setorkan pertama Anda %@";
+"contacts.title" = "Kontak";
+"contacts.contact" = "Kontak";
+"contacts.addresses" = "Alamat";
+"contacts.state.empty.title" = "Tidak ada kontak";
+"contacts.state.empty.description" = "Simpan alamat yang sering Anda gunakan.";
+"charts.price.open" = "Membuka";
+"charts.price.close" = "Menutup";
+"charts.price.high" = "Tinggi";
+"charts.price.low" = "Rendah";
+"charts.price.change" = "Mengubah";

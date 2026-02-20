@@ -12,7 +12,7 @@
 "wallet.new.title" = "Ny tegnebog";
 "receive.title" = "Modtag %@";
 "buy.title" = "Køb %@";
-"wallet.import.secret_phrase" = "Hemmelig sætning";
+"common.secret_phrase" = "Hemmelig sætning";
 "wallet.name" = "Navn";
 "wallet.import.action" = "Importere";
 "common.next" = "Next";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Minimumsbeløbet for handel er %@Indtast venligst et højere beløb.";
 "swap.use_minimum_amount" = "Brug minimumsbeløb";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Dine stillinger vil blive vist her";
+"earn.state.empty.description" = "Indbetal din første %@";
+"contacts.title" = "Kontakter";
+"contacts.contact" = "Kontakte";
+"contacts.addresses" = "Adresser";
+"contacts.state.empty.title" = "Ingen kontakter";
+"contacts.state.empty.description" = "Gem dine ofte brugte adresser";
+"charts.price.open" = "Åben";
+"charts.price.close" = "Tæt";
+"charts.price.high" = "Høj";
+"charts.price.low" = "Lav";
+"charts.price.change" = "Forandring";

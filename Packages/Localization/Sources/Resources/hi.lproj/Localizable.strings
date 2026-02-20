@@ -12,7 +12,7 @@
 "wallet.new.title" = "नया बटुआ";
 "receive.title" = "%@ प्राप्त करें";
 "buy.title" = "%@ खरीदें";
-"wallet.import.secret_phrase" = "गुप्त वाक्यांश";
+"common.secret_phrase" = "गुप्त वाक्यांश";
 "wallet.name" = "नाम";
 "wallet.import.action" = "आयात";
 "common.next" = "Next";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "न्यूनतम व्यापार राशि है %@कृपया अधिक राशि दर्ज करें।";
 "swap.use_minimum_amount" = "न्यूनतम राशि का प्रयोग करें";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "आपके पद यहां दिखाई देंगे";
+"earn.state.empty.description" = "अपनी पहली राशि जमा करें %@";
+"contacts.title" = "संपर्क";
+"contacts.contact" = "संपर्क";
+"contacts.addresses" = "पतों";
+"contacts.state.empty.title" = "कोई संपर्क नहीं";
+"contacts.state.empty.description" = "अपने अक्सर इस्तेमाल होने वाले पतों को सेव करें";
+"charts.price.open" = "खुला";
+"charts.price.close" = "बंद करना";
+"charts.price.high" = "उच्च";
+"charts.price.low" = "कम";
+"charts.price.change" = "परिवर्तन";

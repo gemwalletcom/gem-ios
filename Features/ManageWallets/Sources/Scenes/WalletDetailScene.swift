@@ -54,11 +54,11 @@ public struct WalletDetailScene: View {
                 case .multicoin, .single:
                     Section {
                         NavigationCustomLink(
-                            with: ListItemView(title: Localized.Common.show(Localized.Wallet.Import.secretPhrase)),
+                            with: ListItemView(title: Localized.Common.show(Localized.Common.secretPhrase)),
                             action: model.onShowSecretPhrase
                         )
                     } header: {
-                        Text(Localized.Wallet.Import.secretPhrase)
+                        Text(Localized.Common.secretPhrase)
                     }
                 case .privateKey:
                     Section {

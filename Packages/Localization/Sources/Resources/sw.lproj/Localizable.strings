@@ -12,7 +12,7 @@
 "wallet.new.title" = "Pochi Mpya";
 "receive.title" = "Pokea %@";
 "buy.title" = "Nunua %@";
-"wallet.import.secret_phrase" = "Kifungu cha Siri";
+"common.secret_phrase" = "Kifungu cha Siri";
 "wallet.name" = "Jina";
 "wallet.import.action" = "Ingiza";
 "common.next" = "Next";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Kiwango cha chini cha biashara ni %@Tafadhali weka kiasi cha juu zaidi.";
 "swap.use_minimum_amount" = "Tumia Kiasi cha Chini Zaidi";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Nafasi zako zitaonekana hapa";
+"earn.state.empty.description" = "Weka pesa zako kwanza %@";
+"contacts.title" = "Anwani";
+"contacts.contact" = "Mawasiliano";
+"contacts.addresses" = "Anwani";
+"contacts.state.empty.title" = "Hakuna Anwani";
+"contacts.state.empty.description" = "Hifadhi anwani zako zinazotumiwa mara kwa mara";
+"charts.price.open" = "Fungua";
+"charts.price.close" = "Funga";
+"charts.price.high" = "Juu";
+"charts.price.low" = "Chini";
+"charts.price.change" = "Badilisha";

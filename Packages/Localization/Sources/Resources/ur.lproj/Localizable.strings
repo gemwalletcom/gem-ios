@@ -12,7 +12,7 @@
 "wallet.new.title" = "نیا پرس";
 "receive.title" = "وصول کریں %@";
 "buy.title" = "خریدیں %@";
-"wallet.import.secret_phrase" = "خفیہ جملہ";
+"common.secret_phrase" = "خفیہ جملہ";
 "wallet.name" = "نام";
 "wallet.import.action" = "درآمد کریں۔";
 "common.next" = "Next";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "کم از کم تجارتی رقم ہے۔ %@. براہ کرم زیادہ رقم درج کریں۔";
 "swap.use_minimum_amount" = "کم سے کم رقم استعمال کریں۔";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "آپ کی پوزیشنیں یہاں ظاہر ہوں گی۔";
+"earn.state.empty.description" = "اپنی پہلی جمع کروائیں۔ %@";
+"contacts.title" = "رابطے";
+"contacts.contact" = "رابطہ کریں۔";
+"contacts.addresses" = "پتے";
+"contacts.state.empty.title" = "کوئی رابطے نہیں";
+"contacts.state.empty.description" = "اپنے اکثر استعمال ہونے والے پتے محفوظ کریں۔";
+"charts.price.open" = "کھولیں۔";
+"charts.price.close" = "بند";
+"charts.price.high" = "اعلی";
+"charts.price.low" = "کم";
+"charts.price.change" = "تبدیلی";

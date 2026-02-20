@@ -12,7 +12,7 @@
 "wallet.new.title" = "Nieuwe portemonnee";
 "receive.title" = "Ontvang %@";
 "buy.title" = "Koop %@";
-"wallet.import.secret_phrase" = "Geheime zin";
+"common.secret_phrase" = "Geheime zin";
 "wallet.name" = "Naam";
 "wallet.import.action" = "Importeren";
 "common.next" = "Next";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Het minimale handelsbedrag is %@Voer een hoger bedrag in.";
 "swap.use_minimum_amount" = "Gebruik de minimale hoeveelheid";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Uw posities verschijnen hier.";
+"earn.state.empty.description" = "Stort uw eerste %@";
+"contacts.title" = "Contacten";
+"contacts.contact" = "Contact";
+"contacts.addresses" = "Adressen";
+"contacts.state.empty.title" = "Geen contacten";
+"contacts.state.empty.description" = "Bewaar uw veelgebruikte adressen.";
+"charts.price.open" = "Open";
+"charts.price.close" = "Dichtbij";
+"charts.price.high" = "Hoog";
+"charts.price.low" = "Laag";
+"charts.price.change" = "Wijziging";

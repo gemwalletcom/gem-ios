@@ -12,7 +12,7 @@
 "wallet.new.title" = "Yeni Cüzdan";
 "receive.title" = "%@ alın";
 "buy.title" = "%@ satın al";
-"wallet.import.secret_phrase" = "Gizli Söz";
+"common.secret_phrase" = "Gizli Söz";
 "wallet.name" = "İsim";
 "wallet.import.action" = "Cüzdanı İçe Aktar";
 "common.next" = "Sonraki";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "Minimum işlem tutarı %@. Lütfen daha yüksek bir tutar girin.";
 "swap.use_minimum_amount" = "Minimum Tutarı Kullanın";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "Pozisyonlarınız burada görünecektir.";
+"earn.state.empty.description" = "İlk para yatırma işleminizi gerçekleştirin. %@";
+"contacts.title" = "İletişim";
+"contacts.contact" = "Temas etmek";
+"contacts.addresses" = "Adresler";
+"contacts.state.empty.title" = "İletişim yok";
+"contacts.state.empty.description" = "Sık kullandığınız adresleri kaydedin.";
+"charts.price.open" = "Açık";
+"charts.price.close" = "Kapalı";
+"charts.price.high" = "Yüksek";
+"charts.price.low" = "Düşük";
+"charts.price.change" = "Değiştirmek";

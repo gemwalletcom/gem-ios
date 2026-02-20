@@ -12,7 +12,7 @@
 "wallet.new.title" = "کیف پول جدید";
 "receive.title" = "دریافت %@";
 "buy.title" = "خرید %@";
-"wallet.import.secret_phrase" = "عبارت مخفی";
+"common.secret_phrase" = "عبارت مخفی";
 "wallet.name" = "نام";
 "wallet.import.action" = "وارد کردن";
 "common.next" = "بعدی";
@@ -537,3 +537,15 @@
 "errors.swap.minimum_amount" = "حداقل مبلغ معامله %@لطفا مبلغ بیشتری وارد کنید.";
 "swap.use_minimum_amount" = "از حداقل مقدار استفاده کنید";
 "common.earn" = "Earn";
+"earn.state.empty.title" = "موقعیت‌های شما اینجا نمایش داده می‌شوند";
+"earn.state.empty.description" = "اولین واریز خود را انجام دهید %@";
+"contacts.title" = "مخاطبین";
+"contacts.contact" = "تماس";
+"contacts.addresses" = "آدرس‌ها";
+"contacts.state.empty.title" = "بدون مخاطب";
+"contacts.state.empty.description" = "آدرس‌های پرکاربرد خود را ذخیره کنید";
+"charts.price.open" = "باز";
+"charts.price.close" = "بستن";
+"charts.price.high" = "بالا";
+"charts.price.low" = "کم";
+"charts.price.change" = "تغییر";
