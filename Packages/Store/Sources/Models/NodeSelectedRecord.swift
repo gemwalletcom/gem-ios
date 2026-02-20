@@ -20,11 +20,8 @@ struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, TableRec
 extension NodeSelectedRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.chain.name, .text)
-                .primaryKey()
-                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
-            $0.column(Columns.nodeUrl.name, .text)
-                .notNull()
+            $0.column(Columns.chain.name, .text).primaryKey()
+            $0.column(Columns.nodeUrl.name, .text).notNull()
         }
     }
 }
