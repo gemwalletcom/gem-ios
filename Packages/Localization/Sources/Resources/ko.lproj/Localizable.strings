@@ -12,7 +12,7 @@
 "wallet.new.title" = "새로운 지갑";
 "receive.title" = "%@ 받습니다.";
 "buy.title" = "%@ 구매";
-"wallet.import.secret_phrase" = "비밀 문구";
+"common.secret_phrase" = "비밀 문구";
 "wallet.name" = "이름";
 "wallet.import.action" = "수입";
 "common.next" = "Next";

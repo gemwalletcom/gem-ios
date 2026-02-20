@@ -12,7 +12,7 @@
 "wallet.new.title" = "Sabuwar Wallet";
 "receive.title" = "Karba %@";
 "buy.title" = "Saya %@";
-"wallet.import.secret_phrase" = "Kalmomin Sirri";
+"common.secret_phrase" = "Kalmomin Sirri";
 "wallet.name" = "Suna";
 "wallet.import.action" = "Shigo da";
 "common.next" = "Na gaba";

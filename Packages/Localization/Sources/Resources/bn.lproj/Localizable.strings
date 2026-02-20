@@ -12,7 +12,7 @@
 "wallet.new.title" = "নতুন ওয়ালেট";
 "receive.title" = "%@ গ্রহণ করুন";
 "buy.title" = "%@ কিনুন";
-"wallet.import.secret_phrase" = "গোপন বাক্যাংশ";
+"common.secret_phrase" = "গোপন বাক্যাংশ";
 "wallet.name" = "নাম";
 "wallet.import.action" = "আমদানি করুন";
 "common.next" = "Next";

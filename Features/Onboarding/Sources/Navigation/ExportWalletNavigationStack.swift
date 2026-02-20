@@ -25,7 +25,7 @@ public struct ExportWalletNavigationStack: View {
                 case .words:
                     SecurityReminderScene(
                         model: SecurityReminderViewModelDefault(
-                            title: Localized.Wallet.Import.secretPhrase,
+                            title: Localized.Common.secretPhrase,
                             onNext: onNext
                         )
                     )

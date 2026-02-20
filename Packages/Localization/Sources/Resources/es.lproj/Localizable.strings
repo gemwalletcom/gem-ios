@@ -12,7 +12,7 @@
 "wallet.new.title" = "Nueva cartera";
 "receive.title" = "Recibir %@";
 "buy.title" = "Comprar %@";
-"wallet.import.secret_phrase" = "Frase secreta";
+"common.secret_phrase" = "Frase secreta";
 "wallet.name" = "Nombre";
 "wallet.import.action" = "Importar";
 "common.next" = "Próximo";

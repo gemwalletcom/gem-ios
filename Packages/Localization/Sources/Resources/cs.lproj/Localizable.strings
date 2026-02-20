@@ -12,7 +12,7 @@
 "wallet.new.title" = "Nová peněženka";
 "receive.title" = "Přijmout %@";
 "buy.title" = "Koupit %@";
-"wallet.import.secret_phrase" = "Tajná fráze";
+"common.secret_phrase" = "Tajná fráze";
 "wallet.name" = "Jméno";
 "wallet.import.action" = "Importovat";
 "common.next" = "Next";

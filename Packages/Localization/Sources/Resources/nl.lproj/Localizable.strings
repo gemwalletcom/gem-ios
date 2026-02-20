@@ -12,7 +12,7 @@
 "wallet.new.title" = "Nieuwe portemonnee";
 "receive.title" = "Ontvang %@";
 "buy.title" = "Koop %@";
-"wallet.import.secret_phrase" = "Geheime zin";
+"common.secret_phrase" = "Geheime zin";
 "wallet.name" = "Naam";
 "wallet.import.action" = "Importeren";
 "common.next" = "Next";

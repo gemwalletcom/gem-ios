@@ -12,7 +12,7 @@
 "wallet.new.title" = "नया बटुआ";
 "receive.title" = "%@ प्राप्त करें";
 "buy.title" = "%@ खरीदें";
-"wallet.import.secret_phrase" = "गुप्त वाक्यांश";
+"common.secret_phrase" = "गुप्त वाक्यांश";
 "wallet.name" = "नाम";
 "wallet.import.action" = "आयात";
 "common.next" = "Next";

@@ -12,7 +12,7 @@
 "wallet.new.title" = "ארנק חדש";
 "receive.title" = "קבל %@";
 "buy.title" = "קנה %@";
-"wallet.import.secret_phrase" = "ביטוי סודי";
+"common.secret_phrase" = "ביטוי סודי";
 "wallet.name" = "שֵׁם";
 "wallet.import.action" = "יְבוּא";
 "common.next" = "Next";

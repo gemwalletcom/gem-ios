@@ -12,7 +12,7 @@
 "wallet.new.title" = "Pochi Mpya";
 "receive.title" = "Pokea %@";
 "buy.title" = "Nunua %@";
-"wallet.import.secret_phrase" = "Kifungu cha Siri";
+"common.secret_phrase" = "Kifungu cha Siri";
 "wallet.name" = "Jina";
 "wallet.import.action" = "Ingiza";
 "common.next" = "Next";

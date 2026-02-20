@@ -12,7 +12,7 @@
 "wallet.new.title" = "کیف پول جدید";
 "receive.title" = "دریافت %@";
 "buy.title" = "خرید %@";
-"wallet.import.secret_phrase" = "عبارت مخفی";
+"common.secret_phrase" = "عبارت مخفی";
 "wallet.name" = "نام";
 "wallet.import.action" = "وارد کردن";
 "common.next" = "بعدی";

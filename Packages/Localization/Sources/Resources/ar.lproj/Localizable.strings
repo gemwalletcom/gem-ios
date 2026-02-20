@@ -12,7 +12,7 @@
 "wallet.new.title" = "محفظة جديدة";
 "receive.title" = "استقبل %@";
 "buy.title" = "شراء %@";
-"wallet.import.secret_phrase" = "العبارة السرية";
+"common.secret_phrase" = "العبارة السرية";
 "wallet.name" = "اسم";
 "wallet.import.action" = "يستورد";
 "common.next" = "Next";

@@ -12,7 +12,7 @@
 "wallet.new.title" = "نیا پرس";
 "receive.title" = "وصول کریں %@";
 "buy.title" = "خریدیں %@";
-"wallet.import.secret_phrase" = "خفیہ جملہ";
+"common.secret_phrase" = "خفیہ جملہ";
 "wallet.name" = "نام";
 "wallet.import.action" = "درآمد کریں۔";
 "common.next" = "Next";

@@ -12,7 +12,7 @@
 "wallet.new.title" = "กระเป๋าสตางค์ใหม่";
 "receive.title" = "รับ %@";
 "buy.title" = "ซื้อ %@";
-"wallet.import.secret_phrase" = "วลีลับ";
+"common.secret_phrase" = "วลีลับ";
 "wallet.name" = "ชื่อ";
 "wallet.import.action" = "นำเข้า";
 "common.next" = "Next";

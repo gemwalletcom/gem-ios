@@ -12,7 +12,7 @@
 "wallet.new.title" = "Yeni Cüzdan";
 "receive.title" = "%@ alın";
 "buy.title" = "%@ satın al";
-"wallet.import.secret_phrase" = "Gizli Söz";
+"common.secret_phrase" = "Gizli Söz";
 "wallet.name" = "İsim";
 "wallet.import.action" = "Cüzdanı İçe Aktar";
 "common.next" = "Sonraki";

@@ -12,7 +12,7 @@
 "wallet.new.title" = "Новий Гаманець";
 "receive.title" = "Отримати %@";
 "buy.title" = "Купити %@";
-"wallet.import.secret_phrase" = "Секретна фраза";
+"common.secret_phrase" = "Секретна фраза";
 "wallet.name" = "Ім'я";
 "wallet.import.action" = "Імпорт";
 "common.next" = "Далі";

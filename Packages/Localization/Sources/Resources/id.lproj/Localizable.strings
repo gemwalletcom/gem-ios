@@ -12,7 +12,7 @@
 "wallet.new.title" = "Dompet Baru";
 "receive.title" = "Terima %@";
 "buy.title" = "Beli %@";
-"wallet.import.secret_phrase" = "Frasa Rahasia";
+"common.secret_phrase" = "Frasa Rahasia";
 "wallet.name" = "Nama";
 "wallet.import.action" = "Impor";
 "common.next" = "Selanjutnya";

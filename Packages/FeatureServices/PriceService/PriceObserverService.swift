@@ -140,7 +140,7 @@ public actor PriceObserverService: Sendable {
                 debugLog("price observer: balance updates: \(updates.count)")
             case .transactions(let update):
                 debugLog("price observer: transactions for wallet \(update.walletId): \(update.transactions.count)")
-            case .priceAlerts, .nft, .perpetual, .inAppNotification, .newAssets:
+            case .priceAlerts, .nft, .perpetual, .inAppNotification:
                 break
             }
         } catch {

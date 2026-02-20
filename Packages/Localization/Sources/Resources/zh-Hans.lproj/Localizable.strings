@@ -12,7 +12,7 @@
 "wallet.new.title" = "新建钱包";
 "receive.title" = "接收%@";
 "buy.title" = "购买%@";
-"wallet.import.secret_phrase" = "秘密短语";
+"common.secret_phrase" = "秘密短语";
 "wallet.name" = "名称";
 "wallet.import.action" = "导入";
 "common.next" = "下一步";

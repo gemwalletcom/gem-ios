@@ -12,7 +12,7 @@
 "wallet.new.title" = "Ví mới";
 "receive.title" = "Nhận %@";
 "buy.title" = "Mua %@";
-"wallet.import.secret_phrase" = "Cụm từ bí mật";
+"common.secret_phrase" = "Cụm từ bí mật";
 "wallet.name" = "Tên";
 "wallet.import.action" = "Nhập khẩu";
 "common.next" = "Next";

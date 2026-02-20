@@ -12,7 +12,7 @@
 "wallet.new.title" = "新しいウォレット";
 "receive.title" = "%@を受信";
 "buy.title" = "%@を購入";
-"wallet.import.secret_phrase" = "秘密のフレーズ";
+"common.secret_phrase" = "秘密のフレーズ";
 "wallet.name" = "名前";
 "wallet.import.action" = "インポート";
 "common.next" = "次へ";
