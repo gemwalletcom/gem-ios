@@ -10,7 +10,7 @@ public extension ContactAddress {
         memo: String?
     ) -> ContactAddress {
         ContactAddress(
-            id: chain.rawValue + "_" + address,
+            id: contactId + "_"  + chain.rawValue + "_" + address,
             contactId: contactId,
             address: address,
             chain: chain,
