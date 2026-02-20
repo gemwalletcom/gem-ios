@@ -7,7 +7,7 @@ import Style
 import Components
 import Localization
 
-struct CandleTooltipViewModel {
+public struct CandleTooltipViewModel {
     private static let titleStyle = TextStyle(font: .caption2, color: Colors.secondaryText, fontWeight: .medium)
     private static let subtitleStyle = TextStyle(font: .caption2.monospacedDigit(), color: Colors.black, fontWeight: .semibold)
     private static let volumeFormatter = CurrencyFormatter(type: .abbreviated, currencyCode: Currency.usd.rawValue)
@@ -15,7 +15,7 @@ struct CandleTooltipViewModel {
     private let candle: ChartCandleStick
     private let formatter: CurrencyFormatter
 
-    init(candle: ChartCandleStick, formatter: CurrencyFormatter) {
+    public init(candle: ChartCandleStick, formatter: CurrencyFormatter) {
         self.candle = candle
         self.formatter = formatter
     }
