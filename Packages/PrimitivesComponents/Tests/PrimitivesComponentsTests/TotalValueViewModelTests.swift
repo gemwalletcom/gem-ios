@@ -22,8 +22,8 @@ struct TotalValueViewModelTests {
 
     @Test
     func pnlPercentageText() {
-        #expect(TotalValueViewModel.mock(pnlPercentage: 5).pnlPercentageText == "+5.00%")
-        #expect(TotalValueViewModel.mock(pnlPercentage: -5).pnlPercentageText == "-5.00%")
+        #expect(TotalValueViewModel.mock(pnlPercentage: 5).pnlPercentageText == "5.00%")
+        #expect(TotalValueViewModel.mock(pnlPercentage: -5).pnlPercentageText == "5.00%")
         #expect(TotalValueViewModel.mock(pnlAmount: 0).pnlPercentageText == nil)
     }
 

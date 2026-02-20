@@ -51,6 +51,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
         formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 2
         formatter.positivePrefix = .empty
+        formatter.negativePrefix = .empty
         return formatter
     }
     
