@@ -1,13 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Combine
 import GRDB
-import GRDBQuery
 import Primitives
 
-public struct InAppNotificationsRequest: ValueObservationQueryable {
-    public static var defaultValue: [Primitives.InAppNotification] { [] }
+public struct InAppNotificationsRequest: DatabaseQueryable {
 
     public var walletId: String
 
@@ -23,3 +20,5 @@ public struct InAppNotificationsRequest: ValueObservationQueryable {
             .map { $0.mapToNotification() }
     }
 }
+
+extension InAppNotificationsRequest: Equatable {}

@@ -6,7 +6,6 @@ import Style
 import PrimitivesComponents
 import Components
 import Localization
-import GRDBQuery
 import Primitives
 import Store
 
@@ -14,26 +13,18 @@ public struct WalletImageScene: View {
     enum Tab: Equatable {
         case emoji, collections
     }
-    
+
     @Environment(\.dismiss) private var dismiss
     @State private var selectedTab: Tab = .emoji
     @State private var model: WalletImageViewModel
-    
-    @Query<WalletRequest>
-    var dbWallet: Wallet?
-    
-    @Query<NFTRequest>
-    private var nftDataList: [NFTData]
-    
+
     public init(model: WalletImageViewModel) {
         _model = State(initialValue: model)
-        _nftDataList = Query(constant: model.nftAssetsRequest)
-        _dbWallet = Query(constant: model.walletRequest)
     }
 
     public var body: some View {
         VStack {
-            if let dbWallet {
+            if let dbWallet = model.dbWallet {
                 AvatarView(
                     avatarImage: WalletViewModel(wallet: dbWallet).avatarImage,
                     size: model.emojiViewSize,
@@ -52,6 +43,7 @@ public struct WalletImageScene: View {
                 listView
             }
         }
+        .bindQuery(model.walletQuery, model.nftQuery)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .background(Colors.grayBackground)
@@ -83,7 +75,7 @@ public struct WalletImageScene: View {
             .padding(.horizontal, .medium)
         }
         .overlay {
-            if nftDataList.isEmpty, case .collections = selectedTab {
+            if model.nftDataList.isEmpty, case .collections = selectedTab {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
@@ -103,7 +95,7 @@ public struct WalletImageScene: View {
     }
     
     private var nftAssetListView: some View {
-        ForEach(model.buildNftAssetsItems(from: nftDataList)) { item in
+        ForEach(model.buildNftAssetsItems(from: model.nftDataList)) { item in
             let view = GridPosterView(assetImage: item.assetImage, title: nil)
             NavigationCustomLink(with: view) {
                 onSelectNftAsset(item)

@@ -23,7 +23,7 @@ public final class TransactionsViewModel {
 
     public private(set) var wallet: Wallet
 
-    public var transactions: [TransactionExtended] = []
+    public var transactions: [TransactionExtended] { filterModel.query.value }
     public var filterModel: TransactionsFilterViewModel
 
     // TODO: - separate presenting sheet state logic to separate type
