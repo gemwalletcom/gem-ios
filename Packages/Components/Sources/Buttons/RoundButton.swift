@@ -27,7 +27,7 @@ public struct RoundButton: View {
         } label: {
             VStack(alignment: .center) {
                 image
-                    .font(.system(size: 20).weight(.medium))
+                    .font(.app.title3)
                     .foregroundStyle(Colors.whiteSolid)
                     .frame(size: 48)
                     .background(Colors.blue)
@@ -38,7 +38,7 @@ public struct RoundButton: View {
                     .allowsTightening(true)
                     .truncationMode(.tail)
                     .foregroundStyle(Colors.secondaryText)
-                    .font(.system(size: 16).weight(.medium))
+                    .font(.app.body)
                     .lineLimit(1)
             }
         }

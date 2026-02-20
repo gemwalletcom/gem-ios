@@ -41,8 +41,7 @@ public struct WalletHeaderView: View {
             balanceView
             .numericTransition(for: model.title)
             .minimumScaleFactor(0.5)
-            .font(.system(size: 42))
-            .fontWeight(.semibold)
+            .font(.app.largeTitle)
             .foregroundStyle(Colors.black)
             .lineLimit(1)
             .padding(.bottom, .space10)
@@ -53,7 +52,7 @@ public struct WalletHeaderView: View {
                         subtitle,
                         isEnabled: $isPrivacyEnabled
                     )
-                    .font(.system(size: 17, weight: .medium))
+                    .font(.app.headline)
                     .foregroundStyle(model.subtitleColor)
                 }
                 .numericTransition(for: model.subtitle)

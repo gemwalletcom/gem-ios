@@ -119,7 +119,7 @@ public struct RewardsScene: View {
         Section {
             VStack(spacing: Spacing.large) {
                 Text("🎁")
-                    .font(.system(size: 72))
+                    .font(.app.extraLargeTitle)
                     .padding(.top, Spacing.medium)
 
                 VStack(spacing: Spacing.small) {
