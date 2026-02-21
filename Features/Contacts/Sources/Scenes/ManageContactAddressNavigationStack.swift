@@ -20,8 +20,8 @@ struct ManageContactAddressNavigationStack: View {
                 .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
                     ChainSelectorScene(
                         chain: model.chain,
-                        onSelectChain: { chain in
-                            model.onSelectChain(chain)
+                        onSelectChain: {
+                            model.onSelectChain($0)
                             path.removeLast()
                         }
                     )

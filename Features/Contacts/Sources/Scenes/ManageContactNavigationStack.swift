@@ -26,7 +26,7 @@ struct ManageContactNavigationStack: View {
                 )
             )
         }
-        .sheet(item: $model.isPresentingManageAddress) { address in
+        .sheet(item: $model.isPresentingContactAddress) { address in
             ManageContactAddressNavigationStack(
                 model: ManageContactAddressViewModel(
                     contactId: model.contactId,

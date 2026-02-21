@@ -110,7 +110,7 @@ struct RecipientScene: View {
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listSectionSpacing(.compact)
         .navigationTitle(model.tittle)
-        .observeQuery(request: $model.contactsRequest, value: $model.contacts)
+        .bindQuery(model.contactsQuery)
         .onChange(of: model.addressInputModel.text, model.onChangeAddressText)
         .onChange(of: model.nameResolveState, model.onChangeNameResolverState)
     }

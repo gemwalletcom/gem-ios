@@ -6,7 +6,7 @@ import Primitives
 
 public struct ContactAddressRecord: Codable, FetchableRecord, PersistableRecord, Sendable, Equatable {
 
-    public static let databaseTableName: String = "contact_addresses"
+    public static let databaseTableName: String = "contacts_addresses"
 
     public enum Columns {
         static let id = Column("id")

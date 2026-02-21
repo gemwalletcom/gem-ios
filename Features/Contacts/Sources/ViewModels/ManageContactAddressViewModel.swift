@@ -83,7 +83,7 @@ public final class ManageContactAddressViewModel {
         ContactAddress.new(
             contactId: contactId,
             chain: chain,
-            address: chain.checksumAddress(addressInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)),
+            address: chain.checksumAddress(addressInputModel.text.trim()),
             memo: memo.isEmpty ? nil : memo
         )
     }

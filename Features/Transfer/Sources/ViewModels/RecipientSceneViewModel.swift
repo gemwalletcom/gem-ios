@@ -38,8 +38,8 @@ public final class RecipientSceneViewModel {
     var amount: String = ""
     var addressInputModel: InputValidationViewModel
 
-    public var contactsRequest: ContactsRequest
-    public var contacts: [ContactData] = []
+    public let contactsQuery: ObservableQuery<ContactsRequest>
+    var contacts: [ContactData] { contactsQuery.value }
 
     public init(
         wallet: Wallet,
@@ -66,7 +66,7 @@ public final class RecipientSceneViewModel {
             ]
         )
 
-        self.contactsRequest = ContactsRequest(chain: asset.chain)
+        self.contactsQuery = ObservableQuery(ContactsRequest(chain: asset.chain), initialValue: [])
     }
 
     var tittle: String { Localized.Transfer.Recipient.title }

@@ -39,7 +39,7 @@ public final class ManageContactViewModel {
     var description: String = ""
     var addresses: [ContactAddress] = []
     var isPresentingAddAddress = false
-    var isPresentingManageAddress: ContactAddress?
+    var isPresentingContactAddress: ContactAddress?
 
     public init(
         service: ContactService,
@@ -93,7 +93,7 @@ public final class ManageContactViewModel {
     private var currentContact: Contact {
         Contact.new(
             id: contactId,
-            name: nameInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
+            name: nameInputModel.text.trim(),
             description: description.isEmpty ? nil : description,
             createdAt: mode.contact?.createdAt ?? .now
         )
@@ -116,7 +116,7 @@ public final class ManageContactViewModel {
         if let index = addresses.firstIndex(where: { $0.id == address.id }) {
             addresses[index] = address
         }
-        isPresentingManageAddress = nil
+        isPresentingContactAddress = nil
     }
 
     func deleteAddress(at offsets: IndexSet) {

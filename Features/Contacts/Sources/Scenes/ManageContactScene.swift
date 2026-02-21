@@ -83,7 +83,7 @@ extension ManageContactScene {
             ForEach(model.addresses, id: \.id) { address in
                 NavigationCustomLink(
                     with: ListItemView(model: model.listItemModel(for: address)),
-                    action: { model.isPresentingManageAddress = address }
+                    action: { model.isPresentingContactAddress = address }
                 )
             }
             .onDelete(perform: model.deleteAddress)
@@ -104,12 +104,12 @@ extension ManageContactScene {
 
 extension ManageContactScene {
     private func onAddAddress() {
-        focusedField = nil
+        focusedField = .none
         model.isPresentingAddAddress = true
     }
 
     private func onSave() {
-        focusedField = nil
+        focusedField = .none
         model.onSave()
         dismiss()
     }

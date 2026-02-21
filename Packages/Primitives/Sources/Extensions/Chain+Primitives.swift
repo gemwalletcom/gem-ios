@@ -48,13 +48,3 @@ extension Chain: Comparable {
         lhs.rawValue < rhs.rawValue
     }
 }
-
-extension Chain {
-    public var evmChain: EVMChain? {
-        EVMChain(rawValue: rawValue)
-    }
-
-    public var isEvm: Bool {
-        evmChain != nil
-    }
-}

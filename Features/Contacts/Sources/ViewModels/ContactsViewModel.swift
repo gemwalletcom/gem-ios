@@ -13,15 +13,15 @@ import Localization
 public final class ContactsViewModel {
     let service: ContactService
 
-    public var request: ContactsRequest
-    public var contacts: [ContactData] = []
+    public let query: ObservableQuery<ContactsRequest>
+    var contacts: [ContactData] { query.value }
 
-    var isPresentingManageContact: ContactData?
+    var isPresentingContact: ContactData?
     var isPresentingAddContact = false
 
     public init(service: ContactService) {
         self.service = service
-        self.request = ContactsRequest()
+        self.query = ObservableQuery(ContactsRequest(), initialValue: [])
     }
 
     var title: String { Localized.Contacts.title }
@@ -43,12 +43,16 @@ public final class ContactsViewModel {
     }
 
     func onManageContactComplete() {
-        isPresentingManageContact = nil
+        isPresentingContact = nil
     }
 
     func deleteContacts(at offsets: IndexSet) {
-        for index in offsets {
-            try? service.deleteContact(id: contacts[index].contact.id)
+        do {
+            for index in offsets {
+                try service.deleteContact(id: contacts[index].contact.id)
+            }
+        } catch {
+            debugLog("ContactsViewModel deleteContacts error: \(error)")
         }
     }
 }

@@ -42,7 +42,7 @@ public struct ManageContactAddressScene: View {
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $model.isPresentingScanner) {
-            ScanQRCodeNavigationStack(action: onHandleScan)
+            ScanQRCodeNavigationStack(action: onScan)
         }
     }
 }
@@ -66,7 +66,7 @@ extension ManageContactAddressScene {
                 allowClean: true,
                 trailingView: {
                     if model.shouldShowInputActions {
-                        HStack(spacing: .space12) {
+                        HStack(spacing: .medium) {
                             ListButton(image: model.pasteImage, action: onSelectPaste)
                             ListButton(image: model.qrImage, action: onSelectScan)
                         }
@@ -106,7 +106,7 @@ extension ManageContactAddressScene {
         model.onSelectScan()
     }
 
-    private func onHandleScan(_ result: String) {
+    private func onScan(_ result: String) {
         model.onHandleScan(result)
         focusedField = nil
     }
