@@ -12,7 +12,7 @@
 "wallet.new.title" = "নতুন ওয়ালেট";
 "receive.title" = "%@ গ্রহণ করুন";
 "buy.title" = "%@ কিনুন";
-"wallet.import.secret_phrase" = "গোপন বাক্যাংশ";
+"common.secret_phrase" = "গোপন বাক্যাংশ";
 "wallet.name" = "নাম";
 "wallet.import.action" = "আমদানি করুন";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "ঠিকানা";
 "contacts.state.empty.title" = "কোনও পরিচিতি নেই";
 "contacts.state.empty.description" = "আপনার ঘন ঘন ব্যবহৃত ঠিকানাগুলি সংরক্ষণ করুন";
+"charts.price.open" = "খোলা";
+"charts.price.close" = "বন্ধ করা";
+"charts.price.high" = "উচ্চ";
+"charts.price.low" = "কম";
+"charts.price.change" = "পরিবর্তন";

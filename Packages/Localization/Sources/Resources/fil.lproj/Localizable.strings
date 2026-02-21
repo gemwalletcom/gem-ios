@@ -12,7 +12,7 @@
 "wallet.new.title" = "Bagong Wallet";
 "receive.title" = "Tumanggap ng %@";
 "buy.title" = "Bumili ng %@";
-"wallet.import.secret_phrase" = "Lihim na Parirala";
+"common.secret_phrase" = "Lihim na Parirala";
 "wallet.name" = "Pangalan";
 "wallet.import.action" = "I-import";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Mga Address";
 "contacts.state.empty.title" = "Walang Mga Kontak";
 "contacts.state.empty.description" = "I-save ang iyong mga madalas gamiting address";
+"charts.price.open" = "Bukas";
+"charts.price.close" = "Isara";
+"charts.price.high" = "Mataas";
+"charts.price.low" = "Mababa";
+"charts.price.change" = "Pagbabago";

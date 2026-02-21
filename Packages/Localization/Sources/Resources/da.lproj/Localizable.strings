@@ -12,7 +12,7 @@
 "wallet.new.title" = "Ny tegnebog";
 "receive.title" = "Modtag %@";
 "buy.title" = "Køb %@";
-"wallet.import.secret_phrase" = "Hemmelig sætning";
+"common.secret_phrase" = "Hemmelig sætning";
 "wallet.name" = "Navn";
 "wallet.import.action" = "Importere";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Adresser";
 "contacts.state.empty.title" = "Ingen kontakter";
 "contacts.state.empty.description" = "Gem dine ofte brugte adresser";
+"charts.price.open" = "Åben";
+"charts.price.close" = "Tæt";
+"charts.price.high" = "Høj";
+"charts.price.low" = "Lav";
+"charts.price.change" = "Forandring";

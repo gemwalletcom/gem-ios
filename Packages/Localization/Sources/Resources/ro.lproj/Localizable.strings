@@ -12,7 +12,7 @@
 "wallet.new.title" = "Portofel nou";
 "receive.title" = "Primește %@";
 "buy.title" = "Cumpără %@";
-"wallet.import.secret_phrase" = "Frază secretă";
+"common.secret_phrase" = "Frază secretă";
 "wallet.name" = "Nume";
 "wallet.import.action" = "Import";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Adrese";
 "contacts.state.empty.title" = "Niciun contact";
 "contacts.state.empty.description" = "Salvați adresele utilizate frecvent";
+"charts.price.open" = "Deschide";
+"charts.price.close" = "Aproape";
+"charts.price.high" = "Ridicat";
+"charts.price.low" = "Scăzut";
+"charts.price.change" = "Schimba";

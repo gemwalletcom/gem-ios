@@ -20,6 +20,13 @@ public final class ManageContactViewModel {
     public enum Mode {
         case add
         case edit(ContactData)
+
+        var contact: Contact? {
+            switch self {
+            case .add: nil
+            case .edit(let contactData): contactData.contact
+            }
+        }
     }
 
     private let service: ContactService
@@ -80,38 +87,15 @@ public final class ManageContactViewModel {
             return .disabled
         }
 
-        switch mode {
-        case .add:
-            return .normal
-        case .edit:
-            return hasChanges ? .normal : .disabled
-        }
-    }
-
-    private var hasChanges: Bool {
-        switch mode {
-        case .add:
-            return true
-        case .edit(let contactData):
-            let trimmedName = nameInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines)
-            let trimmedDescription = description.isEmpty ? nil : description
-            return contactData.contact.name != trimmedName
-                || contactData.contact.description != trimmedDescription
-                || contactData.addresses != addresses
-        }
+        return .normal
     }
 
     private var currentContact: Contact {
-        let createdAt: Date = switch mode {
-        case .add: .now
-        case .edit(let contactData): contactData.contact.createdAt
-        }
-        return Contact(
+        Contact.new(
             id: contactId,
             name: nameInputModel.text.trimmingCharacters(in: .whitespacesAndNewlines),
             description: description.isEmpty ? nil : description,
-            createdAt: createdAt,
-            updatedAt: .now
+            createdAt: mode.contact?.createdAt ?? .now
         )
     }
     

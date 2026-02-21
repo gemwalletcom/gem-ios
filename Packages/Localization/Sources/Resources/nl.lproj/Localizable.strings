@@ -12,7 +12,7 @@
 "wallet.new.title" = "Nieuwe portemonnee";
 "receive.title" = "Ontvang %@";
 "buy.title" = "Koop %@";
-"wallet.import.secret_phrase" = "Geheime zin";
+"common.secret_phrase" = "Geheime zin";
 "wallet.name" = "Naam";
 "wallet.import.action" = "Importeren";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Adressen";
 "contacts.state.empty.title" = "Geen contacten";
 "contacts.state.empty.description" = "Bewaar uw veelgebruikte adressen.";
+"charts.price.open" = "Open";
+"charts.price.close" = "Dichtbij";
+"charts.price.high" = "Hoog";
+"charts.price.low" = "Laag";
+"charts.price.change" = "Wijziging";

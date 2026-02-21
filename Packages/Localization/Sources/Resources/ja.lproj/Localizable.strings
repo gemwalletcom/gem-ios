@@ -12,7 +12,7 @@
 "wallet.new.title" = "新しいウォレット";
 "receive.title" = "%@を受信";
 "buy.title" = "%@を購入";
-"wallet.import.secret_phrase" = "秘密のフレーズ";
+"common.secret_phrase" = "秘密のフレーズ";
 "wallet.name" = "名前";
 "wallet.import.action" = "インポート";
 "common.next" = "次へ";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "住所";
 "contacts.state.empty.title" = "連絡先なし";
 "contacts.state.empty.description" = "よく使うアドレスを保存する";
+"charts.price.open" = "開ける";
+"charts.price.close" = "近い";
+"charts.price.high" = "高い";
+"charts.price.low" = "低い";
+"charts.price.change" = "変化";

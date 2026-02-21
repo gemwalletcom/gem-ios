@@ -12,7 +12,7 @@
 "wallet.new.title" = "Pochi Mpya";
 "receive.title" = "Pokea %@";
 "buy.title" = "Nunua %@";
-"wallet.import.secret_phrase" = "Kifungu cha Siri";
+"common.secret_phrase" = "Kifungu cha Siri";
 "wallet.name" = "Jina";
 "wallet.import.action" = "Ingiza";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Anwani";
 "contacts.state.empty.title" = "Hakuna Anwani";
 "contacts.state.empty.description" = "Hifadhi anwani zako zinazotumiwa mara kwa mara";
+"charts.price.open" = "Fungua";
+"charts.price.close" = "Funga";
+"charts.price.high" = "Juu";
+"charts.price.low" = "Chini";
+"charts.price.change" = "Badilisha";

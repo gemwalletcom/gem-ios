@@ -12,7 +12,7 @@
 "wallet.new.title" = "กระเป๋าสตางค์ใหม่";
 "receive.title" = "รับ %@";
 "buy.title" = "ซื้อ %@";
-"wallet.import.secret_phrase" = "วลีลับ";
+"common.secret_phrase" = "วลีลับ";
 "wallet.name" = "ชื่อ";
 "wallet.import.action" = "นำเข้า";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "ที่อยู่";
 "contacts.state.empty.title" = "ไม่มีข้อมูลติดต่อ";
 "contacts.state.empty.description" = "บันทึกที่อยู่ที่คุณใช้งานบ่อย";
+"charts.price.open" = "เปิด";
+"charts.price.close" = "ปิด";
+"charts.price.high" = "สูง";
+"charts.price.low" = "ต่ำ";
+"charts.price.change" = "เปลี่ยน";

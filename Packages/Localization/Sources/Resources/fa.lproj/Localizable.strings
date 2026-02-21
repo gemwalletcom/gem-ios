@@ -12,7 +12,7 @@
 "wallet.new.title" = "کیف پول جدید";
 "receive.title" = "دریافت %@";
 "buy.title" = "خرید %@";
-"wallet.import.secret_phrase" = "عبارت مخفی";
+"common.secret_phrase" = "عبارت مخفی";
 "wallet.name" = "نام";
 "wallet.import.action" = "وارد کردن";
 "common.next" = "بعدی";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "آدرس‌ها";
 "contacts.state.empty.title" = "بدون مخاطب";
 "contacts.state.empty.description" = "آدرس‌های پرکاربرد خود را ذخیره کنید";
+"charts.price.open" = "باز";
+"charts.price.close" = "بستن";
+"charts.price.high" = "بالا";
+"charts.price.low" = "کم";
+"charts.price.change" = "تغییر";

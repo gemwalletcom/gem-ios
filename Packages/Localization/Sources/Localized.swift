@@ -217,6 +217,18 @@ public enum Localized {
     public static let week = Localized.tr("Localizable", "charts.week", fallback: "1W")
     /// 1Y
     public static let year = Localized.tr("Localizable", "charts.year", fallback: "1Y")
+    public enum Price {
+      /// Change
+      public static let change = Localized.tr("Localizable", "charts.price.change", fallback: "Change")
+      /// Close
+      public static let close = Localized.tr("Localizable", "charts.price.close", fallback: "Close")
+      /// High
+      public static let high = Localized.tr("Localizable", "charts.price.high", fallback: "High")
+      /// Low
+      public static let low = Localized.tr("Localizable", "charts.price.low", fallback: "Low")
+      /// Open
+      public static let `open` = Localized.tr("Localizable", "charts.price.open", fallback: "Open")
+    }
   }
   public enum Common {
     /// Address
@@ -303,6 +315,8 @@ public enum Localized {
     public static let recommended = Localized.tr("Localizable", "common.recommended", fallback: "Recommended")
     /// Save
     public static let save = Localized.tr("Localizable", "common.save", fallback: "Save")
+    /// Secret Phrase
+    public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Phrase")
     /// Share
     public static let share = Localized.tr("Localizable", "common.share", fallback: "Share")
     /// Gem
@@ -1549,8 +1563,6 @@ public enum Localized {
       public static let addressField = Localized.tr("Localizable", "wallet.import.address_field", fallback: "Address or Name")
       /// Contract or Token ID
       public static let contractAddressField = Localized.tr("Localizable", "wallet.import.contract_address_field", fallback: "Contract or Token ID")
-      /// Secret Phrase
-      public static let secretPhrase = Localized.tr("Localizable", "wallet.import.secret_phrase", fallback: "Secret Phrase")
       /// Import Wallet
       public static let title = Localized.tr("Localizable", "wallet.import.title", fallback: "Import Wallet")
     }

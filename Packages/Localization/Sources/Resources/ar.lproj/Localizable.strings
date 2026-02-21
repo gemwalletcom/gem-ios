@@ -12,7 +12,7 @@
 "wallet.new.title" = "محفظة جديدة";
 "receive.title" = "استقبل %@";
 "buy.title" = "شراء %@";
-"wallet.import.secret_phrase" = "العبارة السرية";
+"common.secret_phrase" = "العبارة السرية";
 "wallet.name" = "اسم";
 "wallet.import.action" = "يستورد";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "العناوين";
 "contacts.state.empty.title" = "لا توجد جهات اتصال";
 "contacts.state.empty.description" = "احفظ عناوينك التي تستخدمها بشكل متكرر";
+"charts.price.open" = "يفتح";
+"charts.price.close" = "يغلق";
+"charts.price.high" = "عالي";
+"charts.price.low" = "قليل";
+"charts.price.change" = "يتغير";

@@ -12,7 +12,7 @@
 "wallet.new.title" = "Nouveau portefeuille";
 "receive.title" = "Recevez %@";
 "buy.title" = "Achetez %@";
-"wallet.import.secret_phrase" = "Phrase secrète";
+"common.secret_phrase" = "Phrase secrète";
 "wallet.name" = "Nom";
 "wallet.import.action" = "Importer";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Adresses";
 "contacts.state.empty.title" = "Aucun contact";
 "contacts.state.empty.description" = "Enregistrez vos adresses fréquemment utilisées";
+"charts.price.open" = "Ouvrir";
+"charts.price.close" = "Fermer";
+"charts.price.high" = "Haut";
+"charts.price.low" = "Faible";
+"charts.price.change" = "Changement";

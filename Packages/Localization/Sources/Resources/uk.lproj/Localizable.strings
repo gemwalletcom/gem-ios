@@ -12,7 +12,7 @@
 "wallet.new.title" = "Новий Гаманець";
 "receive.title" = "Отримати %@";
 "buy.title" = "Купити %@";
-"wallet.import.secret_phrase" = "Секретна фраза";
+"common.secret_phrase" = "Секретна фраза";
 "wallet.name" = "Ім'я";
 "wallet.import.action" = "Імпорт";
 "common.next" = "Далі";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Адреси";
 "contacts.state.empty.title" = "Немає контактів";
 "contacts.state.empty.description" = "Збережіть часто використовувані адреси";
+"charts.price.open" = "Відкриття";
+"charts.price.close" = "Закриття";
+"charts.price.high" = "Максимум";
+"charts.price.low" = "Мінімум";
+"charts.price.change" = "Зміна";

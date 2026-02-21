@@ -12,7 +12,7 @@
 "wallet.new.title" = "نیا پرس";
 "receive.title" = "وصول کریں %@";
 "buy.title" = "خریدیں %@";
-"wallet.import.secret_phrase" = "خفیہ جملہ";
+"common.secret_phrase" = "خفیہ جملہ";
 "wallet.name" = "نام";
 "wallet.import.action" = "درآمد کریں۔";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "پتے";
 "contacts.state.empty.title" = "کوئی رابطے نہیں";
 "contacts.state.empty.description" = "اپنے اکثر استعمال ہونے والے پتے محفوظ کریں۔";
+"charts.price.open" = "کھولیں۔";
+"charts.price.close" = "بند";
+"charts.price.high" = "اعلی";
+"charts.price.low" = "کم";
+"charts.price.change" = "تبدیلی";

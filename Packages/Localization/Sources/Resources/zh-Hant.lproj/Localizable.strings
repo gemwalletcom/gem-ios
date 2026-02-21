@@ -12,7 +12,7 @@
 "wallet.new.title" = "新建錢包";
 "receive.title" = "接收%@";
 "buy.title" = "購買%@";
-"wallet.import.secret_phrase" = "秘密短語";
+"common.secret_phrase" = "秘密短語";
 "wallet.name" = "名字";
 "wallet.import.action" = "導入";
 "common.next" = "下一步";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "地址";
 "contacts.state.empty.title" = "無聯絡方式";
 "contacts.state.empty.description" = "儲存您常用的地址";
+"charts.price.open" = "打開";
+"charts.price.close" = "關閉";
+"charts.price.high" = "高的";
+"charts.price.low" = "低的";
+"charts.price.change" = "改變";

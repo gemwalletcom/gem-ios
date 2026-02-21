@@ -236,7 +236,7 @@ extension RecipientSceneViewModel {
     private func sectionRecipients(for section: RecipientAddressType) -> [ListItemValue<RecipientAddress>] {
         switch section {
         case .contacts:
-            ContactRecipientSectionViewModel(contacts: contacts, chain: asset.chain).listItems
+            ContactRecipientSectionViewModel(contacts: contacts).listItems
         case .pinned, .wallets, .view:
             WalletRecipientSectionViewModel(
                 wallets: walletService.wallets.filter { $0.id != wallet.id },

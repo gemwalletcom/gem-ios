@@ -12,7 +12,7 @@
 "wallet.new.title" = "Новый кошелек";
 "receive.title" = "Получить %@";
 "buy.title" = "Купить %@";
-"wallet.import.secret_phrase" = "Секретная фраза";
+"common.secret_phrase" = "Секретная фраза";
 "wallet.name" = "Имя";
 "wallet.import.action" = "Импортировать";
 "common.next" = "Следующий";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Адреса";
 "contacts.state.empty.title" = "Нет контактов";
 "contacts.state.empty.description" = "Сохраните часто используемые адреса.";
+"charts.price.open" = "Открытие";
+"charts.price.close" = "Закрытие";
+"charts.price.high" = "Максимум";
+"charts.price.low" = "Минимум";
+"charts.price.change" = "Изменение";

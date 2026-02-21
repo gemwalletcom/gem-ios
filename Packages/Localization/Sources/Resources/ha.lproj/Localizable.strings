@@ -12,7 +12,7 @@
 "wallet.new.title" = "Sabuwar Wallet";
 "receive.title" = "Karba %@";
 "buy.title" = "Saya %@";
-"wallet.import.secret_phrase" = "Kalmomin Sirri";
+"common.secret_phrase" = "Kalmomin Sirri";
 "wallet.name" = "Suna";
 "wallet.import.action" = "Shigo da";
 "common.next" = "Na gaba";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Adiresoshi";
 "contacts.state.empty.title" = "Babu Lambobin Sadarwa";
 "contacts.state.empty.description" = "Ajiye adiresoshin da ake yawan amfani da su";
+"charts.price.open" = "A buɗe";
+"charts.price.close" = "Rufe";
+"charts.price.high" = "Babban";
+"charts.price.low" = "Ƙasa";
+"charts.price.change" = "Sauyi";

@@ -12,7 +12,7 @@
 "wallet.new.title" = "Ví mới";
 "receive.title" = "Nhận %@";
 "buy.title" = "Mua %@";
-"wallet.import.secret_phrase" = "Cụm từ bí mật";
+"common.secret_phrase" = "Cụm từ bí mật";
 "wallet.name" = "Tên";
 "wallet.import.action" = "Nhập khẩu";
 "common.next" = "Next";
@@ -544,3 +544,8 @@
 "contacts.addresses" = "Địa chỉ";
 "contacts.state.empty.title" = "Không có liên hệ";
 "contacts.state.empty.description" = "Lưu lại những địa chỉ bạn thường dùng.";
+"charts.price.open" = "Mở";
+"charts.price.close" = "Đóng";
+"charts.price.high" = "Cao";
+"charts.price.low" = "Thấp";
+"charts.price.change" = "Thay đổi";
