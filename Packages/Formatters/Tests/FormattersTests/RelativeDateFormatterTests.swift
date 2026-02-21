@@ -5,8 +5,8 @@ import Foundation
 import Testing
 
 struct RelativeDateFormatterTests {
-    private let locale = Locale(identifier: "en_US")
-    private let timeZone = TimeZone(identifier: "America/New_York")!
+    private let locale = Locale.US
+    private let timeZone = TimeZone.NewYork!
     private let formatter: RelativeDateFormatter
     private let calendar: Calendar
 
