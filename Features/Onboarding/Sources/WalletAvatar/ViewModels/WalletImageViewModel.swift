@@ -28,6 +28,12 @@ public final class WalletImageViewModel: Sendable {
     public let source: Source
     private let avatarService: AvatarService
 
+    public let walletQuery: ObservableQuery<WalletRequest>
+    public let nftQuery: ObservableQuery<NFTRequest>
+
+    public var dbWallet: Wallet? { walletQuery.value }
+    public var nftDataList: [NFTData] { nftQuery.value }
+
     let emojiViewSize: Sizing = .image.extraLarge
     let emojiList: [EmojiValue] = {
         Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.grayVeryLight) })
@@ -41,6 +47,8 @@ public final class WalletImageViewModel: Sendable {
         self.wallet = wallet
         self.source = source
         self.avatarService = avatarService
+        self.walletQuery = ObservableQuery(WalletRequest(walletId: wallet.walletId), initialValue: wallet)
+        self.nftQuery = ObservableQuery(NFTRequest(walletId: wallet.walletId, filter: .all), initialValue: [])
     }
 
     var title: String {
@@ -48,14 +56,6 @@ public final class WalletImageViewModel: Sendable {
         case .onboarding: Localized.Wallet.New.title
         case .wallet: Localized.Common.avatar
         }
-    }
-
-    var walletRequest: WalletRequest {
-        WalletRequest(walletId: wallet.walletId)
-    }
-
-    var nftAssetsRequest: NFTRequest {
-        NFTRequest(walletId: wallet.walletId, filter: .all)
     }
 
     var emptyContentModel: EmptyContentTypeViewModel {

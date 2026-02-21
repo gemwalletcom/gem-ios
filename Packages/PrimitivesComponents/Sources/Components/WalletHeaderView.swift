@@ -41,27 +41,18 @@ public struct WalletHeaderView: View {
             balanceView
             .numericTransition(for: model.title)
             .minimumScaleFactor(0.5)
-            .font(.system(size: 42))
-            .fontWeight(.semibold)
+            .font(.app.largeTitle)
             .foregroundStyle(Colors.black)
             .lineLimit(1)
             .padding(.bottom, .space10)
 
             if let subtitle = model.subtitle {
                 HStack(spacing: Spacing.space6) {
-                    if let subtitleImage = model.subtitleImage, !isPrivacyEnabled {
-                        subtitleImage
-                            .resizable()
-                            .frame(width: 8, height: 6)
-                            .foregroundStyle(model.subtitleColor)
-                            .offset(y: model.subtitleImageOffset)
-                    }
-
                     PrivacyText(
                         subtitle,
                         isEnabled: $isPrivacyEnabled
                     )
-                    .font(.system(size: 17, weight: .medium))
+                    .font(.app.headline)
                     .foregroundStyle(model.subtitleColor)
                 }
                 .numericTransition(for: model.subtitle)

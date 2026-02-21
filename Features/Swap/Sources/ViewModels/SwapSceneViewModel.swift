@@ -28,13 +28,11 @@ public final class SwapSceneViewModel {
     public var swapState: SwapState = .init()
     public var isPresentingInfoSheet: SwapSheetType?
 
-    // db observation requests
-    var fromAssetRequest: AssetRequestOptional
-    var toAssetRequest: AssetRequestOptional
+    public let fromAssetQuery: ObservableQuery<AssetRequestOptional>
+    public let toAssetQuery: ObservableQuery<AssetRequestOptional>
 
-    // observed from DB
-    var fromAsset: AssetData?
-    var toAsset: AssetData?
+    var fromAsset: AssetData? { fromAssetQuery.value }
+    var toAsset: AssetData? { toAssetQuery.value }
 
     // UI states
     var isPresentingPriceImpactConfirmation: String?
@@ -67,14 +65,8 @@ public final class SwapSceneViewModel {
         self.wallet = input.wallet
         self.walletsService = walletsService
 
-        self.fromAssetRequest = AssetRequestOptional(
-            walletId: wallet.walletId,
-            assetId: pairSelectorModel.fromAssetId
-        )
-        self.toAssetRequest = AssetRequestOptional(
-            walletId: wallet.walletId,
-            assetId: pairSelectorModel.toAssetId
-        )
+        self.fromAssetQuery = ObservableQuery(AssetRequestOptional(walletId: input.wallet.walletId, assetId: pairSelectorModel.fromAssetId), initialValue: nil)
+        self.toAssetQuery = ObservableQuery(AssetRequestOptional(walletId: input.wallet.walletId, assetId: pairSelectorModel.toAssetId), initialValue: nil)
         self.swapQuotesProvider = swapQuotesProvider
         self.swapQuoteDataProvider = swapQuoteDataProvider
         self.onSwap = onSwap
@@ -161,8 +153,8 @@ extension SwapSceneViewModel {
     }
 
     func onChangePair(_ _: SwapPairSelectorViewModel, _ newModel: SwapPairSelectorViewModel) {
-        fromAssetRequest.assetId = newModel.fromAssetId
-        toAssetRequest.assetId = newModel.toAssetId
+        fromAssetQuery.request.assetId = newModel.fromAssetId
+        toAssetQuery.request.assetId = newModel.toAssetId
     }
 
     func onChangeSwapQuoute(_ _: SwapperQuote?, _ newQuote: SwapperQuote?) {

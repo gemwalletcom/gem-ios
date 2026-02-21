@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct ConnectionsRequest: ValueObservationQueryable {
-    public static var defaultValue: [WalletConnection] { [] }
+public struct ConnectionsRequest: DatabaseQueryable {
     
     public init() {}
 
@@ -19,3 +16,5 @@ public struct ConnectionsRequest: ValueObservationQueryable {
             .map { $0.mapToWalletConnection() }
     }
 }
+
+extension ConnectionsRequest: Equatable {}

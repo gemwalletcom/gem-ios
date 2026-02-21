@@ -29,15 +29,15 @@ public final class PerpetualSceneViewModel {
 
     public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
 
-    public var positionsRequest: PerpetualPositionsRequest
-    public var perpetualRequest: PerpetualRequest
-    public var perpetualTotalValueRequest: TotalValueRequest
-    public var transactionsRequest: TransactionsRequest
+    public let positionsQuery: ObservableQuery<PerpetualPositionsRequest>
+    public let perpetualQuery: ObservableQuery<PerpetualRequest>
+    public let perpetualTotalValueQuery: ObservableQuery<TotalValueRequest>
+    public let transactionsQuery: ObservableQuery<TransactionsRequest>
 
-    public var positions: [PerpetualPositionData] = []
-    public var perpetualData: PerpetualData = .empty
-    public var perpetualTotalValue: TotalFiatValue = .zero
-    public var transactions: [TransactionExtended] = []
+    public var positions: [PerpetualPositionData] { positionsQuery.value }
+    public var perpetualData: PerpetualData { perpetualQuery.value }
+    public var perpetualTotalValue: TotalFiatValue { perpetualTotalValueQuery.value }
+    public var transactions: [TransactionExtended] { transactionsQuery.value }
 
     public var state: StateViewType<[ChartCandleStick]> = .loading
     public var currentPeriod: ChartPeriod = .day
@@ -65,15 +65,16 @@ public final class PerpetualSceneViewModel {
         self.onTransferData = onTransferData
         self.onPerpetualRecipientData = onPerpetualRecipientData
 
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId, filter: .assetId(asset.id))
-        self.perpetualRequest = PerpetualRequest(assetId: asset.id)
-        self.perpetualTotalValueRequest = TotalValueRequest(walletId: wallet.walletId, balanceType: .perpetual)
-
-        let transactionTypes: [TransactionType] = [.perpetualOpenPosition, .perpetualClosePosition]
-        self.transactionsRequest = TransactionsRequest(
-            walletId: wallet.walletId,
-            type: .asset(assetId: asset.id),
-            filters: [.types(transactionTypes.map { $0.rawValue })]
+        self.positionsQuery = ObservableQuery(PerpetualPositionsRequest(walletId: wallet.walletId, filter: .assetId(asset.id)), initialValue: [])
+        self.perpetualQuery = ObservableQuery(PerpetualRequest(assetId: asset.id), initialValue: .empty)
+        self.perpetualTotalValueQuery = ObservableQuery(TotalValueRequest(walletId: wallet.walletId, balanceType: .perpetual), initialValue: .zero)
+        self.transactionsQuery = ObservableQuery(
+            TransactionsRequest(
+                walletId: wallet.walletId,
+                type: .asset(assetId: asset.id),
+                filters: [.types([TransactionType.perpetualOpenPosition, .perpetualClosePosition].map { $0.rawValue })]
+            ),
+            initialValue: []
         )
     }
 

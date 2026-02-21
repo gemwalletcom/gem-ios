@@ -11,6 +11,7 @@ import PrimitivesTestKit
 import PreferencesTestKit
 
 @testable import WalletTab
+@testable import Store
 
 @MainActor
 struct WalletSceneViewModelTests {
@@ -29,7 +30,7 @@ struct WalletSceneViewModelTests {
     @Test
     func priorityBannerReturnsHighestPriority() {
         let model = WalletSceneViewModel.mock()
-        model.banners = [
+        model.bannersQuery.value = [
             .mock(event: .stake, state: .active),
             .mock(event: .enableNotifications, state: .cancelled),
             .mock(event: .accountActivation, state: .alwaysActive)

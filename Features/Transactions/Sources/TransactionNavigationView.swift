@@ -22,7 +22,7 @@ public struct TransactionNavigationView: View {
         TransactionScene(
             model: model
         )
-        .observeQuery(request: $model.request, value: $model.transactionExtended)
+        .bindQuery(model.query)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: model.onSelectShare) {

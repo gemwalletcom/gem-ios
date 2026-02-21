@@ -31,9 +31,6 @@ public struct PerpetualsNavigationView: View {
 
     public var body: some View {
         PerpetualsScene(model: model)
-            .observeQuery(request: $model.positionsRequest, value: $model.positions)
-            .observeQuery(request: $model.perpetualsRequest, value: $model.perpetuals)
-            .observeQuery(request: $model.walletBalanceRequest, value: $model.walletBalance)
-            .observeQuery(request: $model.recentsRequest, value: $model.recents)
+            .bindQuery(model.positionsQuery, model.perpetualsQuery, model.walletBalanceQuery, model.recentsQuery)
     }
 }

@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct PriceAlertsRequest: ValueObservationQueryable {
-    public static var defaultValue: [PriceAlertData] { [] }
+public struct PriceAlertsRequest: DatabaseQueryable {
     
     public let assetId: AssetId?
 
@@ -37,6 +34,8 @@ struct PriceAlertInfo: FetchableRecord, Codable {
     var price: PriceRecord?
     var priceAlert: PriceAlertRecord
 }
+
+extension PriceAlertsRequest: Equatable {}
 
 extension PriceAlertInfo {
     var data: PriceAlertData {

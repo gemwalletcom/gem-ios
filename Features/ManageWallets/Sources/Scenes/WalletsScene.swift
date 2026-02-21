@@ -3,7 +3,6 @@
 import SwiftUI
 import Components
 import Primitives
-import GRDBQuery
 import Store
 import Style
 import Localization
@@ -91,14 +90,7 @@ public struct WalletsScene: View {
             }
         )
         .navigationBarTitle(model.title)
-        .observeQuery(
-            request: .constant(model.pinnedWalletsRequest),
-            value: $model.pinnedWallets
-        )
-        .observeQuery(
-            request: .constant(model.walletsRequest),
-            value: $model.wallets
-        )
+        .bindQuery(model.pinnedWalletsQuery, model.walletsQuery)
     }
 }
 

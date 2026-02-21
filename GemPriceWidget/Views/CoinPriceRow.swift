@@ -17,7 +17,7 @@ struct CoinPriceRow: View {
 
             VStack(alignment: .leading, spacing: Spacing.extraSmall) {
                 Text(model.name)
-                    .font(.system(size: Constants.textFontSize, weight: .medium))
+                    .font(.app.Widget.callout)
                     .foregroundColor(Colors.black)
 
                 Text(model.symbol)
@@ -29,7 +29,7 @@ struct CoinPriceRow: View {
 
             VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
                 Text(model.priceText)
-                    .font(.system(size: Constants.textFontSize, weight: .medium))
+                    .font(.app.Widget.callout)
                     .foregroundColor(Colors.black)
 
                 Text(model.percentageText)
@@ -41,10 +41,3 @@ struct CoinPriceRow: View {
     }
 }
 
-// MARK: - Constants
-
-extension CoinPriceRow {
-    enum Constants {
-        static let textFontSize: CGFloat = 14
-    }
-}

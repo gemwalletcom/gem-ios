@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct AssetRequestOptional: ValueObservationQueryable {
-    public static var defaultValue: AssetData? = .none
+public struct AssetRequestOptional: DatabaseQueryable {
 
     public var assetId: AssetId?
     private let walletId: WalletId
@@ -34,3 +31,5 @@ public struct AssetRequestOptional: ValueObservationQueryable {
             .map { $0.assetData }
     }
 }
+
+extension AssetRequestOptional: Equatable {}

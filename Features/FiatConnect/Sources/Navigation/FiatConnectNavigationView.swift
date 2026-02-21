@@ -17,10 +17,7 @@ public struct FiatConnectNavigationView: View {
         FiatScene(
             model: model
         )
-        .observeQuery(
-            request: $model.assetRequest,
-            value: $model.assetData
-        )
+        .onChangeBindQuery(model.assetQuery, action: model.onAssetDataChange)
         .ifElse(
             model.showFiatTypePicker,
             ifContent: {

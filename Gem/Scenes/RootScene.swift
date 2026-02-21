@@ -20,10 +20,9 @@ struct RootScene: View {
     var body: some View {
         VStack {
             if let currentWallet = model.currentWallet {
-                MainTabView(
-                    model: .init(wallet: currentWallet)
-                )
-                .alertSheet($model.updateVersionAlertMessage)
+                MainTabView(model: .init(wallet: currentWallet))
+                    .id(currentWallet.walletId)
+                    .alertSheet($model.updateVersionAlertMessage)
             } else {
                 OnboardingScene(
                     isPresentingCreateWalletSheet: $model.isPresentingCreateWalletSheet,

@@ -46,8 +46,7 @@ public struct SelectAssetScene: View {
                 )
             }
         }
-        .observeQuery(request: $model.request, value: $model.assets)
-        .observeQuery(request: $model.recentsRequest, value: $model.recents)
+        .bindQuery(model.assetsQuery, model.recentsQuery)
         .onChange(of: model.filterModel, model.onChangeFilterModel)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .onChange(of: model.isSearching, model.onChangeFocus)
