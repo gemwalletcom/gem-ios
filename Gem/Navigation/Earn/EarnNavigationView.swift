@@ -5,7 +5,6 @@ import SwiftUI
 import Primitives
 import Earn
 import Transfer
-import Store
 
 struct EarnNavigationView: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
@@ -29,9 +28,7 @@ struct EarnNavigationView: View {
 
     var body: some View {
         EarnScene(model: model)
-            .observeQuery(request: $model.assetRequest, value: $model.assetData)
-            .observeQuery(request: $model.positionsRequest, value: $model.positions)
-            .observeQuery(request: $model.providersRequest, value: $model.providers)
+            .bindQuery(model.assetQuery, model.positionsQuery, model.providersQuery)
             .navigationDestination(for: AmountInput.self) { input in
                 AmountNavigationView(
                     model: viewModelFactory.amountScene(

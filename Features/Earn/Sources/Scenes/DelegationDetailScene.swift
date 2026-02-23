@@ -63,7 +63,7 @@ public struct DelegationDetailScene: View {
                 Section(model.manageTitle) {
                     ForEach(model.availableActions) { action in
                         NavigationCustomLink(with: ListItemView(title: model.actionTitle(action))) {
-                            model.performAction(action)
+                            model.onSelectAction(action)
                         }
                     }
                 }
