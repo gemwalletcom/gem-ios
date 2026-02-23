@@ -24,7 +24,8 @@ public struct AddressStore: Sendable {
         }
     }
     
-    func deleteAddress(chain: Chain, address: String) throws -> Int {
+    @discardableResult
+    public func deleteAddress(chain: Chain, address: String) throws -> Int {
         try db.write { db in
             try AddressRecord
                 .filter(AddressRecord.Columns.chain == chain.rawValue)

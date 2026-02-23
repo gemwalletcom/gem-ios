@@ -43,12 +43,12 @@ public struct ContactStore: Sendable {
         }
     }
 
-    public func getAddressIds(contactId: String) throws -> [String] {
+    public func getAddresses(contactId: String) throws -> [ContactAddress] {
         try db.read { db in
             try ContactAddressRecord
                 .filter(ContactAddressRecord.Columns.contactId == contactId)
                 .fetchAll(db)
-                .map { $0.id }
+                .map { $0.contactAddress }
         }
     }
 
