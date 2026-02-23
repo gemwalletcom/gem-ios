@@ -9,6 +9,7 @@ import PrimitivesComponents
 import FiatConnect
 import Swap
 import Preferences
+import Contacts
 
 public struct ConfirmTransferScene: View {
     @Environment(\.fiatService) private var fiatService
@@ -72,6 +73,17 @@ public struct ConfirmTransferScene: View {
                     PerpetualDetailsView(model: model)
                         .presentationDetentsForCurrentDeviceSize(expandable: true)
                         .presentationBackground(Colors.grayBackground)
+                }
+            case .addContact(let input):
+                NavigationStack {
+                    ContactsScene(
+                        model: ContactsViewModel(
+                            service: model.contactService,
+                            mode: .addAddress(input, onComplete: { self.model.isPresentingSheet = nil })
+                        )
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbarDismissItem(type: .close, placement: .cancellationAction)
                 }
             }
         }

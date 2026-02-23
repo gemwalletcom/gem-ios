@@ -111,7 +111,9 @@ extension ManageContactScene {
     private func onSave() {
         focusedField = .none
         model.onSave()
-        dismiss()
+        if model.shouldDismissOnSave {
+            dismiss()
+        }
     }
 }
 

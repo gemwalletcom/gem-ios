@@ -15,6 +15,7 @@ struct TransactionsNavigationStack: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.activityService) private var activityService
     @Environment(\.assetSearchService) private var assetSearchService
+    @Environment(\.contactService) private var contactService
 
     @State private var model: TransactionsViewModel
 
@@ -48,7 +49,8 @@ struct TransactionsNavigationStack: View {
                     TransactionNavigationView(
                         model: TransactionSceneViewModel(
                             transaction: $0.transaction,
-                            walletId: model.wallet.walletId
+                            walletId: model.wallet.walletId,
+                            contactService: contactService
                         )
                     )
                 }

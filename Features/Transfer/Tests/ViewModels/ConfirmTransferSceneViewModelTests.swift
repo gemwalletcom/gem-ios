@@ -24,6 +24,7 @@ import ActivityServiceTestKit
 import EventPresenterService
 import EventPresenterServiceTestKit
 import Store
+import ContactServiceTestKit
 import BigInt
 import Components
 
@@ -350,6 +351,7 @@ private extension ConfirmTransferSceneViewModel {
                 eventPresenterService: .mock(),
                 chain: data.chain
             ),
+            contactService: .mock(),
             onComplete: {}
         )
     }

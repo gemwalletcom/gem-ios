@@ -21,7 +21,7 @@ public struct ContactsScene: View {
             ForEach(model.contacts) { contact in
                 NavigationCustomLink(
                     with: ListItemView(model: model.listItemModel(for: contact)),
-                    action: { model.isPresentingContact = contact }
+                    action: { model.onSelectContact(contact) }
                 )
             }
             .onDelete(perform: model.deleteContacts)
@@ -39,27 +39,16 @@ public struct ContactsScene: View {
         .navigationTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button {
-                    model.isPresentingAddContact = true
-                } label: {
+                Button(action: model.onSelectAddContact) {
                     Images.System.plus
                 }
             }
         }
-        .sheet(isPresented: $model.isPresentingAddContact) {
+        .sheet(item: $model.isPresentingContact) {
             ManageContactNavigationStack(
                 model: ManageContactViewModel(
                     service: model.service,
-                    mode: .add,
-                    onComplete: model.onAddContactComplete
-                )
-            )
-        }
-        .sheet(item: $model.isPresentingContact) { contact in
-            ManageContactNavigationStack(
-                model: ManageContactViewModel(
-                    service: model.service,
-                    mode: .edit(contact),
+                    mode: $0,
                     onComplete: model.onManageContactComplete
                 )
             )

@@ -10,6 +10,7 @@ import InfoSheet
 import ExplorerService
 import Style
 import PrimitivesComponents
+import Contacts
 
 public struct TransactionNavigationView: View {
     @State private var model: TransactionSceneViewModel
@@ -38,6 +39,17 @@ public struct TransactionNavigationView: View {
                 NetworkFeeSheet(model: model.feeDetailsViewModel)
             case .info(let infoType):
                 InfoSheetScene(type: infoType)
+            case .addContact(let input):
+                NavigationStack {
+                    ContactsScene(
+                        model: ContactsViewModel(
+                            service: model.contactService,
+                            mode: .addAddress(input, onComplete: { model.isPresentingTransactionSheet = nil })
+                        )
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbarDismissItem(type: .close, placement: .cancellationAction)
+                }
             }
         }
     }

@@ -8,9 +8,11 @@ import Components
 
 struct TransactionParticipantViewModel {
     private let transactionViewModel: TransactionViewModel
+    private let onAddContact: (() -> Void)?
 
-    init(transactionViewModel: TransactionViewModel) {
+    init(transactionViewModel: TransactionViewModel, onAddContact: (() -> Void)? = nil) {
         self.transactionViewModel = transactionViewModel
+        self.onAddContact = onAddContact
     }
 }
 
@@ -49,7 +51,8 @@ extension TransactionParticipantViewModel {
             TransactionParticipantItemModel(
                 title: participantTitle,
                 account: account,
-                addressLink: transactionViewModel.addressLink(account: account)
+                addressLink: transactionViewModel.addressLink(account: account),
+                onAddContact: account.name == nil ? onAddContact : nil
             )
         )
     }

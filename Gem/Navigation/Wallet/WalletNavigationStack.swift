@@ -31,6 +31,7 @@ struct WalletNavigationStack: View {
     @Environment(\.walletSearchService) private var walletSearchService
     @Environment(\.assetSearchService) private var assetSearchService
     @Environment(\.observablePreferences) private var preferences
+    @Environment(\.contactService) private var contactService
 
     @State private var model: WalletSceneViewModel
 
@@ -105,7 +106,8 @@ struct WalletNavigationStack: View {
                 TransactionNavigationView(
                     model: TransactionSceneViewModel(
                         transaction: $0.transaction,
-                        walletId: model.wallet.walletId
+                        walletId: model.wallet.walletId,
+                        contactService: contactService
                     )
                 )
             }

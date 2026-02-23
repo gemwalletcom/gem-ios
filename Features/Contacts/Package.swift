@@ -53,8 +53,8 @@ let package = Package(
                 "Primitives",
                 "PrimitivesComponents",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "ContactService", package: "FeatureServices"),
+                .product(name: "ContactServiceTestKit", package: "FeatureServices"),
             ]
         ),
     ]

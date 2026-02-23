@@ -4,15 +4,15 @@ import SwiftUI
 import Primitives
 import Components
 
-struct ManageContactNavigationStack: View {
+public struct ManageContactNavigationStack: View {
 
     @State private var model: ManageContactViewModel
 
-    init(model: ManageContactViewModel) {
+    public init(model: ManageContactViewModel) {
         _model = State(initialValue: model)
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             ManageContactScene(model: $model)
                 .toolbarDismissItem(type: .close, placement: .cancellationAction)

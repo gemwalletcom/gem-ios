@@ -11,16 +11,23 @@ import Localization
 @Observable
 @MainActor
 public final class ContactsViewModel {
+
+    public enum Mode {
+        case view
+        case addAddress(AddAddressInput, onComplete: () -> Void)
+    }
+
     let service: ContactService
+    let mode: Mode
 
     public let query: ObservableQuery<ContactsRequest>
     var contacts: [ContactData] { query.value }
 
-    var isPresentingContact: ContactData?
-    var isPresentingAddContact = false
+    var isPresentingContact: ManageContactViewModel.Mode?
 
-    public init(service: ContactService) {
+    public init(service: ContactService, mode: Mode) {
         self.service = service
+        self.mode = mode
         self.query = ObservableQuery(ContactsRequest(), initialValue: [])
     }
 
@@ -38,12 +45,37 @@ public final class ContactsViewModel {
         )
     }
 
-    func onAddContactComplete() {
-        isPresentingAddContact = false
+    func onSelectAddContact() {
+        switch mode {
+        case .view:
+            isPresentingContact = .add
+        case .addAddress(let input, _):
+            isPresentingContact = .create(input)
+        }
+    }
+
+    func onSelectContact(_ contact: ContactData) {
+        switch mode {
+        case .view:
+            isPresentingContact = .edit(contact)
+        case .addAddress(let input, _):
+            let newAddress = ContactAddress.new(
+                contactId: contact.contact.id,
+                chain: input.chain,
+                address: input.address,
+                memo: input.memo
+            )
+            isPresentingContact = .append(ContactData(contact: contact.contact, addresses: contact.addresses + [newAddress]))
+        }
     }
 
     func onManageContactComplete() {
-        isPresentingContact = nil
+        switch mode {
+        case .view:
+            isPresentingContact = nil
+        case .addAddress(_, let onComplete):
+            onComplete()
+        }
     }
 
     func deleteContacts(at offsets: IndexSet) {

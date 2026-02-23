@@ -17,18 +17,6 @@ import Formatters
 @MainActor
 public final class ManageContactViewModel {
 
-    public enum Mode {
-        case add
-        case edit(ContactData)
-
-        var contact: Contact? {
-            switch self {
-            case .add: nil
-            case .edit(let contactData): contactData.contact
-            }
-        }
-    }
-
     private let service: ContactService
     private let mode: Mode
     private let onComplete: (() -> Void)?
@@ -58,7 +46,18 @@ public final class ManageContactViewModel {
         switch mode {
         case .add:
             self.contactId = UUID().uuidString
-        case .edit(let contactData):
+        case .create(let input):
+            self.contactId = UUID().uuidString
+            self.nameInputModel.text = input.name ?? ""
+            self.addresses = [
+                ContactAddress.new(
+                    contactId: contactId,
+                    chain: input.chain,
+                    address: input.address,
+                    memo: input.memo
+                )
+            ]
+        case .append(let contactData), .edit(let contactData):
             self.contactId = contactData.contact.id
             self.nameInputModel.text = contactData.contact.name
             self.description = contactData.contact.description ?? ""
@@ -70,8 +69,8 @@ public final class ManageContactViewModel {
 
     var isAddMode: Bool {
         switch mode {
-        case .add: true
-        case .edit: false
+        case .add, .create: true
+        case .append, .edit: false
         }
     }
     var buttonTitle: String { Localized.Common.save }
@@ -79,6 +78,13 @@ public final class ManageContactViewModel {
     var descriptionTitle: String { Localized.Common.description }
     var contactSectionTitle: String { Localized.Contacts.contact }
     var addressesSectionTitle: String { Localized.Contacts.addresses }
+
+    var shouldDismissOnSave: Bool {
+        switch mode {
+        case .add, .edit: true
+        case .create, .append: false
+        }
+    }
 
     var buttonState: ButtonState {
         guard nameInputModel.isValid,
@@ -126,8 +132,8 @@ public final class ManageContactViewModel {
     func onSave() {
         do {
             switch mode {
-            case .add: try service.addContact(currentContact, addresses: addresses)
-            case .edit: try service.updateContact(currentContact, addresses: addresses)
+            case .add, .create: try service.addContact(currentContact, addresses: addresses)
+            case .append, .edit: try service.updateContact(currentContact, addresses: addresses)
             }
             onComplete?()
         } catch {

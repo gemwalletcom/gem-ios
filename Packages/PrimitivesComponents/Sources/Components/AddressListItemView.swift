@@ -22,12 +22,18 @@ public struct AddressListItemView: View {
             subtitle: model.subtitle,
             assetImage: model.assetImage
         )
-        .contextMenu(
-            [
-                .copy(value: model.account.address),
-                .url(title: model.addressExplorerText, onOpen: { isPresentingUrl = model.addressExplorerUrl })
-            ]
-        )
+        .contextMenu(contextMenuItems)
         .safariSheet(url: $isPresentingUrl)
+    }
+
+    private var contextMenuItems: [ContextMenuItemType] {
+        let items: [ContextMenuItemType] = [
+            .copy(value: model.account.address),
+            .url(title: model.addressExplorerText, onOpen: { isPresentingUrl = model.addressExplorerUrl })
+        ]
+        if let onAddContact = model.onAddContact {
+            return items + [.custom(title: Localized.Contacts.addToContacts, systemImage: SystemImage.personBadgePlus, action: onAddContact)]
+        }
+        return items
     }
 }

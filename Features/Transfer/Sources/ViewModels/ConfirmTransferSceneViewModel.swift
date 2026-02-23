@@ -12,6 +12,8 @@ import InfoSheet
 import Validators
 import SwiftUI
 import Swap
+import Contacts
+import ContactService
 
 @Observable
 @MainActor
@@ -40,6 +42,7 @@ public final class ConfirmTransferSceneViewModel {
     var isPresentingAlertMessage: AlertMessage?
 
     private let confirmService: ConfirmService
+    let contactService: ContactService
 
     private let wallet: Wallet
     private let onComplete: VoidAction
@@ -52,12 +55,14 @@ public final class ConfirmTransferSceneViewModel {
         wallet: Wallet,
         data: TransferData,
         confirmService: ConfirmService,
+        contactService: ContactService,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.data = data
         self.confirmService = confirmService
+        self.contactService = contactService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.onComplete = onComplete
 
@@ -126,7 +131,8 @@ extension ConfirmTransferSceneViewModel: ListSectionProvideable {
             ConfirmRecipientViewModel(
                 model: dataModel,
                 addressName: try? confirmService.getAddressName(chain: dataModel.chain, address: dataModel.recipient.address),
-                addressLink: confirmService.getExplorerLink(chain: dataModel.chain, address: dataModel.recipient.address)
+                addressLink: confirmService.getExplorerLink(chain: dataModel.chain, address: dataModel.recipient.address),
+                onAddContact: onSelectAddContact
             )
         case .memo:
             ConfirmMemoViewModel(type: data.type, recipientData: data.recipientData)
@@ -207,6 +213,16 @@ extension ConfirmTransferSceneViewModel {
 
     func onSelectPerpetualDetails(_ model: PerpetualDetailsViewModel) {
         isPresentingSheet = .perpetualDetails(model)
+    }
+
+    func onSelectAddContact() {
+        let input = AddAddressInput(
+            chain: dataModel.chain,
+            address: dataModel.recipient.address,
+            memo: dataModel.data.recipientData.recipient.memo,
+            name: dataModel.recipient.name
+        )
+        isPresentingSheet = .addContact(input)
     }
 
     func onChangeFeePriority(_ priority: FeePriority) async {

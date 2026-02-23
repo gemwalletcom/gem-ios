@@ -55,6 +55,7 @@ let package = Package(
         .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
         .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
         .library(name: "ContactService", targets: ["ContactService"]),
+        .library(name: "ContactServiceTestKit", targets: ["ContactServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -538,7 +539,16 @@ let package = Package(
                 "Primitives",
                 "Store"
             ],
-            path: "ContactService"
+            path: "ContactService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "ContactServiceTestKit",
+            dependencies: [
+                "ContactService",
+                .product(name: "StoreTestKit", package: "Store")
+            ],
+            path: "ContactService/TestKit"
         ),
         .target(
             name: "RewardsService",

@@ -3,8 +3,8 @@
 import Testing
 import Primitives
 import PrimitivesTestKit
-import StoreTestKit
 import ContactService
+import ContactServiceTestKit
 import Components
 
 @testable import Contacts
@@ -48,7 +48,7 @@ struct ManageContactViewModelTests {
 extension ManageContactViewModel {
     static func mock(mode: Mode) -> ManageContactViewModel {
         ManageContactViewModel(
-            service: ContactService(store: .mock(), addressStore: .mock()),
+            service: .mock(),
             mode: mode,
             onComplete: nil
         )

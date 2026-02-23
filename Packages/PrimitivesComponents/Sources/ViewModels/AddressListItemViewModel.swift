@@ -8,7 +8,7 @@ import Formatters
 import Style
 
 public struct AddressListItemViewModel {
-    
+
     public enum Mode {
         case auto(addressStyle: AddressFormatter.Style)
         case address(addressStyle: AddressFormatter.Style)
@@ -19,17 +19,20 @@ public struct AddressListItemViewModel {
     public let account: SimpleAccount
     public let mode: Mode
     private let addressLink: BlockExplorerLink
+    public var onAddContact: (() -> Void)?
 
     public init(
         title: String,
         account: SimpleAccount,
         mode: Mode,
-        addressLink: BlockExplorerLink
+        addressLink: BlockExplorerLink,
+        onAddContact: (() -> Void)? = nil
     ) {
         self.title = title
         self.account = account
         self.mode = mode
         self.addressLink = addressLink
+        self.onAddContact = onAddContact
     }
 
     public var subtitle: String {

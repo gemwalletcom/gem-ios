@@ -277,7 +277,8 @@ struct ServicesFactory {
             addressNameService: addressNameService,
             activityService: activityService,
             eventPresenterService: eventPresenterService,
-            fiatService: apiService
+            fiatService: apiService,
+            contactService: contactService
         )
 
         return AppResolver.Services(

@@ -39,6 +39,7 @@ let package = Package(
         .package(name: "Swap", path: "../Swap"),
         .package(name: "Perpetuals", path: "../Perpetuals"),
         .package(name: "EventPresenterService", path: "../EventPresenterService"),
+        .package(name: "Contacts", path: "../Contacts"),
 
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
@@ -69,6 +70,7 @@ let package = Package(
                 "Swap",
                 "Perpetuals",
                 "EventPresenterService",
+                "Contacts",
 
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
@@ -82,7 +84,8 @@ let package = Package(
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "NameService", package: "ChainServices"),
                 .product(name: "AddressNameService", package: "FeatureServices"),
-                .product(name: "ActivityService", package: "FeatureServices")
+                .product(name: "ActivityService", package: "FeatureServices"),
+                .product(name: "ContactService", package: "FeatureServices")
             ],
             path: "Sources"
         ),
@@ -122,6 +125,7 @@ let package = Package(
                 .product(name: "NFTServiceTestKit", package: "FeatureServices"),
                 .product(name: "SignerTestKit", package: "Signer"),
                 .product(name: "EventPresenterServiceTestKit", package: "EventPresenterService"),
+                .product(name: "ContactServiceTestKit", package: "FeatureServices"),
             ],
             path: "Tests"
         ),

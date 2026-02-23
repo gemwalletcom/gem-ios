@@ -28,7 +28,14 @@ public struct ContactService: Sendable {
     }
 
     public func deleteContact(id: String) throws {
+        let addresses = try store.getAddresses(contactId: id)
         try store.deleteContact(id: id)
+        try deleteAddressNames(addresses: addresses)
+    }
+
+    public func addAddress(_ address: ContactAddress, to contact: Contact) throws {
+        try store.updateContact(contact, deleteAddressIds: [], addresses: [address])
+        try syncAddressNames(contact: contact, addresses: [address])
     }
 }
 

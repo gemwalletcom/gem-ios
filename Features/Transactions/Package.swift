@@ -24,6 +24,7 @@ let package = Package(
         .package(name: "ChainServices", path: "../../Packages/ChainServices"),
         .package(name: "FeatureServices", path: "../../Packages/FeatureServices"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
+        .package(name: "Contacts", path: "../Contacts"),
     ],
     targets: [
         .target(
@@ -39,7 +40,9 @@ let package = Package(
                 .product(name: "TransactionsService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
                 "Preferences",
-                "InfoSheet"
+                "InfoSheet",
+                "Contacts",
+                .product(name: "ContactService", package: "FeatureServices")
             ],
             path: "Sources"
         ),
@@ -48,6 +51,8 @@ let package = Package(
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "ContactService", package: "FeatureServices"),
+                .product(name: "ContactServiceTestKit", package: "FeatureServices"),
                 "Transactions",
                 "PrimitivesComponents"
             ]

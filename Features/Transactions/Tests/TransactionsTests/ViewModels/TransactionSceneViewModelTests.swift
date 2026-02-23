@@ -8,9 +8,10 @@ import PreferencesTestKit
 import PrimitivesComponents
 import Style
 import Components
+import ContactService
+import ContactServiceTestKit
 
 @testable import Transactions
-@testable import Store
 
 @MainActor
 struct TransactionSceneViewModelTests {
@@ -106,7 +107,8 @@ struct TransactionSceneViewModelTests {
         let modelWithAddresses = TransactionSceneViewModel(
             transaction: transaction,
             walletId: .mock(),
-            preferences: Preferences.standard
+            preferences: Preferences.standard,
+            contactService: .mock()
         )
 
         if case .participant(let item) = modelWithAddresses.item(for: TransactionItem.participant) {
@@ -248,7 +250,8 @@ extension TransactionSceneViewModel {
                 )
             ),
             walletId: .mock(),
-            preferences: Preferences.standard
+            preferences: Preferences.standard,
+            contactService: .mock()
         )
     }
 }

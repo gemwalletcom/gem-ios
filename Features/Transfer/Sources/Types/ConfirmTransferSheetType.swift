@@ -5,6 +5,7 @@ import InfoSheet
 import Primitives
 import Components
 import PrimitivesComponents
+import Contacts
 
 enum ConfirmTransferSheetType: Identifiable, Sendable {
     case info(InfoSheetType)
@@ -13,6 +14,7 @@ enum ConfirmTransferSheetType: Identifiable, Sendable {
     case fiatConnect(assetAddress: AssetAddress, walletId: WalletId)
     case swapDetails
     case perpetualDetails(PerpetualDetailsViewModel)
+    case addContact(AddAddressInput)
 
     var id: String {
         switch self {
@@ -22,6 +24,7 @@ enum ConfirmTransferSheetType: Identifiable, Sendable {
         case .fiatConnect: "fiat-connect"
         case .swapDetails: "swap-details"
         case let .perpetualDetails(model): "perpetual-details-\(model.id)"
+        case let .addContact(input): "add-to-contact-\(input.chain.rawValue)-\(input.address)"
         }
     }
 }
