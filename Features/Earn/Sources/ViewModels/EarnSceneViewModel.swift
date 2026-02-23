@@ -21,13 +21,13 @@ public final class EarnSceneViewModel {
     public let asset: Asset
     private let currencyCode: String
 
-    public var assetRequest: AssetRequest
-    public var assetData: AssetData = .empty
+    public let assetQuery: ObservableQuery<AssetRequest>
+    public let positionsQuery: ObservableQuery<DelegationsRequest>
+    public let providersQuery: ObservableQuery<ValidatorsRequest>
 
-    public var positionsRequest: DelegationsRequest
-    public var positions: [Delegation] = []
-    public var providersRequest: ValidatorsRequest
-    public var providers: [DelegationValidator] = []
+    public var assetData: AssetData { assetQuery.value }
+    public var positions: [Delegation] { positionsQuery.value }
+    public var providers: [DelegationValidator] { providersQuery.value }
 
     public init(
         wallet: Wallet,
@@ -39,13 +39,15 @@ public final class EarnSceneViewModel {
         self.asset = asset
         self.currencyCode = currencyCode
         self.earnService = earnService
-        self.assetRequest = AssetRequest(walletId: wallet.walletId, assetId: asset.id)
-        self.positionsRequest = DelegationsRequest(
-            walletId: wallet.walletId,
-            assetId: asset.id,
-            providerType: .earn
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: wallet.walletId, assetId: asset.id), initialValue: .with(asset: asset))
+        self.positionsQuery = ObservableQuery(
+            DelegationsRequest(walletId: wallet.walletId, assetId: asset.id, providerType: .earn),
+            initialValue: []
         )
-        self.providersRequest = ValidatorsRequest(chain: asset.id.chain, providerType: .earn)
+        self.providersQuery = ObservableQuery(
+            ValidatorsRequest(chain: asset.id.chain, providerType: .earn),
+            initialValue: []
+        )
     }
 
     var title: String { Localized.Common.earn }
