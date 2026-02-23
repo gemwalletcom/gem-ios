@@ -44,11 +44,12 @@ struct EarnNavigationView: View {
                 )
             }
             .navigationDestination(for: Delegation.self) { delegation in
-                EarnDetailScene(
-                    model: viewModelFactory.earnDetailScene(
+                DelegationDetailScene(
+                    model: viewModelFactory.delegationDetailScene(
                         wallet: wallet,
-                        asset: asset,
                         delegation: delegation,
+                        asset: asset,
+                        validators: [],
                         onAmountInputAction: {
                             navigationPath.append($0)
                         },

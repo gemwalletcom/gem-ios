@@ -4,10 +4,10 @@ import SwiftUI
 import Components
 import PrimitivesComponents
 
-public struct StakeDetailScene: View {
-    private let model: StakeDetailSceneViewModel
+public struct DelegationDetailScene: View {
+    private let model: DelegationDetailSceneViewModel
 
-    public init(model: StakeDetailSceneViewModel) {
+    public init(model: DelegationDetailSceneViewModel) {
         self.model = model
     }
 
@@ -15,7 +15,7 @@ public struct StakeDetailScene: View {
         List {
             Section { } header: {
                 WalletHeaderView(
-                    model: model.validatorHeaderViewModel,
+                    model: model.headerViewModel,
                     isPrivacyEnabled: .constant(false),
                     balanceActionType: .none,
                     onHeaderAction: nil,
@@ -26,16 +26,16 @@ public struct StakeDetailScene: View {
             .cleanListRow()
 
             Section {
-                if let url = model.validatorUrl {
+                if let url = model.providerUrl {
                     SafariNavigationLink(url: url) {
-                        ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
+                        ListItemView(title: model.providerTitle, subtitle: model.providerText)
                     }
                 } else {
-                    ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
+                    ListItemView(title: model.providerTitle, subtitle: model.providerText)
                 }
 
-                if model.showValidatorApr {
-                    ListItemView(title: model.aprTitle, subtitle: model.validatorAprText)
+                if model.showApr {
+                    ListItemView(title: model.aprTitle, subtitle: model.aprText)
                 }
 
                 ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
@@ -59,27 +59,11 @@ public struct StakeDetailScene: View {
                 }
             }
 
-            //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
                 Section(model.manageTitle) {
-                    if model.isStakeAvailable {
-                        NavigationCustomLink(with: ListItemView(title: model.title)) {
-                            model.onStakeAmountAction()
-                        }
-                    }
-                    if model.isUnstakeAvailable {
-                        NavigationCustomLink(with: ListItemView(title: model.unstakeTitle)) {
-                            model.onUnstakeAction()
-                        }
-                    }
-                    if model.isRedelegateAvailable {
-                        NavigationCustomLink(with: ListItemView(title: model.redelegateTitle)) {
-                            model.onRedelegateAction()
-                        }
-                    }
-                    if model.isWithdrawStakeAvailable {
-                        NavigationCustomLink(with: ListItemView(title: model.withdrawTitle)) {
-                            model.onWithdrawAction()
+                    ForEach(model.availableActions) { action in
+                        NavigationCustomLink(with: ListItemView(title: model.actionTitle(action))) {
+                            model.performAction(action)
                         }
                     }
                 }

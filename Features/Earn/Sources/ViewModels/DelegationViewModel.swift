@@ -62,7 +62,7 @@ public struct DelegationViewModel: Sendable {
     }
 
     public var stateStyle: TextStyle {
-        TextStyle(font: .footnote, color: stateTextColor)
+        DelegationStateViewModel(state: state).textStyle
     }
 
     public var subtitleStyle: TextStyle {
@@ -71,17 +71,6 @@ public struct DelegationViewModel: Sendable {
 
     public var subtitleExtraStyle: TextStyle {
         TextStyle(font: .footnote, color: Colors.gray)
-    }
-
-    public var stateTextColor: Color {
-        switch state {
-        case .active: Colors.green
-        case .pending,
-            .activating,
-            .deactivating: Colors.orange
-        case .inactive,
-            .awaitingWithdrawal: Colors.red
-        }
     }
 
     public var balanceText: String {

@@ -206,17 +206,19 @@ public struct ViewModelFactory: Sendable {
     }
 
     @MainActor
-    public func earnDetailScene(
+    public func delegationDetailScene(
         wallet: Wallet,
-        asset: Asset,
         delegation: Delegation,
+        asset: Asset,
+        validators: [DelegationValidator],
         onAmountInputAction: AmountInputAction,
         onTransferAction: TransferDataAction
-    ) -> EarnDetailSceneViewModel {
-        EarnDetailSceneViewModel(
+    ) -> DelegationDetailSceneViewModel {
+        DelegationDetailSceneViewModel(
             wallet: wallet,
             model: DelegationViewModel(delegation: delegation, asset: asset, formatter: .auto, currencyCode: Preferences.standard.currency),
             asset: asset,
+            validators: validators,
             onAmountInputAction: onAmountInputAction,
             onTransferAction: onTransferAction
         )
@@ -231,22 +233,6 @@ public struct ViewModelFactory: Sendable {
             keystore: keystore,
             payload: payload,
             confirmTransferDelegate: confirmTransferDelegate
-        )
-    }
-    
-    @MainActor
-    public func stakeDetailScene(
-        wallet: Wallet,
-        delegation: Delegation,
-        onAmountInputAction: AmountInputAction,
-        onTransferAction: TransferDataAction
-    ) -> StakeDetailSceneViewModel {
-        StakeDetailSceneViewModel(
-            wallet: wallet,
-            model: DelegationViewModel(delegation: delegation, formatter: .auto, currencyCode: Preferences.standard.currency),
-            service: stakeService,
-            onAmountInputAction: onAmountInputAction,
-            onTransferAction: onTransferAction
         )
     }
     

@@ -2,32 +2,31 @@
 
 import Foundation
 import Testing
-import StakeService
-import StakeServiceTestKit
 import PrimitivesTestKit
 import Primitives
 
 @testable import Earn
 
-struct StakeDetailSceneViewModelTests {
+struct DelegationDetailSceneViewModelTests {
 
     @Test
     func showManage() {
-        #expect(StakeDetailSceneViewModel.mock(wallet: .mock(type: .multicoin)).showManage == true)
-        #expect(StakeDetailSceneViewModel.mock(wallet: .mock(type: .view)).showManage == false)
+        #expect(DelegationDetailSceneViewModel.mock(wallet: .mock(type: .multicoin)).showManage == true)
+        #expect(DelegationDetailSceneViewModel.mock(wallet: .mock(type: .view)).showManage == false)
     }
 }
 
-extension StakeDetailSceneViewModel {
+extension DelegationDetailSceneViewModel {
     static func mock(
         wallet: Wallet = .mock(),
         model: DelegationViewModel = .mock(),
-        service: any StakeServiceable = MockStakeService()
-    ) -> StakeDetailSceneViewModel {
-        StakeDetailSceneViewModel(
+        validators: [DelegationValidator] = []
+    ) -> DelegationDetailSceneViewModel {
+        DelegationDetailSceneViewModel(
             wallet: wallet,
             model: model,
-            service: service,
+            asset: model.delegation.base.assetId.chain.asset,
+            validators: validators,
             onAmountInputAction: nil,
             onTransferAction: nil
         )
