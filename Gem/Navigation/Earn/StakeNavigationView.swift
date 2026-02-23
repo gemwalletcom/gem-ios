@@ -44,10 +44,12 @@ struct StakeNavigationView: View {
             )
         }
         .navigationDestination(for: Delegation.self) { delegation in
-            StakeDetailScene(
-                model: viewModelFactory.stakeDetailScene(
+            DelegationDetailScene(
+                model: viewModelFactory.delegationDetailScene(
                     wallet: model.wallet,
                     delegation: delegation,
+                    asset: delegation.base.assetId.chain.asset,
+                    validators: model.validators,
                     onAmountInputAction: {
                         navigationPath.append($0)
                     },
