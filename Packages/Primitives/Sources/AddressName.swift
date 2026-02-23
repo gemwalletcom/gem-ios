@@ -8,10 +8,12 @@ public struct AddressName: Codable, Equatable, Hashable, Sendable {
 	public let chain: Chain
 	public let address: String
 	public let name: String
+	public let type: AddressType?
 
-	public init(chain: Chain, address: String, name: String) {
+	public init(chain: Chain, address: String, name: String, type: AddressType?) {
 		self.chain = chain
 		self.address = address
 		self.name = name
+		self.type = type
 	}
 }

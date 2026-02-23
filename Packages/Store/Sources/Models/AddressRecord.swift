@@ -6,25 +6,29 @@ import Primitives
 
 struct AddressRecord: Codable, FetchableRecord, PersistableRecord, Sendable {
     static let databaseTableName = "addresses"
-    
+
     enum Columns {
         static let chain = Column("chain")
         static let address = Column("address")
         static let name = Column("name")
+        static let type = Column("type")
     }
-    
+
     let chain: Chain
     let address: String
     let name: String
-    
+    let type: AddressType?
+
     init(
         chain: Chain,
         address: String,
-        name: String
+        name: String,
+        type: AddressType?
     ) {
         self.chain = chain
         self.address = address
         self.name = name
+        self.type = type
     }
 }
 
@@ -38,6 +42,7 @@ extension AddressRecord: CreateTable {
                 .notNull()
             $0.column(Columns.name.name, .text)
                 .notNull()
+            $0.column(Columns.type.name, .text)
             $0.primaryKey([Columns.chain.name, Columns.address.name])
         }
     }
@@ -48,7 +53,8 @@ extension AddressRecord {
         AddressName(
             chain: chain,
             address: address,
-            name: name
+            name: name,
+            type: type
         )
     }
 }
