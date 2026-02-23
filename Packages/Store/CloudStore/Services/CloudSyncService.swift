@@ -6,15 +6,18 @@ import CloudKit
 public actor CloudSyncService {
     private let container: CKContainer
     private let database: CKDatabase
-    private let transformer: DataTransformable
+    private let encoder: JSONEncoder
+    private let decoder: JSONDecoder
 
     public init(
         containerIdentifier: String,
-        transformer: DataTransformable
+        encoder: JSONEncoder = JSONEncoder(),
+        decoder: JSONDecoder = JSONDecoder()
     ) {
         self.container = CKContainer(identifier: containerIdentifier)
         self.database = container.privateCloudDatabase
-        self.transformer = transformer
+        self.encoder = encoder
+        self.decoder = decoder
     }
 
     // MARK: - Account Status
@@ -68,9 +71,8 @@ public actor CloudSyncService {
     // MARK: - Private
 
     private func createRecord<T: CloudSyncable>(for item: T) throws -> CKRecord {
-        let data = try JSONEncoder().encode(item)
         let record = CKRecord(recordType: T.recordType, recordID: item.recordID)
-        record.payload = try transformer.transform(data)
+        record.payload = try encoder.encode(item)
         return record
     }
 
@@ -78,7 +80,7 @@ public actor CloudSyncService {
         guard let data = record.payload else {
             throw CloudSyncError.invalidRecordData
         }
-        return try JSONDecoder().decode(type, from: try transformer.restore(data))
+        return try decoder.decode(type, from: data)
     }
 
     private func fetchAllRecords(
