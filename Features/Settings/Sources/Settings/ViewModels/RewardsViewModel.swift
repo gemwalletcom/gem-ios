@@ -32,7 +32,8 @@ public final class RewardsViewModel: Sendable {
 
     var state: StateViewType<Rewards> = .loading
     var toastMessage: ToastMessage?
-    var isPresentingError: String?
+    var isPresentingSheet: RewardsSheetType?
+    var isPresentingAlert: AlertMessage?
 
     public init(
         rewardsService: RewardsServiceable,
@@ -192,26 +193,31 @@ public final class RewardsViewModel: Sendable {
         await fetch(wallet: selectedWallet)
     }
 
-    var activateCodeFromLink: String? {
-        activateCode
+    func onTaskOnce() async {
+        await fetch()
+
+        if wallets.count == 1, activateCode != nil {
+            await useReferralCode()
+        } else if giftCode != nil {
+            do {
+                let option = try await getRewardRedemptionOption()
+                showRedemptionAlert(for: option)
+            } catch {
+                showError(error.localizedDescription)
+            }
+        } else if let code = activateCode {
+            isPresentingSheet = .activateCode(code: code)
+        }
     }
 
-    var giftCodeFromLink: String? {
-        giftCode
-    }
-
-    var shouldAutoActivate: Bool {
-        wallets.count == 1 && activateCode != nil
-    }
-
-    func useReferralCode() async {
+    private func useReferralCode() async {
         guard let code = activateCode else { return }
         do {
             try await rewardsService.useReferralCode(wallet: selectedWallet, referralCode: code)
             showActivatedToast()
             await fetch()
         } catch {
-            isPresentingError = error.localizedDescription
+            showError(error.localizedDescription)
         }
     }
 
@@ -222,11 +228,11 @@ public final class RewardsViewModel: Sendable {
             showActivatedToast()
             await fetch()
         } catch {
-            isPresentingError = error.localizedDescription
+            showError(error.localizedDescription)
         }
     }
 
-    func getRewardRedemptionOption() async throws -> RewardRedemptionOption {
+    private func getRewardRedemptionOption() async throws -> RewardRedemptionOption {
         guard let code = giftCode else {
             throw AnyError("no gift code")
         }
@@ -236,6 +242,23 @@ public final class RewardsViewModel: Sendable {
     func canRedeem(option: RewardRedemptionOption) -> Bool {
         guard let rewards else { return false }
         return rewards.points >= option.points
+    }
+
+    func showRedemptionAlert(for option: RewardRedemptionOption) {
+        let viewModel = RewardRedemptionOptionViewModel(option: option)
+        isPresentingAlert = AlertMessage(
+            title: viewModel.confirmationMessage,
+            message: "",
+            actions: [
+                AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) { [weak self] in
+                    Task {
+                        await self?.redeem(option: option)
+                        await self?.fetch()
+                    }
+                },
+                .cancel(title: Localized.Common.cancel)
+            ]
+        )
     }
 
     func redeem(option: RewardRedemptionOption) async {
@@ -252,12 +275,20 @@ public final class RewardsViewModel: Sendable {
                 }
             }
         } catch {
-            isPresentingError = error.localizedDescription
+            showError(error.localizedDescription)
         }
     }
 
     private func showActivatedToast() {
         toastMessage = ToastMessage.success(Localized.Common.done)
+    }
+
+    func showError(_ message: String) {
+        isPresentingAlert = AlertMessage(
+            title: Localized.Errors.errorOccured,
+            message: message,
+            actions: [.cancel(title: Localized.Common.done)]
+        )
     }
 
     private func fetch(wallet: Wallet) async {

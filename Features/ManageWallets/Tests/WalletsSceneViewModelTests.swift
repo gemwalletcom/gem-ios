@@ -5,11 +5,11 @@ import SwiftUI
 import Primitives
 import PrimitivesTestKit
 import WalletService
-import Store
 import StoreTestKit
 import WalletServiceTestKit
 
 @testable import ManageWallets
+@testable import Store
 
 @MainActor
 struct WalletsSceneViewModelTests {
@@ -18,7 +18,7 @@ struct WalletsSceneViewModelTests {
     func onDeleteConfirmed() async throws {
         let service: WalletService = try .mockWallets()
         let model = WalletsSceneViewModel.mock(walletService: service)
-        model.wallets = service.wallets
+        model.walletsQuery.value = service.wallets
 
         #expect(model.currentWalletId == .mock(id: "1"))
 
@@ -39,7 +39,7 @@ struct WalletsSceneViewModelTests {
     func onMove() throws {
         let service: WalletService = try .mockWallets()
         let model = WalletsSceneViewModel.mock(walletService: service)
-        model.wallets = service.wallets
+        model.walletsQuery.value = service.wallets
 
         model.onMove(from: IndexSet(integer: 0), to: 0)
         #expect(service.sortedWallets.ids == ["1", "2", "3"])

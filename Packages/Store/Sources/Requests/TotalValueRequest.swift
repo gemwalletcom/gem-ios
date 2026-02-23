@@ -1,8 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
 public enum BalanceType: Sendable {
@@ -10,8 +8,7 @@ public enum BalanceType: Sendable {
     case perpetual
 }
 
-public struct TotalValueRequest: ValueObservationQueryable {
-    public static var defaultValue: TotalFiatValue { .zero }
+public struct TotalValueRequest: DatabaseQueryable {
 
     public var walletId: WalletId
     public var type: BalanceType
@@ -64,3 +61,5 @@ public struct TotalValueRequest: ValueObservationQueryable {
         return TotalFiatValue(value: total, pnlAmount: 0, pnlPercentage: 0)
     }
 }
+
+extension TotalValueRequest: Equatable {}

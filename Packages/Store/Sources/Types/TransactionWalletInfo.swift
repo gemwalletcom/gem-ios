@@ -2,7 +2,6 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
 import Primitives
 
 struct WalletTransactionInfo: FetchableRecord, Decodable {

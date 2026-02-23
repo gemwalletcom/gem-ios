@@ -22,11 +22,7 @@ public struct AmountNavigationView: View {
 
     public var body: some View {
         AmountScene(model: model)
-            .onChangeObserveQuery(
-                request: $model.assetRequest,
-                value: $model.assetData,
-                action: model.onChangeAssetBalance
-            )
+            .onChangeBindQuery(model.assetQuery, action: model.onChangeAssetBalance)
             .sheet(item: $model.isPresentingSheet) {
                 switch $0 {
                 case let .infoAction(type):

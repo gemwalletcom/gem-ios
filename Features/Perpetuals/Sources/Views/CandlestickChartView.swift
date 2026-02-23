@@ -170,7 +170,7 @@ struct CandlestickChartView: View {
                 .foregroundStyle(.clear)
                 .annotation(position: .overlay, alignment: .leading, spacing: 0) {
                     Text(line.label)
-                        .font(.system(size: .space10, weight: .semibold))
+                        .font(.app.caption)
                         .foregroundStyle(Colors.whiteSolid)
                         .padding(.tiny)
                         .background(line.color)

@@ -28,13 +28,8 @@ public final class FiatSceneViewModel {
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
     private let walletId: WalletId
 
-    var assetData: AssetData = .empty {
-        didSet {
-            buyViewModel.availableBalance = assetData.balance.available
-            sellViewModel.availableBalance = assetData.balance.available
-        }
-    }
-    var assetRequest: AssetRequest
+    public let assetQuery: ObservableQuery<AssetRequest>
+    var assetData: AssetData { assetQuery.value }
     var urlState: StateViewType<Void> = .noData
     var type: FiatQuoteType
     var isPresentingFiatProvider: Bool = false
@@ -57,7 +52,7 @@ public final class FiatSceneViewModel {
         self.assetAddress = assetAddress
         self.walletId = walletId
         self.type = type
-        self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id)
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
 
         let buyOperation = BuyOperation(
             service: fiatService,
@@ -176,6 +171,11 @@ public final class FiatSceneViewModel {
 extension FiatSceneViewModel {
     func fetch() {
         currentViewModel.fetch()
+    }
+
+    func onAssetDataChange(_ oldValue: AssetData, _ newValue: AssetData) {
+        buyViewModel.availableBalance = newValue.balance.available
+        sellViewModel.availableBalance = newValue.balance.available
     }
 
     func onSelectContinue() {

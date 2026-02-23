@@ -22,15 +22,15 @@ final class PerpetualsSceneViewModel {
     let preferences: Preferences = .standard
     let wallet: Wallet
 
-    var positionsRequest: PerpetualPositionsRequest
-    var perpetualsRequest: PerpetualsRequest
-    var walletBalanceRequest: PerpetualWalletBalanceRequest
-    var recentsRequest: RecentActivityRequest
+    let positionsQuery: ObservableQuery<PerpetualPositionsRequest>
+    let perpetualsQuery: ObservableQuery<PerpetualsRequest>
+    let walletBalanceQuery: ObservableQuery<PerpetualWalletBalanceRequest>
+    let recentsQuery: ObservableQuery<RecentActivityRequest>
 
-    var recents: [RecentAsset] = []
-    var positions: [PerpetualPositionData] = []
-    var perpetuals: [PerpetualData] = []
-    var walletBalance: WalletBalance = .zero
+    var recents: [RecentAsset] { recentsQuery.value }
+    var positions: [PerpetualPositionData] { positionsQuery.value }
+    var perpetuals: [PerpetualData] { perpetualsQuery.value }
+    var walletBalance: WalletBalance { walletBalanceQuery.value }
 
     var isSearchPresented: Bool = false
     var searchQuery: String = .empty
@@ -55,14 +55,10 @@ final class PerpetualsSceneViewModel {
         self.activityService = activityService
         self.onSelectAssetType = onSelectAssetType
         self.onSelectAsset = onSelectAsset
-        self.positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId, searchQuery: "")
-        self.perpetualsRequest = PerpetualsRequest(searchQuery: "")
-        self.walletBalanceRequest = PerpetualWalletBalanceRequest(walletId: wallet.walletId)
-        self.recentsRequest = RecentActivityRequest(
-            walletId: wallet.walletId,
-            limit: 10,
-            types: [.perpetual]
-        )
+        self.positionsQuery = ObservableQuery(PerpetualPositionsRequest(walletId: wallet.walletId, searchQuery: ""), initialValue: [])
+        self.perpetualsQuery = ObservableQuery(PerpetualsRequest(searchQuery: ""), initialValue: [])
+        self.walletBalanceQuery = ObservableQuery(PerpetualWalletBalanceRequest(walletId: wallet.walletId), initialValue: .zero)
+        self.recentsQuery = ObservableQuery(RecentActivityRequest(walletId: wallet.walletId, limit: 10, types: [.perpetual]), initialValue: [])
     }
 
     var navigationTitle: String { Localized.Perpetuals.title }
@@ -147,8 +143,8 @@ extension PerpetualsSceneViewModel {
 
     func onSearchQueryChange(_ _: String, _ newValue: String) {
         let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        perpetualsRequest = PerpetualsRequest(searchQuery: trimmed)
-        positionsRequest = PerpetualPositionsRequest(walletId: wallet.walletId, searchQuery: trimmed)
+        perpetualsQuery.request = PerpetualsRequest(searchQuery: trimmed)
+        positionsQuery.request = PerpetualPositionsRequest(walletId: wallet.walletId, searchQuery: trimmed)
     }
 
     func onSearchPresentedChange(_ _: Bool, _ isPresented: Bool) {

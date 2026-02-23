@@ -52,17 +52,9 @@ public struct SwapScene: View {
                 )
         }
         .navigationTitle(model.title)
-        .onChangeObserveQuery(
-            request: $model.fromAssetRequest,
-            value: $model.fromAsset,
-            action: model.onChangeFromAsset
-        )
-        .onChangeObserveQuery(
-            request: $model.toAssetRequest,
-            value: $model.toAsset,
-            action: model.onChangeToAsset
-        )
-        .debouncedTask(id: model.fetchTrigger, interval: .debounce) {
+        .onChangeBindQuery(model.fromAssetQuery, action: model.onChangeFromAsset)
+        .onChangeBindQuery(model.toAssetQuery, action: model.onChangeToAsset)
+        .debouncedTask(id: model.fetchTrigger) {
             await model.fetch()
         }
         .debounce(
@@ -74,7 +66,7 @@ public struct SwapScene: View {
         .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
-        .onTimer(every: .seconds(30)) {
+        .onTimer(every: 30) {
             await model.fetch()
         }
         .onAppear {

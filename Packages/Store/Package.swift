@@ -22,7 +22,6 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "GRDB", path: "../../Submodules/GRDB"),
-        .package(name: "GRDBQuery", path: "../../Submodules/GRDBQuery"),
     ],
     targets: [
         .target(
@@ -30,7 +29,6 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 .product(name: "GRDB", package: "GRDB"),
-                .product(name: "GRDBQuery", package: "GRDBQuery"),
             ],
             path: "Sources"
         ),

@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct TransactionsCountRequest: ValueObservationQueryable {
-    public static var defaultValue: Int { 0 }
+public struct TransactionsCountRequest: DatabaseQueryable {
 
     private let walletId: WalletId
     private let state: TransactionState
@@ -27,3 +24,5 @@ public struct TransactionsCountRequest: ValueObservationQueryable {
             .fetchCount(db)
     }
 }
+
+extension TransactionsCountRequest: Equatable {}

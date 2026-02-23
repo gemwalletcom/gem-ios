@@ -25,13 +25,11 @@ public final class WalletsSceneViewModel {
     var walletDelete: Wallet?
     var currentWalletId: WalletId?
 
-    // db observation requests
-    let pinnedWalletsRequest: WalletsRequest = WalletsRequest(isPinned: true)
-    let walletsRequest: WalletsRequest = WalletsRequest(isPinned: false)
+    let pinnedWalletsQuery: ObservableQuery<WalletsRequest>
+    let walletsQuery: ObservableQuery<WalletsRequest>
 
-    // observed
-    var pinnedWallets: [Wallet] = []
-    var wallets: [Wallet] = []
+    var pinnedWallets: [Wallet] { pinnedWalletsQuery.value }
+    var wallets: [Wallet] { walletsQuery.value }
 
     public init(
         navigationPath: Binding<NavigationPath>,
@@ -46,6 +44,8 @@ public final class WalletsSceneViewModel {
         self.walletDelete = nil
         self.isPresentingCreateWalletSheet = isPresentingCreateWalletSheet
         self.isPresentingImportWalletSheet = isPresentingImportWalletSheet
+        self.pinnedWalletsQuery = ObservableQuery(WalletsRequest(isPinned: true), initialValue: [])
+        self.walletsQuery = ObservableQuery(WalletsRequest(isPinned: false), initialValue: [])
     }
     
     var title: String {

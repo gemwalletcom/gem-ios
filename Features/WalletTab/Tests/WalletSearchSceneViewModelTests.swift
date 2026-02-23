@@ -2,37 +2,38 @@
 
 import Testing
 import Primitives
-import Store
 import PrimitivesTestKit
 import PreferencesTestKit
 import WalletTabTestKit
+
 @testable import WalletTab
+@testable import Store
 
 @MainActor
 struct WalletSearchSceneViewModelTests {
 
     @Test
     func recentActivityTypes() {
-        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true)).recentsRequest.types == RecentActivityType.allCases)
-        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: false)).recentsRequest.types.contains(.perpetual) == false)
+        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true)).recentsQuery.request.types == RecentActivityType.allCases)
+        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: false)).recentsQuery.request.types.contains(.perpetual) == false)
     }
 
     @Test
     func searchRequestInitialization() {
-        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true)).searchRequest.limit == 13)
-        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: false)).searchRequest.limit == 100)
-        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true)).searchRequest.types == [.asset, .perpetual])
-        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: false)).searchRequest.types == [.asset])
+        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true)).searchQuery.request.limit == 13)
+        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: false)).searchQuery.request.limit == 100)
+        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true)).searchQuery.request.types == [.asset, .perpetual])
+        #expect(WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: false)).searchQuery.request.types == [.asset])
     }
 
     @Test
     func hasMoreAssets() {
         let model = WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true))
 
-        model.searchResult = WalletSearchResult(assets: (0..<12).map { _ in .mock() }, perpetuals: [])
+        model.searchQuery.value = WalletSearchResult(assets: (0..<12).map { _ in .mock() }, perpetuals: [])
         #expect(model.hasMoreAssets == false)
 
-        model.searchResult = WalletSearchResult(assets: (0..<13).map { _ in .mock() }, perpetuals: [])
+        model.searchQuery.value = WalletSearchResult(assets: (0..<13).map { _ in .mock() }, perpetuals: [])
         #expect(model.hasMoreAssets == true)
     }
 
@@ -40,10 +41,10 @@ struct WalletSearchSceneViewModelTests {
     func hasMorePerpetuals() {
         let model = WalletSearchSceneViewModel.mock(preferences: .mock(isPerpetualEnabled: true))
 
-        model.searchResult = WalletSearchResult(assets: [], perpetuals: (0..<3).map { _ in .mock() })
+        model.searchQuery.value = WalletSearchResult(assets: [], perpetuals: (0..<3).map { _ in .mock() })
         #expect(model.hasMorePerpetuals == false)
 
-        model.searchResult = WalletSearchResult(assets: [], perpetuals: (0..<4).map { _ in .mock() })
+        model.searchQuery.value = WalletSearchResult(assets: [], perpetuals: (0..<4).map { _ in .mock() })
         #expect(model.hasMorePerpetuals == true)
     }
 }
