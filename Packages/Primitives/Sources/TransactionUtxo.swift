@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TransactionUtxoInput: Codable, Equatable, Sendable {
+public struct TransactionUtxoInput: Codable, Equatable, Hashable, Sendable {
 	public let address: String
 	public let value: String
 
