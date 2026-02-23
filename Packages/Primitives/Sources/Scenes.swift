@@ -202,4 +202,8 @@ public struct Scenes {
             self.price = price
         }
     }
+
+    public struct Contacts: Hashable, Codable {
+        public init() {}
+    }
 }

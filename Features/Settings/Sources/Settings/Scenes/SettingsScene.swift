@@ -105,6 +105,13 @@ extension SettingsScene {
                 )
             }
 
+            NavigationLink(value: Scenes.Contacts()) {
+                ListItemView(
+                    title: model.contactsTitle,
+                    imageStyle: .settings(assetImage: model.contactsImage)
+                )
+            }
+
             NavigationLink(value: Scenes.Preferences()) {
                 ListItemView(
                     title: model.preferencesTitle,
