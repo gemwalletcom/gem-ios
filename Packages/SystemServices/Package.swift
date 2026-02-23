@@ -9,7 +9,8 @@ let package = Package(
         .macOS(.v15)
     ],
     products: [
-        .library(name: "ImageGalleryService", targets: ["ImageGalleryService"])
+        .library(name: "ImageGalleryService", targets: ["ImageGalleryService"]),
+        .library(name: "CloudStore", targets: ["CloudStore"])
     ],
     dependencies: [],
     targets: [
@@ -18,6 +19,11 @@ let package = Package(
             dependencies: [],
             path: "ImageGalleryService",
             exclude: ["Tests", "TestKit"]
+        ),
+        .target(
+            name: "CloudStore",
+            dependencies: [],
+            path: "CloudStore"
         )
     ]
 )

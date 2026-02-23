@@ -14,10 +14,6 @@ let package = Package(
             name: "StoreTestKit",
             targets: ["StoreTestKit"]
         ),
-        .library(
-            name: "CloudStore",
-            targets: ["CloudStore"]
-        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -45,13 +41,8 @@ let package = Package(
             dependencies: [
                 "Store",
                 "StoreTestKit",
-                "CloudStore",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ]
-        ),
-        .target(
-            name: "CloudStore",
-            path: "CloudStore"
         ),
     ]
 )
