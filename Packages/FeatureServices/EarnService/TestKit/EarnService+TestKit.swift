@@ -8,7 +8,7 @@ import EarnService
 public final class MockEarnService: EarnDataProvidable, @unchecked Sendable {
     public init() {}
 
-    public func getEarnData(chain: Chain, assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData {
+    public func getEarnData(assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData {
         .mock()
     }
 }

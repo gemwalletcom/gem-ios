@@ -6,7 +6,7 @@ import Primitives
 import Store
 
 public protocol EarnDataProvidable: Sendable {
-    func getEarnData(chain: Chain, assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData
+    func getEarnData(assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData
 }
 
 public struct EarnService: Sendable {
@@ -19,16 +19,11 @@ public struct EarnService: Sendable {
     }
 
     public func update(walletId: WalletId, assetId: AssetId, address: String) async throws {
-        async let providers: Void = updateProviders(assetId: assetId)
-        async let positions = gatewayService.earnPositions(chain: assetId.chain, address: address)
-
-        let (_, fetched) = try await (providers, positions)
-        try updatePositions(walletId: walletId, assetId: assetId, positions: fetched)
-    }
-
-    private func updateProviders(assetId: AssetId) async throws {
-        let providers = try await gatewayService.earnProviders(assetId: assetId)
+        let providers = await gatewayService.earnProviders(assetId: assetId)
         try store.updateValidators(providers)
+
+        let positions = try await gatewayService.earnPositions(chain: assetId.chain, address: address, assetIds: [assetId])
+        try updatePositions(walletId: walletId, assetId: assetId, positions: positions)
     }
 
     private func updatePositions(walletId: WalletId, assetId: AssetId, positions: [DelegationBase]) throws {
@@ -44,7 +39,7 @@ public struct EarnService: Sendable {
 // MARK: - EarnDataProvidable
 
 extension EarnService: EarnDataProvidable {
-    public func getEarnData(chain: Chain, assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData {
-        try await gatewayService.getEarnData(chain: chain, assetId: assetId, address: address, value: value, earnType: earnType)
+    public func getEarnData(assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData {
+        try await gatewayService.getEarnData(assetId: assetId, address: address, value: value, earnType: earnType)
     }
 }

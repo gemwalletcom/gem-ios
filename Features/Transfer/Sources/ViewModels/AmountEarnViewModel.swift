@@ -77,7 +77,6 @@ final class AmountEarnViewModel: AmountDataProvidable {
     func makeTransferData(value: BigInt) async throws -> TransferData {
         let address = (try? wallet.account(for: asset.chain).address) ?? ""
         let earnData = try await earnService.getEarnData(
-            chain: asset.chain,
             assetId: asset.id,
             address: address,
             value: String(value),
