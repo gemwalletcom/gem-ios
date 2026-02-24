@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Transaction: Codable, Equatable, Sendable {
+public struct Transaction: Codable, Equatable, Hashable, Sendable {
 	public let id: TransactionId
 	public let assetId: AssetId
 	public let from: String
