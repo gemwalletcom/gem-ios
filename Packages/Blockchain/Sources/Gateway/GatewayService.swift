@@ -49,6 +49,11 @@ extension GatewayService {
     public func getStakeBalance(chain: Primitives.Chain, address: String) async throws -> AssetBalance? {
         try await gateway.getBalanceStaking(chain: chain.rawValue, address: address)?.map()
     }
+
+    public func getEarnBalance(chain: Primitives.Chain, address: String) async throws -> [AssetBalance] {
+        try await gateway.getBalanceEarn(chain: chain.rawValue, address: address)
+            .map { try $0.map() }
+    }
 }
 
 // MARK: - Transactions
