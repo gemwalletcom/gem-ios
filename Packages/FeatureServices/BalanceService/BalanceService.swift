@@ -150,7 +150,10 @@ extension BalanceService {
 
     @discardableResult
     private func updateEarnBalance(walletId: WalletId, chain: Chain, address: String) async -> [AssetBalanceChange] {
-        await updateBalanceAsync(
+        let earnBalance = (try? balanceStore.getBalance(walletId: walletId, assetId: chain.assetId))?.earn ?? .zero
+        guard earnBalance > 0 else { return [] }
+
+        return await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
             fetchBalance: { try await fetcher.getEarnBalance(chain: chain, address: address) },
