@@ -17,6 +17,7 @@ import TransactionsService
 import TransactionStateService
 import WalletsService
 import WalletService
+import WalletSessionService
 import AppService
 import ScanService
 import NFTService
@@ -51,7 +52,10 @@ extension AppResolver {
         let transactionsService: TransactionsService
         let transactionStateService: TransactionStateService
         let walletService: WalletService
-        let walletsService: WalletsService
+        let walletSessionService: WalletSessionService
+        let assetsEnabler: any AssetsEnabler
+        let assetSyncService: any AssetSyncServiceable
+        let walletSetupService: WalletSetupService
         let explorerService: ExplorerService
         let scanService: ScanService
         let nftService: NFTService
@@ -98,7 +102,10 @@ extension AppResolver {
             transactionsService: TransactionsService,
             transactionStateService: TransactionStateService,
             walletService: WalletService,
-            walletsService: WalletsService,
+            walletSessionService: WalletSessionService,
+            assetsEnabler: any AssetsEnabler,
+            assetSyncService: any AssetSyncServiceable,
+            walletSetupService: WalletSetupService,
             explorerService: ExplorerService,
             scanService: ScanService,
             nftService: NFTService,
@@ -144,7 +151,10 @@ extension AppResolver {
             self.transactionsService = transactionsService
             self.transactionStateService = transactionStateService
             self.walletService = walletService
-            self.walletsService = walletsService
+            self.walletSessionService = walletSessionService
+            self.assetsEnabler = assetsEnabler
+            self.assetSyncService = assetSyncService
+            self.walletSetupService = walletSetupService
             self.explorerService = explorerService
             self.scanService = scanService
             self.nftService = nftService

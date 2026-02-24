@@ -32,7 +32,8 @@ public struct ViewModelFactory: Sendable {
     let chainServiceFactory: ChainServiceFactory
     let scanService: ScanService
     let swapService: SwapService
-    let walletsService: WalletsService
+    let assetsEnabler: any AssetsEnabler
+    let assetSyncService: any AssetSyncServiceable
     let walletService: WalletService
     let stakeService: StakeService
     let nameService: NameService
@@ -49,7 +50,8 @@ public struct ViewModelFactory: Sendable {
         chainServiceFactory: ChainServiceFactory,
         scanService: ScanService,
         swapService: SwapService,
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
+        assetSyncService: any AssetSyncServiceable,
         walletService: WalletService,
         stakeService: StakeService,
         nameService: NameService,
@@ -65,7 +67,8 @@ public struct ViewModelFactory: Sendable {
         self.chainServiceFactory = chainServiceFactory
         self.scanService = scanService
         self.swapService = swapService
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
+        self.assetSyncService = assetSyncService
         self.walletService = walletService
         self.stakeService = stakeService
         self.nameService = nameService
@@ -88,7 +91,7 @@ public struct ViewModelFactory: Sendable {
         let confirmService = ConfirmServiceFactory.create(
             keystore: keystore,
             chainServiceFactory: chainServiceFactory,
-            walletsService: walletsService,
+            assetsEnabler: assetsEnabler,
             scanService: scanService,
             balanceService: balanceService,
             priceService: priceService,
@@ -163,7 +166,7 @@ public struct ViewModelFactory: Sendable {
     ) -> SwapSceneViewModel {
         SwapSceneViewModel(
             input: input,
-            walletsService: walletsService,
+            assetSyncService: assetSyncService,
             swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
             onSwap: onSwap

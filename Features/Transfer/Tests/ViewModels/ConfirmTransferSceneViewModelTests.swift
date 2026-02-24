@@ -340,7 +340,7 @@ private extension ConfirmTransferSceneViewModel {
             confirmService: ConfirmServiceFactory.create(
                 keystore: KeystoreMock(),
                 chainServiceFactory: ChainServiceFactoryMock(),
-                walletsService: .mock(),
+                assetsEnabler: .mock(),
                 scanService: .mock(),
                 balanceService: .mock(),
                 priceService: .mock(),

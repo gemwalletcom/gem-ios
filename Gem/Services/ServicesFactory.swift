@@ -174,14 +174,25 @@ struct ServicesFactory {
         )
 
         let discoverAssetsService = DiscoverAssetsService(balanceService: balanceService, assetsService: apiService)
-        let walletsService = Self.makeWalletsService(
-            walletSessionService: walletSessionService,
-            assetsService: assetsService,
+        let balanceUpdater = BalanceUpdateService(
             balanceService: balanceService,
-            priceObserver: priceObserverService,
-            deviceService: deviceService,
-            discoverAssetsService: discoverAssetsService
+            walletSessionService: walletSessionService
         )
+        let assetsEnabler = AssetsEnablerService(
+            assetsService: assetsService,
+            balanceUpdater: balanceUpdater,
+            priceUpdater: priceObserverService
+        )
+        let assetSyncService = WalletAssetSyncService(
+            deviceService: deviceService,
+            discoverAssetService: discoverAssetsService,
+            assetService: assetsService,
+            priceUpdater: priceObserverService,
+            balanceUpdater: balanceUpdater,
+            assetsEnabler: assetsEnabler,
+            walletSessionService: walletSessionService
+        )
+        let walletSetupService = WalletSetupService(balanceUpdater: balanceUpdater)
 
         let configService = ConfigService(apiService: apiService)
         let releaseService = AppReleaseService(configService: configService)
@@ -267,7 +278,8 @@ struct ServicesFactory {
             chainServiceFactory: chainServiceFactory,
             scanService: scanService,
             swapService: swapService,
-            walletsService: walletsService,
+            assetsEnabler: assetsEnabler,
+            assetSyncService: assetSyncService,
             walletService: walletService,
             stakeService: stakeService,
             nameService: nameService,
@@ -297,7 +309,10 @@ struct ServicesFactory {
             transactionsService: transactionsService,
             transactionStateService: transactionStateService,
             walletService: walletService,
-            walletsService: walletsService,
+            walletSessionService: walletSessionService,
+            assetsEnabler: assetsEnabler,
+            assetSyncService: assetSyncService,
+            walletSetupService: walletSetupService,
             explorerService: explorerService,
             scanService: scanService,
             nftService: nftService,
@@ -499,24 +514,6 @@ extension ServicesFactory {
                 walletSessionService: walletSessionService,
                 walletConnectorInteractor: interactor
             )
-        )
-    }
-
-    private static func makeWalletsService(
-        walletSessionService: WalletSessionService,
-        assetsService: AssetsService,
-        balanceService: BalanceService,
-        priceObserver: PriceObserverService,
-        deviceService: DeviceService,
-        discoverAssetsService: DiscoverAssetsService
-    ) -> WalletsService {
-        WalletsService(
-            walletSessionService: walletSessionService,
-            assetsService: assetsService,
-            balanceService: balanceService,
-            priceObserver: priceObserver,
-            deviceService: deviceService,
-            discoverAssetsService: discoverAssetsService
         )
     }
 

@@ -23,6 +23,7 @@ import AssetsService
 import TransactionsService
 import WalletsService
 import WalletService
+import WalletSessionService
 import AvatarService
 import AppService
 import ScanService
@@ -42,8 +43,11 @@ extension EnvironmentValues {
     @Entry var priceService: PriceService = AppResolver.main.services.priceService
     @Entry var priceObserverService: PriceObserverService = AppResolver.main.services.priceObserverService
     @Entry var explorerService: ExplorerService = AppResolver.main.services.explorerService
-    @Entry var walletsService: WalletsService = AppResolver.main.services.walletsService
+    @Entry var assetsEnabler: any AssetsEnabler = AppResolver.main.services.assetsEnabler
+    @Entry var assetSyncService: any AssetSyncServiceable = AppResolver.main.services.assetSyncService
+    @Entry var walletSetupService: WalletSetupService = AppResolver.main.services.walletSetupService
     @Entry var walletService: WalletService = AppResolver.main.services.walletService
+    @Entry var walletSessionService: WalletSessionService = AppResolver.main.services.walletSessionService
     @Entry var priceAlertService: PriceAlertService = AppResolver.main.services.priceAlertService
     @Entry var deviceService: DeviceService = AppResolver.main.services.deviceService
     @Entry var balanceService: BalanceService = AppResolver.main.services.balanceService

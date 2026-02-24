@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-protocol BalanceUpdater: Sendable {
+public protocol BalanceUpdater: Sendable {
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws
     func addBalancesIfMissing(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws
 }

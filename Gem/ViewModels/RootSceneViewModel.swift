@@ -34,7 +34,7 @@ final class RootSceneViewModel {
     private let deviceService: DeviceService
 
     let observablePreferences: ObservablePreferences
-    let walletsService: WalletsService
+    let walletSetupService: WalletSetupService
     let walletService: WalletService
     let nameService: NameService
     let avatarService: AvatarService
@@ -81,7 +81,7 @@ final class RootSceneViewModel {
         navigationHandler: NavigationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
-        walletsService: WalletsService,
+        walletSetupService: WalletSetupService,
         nameService: NameService,
         releaseAlertService: ReleaseAlertService,
         rateService: RateService,
@@ -98,7 +98,7 @@ final class RootSceneViewModel {
         self.navigationHandler = navigationHandler
         self.lockManager = lockWindowManager
         self.walletService = walletService
-        self.walletsService = walletsService
+        self.walletSetupService = walletSetupService
         self.nameService = nameService
         self.releaseAlertService = releaseAlertService
         self.rateService = rateService
@@ -176,7 +176,7 @@ extension RootSceneViewModel {
         navigationHandler.wallet = wallet
         onstartWalletService.setup(wallet: wallet)
         do {
-            try walletsService.setup(wallet: wallet)
+            try walletSetupService.setup(wallet: wallet)
         } catch {
             debugLog("RootSceneViewModel setupWallet error: \(error)")
         }

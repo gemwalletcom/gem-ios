@@ -11,7 +11,7 @@ import AssetsService
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
-    @Environment(\.walletsService) private var walletsService
+    @Environment(\.assetsEnabler) private var assetsEnabler
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.activityService) private var activityService
     @Environment(\.assetSearchService) private var assetSearchService
@@ -66,7 +66,7 @@ struct TransactionsNavigationStack: View {
                             wallet: model.wallet,
                             selectType: $0,
                             searchService: assetSearchService,
-                            walletsService: walletsService,
+                            assetsEnabler: assetsEnabler,
                             priceAlertService: priceAlertService,
                             activityService: activityService
                         ),

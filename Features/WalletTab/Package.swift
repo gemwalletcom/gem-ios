@@ -47,6 +47,7 @@ let package = Package(
                 "Store",
                 "Preferences",
                 .product(name: "WalletsService", package: "FeatureServices"),
+                .product(name: "BalanceService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "ActivityService", package: "FeatureServices"),
@@ -61,6 +62,7 @@ let package = Package(
             name: "WalletTabTestKit",
             dependencies: [
                 .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "BannerServiceTestKit", package: "FeatureServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),

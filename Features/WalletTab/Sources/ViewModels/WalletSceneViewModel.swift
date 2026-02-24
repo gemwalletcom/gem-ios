@@ -5,6 +5,7 @@ import SwiftUI
 import Style
 import Primitives
 import WalletsService
+import BalanceService
 import BannerService
 import Store
 import Preferences
@@ -18,7 +19,8 @@ import Formatters
 @Observable
 @MainActor
 public final class WalletSceneViewModel: Sendable {
-    private let walletsService: WalletsService
+    private let assetSyncService: any AssetSyncServiceable
+    private let balanceService: BalanceService
     private let bannerService: BannerService
     private let walletService: WalletService
 
@@ -52,7 +54,8 @@ public final class WalletSceneViewModel: Sendable {
     public var isLoadingAssets: Bool = false
 
     public init(
-        walletsService: WalletsService,
+        assetSyncService: any AssetSyncServiceable,
+        balanceService: BalanceService,
         bannerService: BannerService,
         walletService: WalletService,
         observablePreferences: ObservablePreferences,
@@ -60,7 +63,8 @@ public final class WalletSceneViewModel: Sendable {
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.wallet = wallet
-        self.walletsService = walletsService
+        self.assetSyncService = assetSyncService
+        self.balanceService = balanceService
         self.bannerService = bannerService
         self.walletService = walletService
         self.observablePreferences = observablePreferences
@@ -186,7 +190,7 @@ extension WalletSceneViewModel {
 
     func onHideAsset(_ assetId: AssetId) {
         do {
-            try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
+            try balanceService.hideAsset(walletId: wallet.walletId, assetId: assetId)
         } catch {
             debugLog("WalletSceneViewModel hide Asset error: \(error)")
         }
@@ -194,7 +198,7 @@ extension WalletSceneViewModel {
 
     func onPinAsset(_ asset: Asset, value: Bool) {
         do {
-            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
+            try balanceService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
             isPresentingToastMessage = .pin(asset.name, pinned: value)
         } catch {
             debugLog("WalletSceneViewModel pin asset error: \(error)")
@@ -242,7 +246,7 @@ extension WalletSceneViewModel {
         assetIds: [AssetId]
     ) async {
         do {
-            try await walletsService.fetch(
+            try await assetSyncService.fetch(
                 walletId: walletId,
                 assetIds: assetIds
             )

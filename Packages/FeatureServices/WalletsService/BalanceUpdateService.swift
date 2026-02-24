@@ -5,11 +5,11 @@ import Primitives
 import BalanceService
 import WalletSessionService
 
-struct BalanceUpdateService: BalanceUpdater {
+public struct BalanceUpdateService: BalanceUpdater {
     private let balanceService: BalanceService
     private let walletSessionService: any WalletSessionManageable
 
-    init(
+    public init(
         balanceService: BalanceService,
         walletSessionService: any WalletSessionManageable
     ) {
@@ -17,7 +17,7 @@ struct BalanceUpdateService: BalanceUpdater {
         self.walletSessionService = walletSessionService
     }
 
-    func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
+    public func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
         await balanceService.updateBalance(
             for: try walletSessionService.getWallet(walletId: walletId),
             assetIds: assetIds
@@ -25,7 +25,7 @@ struct BalanceUpdateService: BalanceUpdater {
     }
 
     // add asset to asset store and create balance store record
-    func addBalancesIfMissing(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
+    public func addBalancesIfMissing(for walletId: WalletId, assetIds: [AssetId], isEnabled: Bool?) throws {
         try balanceService.addAssetsBalancesIfMissing(
             assetIds: assetIds,
             wallet: walletSessionService.getWallet(walletId: walletId),

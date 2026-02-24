@@ -8,7 +8,7 @@ import Primitives
 import Localization
 import Style
 import Preferences
-import WalletsService
+import WalletSessionService
 import PrimitivesComponents
 import Components
 
@@ -16,16 +16,16 @@ import Components
 @MainActor
 public final class SettingsViewModel {
     private let walletId: WalletId
-    private let walletsService: WalletsService
+    private let walletSessionService: WalletSessionService
     private let observablePrefereces: ObservablePreferences
 
     public init(
         walletId: WalletId,
-        walletsService: WalletsService,
+        walletSessionService: WalletSessionService,
         observablePrefereces: ObservablePreferences
     ) {
         self.walletId = walletId
-        self.walletsService = walletsService
+        self.walletSessionService = walletSessionService
         self.observablePrefereces = observablePrefereces
     }
 
@@ -37,7 +37,7 @@ public final class SettingsViewModel {
 
     var walletsTitle: String { Localized.Wallets.title }
     var walletsValue: String {
-        let count = (try? walletsService.walletsCount()) ?? .zero
+        let count = (try? walletSessionService.walletsCount()) ?? .zero
         return "\(count)"
     }
     var walletsImage: AssetImage { AssetImage.image(Images.Settings.wallets) }
@@ -59,7 +59,7 @@ public final class SettingsViewModel {
 
     var rewardsTitle: String { Localized.Rewards.title }
     var rewardsImage: AssetImage { AssetImage.image(Images.Settings.gem) }
-    var showsRewards: Bool { walletsService.hasMulticoinWallet() }
+    var showsRewards: Bool { walletSessionService.hasMulticoinWallet() }
 
     private let links: [SocialUrl] = [.x, .discord, .telegram, .gitHub, .youTube]
     var linksViewModel: SocialLinksViewModel {

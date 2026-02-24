@@ -17,7 +17,9 @@ import PriceAlerts
 import AssetsService
 
 struct WalletNavigationStack: View {
-    @Environment(\.walletsService) private var walletsService
+    @Environment(\.assetsEnabler) private var assetsEnabler
+    @Environment(\.assetSyncService) private var assetSyncService
+    @Environment(\.balanceService) private var balanceService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
@@ -54,7 +56,8 @@ struct WalletNavigationStack: View {
                             wallet: model.wallet,
                             searchService: walletSearchService,
                             activityService: activityService,
-                            walletsService: walletsService,
+                            assetsEnabler: assetsEnabler,
+                            balanceService: balanceService,
                             perpetualService: perpetualService,
                             onDismissSearch: model.onToggleSearch,
                             onSelectAssetAction: onSelectAsset,
@@ -87,7 +90,9 @@ struct WalletNavigationStack: View {
             .navigationDestination(for: Scenes.Asset.self) {
                 AssetNavigationView(
                     model: AssetSceneViewModel(
-                        walletsService: walletsService,
+                        assetsEnabler: assetsEnabler,
+                        assetSyncService: assetSyncService,
+                        balanceService: balanceService,
                         assetsService: assetsService,
                         transactionsService: transactionsService,
                         priceObserverService: priceObserverService,
@@ -134,7 +139,8 @@ struct WalletNavigationStack: View {
                 AssetsResultsScene(
                     model: AssetsResultsSceneViewModel(
                         wallet: model.wallet,
-                        walletsService: walletsService,
+                        assetsEnabler: assetsEnabler,
+                        balanceService: balanceService,
                         preferences: preferences.preferences,
                         request: WalletSearchRequest(
                             walletId: model.wallet.walletId,
@@ -171,7 +177,7 @@ struct WalletNavigationStack: View {
                         wallet: model.wallet,
                         selectType: $0,
                         searchService: assetSearchService,
-                        walletsService: walletsService,
+                        assetsEnabler: assetsEnabler,
                         priceAlertService: priceAlertService,
                         activityService: activityService
                     ),

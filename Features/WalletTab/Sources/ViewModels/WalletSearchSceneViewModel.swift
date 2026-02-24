@@ -12,6 +12,7 @@ import Style
 import Localization
 import ActivityService
 import WalletsService
+import BalanceService
 import PerpetualService
 import Recents
 
@@ -21,7 +22,8 @@ public final class WalletSearchSceneViewModel: Sendable {
 
     private let searchService: WalletSearchService
     private let activityService: ActivityService
-    private let walletsService: WalletsService
+    private let assetsEnabler: any AssetsEnabler
+    private let balanceService: BalanceService
     private let perpetualService: PerpetualService
     private let preferences: ObservablePreferences
 
@@ -51,7 +53,8 @@ public final class WalletSearchSceneViewModel: Sendable {
         wallet: Wallet,
         searchService: WalletSearchService,
         activityService: ActivityService,
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
+        balanceService: BalanceService,
         perpetualService: PerpetualService,
         preferences: ObservablePreferences = .default,
         onDismissSearch: VoidAction,
@@ -61,7 +64,8 @@ public final class WalletSearchSceneViewModel: Sendable {
         self.wallet = wallet
         self.searchService = searchService
         self.activityService = activityService
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
+        self.balanceService = balanceService
         self.perpetualService = perpetualService
         self.preferences = preferences
         self.onDismissSearch = onDismissSearch
@@ -191,7 +195,7 @@ extension WalletSearchSceneViewModel {
     func onSelectAddToWallet(_ asset: Asset) {
         Task {
             do {
-                try await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
+                try await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
                 isPresentingToastMessage = .addedToWallet()
             } catch {
                 debugLog("WalletSearchSceneViewModel add to wallet error: \(error)")
@@ -201,7 +205,7 @@ extension WalletSearchSceneViewModel {
 
     func onSelectPinAsset(_ assetData: AssetData, value: Bool) {
         do {
-            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
+            try balanceService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
             isPresentingToastMessage = .pin(assetData.asset.name, pinned: value)
         } catch {
             debugLog("WalletSearchSceneViewModel pin asset error: \(error)")

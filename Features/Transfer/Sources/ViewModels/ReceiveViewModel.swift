@@ -17,7 +17,7 @@ public final class ReceiveViewModel: Sendable {
     let assetModel: AssetViewModel
     let walletId: WalletId
     let address: String
-    let walletsService: WalletsService
+    let assetsEnabler: any AssetsEnabler
     let generator = QRCodeGenerator()
     
     public var isPresentingShareSheet: Bool = false
@@ -28,12 +28,12 @@ public final class ReceiveViewModel: Sendable {
         assetModel: AssetViewModel,
         walletId: WalletId,
         address: String,
-        walletsService: WalletsService
+        assetsEnabler: any AssetsEnabler
     ) {
         self.assetModel = assetModel
         self.walletId = walletId
         self.address = address
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
     }
 
     var title: String {
@@ -88,7 +88,7 @@ public final class ReceiveViewModel: Sendable {
     
     func enableAsset() async {
         do {
-            try await walletsService.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
+            try await assetsEnabler.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
         } catch {
             debugLog("ReceiveViewModel enableAsset error: \(error)")
         }

@@ -15,7 +15,10 @@ extension View {
         self
             .environment(\.nodeService, services.nodeService)
             .environment(\.walletService, services.walletService)
-            .environment(\.walletsService, services.walletsService)
+            .environment(\.walletSessionService, services.walletSessionService)
+            .environment(\.assetsEnabler, services.assetsEnabler)
+            .environment(\.assetSyncService, services.assetSyncService)
+            .environment(\.walletSetupService, services.walletSetupService)
             .environment(\.deviceService, services.deviceService)
             .environment(\.transactionsService, services.transactionsService)
             .environment(\.assetsService, services.assetsService)

@@ -11,7 +11,7 @@ import Components
 import AssetsService
 
 struct PriceAlertsNavigationView: View {
-    @Environment(\.walletsService) private var walletsService
+    @Environment(\.assetsEnabler) private var assetsEnabler
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.walletService) private var walletService
     @Environment(\.activityService) private var activityService
@@ -39,7 +39,7 @@ struct PriceAlertsNavigationView: View {
                     wallet: walletService.currentWallet!,
                     selectType: .priceAlert,
                     searchService: assetSearchService,
-                    walletsService: walletsService,
+                    assetsEnabler: assetsEnabler,
                     priceAlertService: priceAlertService,
                     activityService: activityService,
                     selectAssetAction: onSelectAsset

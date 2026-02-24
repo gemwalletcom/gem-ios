@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Blockchain
+import BalanceService
 import Foundation
 import Primitives
 import Signer
@@ -14,18 +15,21 @@ public protocol TransferExecutable: Sendable {
 public struct TransferExecutor: TransferExecutable {
     private let signer: any TransactionSigneable
     private let chainService: any ChainServiceable
-    private let walletsService: WalletsService
+    private let assetsEnabler: any AssetsEnabler
+    private let balanceService: BalanceService
     private let transactionStateService: TransactionStateService
 
     public init(
         signer: any TransactionSigneable,
         chainService: any ChainServiceable,
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
+        balanceService: BalanceService,
         transactionStateService: TransactionStateService
     ) {
         self.signer = signer
         self.chainService = chainService
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
+        self.balanceService = balanceService
         self.transactionStateService = transactionStateService
     }
 
@@ -67,10 +71,9 @@ public struct TransferExecutor: TransferExecutable {
 
                 try transactionStateService.addTransactions(wallet: input.wallet, transactions: transactions)
                 Task {
-                    let walletId = input.wallet.walletId
                     do {
-                        try walletsService.addBalancesIfMissing(for: walletId, assetIds: assetIds, isEnabled: true)
-                        try await walletsService.enableAssets(walletId: walletId, assetIds: assetIds, enabled: true)
+                        try balanceService.addAssetsBalancesIfMissing(assetIds: assetIds, wallet: input.wallet, isEnabled: true)
+                        try await assetsEnabler.enableAssets(walletId: input.wallet.walletId, assetIds: assetIds, enabled: true)
                     } catch {
                         debugLog("TransferExecutor post-transfer asset update error: \(error)")
                     }

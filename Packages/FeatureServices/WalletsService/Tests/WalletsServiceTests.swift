@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import WalletsServiceTestKit
 import StoreTestKit
 import BalanceServiceTestKit
 import PrimitivesTestKit
@@ -13,7 +12,7 @@ import GRDB
 @testable import Store
 @testable import WalletsService
 
-struct WalletsServiceTests {
+struct WalletSetupServiceTests {
     @Test
     func setupMulticoinWallet() throws {
         let (db, balanceStore, walletStore, service) = setupService()
@@ -43,14 +42,16 @@ struct WalletsServiceTests {
         #expect(isEnabled == true)
     }
 
-    private func setupService() -> (DB, BalanceStore, WalletStore, WalletsService) {
+    private func setupService() -> (DB, BalanceStore, WalletStore, WalletSetupService) {
         let db = DB.mock()
         let balanceStore = BalanceStore.mock(db: db)
         let walletStore = WalletStore.mock(db: db)
-        let service = WalletsService.mock(
-            walletSessionService: WalletSessionService(walletStore: walletStore, preferences: .mock()),
-            balanceService: .mock(balanceStore: balanceStore)
+        let walletSessionService = WalletSessionService(walletStore: walletStore, preferences: .mock())
+        let balanceUpdater = BalanceUpdateService(
+            balanceService: .mock(balanceStore: balanceStore),
+            walletSessionService: walletSessionService
         )
+        let service = WalletSetupService(balanceUpdater: balanceUpdater)
         return (db, balanceStore, walletStore, service)
     }
 

@@ -7,6 +7,7 @@ import Store
 import Preferences
 import Localization
 import WalletsService
+import BalanceService
 import PrimitivesComponents
 import Components
 import Style
@@ -16,7 +17,8 @@ import Style
 public final class AssetsResultsSceneViewModel {
     public static let defaultLimit = 100
 
-    private let walletsService: WalletsService
+    private let assetsEnabler: any AssetsEnabler
+    private let balanceService: BalanceService
     private let preferences: Preferences
     private let wallet: Wallet
 
@@ -28,13 +30,15 @@ public final class AssetsResultsSceneViewModel {
 
     public init(
         wallet: Wallet,
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
+        balanceService: BalanceService,
         preferences: Preferences,
         request: WalletSearchRequest,
         onSelectAsset: @escaping (Asset) -> Void
     ) {
         self.wallet = wallet
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
+        self.balanceService = balanceService
         self.preferences = preferences
         self.searchQuery = ObservableQuery(request, initialValue: .empty)
         self.onSelectAssetAction = onSelectAsset
@@ -70,7 +74,7 @@ extension AssetsResultsSceneViewModel {
     private func onAddToWallet(_ asset: Asset) {
         Task {
             do {
-                try await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
+                try await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
                 isPresentingToastMessage = .addedToWallet()
             } catch {
                 debugLog("AssetsResultsSceneViewModel add to wallet error: \(error)")
@@ -80,7 +84,7 @@ extension AssetsResultsSceneViewModel {
 
     private func onPinAsset(_ assetData: AssetData, value: Bool) {
         do {
-            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
+            try balanceService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
             isPresentingToastMessage = .pin(assetData.asset.name, pinned: value)
         } catch {
             debugLog("AssetsResultsSceneViewModel pin asset error: \(error)")

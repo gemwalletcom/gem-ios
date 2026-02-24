@@ -38,6 +38,13 @@ extension BalanceService {
     public func unpinAsset(walletId: WalletId, assetId: AssetId) throws {
         try balanceStore.pinAsset(walletId: walletId, assetId: assetId, value: false)
     }
+
+    public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
+        switch isPinned {
+        case true: try pinAsset(walletId: walletId, assetId: assetId)
+        case false: try unpinAsset(walletId: walletId, assetId: assetId)
+        }
+    }
 }
 
 // MARK: - Balances

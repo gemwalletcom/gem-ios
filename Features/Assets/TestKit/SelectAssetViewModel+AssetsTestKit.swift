@@ -24,7 +24,7 @@ extension SelectAssetViewModel {
             wallet: wallet,
             selectType: selectType,
             searchService: .mock(),
-            walletsService: .mock(),
+            assetsEnabler: .mock(),
             priceAlertService: .mock(),
             activityService: .mock()
         )

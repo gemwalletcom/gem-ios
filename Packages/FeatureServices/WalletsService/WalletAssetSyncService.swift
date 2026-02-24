@@ -8,7 +8,7 @@ import Preferences
 import WalletSessionService
 import DeviceService
 
-actor WalletAssetSyncService: DiscoveryAssetsProcessing {
+public actor WalletAssetSyncService: AssetSyncServiceable, DiscoveryAssetsProcessing {
     private let deviceService: any DeviceServiceable
     private let discoverAssetService: DiscoverAssetsService
     private let assetService: AssetsService
@@ -17,7 +17,7 @@ actor WalletAssetSyncService: DiscoveryAssetsProcessing {
     private let assetsEnabler: any AssetsEnabler
     private let walletSessionService: any WalletSessionManageable
 
-    init(
+    public init(
         deviceService: any DeviceServiceable,
         discoverAssetService: DiscoverAssetsService,
         assetService: AssetsService,
@@ -35,7 +35,7 @@ actor WalletAssetSyncService: DiscoveryAssetsProcessing {
         self.walletSessionService = walletSessionService
     }
 
-    func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
+    public func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
         async let updateAssets: () = try updateAssets(walletId: walletId, assetIds: assetIds)
         async let discoverAssets: () = try discoverAssets(
             for: walletId,
@@ -44,11 +44,11 @@ actor WalletAssetSyncService: DiscoveryAssetsProcessing {
         _ = try await (updateAssets, discoverAssets)
     }
 
-    func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
+    public func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
         try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
     }
 
-    func addPrices(assetIds: [AssetId]) async throws {
+    public func addPrices(assetIds: [AssetId]) async throws {
         try await priceUpdater.addPrices(assetIds: assetIds)
     }
 

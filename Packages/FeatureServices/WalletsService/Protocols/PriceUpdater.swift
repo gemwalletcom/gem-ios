@@ -4,12 +4,12 @@ import Foundation
 import Primitives
 import PriceService
 
-protocol PriceUpdater: Sendable {
+public protocol PriceUpdater: Sendable {
     func addPrices(assetIds: [AssetId]) async throws
 }
 
 extension PriceObserverService: PriceUpdater {
-    func addPrices(assetIds: [AssetId]) async throws {
+    public func addPrices(assetIds: [AssetId]) async throws {
         try await addAssets(assets: assetIds)
     }
 }
