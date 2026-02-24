@@ -129,6 +129,7 @@ struct ServicesFactory {
             transactionStore: storeManager.transactionStore,
             nativeProvider: nativeProvider,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainFactory: chainServiceFactory,
             balanceService: balanceService
@@ -459,6 +460,7 @@ extension ServicesFactory {
         transactionStore: TransactionStore,
         nativeProvider: NativeProvider,
         stakeService: StakeService,
+        earnService: EarnService,
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
         balanceService: BalanceService
@@ -467,6 +469,7 @@ extension ServicesFactory {
             transactionStore: transactionStore,
             swapper: GemSwapper(rpcProvider: nativeProvider),
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainServiceFactory: chainFactory,
             balanceUpdater: balanceService

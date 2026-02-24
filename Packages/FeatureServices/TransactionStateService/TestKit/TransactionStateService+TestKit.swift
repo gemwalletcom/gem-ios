@@ -5,9 +5,12 @@ import Gemstone
 import TransactionStateService
 import Store
 import StakeService
+import EarnService
+import Blockchain
 import NFTService
 import ChainService
 import BalanceService
+import NativeProviderService
 import StoreTestKit
 import StakeServiceTestKit
 import NFTServiceTestKit
@@ -20,6 +23,7 @@ public extension TransactionStateService {
         transactionStore: TransactionStore = .mock(),
         swapper: any GemSwapperProtocol = GemSwapperMock(),
         stakeService: StakeService = .mock(),
+        earnService: EarnService = .mock(),
         nftService: NFTService = .mock(),
         chainServiceFactory: any ChainServiceFactorable = ChainServiceFactoryMock()
     ) -> TransactionStateService {
@@ -27,9 +31,19 @@ public extension TransactionStateService {
             transactionStore: transactionStore,
             swapper: swapper,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainServiceFactory: chainServiceFactory,
             balanceUpdater: BalancerUpdaterMock()
         )
+    }
+}
+
+extension EarnService {
+    static func mock(
+        store: StakeStore = .mock()
+    ) -> EarnService {
+        let provider = NativeProvider(url: Constants.apiURL, requestInterceptor: EmptyRequestInterceptor())
+        return EarnService(store: store, gatewayService: GatewayService(provider: provider))
     }
 }
