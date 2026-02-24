@@ -34,6 +34,7 @@ public final class ManageContactViewModel {
     private let onComplete: (() -> Void)?
 
     let contactId: String
+    let nameService: any NameServiceable
 
     var nameInputModel: InputValidationViewModel
     var description: String = ""
@@ -43,10 +44,12 @@ public final class ManageContactViewModel {
 
     public init(
         service: ContactService,
+        nameService: any NameServiceable,
         mode: Mode,
         onComplete: (() -> Void)? = nil
     ) {
         self.service = service
+        self.nameService = nameService
         self.mode = mode
         self.onComplete = onComplete
 

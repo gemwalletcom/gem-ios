@@ -50,6 +50,7 @@ public struct ContactsScene: View {
             ManageContactNavigationStack(
                 model: ManageContactViewModel(
                     service: model.service,
+                    nameService: model.nameService,
                     mode: .add,
                     onComplete: model.onAddContactComplete
                 )
@@ -59,6 +60,7 @@ public struct ContactsScene: View {
             ManageContactNavigationStack(
                 model: ManageContactViewModel(
                     service: model.service,
+                    nameService: model.nameService,
                     mode: .edit(contact),
                     onComplete: model.onManageContactComplete
                 )

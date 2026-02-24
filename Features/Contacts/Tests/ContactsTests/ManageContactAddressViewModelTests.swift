@@ -4,6 +4,7 @@ import Testing
 import Primitives
 import PrimitivesTestKit
 import Components
+import NameServiceTestKit
 
 @testable import Contacts
 
@@ -51,6 +52,23 @@ struct ManageContactAddressViewModelTests {
         model.chain = .cosmos
         #expect(model.showMemo == true)
     }
+
+    @Test
+    func nameResolveState() {
+        let model = ManageContactAddressViewModel.mock(mode: .add)
+
+        model.nameResolveState = .loading
+        #expect(model.buttonState == .disabled)
+
+        model.nameResolveState = .error
+        #expect(model.buttonState == .disabled)
+
+        model.nameResolveState = .complete(.mock())
+        #expect(model.buttonState == .normal)
+
+        model.onSelectChain(.bitcoin)
+        #expect(model.nameResolveState == .none)
+    }
 }
 
 // MARK: - Mock
@@ -58,10 +76,12 @@ struct ManageContactAddressViewModelTests {
 extension ManageContactAddressViewModel {
     static func mock(
         contactId: String = "contact-1",
+        nameService: any NameServiceable = .mock(),
         mode: Mode
     ) -> ManageContactAddressViewModel {
         ManageContactAddressViewModel(
             contactId: contactId,
+            nameService: nameService,
             mode: mode,
             onComplete: { _ in }
         )

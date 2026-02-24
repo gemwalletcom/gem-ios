@@ -44,6 +44,7 @@ public struct ManageContactAddressScene: View {
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onScan)
         }
+        .onChange(of: model.nameResolveState, model.onChangeNameResolverState)
     }
 }
 
@@ -65,8 +66,13 @@ extension ManageContactAddressScene {
                 placeholder: model.addressTitle,
                 allowClean: true,
                 trailingView: {
-                    if model.shouldShowInputActions {
-                        HStack(spacing: .medium) {
+                    HStack(spacing: Spacing.medium) {
+                        NameRecordView(
+                            model: model.nameRecordViewModel,
+                            state: $model.nameResolveState,
+                            address: $model.addressInputModel.text
+                        )
+                        if model.shouldShowInputActions {
                             ListButton(image: model.pasteImage, action: onSelectPaste)
                             ListButton(image: model.qrImage, action: onSelectScan)
                         }

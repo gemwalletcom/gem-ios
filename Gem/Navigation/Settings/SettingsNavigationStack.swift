@@ -37,6 +37,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.rewardsService) private var rewardsService
     @Environment(\.inAppNotificationService) private var inAppNotificationService
     @Environment(\.contactService) private var contactService
+    @Environment(\.nameService) private var nameService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -187,7 +188,7 @@ struct SettingsNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.Contacts.self) { _ in
-                ContactsScene(model: ContactsViewModel(service: contactService))
+                ContactsScene(model: ContactsViewModel(service: contactService, nameService: nameService))
             }
             .sheet(isPresented: $isPresentingWallets) {
                 WalletsNavigationStack(isPresentingWallets: $isPresentingWallets)

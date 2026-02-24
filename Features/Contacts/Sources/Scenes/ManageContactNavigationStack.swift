@@ -21,6 +21,7 @@ struct ManageContactNavigationStack: View {
             ManageContactAddressNavigationStack(
                 model: ManageContactAddressViewModel(
                     contactId: model.contactId,
+                    nameService: model.nameService,
                     mode: .add,
                     onComplete: model.onAddAddressComplete
                 )
@@ -30,6 +31,7 @@ struct ManageContactNavigationStack: View {
             ManageContactAddressNavigationStack(
                 model: ManageContactAddressViewModel(
                     contactId: model.contactId,
+                    nameService: model.nameService,
                     mode: .edit(address),
                     onComplete: model.onManageAddressComplete
                 )

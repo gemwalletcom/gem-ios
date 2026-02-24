@@ -12,6 +12,7 @@ import Localization
 @MainActor
 public final class ContactsViewModel {
     let service: ContactService
+    let nameService: any NameServiceable
 
     public let query: ObservableQuery<ContactsRequest>
     var contacts: [ContactData] { query.value }
@@ -19,8 +20,12 @@ public final class ContactsViewModel {
     var isPresentingContact: ContactData?
     var isPresentingAddContact = false
 
-    public init(service: ContactService) {
+    public init(
+        service: ContactService,
+        nameService: any NameServiceable
+    ) {
         self.service = service
+        self.nameService = nameService
         self.query = ObservableQuery(ContactsRequest(), initialValue: [])
     }
 
