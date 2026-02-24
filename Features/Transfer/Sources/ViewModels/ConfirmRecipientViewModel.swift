@@ -4,6 +4,7 @@ import Components
 import Localization
 import Primitives
 import PrimitivesComponents
+import Style
 
 struct ConfirmRecipientViewModel {
     private let model: TransferDataViewModel
@@ -29,7 +30,7 @@ extension ConfirmRecipientViewModel: ItemModelProvidable {
                     name: addressName?.name ?? model.recipient.name,
                     chain: model.chain,
                     address: model.recipient.address,
-                    assetImage: .none
+                    assetImage: recipientImage ?? addressNameImage
                 ),
                 mode: .nameOrAddress,
                 addressLink: addressLink
@@ -41,6 +42,27 @@ extension ConfirmRecipientViewModel: ItemModelProvidable {
 // MARK: - Private
 
 extension ConfirmRecipientViewModel {
+    private var recipientImage: AssetImage? {
+        switch model.recipient.type {
+        case .domain(let provider):
+            switch provider {
+            case .ens, .basenames: AssetImage.image(Images.NameResolve.ens)
+            case .ud, .sns, .spaceid, .lens, .ton, .tree, .eths, .did, .suins, .aptos, .injective, .icns, .hyperliquid, .allDomains: nil
+            }
+        case .none: nil
+        }
+    }
+
+    private var addressNameImage: AssetImage? {
+        switch addressName?.type {
+        case .contact:
+            guard let name = addressName?.name else { return nil }
+            return AssetImage(type: String(name.prefix(2)))
+        case .address, .contract, .validator, .none:
+            return nil
+        }
+    }
+
     private var recipientTitle: String {
         switch model.type {
         case .swap: Localized.Common.provider
