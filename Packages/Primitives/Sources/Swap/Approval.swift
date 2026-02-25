@@ -101,5 +101,4 @@ public enum SwapStatus: String, Codable, Equatable, Hashable, Sendable {
 	case pending
 	case completed
 	case failed
-	case refunded
 }

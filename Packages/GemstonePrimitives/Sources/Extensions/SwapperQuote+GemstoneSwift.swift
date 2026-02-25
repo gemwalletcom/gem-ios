@@ -7,19 +7,19 @@ import struct Gemstone.SwapperQuote
 import struct Gemstone.SwapperProviderType
 
 public extension Gemstone.SwapperQuote {
-    func map() -> Primitives.SwapQuote {
+    func map() throws -> Primitives.SwapQuote {
         Primitives.SwapQuote(
             fromAddress: request.walletAddress,
             fromValue: fromValue,
             toAddress: request.destinationAddress,
             toValue: toValue,
-            providerData: data.provider.asPrimitive,
+            providerData: try data.provider.map(),
             slippageBps: data.slippageBps,
             etaInSeconds: self.etaInSeconds,
             useMaxAmount: request.options.useMaxAmount
         )
     }
-    
+
     var toValueBigInt: BigInt {
         (try? BigInt.from(string: toValue)) ?? .zero
     }
@@ -30,9 +30,9 @@ public extension Gemstone.SwapperQuote {
 }
 
 extension Gemstone.SwapperProviderType {
-    var asPrimitive: Primitives.SwapProviderData {
+    func map() throws -> Primitives.SwapProviderData {
         Primitives.SwapProviderData(
-            provider: SwapProvider(rawValue: protocolId)!,
+            provider: try id.map(),
             name: self.name,
             protocolName: self.protocol
         )

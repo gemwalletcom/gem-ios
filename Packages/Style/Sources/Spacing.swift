@@ -5,6 +5,8 @@ public typealias Spacing = CGFloat
 public typealias Sizing = CGFloat
 
 public extension Spacing {
+    /// 1
+    static let space1: Spacing = 1
     /// 2
     static let space2: Spacing = 2
     /// 4

@@ -39,9 +39,9 @@ public struct SwapProviderItem: Sendable {
         priceViewModel: PriceViewModel,
         valueFormatter: ValueFormatter
     ) {
-        guard let swapperQuote else { return nil }
+        guard let swapperQuote, let swapQuote = try? swapperQuote.map() else { return nil }
         self.asset = asset
-        self.swapQuote = swapperQuote.map()
+        self.swapQuote = swapQuote
         self.swapperQuote = swapperQuote
         self.selectedProvider = selectedProvider
         self.priceViewModel = priceViewModel

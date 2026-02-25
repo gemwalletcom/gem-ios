@@ -82,6 +82,7 @@ public enum Images {
         public static let hyperliquid = Image(.hypercore)
         public static let panora = Image(.panora)
         public static let okx = Image(.okx)
+        public static let nearIntents = Image(.nearIntents)
     }
 
     public enum Fiat {

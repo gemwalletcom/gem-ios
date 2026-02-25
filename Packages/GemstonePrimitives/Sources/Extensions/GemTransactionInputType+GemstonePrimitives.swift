@@ -54,7 +54,7 @@ public extension TransferDataType {
         case .deposit(let asset):
             return .deposit(asset: asset.map())
         case .swap(let fromAsset, let toAsset, let swapData):
-            return .swap(fromAsset: fromAsset.map(), toAsset: toAsset.map(), swapData: swapData.map())
+            return try .swap(fromAsset: fromAsset.map(), toAsset: toAsset.map(), swapData: swapData.map())
         case .transferNft(let nftAsset):
             return .transferNft(asset: Asset(nftAsset.chain).map(), nftAsset: nftAsset.map())
         case .stake(let asset, let stakeType):
