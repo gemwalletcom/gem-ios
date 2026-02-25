@@ -8,9 +8,9 @@ import PrimitivesComponents
 import ExplorerService
 
 @Observable
-public final class StakeValidatorsViewModel {
+public final class ValidatorSelectSceneViewModel {
     
-    private let type: StakeValidatorsType
+    private let type: ValidatorSelectType
     private let chain: Chain
     public let currentValidator: DelegationValidator?
     private let validators: [DelegationValidator]
@@ -21,7 +21,7 @@ public final class StakeValidatorsViewModel {
     private let recommendedValidators = StakeRecommendedValidators()
     
     public init(
-        type: StakeValidatorsType,
+        type: ValidatorSelectType,
         chain: Chain,
         currentValidator: DelegationValidator?,
         validators: [DelegationValidator],
