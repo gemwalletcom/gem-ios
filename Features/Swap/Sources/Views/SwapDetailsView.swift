@@ -7,9 +7,12 @@ import PrimitivesComponents
 import InfoSheet
 import Localization
 import Primitives
+import Style
 
 public struct SwapDetailsView: View {
+    @Environment(\.dismiss) private var dismiss
     @Bindable private var model: SwapDetailsViewModel
+
     public init(model: Bindable<SwapDetailsViewModel>) {
         _model = model
     }
@@ -23,7 +26,11 @@ public struct SwapDetailsView: View {
             case .noData: List { ListItemErrorView(errorTitle: nil, error: AnyError(Localized.Errors.errorOccured)) }
             }
         }
-        .toolbarDismissItem(type: .close, placement: .topBarLeading)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("", systemImage: SystemImage.checkmark, action: { dismiss() })
+            }
+        }
         .navigationTitle(Localized.Common.details)
         .navigationBarTitleDisplayMode(.inline)
         .listSectionSpacing(.compact)
