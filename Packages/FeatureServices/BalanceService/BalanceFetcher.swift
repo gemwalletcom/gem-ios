@@ -49,13 +49,8 @@ struct BalanceFetcher: Sendable {
             .getStakeBalance(for: address)
     }
 
-    func getEarnBalance(
-        chain: Chain,
-        address: String
-    ) async throws -> [AssetBalance] {
-        try await chainServiceFactory
-            .service(for: chain)
-            .getEarnBalance(for: address)
+    func getEarnBalance(chain: Chain, address: String) async throws -> [AssetBalance] {
+        try await chainServiceFactory.service(for: chain).getEarnBalance(for: address)
     }
 
     func getTokenBalance(
