@@ -53,16 +53,12 @@ public struct DelegationViewModel: Sendable {
         delegation.base.state
     }
 
-    public var stateText: String? {
-        DelegationStateViewModel(state: state).title
+    public var stateModel: DelegationStateViewModel {
+        DelegationStateViewModel(state: state)
     }
 
     public var titleStyle: TextStyle {
         TextStyle(font: .body, color: .primary, fontWeight: .semibold)
-    }
-
-    public var stateStyle: TextStyle {
-        DelegationStateViewModel(state: state).textStyle
     }
 
     public var subtitleStyle: TextStyle {

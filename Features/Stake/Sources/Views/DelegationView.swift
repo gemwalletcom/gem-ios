@@ -17,8 +17,8 @@ public struct DelegationView: View {
         ListItemView(
            title: delegation.validatorText,
            titleStyle: delegation.titleStyle,
-           titleExtra: delegation.stateText,
-           titleStyleExtra: delegation.stateStyle,
+           titleExtra: delegation.stateModel.title,
+           titleStyleExtra: delegation.stateModel.textStyle,
            subtitle: delegation.balanceText,
            subtitleStyle: delegation.subtitleStyle,
            subtitleExtra: delegation.fiatValueText,

@@ -38,7 +38,7 @@ public struct DelegationDetailScene: View {
                     ListItemView(title: model.aprTitle, subtitle: model.aprText)
                 }
 
-                ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
+                ListItemView(title: model.stateTitle, subtitle: model.stateModel.title, subtitleStyle: model.stateModel.textStyle)
 
                 if let title = model.completionDateTitle, let subtitle = model.completionDateText {
                     ListItemView(title: title, subtitle: subtitle)
