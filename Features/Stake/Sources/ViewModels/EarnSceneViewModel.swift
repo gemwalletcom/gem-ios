@@ -51,7 +51,7 @@ public final class EarnSceneViewModel {
     }
 
     var title: String { Localized.Common.earn }
-    var assetTitle: String { "\(asset.symbol) (\(asset.chain.asset.name))" }
+    var assetTitle: String { AssetViewModel(asset: asset).title }
 
     var aprTitle: String { Localized.Stake.apr("") }
     var aprValue: String {

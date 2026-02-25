@@ -51,6 +51,7 @@ extension DelegationViewModel {
                     completionDate: completionDate
                 )
             ),
+            asset: Chain.tron.asset,
             currencyCode: "USD"
         )
     }

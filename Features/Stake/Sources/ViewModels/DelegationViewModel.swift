@@ -36,14 +36,14 @@ public struct DelegationViewModel: Sendable {
 
     public init(
         delegation: Delegation,
-        asset: Asset? = nil,
+        asset: Asset,
         formatter: ValueFormatter = .short,
         currencyCode: String,
         exploreService: ExplorerService = .standard
     ) {
         self.delegation = delegation
         self.currencyCode = currencyCode
-        self.asset = asset ?? delegation.base.assetId.chain.asset
+        self.asset = asset
         self.formatter = formatter
         self.exploreService = exploreService
         self.priceFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
