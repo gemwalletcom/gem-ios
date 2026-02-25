@@ -62,13 +62,9 @@ public final class StakeSceneViewModel {
     var assetTitle: String { assetModel.title }
     var delegationsTitle: String { Localized.Stake.delegations }
 
-    var stakeAprTitle: String { Localized.Stake.apr("") }
-    var stakeAprValue: String {
-        let apr = (try? stakeService.stakeApr(assetId: chain.chain.assetId)) ?? 0
-        guard apr > 0 else {
-            return .empty
-        }
-        return CurrencyFormatter.percentSignLess.string(apr)
+    var stakeAprModel: AprViewModel {
+        let apr = (try? stakeService.stakeApr(assetId: chain.chain.assetId)) ?? .zero
+        return AprViewModel(apr: apr)
     }
 
     var resourcesTitle: String { Localized.Asset.resources }

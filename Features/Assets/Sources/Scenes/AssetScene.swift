@@ -148,8 +148,7 @@ public struct AssetScene: View {
                                 .frame(size: .image.asset)
                             ListItemView(
                                 title: model.earnTitle,
-                                subtitle: model.earnAprText,
-                                subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                                subtitle: model.aprModel(for: .earn).text
                             )
                         },
                         action: { model.onSelectEarn() }
@@ -216,8 +215,7 @@ extension AssetScene {
                     .frame(size: .image.asset)
                 ListItemView(
                     title: model.stakeTitle,
-                    subtitle: model.stakeAprText,
-                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                    subtitle: model.aprModel(for: .stake).text
                 )
             },
             action: { model.onSelectHeader(.stake) }

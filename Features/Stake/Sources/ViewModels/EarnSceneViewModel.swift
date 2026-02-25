@@ -3,7 +3,6 @@
 import BigInt
 import Components
 import Foundation
-import Formatters
 import Localization
 import Primitives
 import Store
@@ -53,12 +52,14 @@ public final class EarnSceneViewModel {
     var title: String { Localized.Common.earn }
     var assetTitle: String { AssetViewModel(asset: asset).title }
 
-    var aprTitle: String { Localized.Stake.apr("") }
-    var aprValue: String {
-        let apr = providers.first.map(\.apr).flatMap { $0 > 0 ? $0 : nil }
+
+    private var apr: Double? {
+        providers.first.map(\.apr).flatMap { $0 > 0 ? $0 : nil }
             ?? assetData.metadata.earnApr
-        guard let apr, apr > 0 else { return "-" }
-        return CurrencyFormatter.percentSignLess.string(apr)
+    }
+
+    var aprModel: AprViewModel {
+        AprViewModel(apr: apr ?? .zero)
     }
 
     var showDeposit: Bool {
