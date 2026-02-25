@@ -5,7 +5,7 @@ import Testing
 import PrimitivesTestKit
 import Primitives
 
-@testable import Earn
+@testable import Stake
 
 struct DelegationDetailSceneViewModelTests {
 

@@ -8,9 +8,9 @@ public struct DelegationsRequest: DatabaseQueryable {
 
     private let walletId: WalletId
     private let assetId: AssetId
-    private let providerType: EarnProviderType
+    private let providerType: StakeProviderType
 
-    public init(walletId: WalletId, assetId: AssetId, providerType: EarnProviderType) {
+    public init(walletId: WalletId, assetId: AssetId, providerType: StakeProviderType) {
         self.walletId = walletId
         self.assetId = assetId
         self.providerType = providerType

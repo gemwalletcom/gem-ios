@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import SwiftUI
 import Transfer
-import Earn
+import Stake
 import InfoSheet
 
 struct StakeNavigationView: View {

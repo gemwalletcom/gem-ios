@@ -3,15 +3,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Earn",
+    name: "Stake",
     platforms: [
         .iOS(.v17),
         .macOS(.v15)
     ],
     products: [
         .library(
-            name: "Earn",
-            targets: ["Earn"]),
+            name: "Stake",
+            targets: ["Stake"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -29,7 +29,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Earn",
+            name: "Stake",
             dependencies: [
                 "Primitives",
                 "Components",
@@ -48,11 +48,11 @@ let package = Package(
             path: "Sources"
         ),
         .testTarget(
-            name: "EarnTests",
+            name: "StakeTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StakeServiceTestKit", package: "ChainServices"),
-                "Earn"
+                "Stake"
             ],
             path: "Tests"
         ),

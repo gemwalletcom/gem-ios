@@ -8,7 +8,7 @@ import GemstonePrimitives
 import Localization
 import Primitives
 import PrimitivesComponents
-import Earn
+import Stake
 import Validators
 
 final class AmountStakeViewModel: AmountDataProvidable {

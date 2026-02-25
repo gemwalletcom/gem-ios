@@ -183,7 +183,7 @@ extension DelegationDetailSceneViewModel {
         )
     }
 
-    private var providerType: EarnProviderType {
+    private var providerType: StakeProviderType {
         model.delegation.validator.providerType
     }
 

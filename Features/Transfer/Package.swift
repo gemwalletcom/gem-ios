@@ -31,7 +31,7 @@ let package = Package(
         .package(name: "Validators", path: "../../Packages/Validators"),
         .package(name: "Store", path: "../../Packages/Store"),
 
-        .package(name: "Earn", path: "../Earn"),
+        .package(name: "Stake", path: "../Stake"),
         .package(name: "WalletConnector", path: "../WalletConnector"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "FiatConnect", path: "../FiatConnect"),
@@ -60,7 +60,7 @@ let package = Package(
                 "Preferences",
                 "Validators",
 
-                "Earn",
+                "Stake",
                 "WalletConnector",
                 "InfoSheet",
                 "FiatConnect",

@@ -2,7 +2,7 @@
 
 import Foundation
 import Testing
-import Earn
+import Stake
 import PrimitivesTestKit
 
 struct ValidatorViewModelTests {
