@@ -15,28 +15,28 @@ import struct Gemstone.SwapperQuote
 @MainActor
 struct SwapDetailsViewModelTests {
     @Test
-    func swapEstimationText() {
+    func swapEstimationText() throws {
         #expect(
             SwapDetailsViewModel
-                .mock(selectedQuote: SwapperQuote.mock(etaInSeconds: nil).map()).swapEstimationText == nil
+                .mock(selectedQuote: try SwapperQuote.mock(etaInSeconds: nil).map()).swapEstimationText == nil
         )
-        #expect(SwapDetailsViewModel.mock(selectedQuote: SwapperQuote.mock(etaInSeconds: 30).map()).swapEstimationText == nil)
-        #expect(SwapDetailsViewModel.mock(selectedQuote: SwapperQuote.mock(etaInSeconds: 180).map()).swapEstimationText == "≈ 3 min")
+        #expect(SwapDetailsViewModel.mock(selectedQuote: try SwapperQuote.mock(etaInSeconds: 30).map()).swapEstimationText == nil)
+        #expect(SwapDetailsViewModel.mock(selectedQuote: try SwapperQuote.mock(etaInSeconds: 180).map()).swapEstimationText == "≈ 3 min")
     }
-    
+
     @Test
-    func switchRate() {
-        let model = SwapDetailsViewModel.mock(selectedQuote: SwapperQuote.mock(toValue: "250000000000").map())
-        
+    func switchRate() throws {
+        let model = SwapDetailsViewModel.mock(selectedQuote: try SwapperQuote.mock(toValue: "250000000000").map())
+
         #expect(model.rateText == "1 ETH ≈ 250,000.00 USDT")
-        
+
         model.switchRateDirection()
         #expect(model.rateText == "1 USDT ≈ 0.000004 ETH")
     }
 }
 
 extension SwapDetailsViewModel {
-    static func mock(selectedQuote: SwapQuote = SwapperQuote.mock().map()) -> SwapDetailsViewModel {
+    static func mock(selectedQuote: SwapQuote = try! SwapperQuote.mock().map()) -> SwapDetailsViewModel {
         SwapDetailsViewModel(
             state: .data([SwapperQuote.mock()]),
             fromAssetPrice: AssetPriceValue(asset: .mockEthereum(), price: .mock()),

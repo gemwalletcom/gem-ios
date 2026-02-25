@@ -13,12 +13,12 @@ public struct TransactionStore: Sendable {
     }
 
     public func getTransactionWallets(
-        state: TransactionState
+        states: [TransactionState]
     ) throws -> [TransactionWallet] {
         try db.read { db in
             try TransactionRecord
                 .including(required: TransactionRecord.wallet)
-                .filter(TransactionRecord.Columns.state == state.rawValue)
+                .filter(states.map(\.rawValue).contains(TransactionRecord.Columns.state))
                 .asRequest(of: WalletTransactionInfo.self)
                 .fetchAll(db)
                 .map(\.transactionWallet)

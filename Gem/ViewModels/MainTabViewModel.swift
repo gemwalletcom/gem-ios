@@ -10,7 +10,7 @@ import Components
 @Observable
 @MainActor
 final class MainTabViewModel {
-    let wallet: Wallet
+    var wallet: Wallet
     let transactionsQuery: ObservableQuery<TransactionsCountRequest>
 
     var transactions: Int { transactionsQuery.value }
@@ -22,6 +22,12 @@ final class MainTabViewModel {
     }
 
     var walletId: WalletId { wallet.walletId }
+
+    func onChangeWallet(_ _: Wallet?, _ newWallet: Wallet?) {
+        guard let newWallet else { return }
+        wallet = newWallet
+        transactionsQuery.request.walletId = newWallet.walletId
+    }
 
     var isMarketEnabled: Bool {
         false //TODO: Disabled. Preferences.standard.isDeveloperEnabled && wallet.type == .multicoin

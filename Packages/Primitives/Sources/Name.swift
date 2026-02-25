@@ -4,20 +4,6 @@
 
 import Foundation
 
-public struct NameRecord: Codable, Hashable, Sendable {
-	public let name: String
-	public let chain: Chain
-	public let address: String
-	public let provider: String
-
-	public init(name: String, chain: Chain, address: String, provider: String) {
-		self.name = name
-		self.chain = chain
-		self.address = address
-		self.provider = provider
-	}
-}
-
 public enum NameProvider: String, Codable, Sendable {
 	case ud
 	case ens
@@ -35,4 +21,18 @@ public enum NameProvider: String, Codable, Sendable {
 	case basenames
 	case hyperliquid
 	case allDomains = "alldomains"
+}
+
+public struct NameRecord: Codable, Hashable, Sendable {
+	public let name: String
+	public let chain: Chain
+	public let address: String
+	public let provider: NameProvider
+
+	public init(name: String, chain: Chain, address: String, provider: NameProvider) {
+		self.name = name
+		self.chain = chain
+		self.address = address
+		self.provider = provider
+	}
 }

@@ -6,8 +6,8 @@ import Primitives
 
 public extension Gemstone.GemSwapProviderData {
     func map() throws -> Primitives.SwapProviderData {
-        return Primitives.SwapProviderData(
-            provider: provider.asPrimitives(),
+        Primitives.SwapProviderData(
+            provider: try provider.map(),
             name: name,
             protocolName: protocolName
         )
@@ -15,9 +15,9 @@ public extension Gemstone.GemSwapProviderData {
 }
 
 extension Primitives.SwapProviderData {
-    func map() -> Gemstone.GemSwapProviderData {
+    func map() throws -> Gemstone.GemSwapProviderData {
         Gemstone.GemSwapProviderData(
-            provider: provider.map(),
+            provider: try provider.map(),
             name: name,
             protocolName: protocolName
         )

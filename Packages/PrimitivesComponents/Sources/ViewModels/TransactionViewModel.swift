@@ -99,7 +99,7 @@ public struct TransactionViewModel: Sendable {
                     case .outgoing, .selfTransfer:
                         return Localized.Transaction.Title.sent
                     }
-                case .failed, .pending, .reverted:
+                case .failed, .pending, .reverted, .inTransit:
                     return Localized.Transfer.title
                 }
             case .swap:
@@ -145,7 +145,7 @@ public struct TransactionViewModel: Sendable {
     public var titleTagType: TitleTagType {
         switch transaction.transaction.state {
         case .confirmed: .none
-        case .pending: .progressView()
+        case .pending, .inTransit: .progressView()
         case .failed, .reverted: .none // TODO: Image
         }
     }
@@ -153,7 +153,7 @@ public struct TransactionViewModel: Sendable {
     public var titleTagTextValue: TextValue? {
         let title: String? = switch transaction.transaction.state {
         case .confirmed: .none
-        case .pending, .failed, .reverted: TransactionStateViewModel(state: transaction.transaction.state).title
+        case .pending, .inTransit, .failed, .reverted: TransactionStateViewModel(state: transaction.transaction.state).title
         }
         let model = TransactionStateViewModel(state: transaction.transaction.state)
         return title.map {

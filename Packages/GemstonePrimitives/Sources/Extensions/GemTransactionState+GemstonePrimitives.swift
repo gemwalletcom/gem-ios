@@ -8,6 +8,7 @@ extension Gemstone.TransactionState {
         switch self {
         case .pending: .pending
         case .confirmed: .confirmed
+        case .inTransit: .inTransit
         case .failed: .failed
         case .reverted: .reverted
         }
