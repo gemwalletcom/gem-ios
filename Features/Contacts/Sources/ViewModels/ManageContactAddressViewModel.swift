@@ -2,7 +2,6 @@
 
 import Foundation
 import SwiftUI
-import UIKit
 import Primitives
 import PrimitivesComponents
 import Validators
@@ -18,17 +17,21 @@ public final class ManageContactAddressViewModel {
     public enum Mode {
         case add
         case edit(ContactAddress)
+
+        var contactAddress: ContactAddress? {
+            switch self {
+            case .add: nil
+            case .edit(let address): address
+            }
+        }
     }
 
     private let mode: Mode
     private let contactId: String
-    private let nameService: any NameServiceable
     private let onComplete: (ContactAddress) -> Void
 
-    var chain: Chain
+    var addressInputModel: AddressInputViewModel
     var memo: String = ""
-    var addressInputModel: InputValidationViewModel
-    var nameResolveState: NameRecordState = .none
     var isPresentingScanner = false
 
     public init(
@@ -38,33 +41,30 @@ public final class ManageContactAddressViewModel {
         onComplete: @escaping (ContactAddress) -> Void
     ) {
         self.contactId = contactId
-        self.nameService = nameService
         self.mode = mode
         self.onComplete = onComplete
+        self.title = Localized.Common.address
 
-        self.addressInputModel = InputValidationViewModel(mode: .manual, validators: [])
+        let chain = mode.contactAddress?.chain ?? .bitcoin
+        self.addressInputModel = AddressInputViewModel(
+            chain: chain,
+            nameService: nameService,
+            placeholder: title,
+            validators: [.required(requireName: title), .address(Asset(chain))]
+        )
 
-        switch mode {
-        case .add:
-            self.chain = .bitcoin
-        case .edit(let address):
-            self.chain = address.chain
-            self.memo = address.memo ?? ""
+        if let address = mode.contactAddress {
             self.addressInputModel.text = address.address
+            self.memo = address.memo ?? ""
         }
-
-        updateAddressValidators(for: chain)
     }
 
-    var title: String { Localized.Common.address }
+    let title: String
     var buttonTitle: String { Localized.Transfer.confirm }
     var networkTitle: String { Localized.Transfer.network }
-    var addressTitle: String { Localized.Common.address }
     var memoTitle: String { Localized.Transfer.memo }
+    var chain: Chain { addressInputModel.chain }
     var showMemo: Bool { chain.isMemoSupported }
-    var pasteImage: Image { Images.System.paste }
-    var qrImage: Image { Images.System.qrCodeViewfinder }
-    var shouldShowInputActions: Bool { addressInputModel.text.isEmpty }
 
     var networkSelectorModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(
@@ -74,36 +74,15 @@ public final class ManageContactAddressViewModel {
         )
     }
 
-    var nameRecordViewModel: NameRecordViewModel {
-        NameRecordViewModel(chain: chain, nameService: nameService)
-    }
-
     var buttonState: ButtonState {
-        switch nameResolveState {
-        case .none:
-            guard addressInputModel.isValid, addressInputModel.text.isNotEmpty else {
-                return .disabled
-            }
-            return .normal
-        case .loading, .error:
-            return .disabled
-        case .complete:
-            return .normal
-        }
-    }
-
-    private var resolvedAddress: String {
-        if let resolved = nameResolveState.result {
-            return resolved.address
-        }
-        return addressInputModel.text.trim()
+        addressInputModel.isValid ? .normal : .disabled
     }
 
     private var currentAddress: ContactAddress {
         ContactAddress.new(
             contactId: contactId,
             chain: chain,
-            address: chain.checksumAddress(resolvedAddress),
+            address: chain.checksumAddress(addressInputModel.resolvedAddress),
             memo: memo.isEmpty ? nil : memo
         )
     }
@@ -113,21 +92,8 @@ public final class ManageContactAddressViewModel {
 
 extension ManageContactAddressViewModel {
     func onSelectChain(_ chain: Chain) {
-        self.chain = chain
+        addressInputModel.chain = chain
         self.memo = ""
-        self.nameResolveState = .none
-        updateAddressValidators(for: chain)
-    }
-
-    func onChangeNameResolverState(_: NameRecordState, newState: NameRecordState) {
-        if newState.result != nil {
-            addressInputModel.update(error: nil)
-        }
-    }
-
-    func onSelectPaste() {
-        guard let address = UIPasteboard.general.string else { return }
-        addressInputModel.update(text: address)
     }
 
     func onSelectScan() {
@@ -139,29 +105,7 @@ extension ManageContactAddressViewModel {
     }
 
     func complete() {
-        guard nameResolveState.result != nil || addressInputModel.update() else { return }
+        guard addressInputModel.validate() else { return }
         onComplete(currentAddress)
-    }
-}
-
-// MARK: - Private
-
-extension ManageContactAddressViewModel {
-    private func updateAddressValidators(for chain: Chain) {
-        let currentText = addressInputModel.text
-        let asset = Asset(chain)
-        
-        addressInputModel = InputValidationViewModel(
-            mode: .manual,
-            validators: [
-                .required(requireName: Localized.Common.address),
-                .address(asset)
-            ]
-        )
-        addressInputModel.text = currentText
-
-        if currentText.isNotEmpty {
-            addressInputModel.update()
-        }
     }
 }

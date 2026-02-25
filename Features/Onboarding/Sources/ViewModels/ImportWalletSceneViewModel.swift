@@ -16,14 +16,12 @@ import struct Keystore.Mnemonic
 final class ImportWalletSceneViewModel {
     private let walletService: WalletService
     private let wordSuggester = WordSuggester()
-    private let nameService: any NameServiceable
-
     let type: ImportWalletType
 
     var input: String = ""
     var wordsSuggestion: [String] = []
     var importType: WalletImportType = .phrase
-    var nameResolveState: NameRecordState = .none
+    let nameRecordViewModel: NameRecordViewModel?
     var buttonState = ButtonState.normal
 
     var isPresentingScanner = false
@@ -38,9 +36,12 @@ final class ImportWalletSceneViewModel {
         onComplete: ((WalletImportData) -> Void)?
     ) {
         self.walletService = walletService
-        self.nameService = nameService
         self.type = type
         self.onComplete = onComplete
+        self.nameRecordViewModel = switch type {
+        case .multicoin: nil
+        case .chain: NameRecordViewModel(nameService: nameService)
+        }
     }
 
     var title: String {
@@ -63,10 +64,6 @@ final class ImportWalletSceneViewModel {
         }
     }
     
-    var nameRecordViewModel: NameRecordViewModel? {
-        guard let chain else { return nil }
-        return NameRecordViewModel(chain: chain, nameService: nameService)
-    }
 
     var showImportTypes: Bool { importTypes.count > 1 }
     var importTypes: [WalletImportType] {
@@ -110,6 +107,9 @@ extension ImportWalletSceneViewModel {
 
     func onChangeInput(_: String, newValue: String) {
         wordsSuggestion = wordSuggester.wordSuggestionCalculate(value: newValue)
+        if let chain {
+            nameRecordViewModel?.resolve(name: newValue, chain: chain)
+        }
     }
 
     func onSelectActionButton() {
@@ -162,7 +162,7 @@ extension ImportWalletSceneViewModel {
     private func importWallet() async throws {
         let trimmedInput = input.trim()
         let recipient: RecipientImport = {
-            if let result = nameResolveState.result {
+            if let result = nameRecordViewModel?.state.result {
                 return RecipientImport(name: result.name, address: result.address)
             }
             return RecipientImport(name: WalletNameGenerator(type: type, walletService: walletService).name, address: trimmedInput)

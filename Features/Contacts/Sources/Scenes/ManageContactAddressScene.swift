@@ -44,7 +44,6 @@ public struct ManageContactAddressScene: View {
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onScan)
         }
-        .onChange(of: model.nameResolveState, model.onChangeNameResolverState)
     }
 }
 
@@ -61,28 +60,11 @@ extension ManageContactAddressScene {
 
     private var addressSection: some View {
         Section {
-            InputValidationField(
+            AddressInputView(
                 model: $model.addressInputModel,
-                placeholder: model.addressTitle,
-                allowClean: true,
-                trailingView: {
-                    HStack(spacing: Spacing.medium) {
-                        NameRecordView(
-                            model: model.nameRecordViewModel,
-                            state: $model.nameResolveState,
-                            address: $model.addressInputModel.text
-                        )
-                        if model.shouldShowInputActions {
-                            ListButton(image: model.pasteImage, action: onSelectPaste)
-                            ListButton(image: model.qrImage, action: onSelectScan)
-                        }
-                    }
-                }
+                onSelectScan: model.onSelectScan
             )
             .focused($focusedField, equals: .address)
-            .keyboardType(.alphabet)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
         }
     }
 
@@ -103,15 +85,6 @@ extension ManageContactAddressScene {
 // MARK: - Actions
 
 extension ManageContactAddressScene {
-    private func onSelectPaste() {
-        model.onSelectPaste()
-        focusedField = nil
-    }
-
-    private func onSelectScan() {
-        model.onSelectScan()
-    }
-
     private func onScan(_ result: String) {
         model.onHandleScan(result)
         focusedField = nil

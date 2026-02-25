@@ -11,27 +11,27 @@ import Formatters
 
 @MainActor
 struct RecipientSceneViewModelTests {
-    
+
     @Test
     func tittle() {
         #expect(RecipientSceneViewModel.mock().tittle == "Recipient")
     }
-    
+
     @Test
     func recipientField() {
         #expect(RecipientSceneViewModel.mock().recipientField == "Address or Name")
     }
-    
+
     @Test
     func memoField() {
         #expect(RecipientSceneViewModel.mock().memoField == "Memo")
     }
-    
+
     @Test
     func actionButtonTitle() {
         #expect(RecipientSceneViewModel.mock().actionButtonTitle == "Continue")
     }
-    
+
     @Test
     func showMemo() {
         #expect(RecipientSceneViewModel.mock(asset: .mock(id: AssetId(chain: .cosmos, tokenId: nil))).showMemo == true)
@@ -39,53 +39,53 @@ struct RecipientSceneViewModelTests {
         #expect(RecipientSceneViewModel.mock(asset: .mock(id: AssetId(chain: .bitcoin, tokenId: nil))).showMemo == false)
         #expect(RecipientSceneViewModel.mock(asset: .mockEthereum()).showMemo == false)
     }
-    
+
     @Test
     func shouldShowInputActions() {
         let model = RecipientSceneViewModel.mock()
-        #expect(model.shouldShowInputActions == true)
-        
+        #expect(model.addressInputModel.shouldShowInputActions == true)
+
         model.addressInputModel.text = "0x123"
-        #expect(model.shouldShowInputActions == false)
+        #expect(model.addressInputModel.shouldShowInputActions == false)
     }
-    
+
     @Test
     func actionButtonState() {
         let model = RecipientSceneViewModel.mock()
 
         #expect(model.actionButtonState == .disabled)
-        
+
         model.addressInputModel.text = "0x1234567890123456789012345678901234567890"
         _ = model.addressInputModel.update()
 
         #expect(model.actionButtonState == .normal)
-        
+
         model.addressInputModel.text = "invalid"
         _ = model.addressInputModel.update()
 
         #expect(model.actionButtonState == .disabled)
 
-        model.nameResolveState = .loading
+        model.addressInputModel.nameRecordViewModel.state = .loading
         #expect(model.actionButtonState == .disabled)
-        
-        model.nameResolveState = .complete(NameRecord.mock())
+
+        model.addressInputModel.nameRecordViewModel.state = .complete(NameRecord.mock())
         #expect(model.actionButtonState == .normal)
     }
-    
+
     @Test
     func getRecipientScanResult_transferData() throws {
         let asset = Asset.mockEthereum()
         let model = RecipientSceneViewModel.mock(asset: asset, type: .mockAsset(asset))
-        
+
         let payment = PaymentScanResult(
             address: "0x1234567890123456789012345678901234567890",
             amount: "1",
             memo: nil
         )
-        
+
         do {
             let result = try model.getRecipientScanResult(payment: payment)
-            
+
             switch result {
             case .transferData(let data):
                 #expect(data.recipientData.recipient.address == payment.address)
@@ -98,19 +98,19 @@ struct RecipientSceneViewModelTests {
             Issue.record("Formatter threw error: \(error)")
         }
     }
-    
+
     @Test
     func getRecipientScanResult_recipient() throws {
         let model = RecipientSceneViewModel.mock()
-        
+
         let payment = PaymentScanResult(
             address: "0x123",
             amount: nil,
             memo: "test memo"
         )
-        
+
         let result = try model.getRecipientScanResult(payment: payment)
-        
+
         switch result {
         case .recipient(let address, let memo, let amount):
             #expect(address == payment.address)
@@ -143,4 +143,3 @@ extension RecipientSceneViewModel {
         )
     }
 }
-

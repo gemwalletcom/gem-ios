@@ -33,36 +33,13 @@ struct RecipientScene: View {
             .cleanListRow()
 
             Section {
-                InputValidationField(
+                AddressInputView(
                     model: $model.addressInputModel,
-                    placeholder: model.recipientField,
-                    allowClean: true,
-                    trailingView: {
-                        HStack(spacing: .large/2) {
-                            NameRecordView(
-                                model: model.nameRecordViewModel,
-                                state: $model.nameResolveState,
-                                address: $model.addressInputModel.text
-                            )
-                            if model.shouldShowInputActions {
-                                ListButton(
-                                    image: model.pasteImage,
-                                    action: { model.onSelectPaste(field: .address) }
-                                )
-                                ListButton(
-                                    image: model.qrImage,
-                                    action: { model.onSelectScan(field: .address) }
-                                )
-                            }
-                        }
-                    }
+                    onSelectScan: { model.onSelectScan(field: .address) }
                 )
                 .focused($focusedField, equals: .address)
-                .keyboardType(.alphabet)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
             }
-            
+
             if model.showMemo {
                 Section {
                     FloatTextField(
@@ -71,7 +48,7 @@ struct RecipientScene: View {
                         allowClean: focusedField == .memo,
                         trailingView: {
                             ListButton(
-                                image: model.qrImage,
+                                image: Images.System.qrCodeViewfinder,
                                 action: { model.onSelectScan(field: .memo) }
                             )
                         }
@@ -82,7 +59,7 @@ struct RecipientScene: View {
                     .autocorrectionDisabled()
                 }
             }
-            
+
             ForEach(model.recipientSections) { section in
                 Section {
                     ForEach(section.values) { item in
@@ -112,7 +89,6 @@ struct RecipientScene: View {
         .navigationTitle(model.tittle)
         .bindQuery(model.contactsQuery)
         .onChange(of: model.addressInputModel.text, model.onChangeAddressText)
-        .onChange(of: model.nameResolveState, model.onChangeNameResolverState)
     }
 }
 

@@ -85,8 +85,7 @@ public final class ManageContactViewModel {
 
     var buttonState: ButtonState {
         guard nameInputModel.isValid,
-              nameInputModel.text.isNotEmpty,
-              addresses.isNotEmpty else {
+              nameInputModel.text.isNotEmpty else {
             return .disabled
         }
 
