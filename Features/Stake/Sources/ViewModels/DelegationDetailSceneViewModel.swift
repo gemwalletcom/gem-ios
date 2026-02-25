@@ -59,12 +59,8 @@ public struct DelegationDetailSceneViewModel {
         DelegationViewModel(delegation: model.delegation, asset: asset, formatter: .auto, currencyCode: model.currencyCode)
     }
 
-    public var stateText: String {
-        DelegationStateViewModel(state: model.state).title
-    }
-
-    public var stateTextStyle: TextStyle {
-        DelegationStateViewModel(state: model.state).textStyle
+    public var stateModel: DelegationStateViewModel {
+        DelegationStateViewModel(state: model.state)
     }
 
     public var showApr: Bool {
