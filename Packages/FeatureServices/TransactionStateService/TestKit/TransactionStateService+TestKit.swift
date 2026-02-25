@@ -2,6 +2,7 @@
 
 import Foundation
 import Gemstone
+import Primitives
 import TransactionStateService
 import Store
 import StakeService
@@ -39,7 +40,7 @@ public extension TransactionStateService {
     }
 }
 
-extension EarnService {
+public extension EarnService {
     static func mock(
         store: StakeStore = .mock(),
         balanceStore: BalanceStore = .mock()
