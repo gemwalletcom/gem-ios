@@ -62,7 +62,7 @@ struct TransferDataViewModel {
             }
         case .earn(_, let type, _):
             switch type {
-            case .deposit: Localized.Transfer.Stake.title
+            case .deposit: Localized.Wallet.deposit
             case .withdraw: Localized.Transfer.Withdraw.title
             }
         }
