@@ -44,8 +44,8 @@ struct StakeNavigationView: View {
             )
         }
         .navigationDestination(for: Delegation.self) { delegation in
-            DelegationDetailScene(
-                model: viewModelFactory.delegationDetailScene(
+            DelegationScene(
+                model: viewModelFactory.delegationScene(
                     wallet: model.wallet,
                     delegation: delegation,
                     asset: delegation.base.assetId.chain.asset,

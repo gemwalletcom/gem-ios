@@ -206,15 +206,15 @@ public struct ViewModelFactory: Sendable {
     }
 
     @MainActor
-    public func delegationDetailScene(
+    public func delegationScene(
         wallet: Wallet,
         delegation: Delegation,
         asset: Asset,
         validators: [DelegationValidator],
         onAmountInputAction: AmountInputAction,
         onTransferAction: TransferDataAction
-    ) -> DelegationDetailSceneViewModel {
-        DelegationDetailSceneViewModel(
+    ) -> DelegationSceneViewModel {
+        DelegationSceneViewModel(
             wallet: wallet,
             model: DelegationViewModel(delegation: delegation, asset: asset, formatter: .auto, currencyCode: Preferences.standard.currency),
             asset: asset,
