@@ -14,7 +14,7 @@ import WalletService
 import ChainService
 import StakeService
 import EarnService
-import Earn
+import Stake
 import NameService
 import BalanceService
 import PriceService

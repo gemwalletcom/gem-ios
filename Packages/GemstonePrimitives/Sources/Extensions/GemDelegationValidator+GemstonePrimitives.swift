@@ -4,8 +4,8 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemEarnProviderType {
-    public func map() -> EarnProviderType {
+extension GemStakeProviderType {
+    public func map() -> StakeProviderType {
         switch self {
         case .stake: .stake
         case .earn: .earn
@@ -13,8 +13,8 @@ extension GemEarnProviderType {
     }
 }
 
-extension EarnProviderType {
-    public func map() -> GemEarnProviderType {
+extension StakeProviderType {
+    public func map() -> GemStakeProviderType {
         switch self {
         case .stake: .stake
         case .earn: .earn

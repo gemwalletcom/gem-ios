@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import GRDB
 
-extension EarnProviderType: @retroactive DatabaseValueConvertible {}
+extension StakeProviderType: @retroactive DatabaseValueConvertible {}
 
 struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     static let databaseTableName: String = "stake_validators"
@@ -27,7 +27,7 @@ struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     var isActive: Bool
     var commission: Double
     var apr: Double
-    var providerType: EarnProviderType
+    var providerType: StakeProviderType
 }
 
 extension StakeValidatorRecord: CreateTable {
@@ -51,7 +51,7 @@ extension StakeValidatorRecord: CreateTable {
                 .notNull()
             $0.column(Columns.providerType.name, .text)
                 .notNull()
-                .defaults(to: EarnProviderType.stake)
+                .defaults(to: StakeProviderType.stake)
         }
     }
 }

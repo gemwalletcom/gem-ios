@@ -139,7 +139,7 @@
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
 		E1B4C7052E85A00000YIELD1 /* EarnService in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C7062E85A00000YIELD1 /* EarnService */; };
-		E1B4C7092E85B00000EARN02 /* Earn in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C70A2E85B00000EARN03 /* Earn */; };
+		E1B4C7092E85B00000EARN02 /* Stake in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C70A2E85B00000EARN03 /* Stake */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -289,7 +289,7 @@
 		D9F015752F10654000000001 /* InAppNotifications */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InAppNotifications; sourceTree = "<group>"; };
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DFBDD9AE2C77EC90002A1706 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
-		E1B4C7082E85B00000EARN01 /* Earn */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Earn; sourceTree = "<group>"; };
+		E1B4C7082E85B00000EARN01 /* Stake */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Stake; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -334,7 +334,7 @@
 				D829BF4E2CBF02BA00DEB2E8 /* BannerService in Frameworks */,
 				D8F5B86F2CCD639A0007E615 /* StakeService in Frameworks */,
 				E1B4C7052E85A00000YIELD1 /* EarnService in Frameworks */,
-				E1B4C7092E85B00000EARN02 /* Earn in Frameworks */,
+				E1B4C7092E85B00000EARN02 /* Stake in Frameworks */,
 				D829BF512CBF2C4900DEB2E8 /* NotificationService in Frameworks */,
 				8349F1472D5E4FF4003A0A93 /* ManageWallets in Frameworks */,
 				8361BB612D3FE5F2008D89CF /* Transactions in Frameworks */,
@@ -481,7 +481,7 @@
 				8361BB6F2D402C63008D89CF /* WalletConnector */,
 				8361BB6E2D402C11008D89CF /* Transactions */,
 				D891DD3F2D3F359A00241222 /* NFT */,
-				D891DD3D2D3EDD7400241222 /* Earn */,
+				D891DD3D2D3EDD7400241222 /* Stake */,
 				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
 				B67ED5462DDB5DCC009F74E6 /* NavigationHandler.swift */,
@@ -695,7 +695,7 @@
 				83FE37B22D2715BF0048D54C /* WalletConnector */,
 				D8D83C822CECF90A0083AA53 /* Swap */,
 				8393897A2CCA8F0000735088 /* InfoSheet */,
-				E1B4C7082E85B00000EARN01 /* Earn */,
+				E1B4C7082E85B00000EARN01 /* Stake */,
 				D8CF19E12CC745ED0025D6B4 /* Transfer */,
 				D829BF432CBDD9D200DEB2E8 /* FiatConnect */,
 				D829BF402CBDD64D00DEB2E8 /* MarketInsight */,
@@ -733,13 +733,13 @@
 			path = Markets;
 			sourceTree = "<group>";
 		};
-		D891DD3D2D3EDD7400241222 /* Earn */ = {
+		D891DD3D2D3EDD7400241222 /* Stake */ = {
 			isa = PBXGroup;
 			children = (
 				D8C4A3782C8CF957006FABE8 /* EarnNavigationView.swift */,
 				D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */,
 			);
-			path = Earn;
+			path = Stake;
 			sourceTree = "<group>";
 		};
 		D891DD3F2D3F359A00241222 /* NFT */ = {
@@ -822,7 +822,7 @@
 				D8F5B85F2CCA008E0007E615 /* ChainService */,
 				D8F5B86E2CCD639A0007E615 /* StakeService */,
 				E1B4C7062E85A00000YIELD1 /* EarnService */,
-				E1B4C70A2E85B00000EARN03 /* Earn */,
+				E1B4C70A2E85B00000EARN03 /* Stake */,
 				D85AD29C2CD337BE0010DEF8 /* SwapService */,
 				D85AD2A52CD7017E0010DEF8 /* NativeProviderService */,
 				D8D83C832CECFA610083AA53 /* Swap */,
@@ -2258,9 +2258,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = EarnService;
 		};
-		E1B4C70A2E85B00000EARN03 /* Earn */ = {
+		E1B4C70A2E85B00000EARN03 /* Stake */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Earn;
+			productName = Stake;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

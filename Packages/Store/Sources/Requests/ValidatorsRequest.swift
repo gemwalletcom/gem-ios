@@ -7,9 +7,9 @@ import Primitives
 public struct ValidatorsRequest: DatabaseQueryable {
 
     private let chain: Chain
-    private let providerType: EarnProviderType
+    private let providerType: StakeProviderType
 
-    public init(chain: Chain, providerType: EarnProviderType) {
+    public init(chain: Chain, providerType: StakeProviderType) {
         self.chain = chain
         self.providerType = providerType
     }
