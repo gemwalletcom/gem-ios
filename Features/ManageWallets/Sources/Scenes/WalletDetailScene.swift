@@ -7,7 +7,6 @@ import Style
 import Primitives
 import Localization
 import PrimitivesComponents
-import GRDBQuery
 import Store
 import Onboarding
 
@@ -19,15 +18,11 @@ public struct WalletDetailScene: View {
     @Environment(\.dismiss) private var dismiss
     @FocusState private var focusedField: Field?
     @State private var model: WalletDetailViewModel
-    
-    @Query<WalletRequest>
-    var dbWallet: Wallet?
 
     public init(model: WalletDetailViewModel) {
         _model = State(initialValue: model)
-        _dbWallet = Query(constant: model.walletRequest)
     }
-    
+
     public var body: some View {
         VStack {
             List {
@@ -38,7 +33,7 @@ public struct WalletDetailScene: View {
                     HStack {
                         Spacer()
                         VStack(spacing: .medium) {
-                            if let dbWallet {
+                            if let dbWallet = model.dbWallet {
                                 AvatarView(
                                     avatarImage: model.avatarAssetImage(for: dbWallet),
                                     size: .image.extraLarge,
@@ -102,6 +97,7 @@ public struct WalletDetailScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
+        .bindQuery(model.walletQuery)
         .onChange(of: model.nameInput, model.onChangeWalletName)
         .navigationTitle(model.title)
         .alert(

@@ -5,22 +5,34 @@ import Primitives
 import Store
 import GemstonePrimitives
 import Preferences
+import Components
 
-struct MainTabViewModel {
-    let wallet: Wallet
+@Observable
+@MainActor
+final class MainTabViewModel {
+    var wallet: Wallet
+    let transactionsQuery: ObservableQuery<TransactionsCountRequest>
 
-    var walletId: WalletId {
-        wallet.walletId
+    var transactions: Int { transactionsQuery.value }
+    var isPresentingToastMessage: ToastMessage?
+
+    init(wallet: Wallet) {
+        self.wallet = wallet
+        self.transactionsQuery = ObservableQuery(TransactionsCountRequest(walletId: wallet.walletId, state: .pending), initialValue: 0)
     }
 
-    var transactionsCountRequest: TransactionsCountRequest {
-        TransactionsCountRequest(walletId: walletId, state: .pending)
+    var walletId: WalletId { wallet.walletId }
+
+    func onChangeWallet(_ _: Wallet?, _ newWallet: Wallet?) {
+        guard let newWallet else { return }
+        wallet = newWallet
+        transactionsQuery.request.walletId = newWallet.walletId
     }
-    
+
     var isMarketEnabled: Bool {
         false //TODO: Disabled. Preferences.standard.isDeveloperEnabled && wallet.type == .multicoin
     }
-        
+
     var isCollectionsEnabled: Bool {
         switch wallet.type {
         case .multicoin: true

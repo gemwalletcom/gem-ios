@@ -8,24 +8,7 @@ import Style
 import PrimitivesComponents
 
 public struct RewardsScene: View {
-    enum CodeInputType: Identifiable {
-        case create
-        case activate(code: String)
-
-        var id: String {
-            switch self {
-            case .create: "create"
-            case .activate: "activate"
-            }
-        }
-    }
-
     @State private var model: RewardsViewModel
-    @State private var isPresentingWalletSelector = false
-    @State private var isPresentingShare = false
-    @State private var isPresentingCodeInput: CodeInputType?
-    @State private var isPresentingRedemptionAlert: AlertMessage?
-    @State private var isPresentingInfoUrl: URL?
 
     public init(model: RewardsViewModel) {
         _model = State(initialValue: model)
@@ -64,84 +47,55 @@ public struct RewardsScene: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if model.showsWalletSelector {
                     WalletBarView(model: model.walletBarViewModel) {
-                        isPresentingWalletSelector = true
+                        model.isPresentingSheet = .walletSelector
                     }
                 } else {
                     Button {
-                        isPresentingInfoUrl = model.rewardsUrl
+                        model.isPresentingSheet = .url(model.rewardsUrl)
                     } label: {
                         Images.System.info
                     }
                 }
             }
         }
-        .safariSheet(url: $isPresentingInfoUrl)
-        .sheet(isPresented: $isPresentingWalletSelector) {
-            SelectableListNavigationStack(
-                model: model.walletSelectorModel,
-                onFinishSelection: { wallets in
-                    if let wallet = wallets.first {
-                        model.selectWallet(wallet)
+        .sheet(item: $model.isPresentingSheet) { sheet in
+            switch sheet {
+            case .walletSelector:
+                SelectableListNavigationStack(
+                    model: model.walletSelectorModel,
+                    onFinishSelection: { wallets in
+                        if let wallet = wallets.first {
+                            model.selectWallet(wallet)
+                        }
+                        model.isPresentingSheet = nil
+                    },
+                    listContent: { wallet in
+                        SimpleListItemView(model: wallet)
                     }
-                    isPresentingWalletSelector = false
-                },
-                listContent: { wallet in
-                    SimpleListItemView(model: wallet)
+                )
+            case .share:
+                if let shareText = model.shareText {
+                    ShareSheet(activityItems: [shareText])
                 }
-            )
-        }
-        .sheet(isPresented: $isPresentingShare) {
-            if let shareText = model.shareText {
-                ShareSheet(activityItems: [shareText])
-            }
-        }
-        .sheet(item: $isPresentingCodeInput) { type in
-            switch type {
-            case .create:
+            case .createCode:
                 TextInputScene(model: model.createCodeViewModel) {
-                    isPresentingCodeInput = nil
+                    model.isPresentingSheet = nil
                 }
                 .presentationDetents([.medium])
-            case .activate(let code):
+            case .activateCode(let code):
                 TextInputScene(model: model.redeemCodeViewModel(code: code)) {
-                    isPresentingCodeInput = nil
+                    model.isPresentingSheet = nil
                 }
                 .presentationDetents([.medium])
-            }
-        }
-        .alert(
-            model.errorTitle,
-            isPresented: Binding(
-                get: { model.isPresentingError != nil },
-                set: { if !$0 { model.isPresentingError = nil } }
-            )
-        ) {
-            Button(Localized.Common.done, role: .cancel) {}
-        } message: {
-            if let error = model.isPresentingError {
-                Text(error)
+            case .url(let url):
+                SFSafariView(url: url)
             }
         }
         .taskOnce {
-            Task {
-                await model.fetch()
-                
-                if model.shouldAutoActivate {
-                    await model.useReferralCode()
-                } else if model.giftCodeFromLink != nil {
-                    do {
-                        let option = try await model.getRewardRedemptionOption()
-                        showRedemptionAlert(for: option)
-                    } catch {
-                        model.isPresentingError = error.localizedDescription
-                    }
-                } else if let code = model.activateCodeFromLink {
-                    isPresentingCodeInput = .activate(code: code)
-                }
-            }
+            Task { await model.onTaskOnce() }
         }
         .toast(message: $model.toastMessage)
-        .alertSheet($isPresentingRedemptionAlert)
+        .alertSheet($model.isPresentingAlert)
     }
 
     @ViewBuilder
@@ -165,7 +119,7 @@ public struct RewardsScene: View {
         Section {
             VStack(spacing: Spacing.large) {
                 Text("🎁")
-                    .font(.system(size: 72))
+                    .font(.app.extraLargeTitle)
                     .padding(.top, Spacing.medium)
 
                 VStack(spacing: Spacing.small) {
@@ -186,9 +140,9 @@ public struct RewardsScene: View {
 
                 Button {
                     if code != nil {
-                        isPresentingShare = true
+                        model.isPresentingSheet = .share
                     } else {
-                        isPresentingCodeInput = .create
+                        model.isPresentingSheet = .createCode
                     }
                 } label: {
                     HStack(spacing: Spacing.small) {
@@ -207,7 +161,7 @@ public struct RewardsScene: View {
         if model.canUseReferralCode {
             Section {
                 Button {
-                    isPresentingCodeInput = .activate(code: "")
+                    model.isPresentingSheet = .activateCode(code: "")
                 } label: {
                     Text(model.activateCodeFooterTitle)
                         .frame(maxWidth: .infinity)
@@ -243,32 +197,15 @@ public struct RewardsScene: View {
                     )
                 ) {
                     if model.canRedeem(option: viewModel.option) {
-                        showRedemptionAlert(for: viewModel.option)
+                        model.showRedemptionAlert(for: viewModel.option)
                     } else {
-                        model.isPresentingError = Localized.Rewards.insufficientPoints
+                        model.showError(Localized.Rewards.insufficientPoints)
                     }
                 }
             }
         } header: {
             Text(Localized.Rewards.WaysSpend.title)
         }
-    }
-
-    private func showRedemptionAlert(for option: RewardRedemptionOption) {
-        let viewModel = RewardRedemptionOptionViewModel(option: option)
-        isPresentingRedemptionAlert = AlertMessage(
-            title: viewModel.confirmationMessage,
-            message: "",
-            actions: [
-                AlertAction(title: Localized.Transfer.confirm, isDefaultAction: true) {
-                    Task {
-                        await model.redeem(option: option)
-                        await model.fetch()
-                    }
-                },
-                .cancel(title: Localized.Common.cancel)
-            ]
-        )
     }
 
     @ViewBuilder

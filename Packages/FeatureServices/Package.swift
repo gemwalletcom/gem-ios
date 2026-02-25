@@ -54,6 +54,7 @@ let package = Package(
         .library(name: "AuthServiceTestKit", targets: ["AuthServiceTestKit"]),
         .library(name: "ConnectionsService", targets: ["ConnectionsService"]),
         .library(name: "ConnectionsServiceTestKit", targets: ["ConnectionsServiceTestKit"]),
+        .library(name: "ContactService", targets: ["ContactService"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -226,6 +227,7 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "Blockchain",
+                "Gemstone",
                 .product(name: "ChainService", package: "ChainServices"),
                 .product(name: "StakeService", package: "ChainServices"),
                 "BalanceService",
@@ -244,6 +246,7 @@ let package = Package(
                 "NFTServiceTestKit",
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 "BalanceServiceTestKit",
+                "SwapServiceTestKit",
                 "TransactionStateService"
             ],
             path: "TransactionStateService/TestKit"
@@ -530,6 +533,14 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store")
             ],
             path: "ActivityService/TestKit"
+        ),
+        .target(
+            name: "ContactService",
+            dependencies: [
+                "Primitives",
+                "Store"
+            ],
+            path: "ContactService"
         ),
         .target(
             name: "RewardsService",

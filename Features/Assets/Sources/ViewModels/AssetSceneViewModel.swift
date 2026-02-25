@@ -16,6 +16,7 @@ import WalletsService
 import PriceService
 import BannerService
 import Formatters
+import Store
 
 @Observable
 @MainActor
@@ -37,9 +38,13 @@ public final class AssetSceneViewModel: Sendable {
     public var isPresentingAssetSheet: AssetSheetType?
 
     public var input: AssetSceneInput
-    public var chainAssetData: ChainAssetData
-    public var transactions: [TransactionExtended] = []
-    public var banners: [Banner] = []
+    public let assetQuery: ObservableQuery<ChainAssetRequest>
+    public let bannersQuery: ObservableQuery<BannersRequest>
+    public let transactionsQuery: ObservableQuery<TransactionsRequest>
+
+    public var chainAssetData: ChainAssetData { assetQuery.value }
+    public var banners: [Banner] { bannersQuery.value }
+    public var transactions: [TransactionExtended] { transactionsQuery.value }
     public var assetData: AssetData { chainAssetData.assetData }
     private var asset: Asset { assetData.asset }
     private var wallet: Wallet { walletModel.wallet }
@@ -62,10 +67,15 @@ public final class AssetSceneViewModel: Sendable {
         self.bannerService = bannerService
 
         self.input = input
-        self.chainAssetData = ChainAssetData(
-            assetData: AssetData.with(asset: input.asset),
-            feeAssetData: AssetData.with(asset: input.asset.chain.asset)
+        self.assetQuery = ObservableQuery(
+            input.assetRequest,
+            initialValue: ChainAssetData(
+                assetData: AssetData.with(asset: input.asset),
+                feeAssetData: AssetData.with(asset: input.asset.chain.asset)
+            )
         )
+        self.bannersQuery = ObservableQuery(input.bannersRequest, initialValue: [])
+        self.transactionsQuery = ObservableQuery(input.transactionsRequest, initialValue: [])
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
@@ -84,7 +94,7 @@ public final class AssetSceneViewModel: Sendable {
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
     var showBalances: Bool { assetDataModel.showBalances }
-    private var showStakedBalanceTypes: [BalanceType] = [.staked, .pending, .rewards]
+    private var showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showPendingUnconfirmedBalance: Bool { assetDataModel.hasPendingUnconfirmedBalance }

@@ -36,7 +36,7 @@ public struct TransactionResourceTypeMetadata: Codable, Sendable {
 	}
 }
 
-public struct TransactionSwapMetadata: Codable, Sendable {
+public struct TransactionSwapMetadata: Codable, Equatable, Hashable, Sendable {
 	public let fromAsset: AssetId
 	public let fromValue: String
 	public let toAsset: AssetId

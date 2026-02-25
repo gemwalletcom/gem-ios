@@ -5,10 +5,12 @@ import Foundation
 public struct RecipientAddress: Hashable, Sendable {
     public let name: String
     public let address: String
+    public let memo: String?
 
-    public init(name: String, address: String) {
+    public init(name: String, address: String, memo: String? = nil) {
         self.name = name
         self.address = address
+        self.memo = memo
     }
 }
 

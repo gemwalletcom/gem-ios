@@ -12,12 +12,10 @@ public struct CurrencyTextField: View {
     }
 
     private enum Constants {
-        static let fontSize: CGFloat = 44
-        static let fontWeight: Font.Weight = .semibold
         static let minWidth: CGFloat = 40
         static let maxWidth: CGFloat = 210
         static var height: CGFloat {
-            UIFont.systemFont(ofSize: fontSize, weight: .semibold).lineHeight
+            UIFont.systemFont(ofSize: 44, weight: .semibold).lineHeight
         }
     }
 
@@ -50,7 +48,7 @@ public struct CurrencyTextField: View {
             TextField(placeholder, text: $text)
                 .keyboardType(keyboardType)
                 .foregroundStyle(Colors.black)
-                .font(.system(size: Constants.fontSize, weight: Constants.fontWeight))
+                .font(.app.display)
                 .multilineTextAlignment(.center)
                 .textFieldStyle(.plain)
                 .lineLimit(1)
@@ -68,7 +66,7 @@ public struct CurrencyTextField: View {
 
     private var currencySymbolView: some View {
         Text(currencySymbol)
-            .font(.system(size: Constants.fontSize, weight: Constants.fontWeight))
+            .font(.app.display)
             .foregroundStyle(Colors.black)
             .lineLimit(1)
             .fixedSize()

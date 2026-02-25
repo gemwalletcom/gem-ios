@@ -79,6 +79,7 @@ public struct StateEmptyView<Content: View>: View {
                      Text(description.text)
                          .textStyle(description.style)
                          .multilineTextAlignment(.center)
+                         .padding(.horizontal, Spacing.medium)
                  }
              }
              buttonsView

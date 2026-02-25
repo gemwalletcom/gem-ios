@@ -8,6 +8,7 @@ import DeviceService
 import PriceAlertService
 import StakeService
 import NotificationService
+import Gemstone
 import GemstonePrimitives
 import NodeService
 import WalletConnector
@@ -41,6 +42,7 @@ import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
 import SwiftHTTPClient
+import ContactService
 
 
 struct ServicesFactory {
@@ -119,6 +121,7 @@ struct ServicesFactory {
         )
         let transactionStateService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
+            nativeProvider: nativeProvider,
             stakeService: stakeService,
             nftService: nftService,
             chainFactory: chainServiceFactory,
@@ -251,6 +254,8 @@ struct ServicesFactory {
             store: storeManager.inAppNotificationStore
         )
 
+        let contactService = ContactService(store: storeManager.contactStore, addressStore: storeManager.addressStore)
+
         let appLifecycleService = AppLifecycleService(
             preferences: preferences,
             connectionsService: connectionsService,
@@ -321,7 +326,8 @@ struct ServicesFactory {
             assetSearchService: assetSearchService,
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
-            fiatService: apiService
+            fiatService: apiService,
+            contactService: contactService
         )
     }
 }
@@ -443,6 +449,7 @@ extension ServicesFactory {
 
     private static func makeTransactionService(
         transactionStore: TransactionStore,
+        nativeProvider: NativeProvider,
         stakeService: StakeService,
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
@@ -450,6 +457,7 @@ extension ServicesFactory {
     ) -> TransactionStateService {
         TransactionStateService(
             transactionStore: transactionStore,
+            swapper: GemSwapper(rpcProvider: nativeProvider),
             stakeService: stakeService,
             nftService: nftService,
             chainServiceFactory: chainFactory,

@@ -3,9 +3,9 @@
 import Testing
 import PrimitivesTestKit
 import Primitives
-import Store
 
 @testable import Transfer
+@testable import Store
 
 @MainActor
 struct AmountSceneViewModelTests {
@@ -160,7 +160,7 @@ extension AmountSceneViewModel {
             wallet: .mock(),
             onTransferAction: { _ in }
         )
-        model.assetData = assetData
+        model.assetQuery.value = assetData
         model.onChangeAssetBalance(assetData, assetData)
         return model
     }

@@ -6,11 +6,6 @@ import Components
 import Primitives
 
 struct SwapTokenView: View {
-    private enum Constants {
-        static let amountFontSize: CGFloat = 36
-        static let balanceFontSize: CGFloat = 13
-    }
-
     let model: SwapTokenViewModel
     @Binding var text: String
     var showLoading: Bool = false
@@ -40,8 +35,7 @@ struct SwapTokenView: View {
             TextField(showLoading ? "" : String.zero, text: $text)
                 .keyboardType(.decimalPad)
                 .foregroundStyle(Colors.black)
-                .font(.system(size: Constants.amountFontSize))
-                .fontWeight(.semibold)
+                .font(.app.title1)
                 .disabled(disabledTextField)
                 .multilineTextAlignment(.leading)
         }
@@ -50,8 +44,7 @@ struct SwapTokenView: View {
     private var fiatBalanceView: some View {
         Text(model.fiatBalance(amount: text))
             .lineLimit(1)
-            .font(.system(size: Constants.balanceFontSize))
-            .fontWeight(.medium)
+            .font(.app.callout)
             .foregroundStyle(Colors.secondaryText)
     }
 
@@ -78,8 +71,7 @@ struct SwapTokenView: View {
             Button(action: onBalanceAction) {
                 Text(availableBalanceText)
                     .lineLimit(1)
-                    .font(.system(size: Constants.balanceFontSize))
-                    .fontWeight(.medium)
+                    .font(.app.callout)
                     .foregroundStyle(Colors.secondaryText)
             }
         }

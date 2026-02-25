@@ -10,22 +10,25 @@ import Preferences
 import PrimitivesComponents
 
 @Observable
+@MainActor
 public final class PriceAlertsSceneViewModel: Sendable {
     private let preferences: ObservablePreferences
     private let priceAlertService: PriceAlertService
-    
+
+    public let query: ObservableQuery<PriceAlertsRequest>
+    var priceAlerts: [PriceAlertData] { query.value }
+
     public init(
         preferences: ObservablePreferences = .default,
         priceAlertService: PriceAlertService
     ) {
         self.preferences = preferences
         self.priceAlertService = priceAlertService
+        self.query = ObservableQuery(PriceAlertsRequest(), initialValue: [])
     }
 
     var title: String { Localized.Settings.PriceAlerts.title }
     var enableTitle: String { Localized.Settings.enableValue("") }
-
-    var request: PriceAlertsRequest { PriceAlertsRequest() }
 
     var isPriceAlertsEnabled: Bool {
         get {

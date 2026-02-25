@@ -26,15 +26,15 @@ public final class WalletSceneViewModel: Sendable {
 
     public var wallet: Wallet
 
-    // db observation
-    public var totalFiatRequest: TotalValueRequest
-    public var assetsRequest: AssetsRequest
-    public var bannersRequest: BannersRequest
+    // db queries
+    public let totalFiatQuery: ObservableQuery<TotalValueRequest>
+    public let assetsQuery: ObservableQuery<AssetsRequest>
+    public let bannersQuery: ObservableQuery<BannersRequest>
 
     // db observed values
-    public var totalFiatValue: TotalFiatValue = .zero
-    public var assets: [AssetData] = []
-    public var banners: [Banner] = []
+    public var totalFiatValue: TotalFiatValue { totalFiatQuery.value }
+    public var assets: [AssetData] { assetsQuery.value }
+    public var banners: [Banner] { bannersQuery.value }
 
     // TODO: - separate presenting sheet state logic to separate type
     public var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
@@ -44,7 +44,7 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingUrl: URL? = nil
     public var isPresentingTransferData: TransferData?
     public var isPresentingPerpetualRecipientData: PerpetualRecipientData?
-    public var isPresentingSetPriceAlert: AssetId?
+    public var isPresentingSetPriceAlert: Asset?
     public var isPresentingToastMessage: ToastMessage?
     public var isPresentingSearch = false
     public var isPresentingAddToken: Bool = false
@@ -65,20 +65,9 @@ public final class WalletSceneViewModel: Sendable {
         self.walletService = walletService
         self.observablePreferences = observablePreferences
 
-        self.totalFiatRequest = TotalValueRequest(walletId: wallet.walletId, balanceType: .wallet)
-        self.assetsRequest = AssetsRequest(
-            walletId: wallet.walletId,
-            filters: [.enabledBalance]
-        )
-        self.bannersRequest = BannersRequest(
-            walletId: wallet.walletId,
-            assetId: .none,
-            chain: .none,
-            events: [
-                .accountBlockedMultiSignature,
-                .onboarding
-            ]
-        )
+        self.totalFiatQuery = ObservableQuery(TotalValueRequest(walletId: wallet.walletId, balanceType: .wallet), initialValue: .zero)
+        self.assetsQuery = ObservableQuery(AssetsRequest(walletId: wallet.walletId, filters: [.enabledBalance]), initialValue: [])
+        self.bannersQuery = ObservableQuery(BannersRequest(walletId: wallet.walletId, assetId: .none, chain: .none, events: [.accountBlockedMultiSignature, .onboarding]), initialValue: [])
         self.isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
@@ -264,9 +253,9 @@ extension WalletSceneViewModel {
 
     private func refresh(for newWallet: Wallet) {
         wallet = newWallet
-        totalFiatRequest.walletId = newWallet.walletId
-        assetsRequest.walletId = newWallet.walletId
-        bannersRequest.walletId = newWallet.walletId
+        totalFiatQuery.request.walletId = newWallet.walletId
+        assetsQuery.request.walletId = newWallet.walletId
+        bannersQuery.request.walletId = newWallet.walletId
 
         fetch()
     }

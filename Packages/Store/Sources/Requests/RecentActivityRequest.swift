@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct RecentActivityRequest: ValueObservationQueryable {
-    public static var defaultValue: [RecentAsset] { [] }
+public struct RecentActivityRequest: DatabaseQueryable {
 
     public var walletId: WalletId
     public var limit: Int
@@ -49,3 +46,5 @@ public struct RecentActivityRequest: ValueObservationQueryable {
             .map { $0.mapToRecentAsset }
     }
 }
+
+extension RecentActivityRequest: Equatable {}

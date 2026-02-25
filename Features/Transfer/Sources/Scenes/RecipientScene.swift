@@ -5,6 +5,7 @@ import Style
 import Components
 import Primitives
 import PrimitivesComponents
+import Store
 
 struct RecipientScene: View {
     enum Field: Int, Hashable, Identifiable {
@@ -24,6 +25,13 @@ struct RecipientScene: View {
     var body: some View {
         @Bindable var model = model
         List {
+            Section { } header: {
+                AssetImageTitleView(model: model.assetImageTitleModel)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, .small)
+            }
+            .cleanListRow()
+
             Section {
                 InputValidationField(
                     model: $model.addressInputModel,
@@ -79,7 +87,7 @@ struct RecipientScene: View {
                 Section {
                     ForEach(section.values) { item in
                         NavigationCustomLink(
-                            with: ListItemView(title: item.value.name),
+                            with: ListItemView(title: item.title ?? item.value.name, subtitle: item.subtitle),
                             action: { onSelectRecipient(item.value) }
                         )
                     }
@@ -100,7 +108,9 @@ struct RecipientScene: View {
             )
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.tittle)
+        .bindQuery(model.contactsQuery)
         .onChange(of: model.addressInputModel.text, model.onChangeAddressText)
         .onChange(of: model.nameResolveState, model.onChangeNameResolverState)
     }

@@ -64,7 +64,7 @@ public struct RecentsScene: View {
                 }
             }
         }
-        .observeQuery(request: $model.request, value: $model.recentAssets)
+        .bindQuery(model.query)
     }
 }
 

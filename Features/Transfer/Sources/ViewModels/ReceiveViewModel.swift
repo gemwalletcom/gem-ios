@@ -51,14 +51,11 @@ public final class ReceiveViewModel: Sendable {
     var copyTitle: String {
         Localized.Common.copy
     }
-    
-    var symbol: String? {
-        if assetModel.name == assetModel.symbol {
-            return nil
-        }
-        return assetModel.symbol
+
+    var assetImageTitleModel: AssetImageTitleViewModel {
+        AssetImageTitleViewModel(asset: assetModel.asset)
     }
-    
+
     var warningMessage: AttributedString {
         let warning = Localized.Receive.warning(assetModel.symbol.boldMarkdown(), assetModel.networkFullName.boldMarkdown())
         guard let message = try? AttributedString(markdown: [warning, memoWarningText].compactMap { $0 }.joined(separator: " ")) else {

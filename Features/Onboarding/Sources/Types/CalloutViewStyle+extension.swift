@@ -24,7 +24,7 @@ extension CalloutViewStyle {
         CalloutViewStyle(
             title: TextValue(
                 text: title,
-                style: TextStyle(font: .system(size: 16, weight: .medium), color: Colors.secondaryText)
+                style: TextStyle(font: .app.body, color: Colors.secondaryText)
             ),
             subtitle: nil,
             backgroundColor: .clear

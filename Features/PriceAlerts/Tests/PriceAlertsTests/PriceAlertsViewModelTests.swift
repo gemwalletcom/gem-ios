@@ -9,7 +9,7 @@ import PrimitivesTestKit
 @testable import PriceAlerts
 
 struct PriceAlertsViewModelTests {
-    @Test
+    @Test @MainActor
     func testSections() {
         let model = PriceAlertsSceneViewModel(priceAlertService: .mock())
         

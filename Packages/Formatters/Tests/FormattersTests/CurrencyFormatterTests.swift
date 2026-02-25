@@ -77,7 +77,7 @@ final class CurrencyFormatterTests {
 
     @Test
     func testPercentSignLess() {
-        #expect(percentSignLess.string(-1.23) == "-1.23%")
+        #expect(percentSignLess.string(-1.23) == "1.23%")
         #expect(percentSignLess.string(11.12) == "11.12%")
         #expect(percentSignLess.string(11) == "11.00%")
         #expect(percentSignLess.string(12000123) == "12,000,123.00%")

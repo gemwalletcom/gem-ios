@@ -2,9 +2,7 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
 import Primitives
-import Combine
 
 public enum NFTFilter: Sendable, Hashable {
     case all
@@ -12,8 +10,7 @@ public enum NFTFilter: Sendable, Hashable {
     case collection(id: String)
 }
 
-public struct NFTRequest: ValueObservationQueryable {
-    public static var defaultValue: [NFTData] { [] }
+public struct NFTRequest: DatabaseQueryable {
 
     private let walletId: WalletId
     private let filter: NFTFilter
@@ -47,3 +44,5 @@ public struct NFTRequest: ValueObservationQueryable {
             .filter { $0.assets.isNotEmpty }
     }
 }
+
+extension NFTRequest: Equatable {}

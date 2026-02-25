@@ -153,9 +153,9 @@ extension SwapDetailsViewModel {
     }
 
     func onFinishSwapProviderSelection(item: [SwapProviderItem]) {
-        guard let quote = item.first?.swapperQuote else { return }
+        guard let quote = item.first?.swapperQuote, let swapQuote = try? quote.map() else { return }
         swapProviderSelectAction?(quote)
-        selectedQuote = quote.map()
+        selectedQuote = swapQuote
         isPresentingSwapProviderSelectionSheet = false
     }
     

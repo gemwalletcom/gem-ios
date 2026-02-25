@@ -2,12 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct WalletRequest: ValueObservationQueryable {
-    public static var defaultValue: Wallet? { .none }
+public struct WalletRequest: DatabaseQueryable {
     public var walletId: WalletId
 
     public init(walletId: WalletId) {
@@ -23,3 +20,5 @@ public struct WalletRequest: ValueObservationQueryable {
             .mapToWallet()
     }
 }
+
+extension WalletRequest: Equatable {}

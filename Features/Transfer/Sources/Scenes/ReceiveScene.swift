@@ -17,17 +17,7 @@ public struct ReceiveScene: View {
             VStack {
                 Spacer()
                 VStack(spacing: .medium) {
-                    AssetImageView(assetImage: model.assetModel.assetImage, size: .image.semiLarge)
-
-                    HStack(alignment: .bottom, spacing: .tiny) {
-                        Text(model.assetModel.name)
-                            .textStyle(.headline)
-                        if let symbol = model.symbol {
-                            Text(symbol)
-                                .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
-                        }
-                    }
-                    .lineLimit(1)
+                    AssetImageTitleView(model: model.assetImageTitleModel)
 
                     Button(action: model.onCopyAddress) {
                         VStack(spacing: .medium) {

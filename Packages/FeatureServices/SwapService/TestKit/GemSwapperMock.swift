@@ -90,7 +90,7 @@ public final class GemSwapperMock: GemSwapperProtocol {
         swapAssetList
     }
 
-    public func getSwapResult(chain: Chain, swapProvider: SwapperProvider, transactionHash: String) async throws -> SwapperSwapResult {
+    public func getSwapResult(chain: Chain, provider: SwapperProvider, transactionHash: String) async throws -> SwapperSwapResult {
         swapResult
     }
 }

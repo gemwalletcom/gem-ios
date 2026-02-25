@@ -6,16 +6,10 @@ import Foundation
 
 public struct SwapResult: Codable, Equatable, Hashable, Sendable {
 	public let status: SwapStatus
-	public let fromChain: Chain
-	public let fromTxHash: String
-	public let toChain: Chain?
-	public let toTxHash: String?
+	public let metadata: TransactionSwapMetadata?
 
-	public init(status: SwapStatus, fromChain: Chain, fromTxHash: String, toChain: Chain?, toTxHash: String?) {
+	public init(status: SwapStatus, metadata: TransactionSwapMetadata?) {
 		self.status = status
-		self.fromChain = fromChain
-		self.fromTxHash = fromTxHash
-		self.toChain = toChain
-		self.toTxHash = toTxHash
+		self.metadata = metadata
 	}
 }

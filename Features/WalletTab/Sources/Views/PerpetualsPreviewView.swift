@@ -29,8 +29,7 @@ struct PerpetualsPreviewView: View {
                 PerpetualPositionsList(positions: viewModel.positions)
             }
         }
-        .observeQuery(request: $viewModel.positionsRequest, value: $viewModel.positions)
-        .observeQuery(request: $viewModel.walletBalanceRequest, value: $viewModel.walletBalance)
+        .bindQuery(viewModel.positionsQuery, viewModel.walletBalanceQuery)
         .onChange(of: wallet.walletId) { _, newWalletId in
             viewModel.updateWallet(walletId: newWalletId)
         }

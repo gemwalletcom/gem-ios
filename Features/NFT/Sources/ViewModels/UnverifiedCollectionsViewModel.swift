@@ -11,8 +11,8 @@ import PrimitivesComponents
 @Observable
 @MainActor
 public final class UnverifiedCollectionsViewModel: CollectionsViewable, Sendable {
-    public var request: NFTRequest
-    public var nftDataList: [NFTData] = []
+    public let query: ObservableQuery<NFTRequest>
+    public var nftDataList: [NFTData] { query.value }
 
     public var isPresentingReceiveSelectAssetType: SelectAssetType?
 
@@ -20,7 +20,7 @@ public final class UnverifiedCollectionsViewModel: CollectionsViewable, Sendable
 
     public init(wallet: Wallet) {
         self.wallet = wallet
-        self.request = NFTRequest(walletId: wallet.walletId, filter: .unverified)
+        self.query = ObservableQuery(NFTRequest(walletId: wallet.walletId, filter: .unverified), initialValue: [])
     }
 
     public var title: String { Localized.Asset.Verification.unverified }

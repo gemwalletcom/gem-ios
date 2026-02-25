@@ -82,6 +82,7 @@ public enum Images {
         public static let hyperliquid = Image(.hypercore)
         public static let panora = Image(.panora)
         public static let okx = Image(.okx)
+        public static let nearIntents = Image(.nearIntents)
     }
 
     public enum Fiat {
@@ -121,6 +122,7 @@ public enum Images {
         public static let notifications = Image(.settingsNotifications)
         public static let preferences = Image(.settingsPreferences)
         public static let perpetuals = Image(.settingsPerps)
+        public static let contacts = Image(.settingsContact)
     }
 
     public enum Perpetuals {
@@ -193,6 +195,7 @@ public enum Images {
         public static let stake = Image(.emptyStake)
         public static let walletConnect = Image(.emptyDapps)
         public static let search = Image(.emptySearch)
+        public static let contacts = Images.System.personBadgePlus
     }
 
     public enum ErrorConent {
