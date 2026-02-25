@@ -70,6 +70,13 @@ public extension BigInt {
         }
     }
     
+    static func fromString(_ string: String) -> BigInt {
+        if let value = try? BigInt.from(string: string)  {
+            return value
+        }
+        return .zero
+    }
+    
     static func fromHex(_ hex: String) throws -> BigInt {
         guard let value = BigInt(hex.remove0x, radix: 16) else {
             throw AnyError("invalid hex value: \(hex)")

@@ -263,7 +263,7 @@ public struct TransactionViewModel: Sendable {
                 return .none
             }
             return AmountDisplay.numeric(
-                data: AssetValuePrice(asset: asset, value: BigInt(stringLiteral: metadata.toValue), price: nil),
+                data: AssetValuePrice(asset: asset, value: BigInt.fromString(metadata.toValue), price: nil),
                 style: AmountDisplayStyle(sign: .incoming, formatter: formatter, currencyCode: currency)
             ).amount
         case .transferNFT:
