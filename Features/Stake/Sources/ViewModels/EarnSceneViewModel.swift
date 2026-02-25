@@ -65,9 +65,10 @@ public final class EarnSceneViewModel {
         wallet.canSign && providers.isNotEmpty
     }
 
-    var depositDestination: AmountInput {
-        AmountInput(
-            type: .earn(.deposit(providers.first!)),
+    var depositDestination: AmountInput? {
+        guard let provider = providers.first else { return nil }
+        return AmountInput(
+            type: .earn(.deposit(provider)),
             asset: asset
         )
     }
