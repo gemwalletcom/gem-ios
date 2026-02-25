@@ -6,12 +6,12 @@ import Style
 import Primitives
 import PrimitivesComponents
 
-public struct StakeValidatorsScene: View {
+public struct ValidatorSelectScene: View {
     @Environment(\.dismiss) private var dismiss
     
-    @State private var model: StakeValidatorsViewModel
+    @State private var model: ValidatorSelectSceneViewModel
 
-    public init(model: StakeValidatorsViewModel) {
+    public init(model: ValidatorSelectSceneViewModel) {
         _model = State(wrappedValue: model)
     }
 

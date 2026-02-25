@@ -35,7 +35,7 @@ final class AmountStakeViewModel: AmountDataProvidable {
         }
     }
 
-    var stakeValidatorsType: StakeValidatorsType {
+    var validatorSelectType: ValidatorSelectType {
         switch action {
         case .stake, .redelegate: .stake
         case .unstake, .withdraw: .unstake
