@@ -192,16 +192,6 @@ public struct BalanceStore: Sendable {
         }
     }
 
-    public func hasEarnBalance(walletId: WalletId, chain: Chain) throws -> Bool {
-        try db.read { db in
-            try BalanceRecord
-                .filter(BalanceRecord.Columns.walletId == walletId.id)
-                .filter(BalanceRecord.Columns.assetId.like("\(chain.rawValue)%"))
-                .filter(BalanceRecord.Columns.earnAmount > 0)
-                .fetchCount(db) > 0
-        }
-    }
-
     public func addMissingBalances(walletId: WalletId, assetIds: [AssetId], isEnabled: Bool = false) throws {
         let missingAssetIds = try getMissingAssetIds(walletId: walletId, assetIds: assetIds)
         let missingBalances = missingAssetIds.map { assetId in

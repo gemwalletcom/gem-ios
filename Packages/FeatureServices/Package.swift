@@ -587,7 +587,6 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "Blockchain",
-                "Formatters",
             ],
             path: "EarnService",
             exclude: ["TestKit"]
