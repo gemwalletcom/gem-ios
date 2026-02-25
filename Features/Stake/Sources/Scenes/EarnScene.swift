@@ -26,8 +26,8 @@ public struct EarnScene: View {
             case .data:
                 Section(model.assetTitle) {
                     ListItemView(
-                        title: model.aprTitle,
-                        subtitle: model.aprValue
+                        title: model.aprModel.title,
+                        subtitle: model.aprModel.subtitle
                     )
                 }
             case .error(let error):

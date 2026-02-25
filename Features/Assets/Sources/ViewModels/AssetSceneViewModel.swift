@@ -127,17 +127,13 @@ public final class AssetSceneViewModel: Sendable {
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
 
     var networkText: String { assetModel.networkFullName }
-    var stakeAprText: String {
-        guard let apr = assetDataModel.stakeApr else { return .empty }
-        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    func aprModel(for type: StakeProviderType) -> AprViewModel {
+        AprViewModel(apr: assetDataModel.apr(for: type) ?? .zero)
     }
+
 
     var earnTitle: String { Localized.Common.earn }
 
-    var earnAprText: String {
-        guard let apr = assetDataModel.earnApr else { return .empty }
-        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
-    }
 
     var showEarnButton: Bool {
         assetData.metadata.isEarnEnabled && !wallet.isViewOnly && !showEarnBalance

@@ -99,8 +99,8 @@ extension StakeScene {
     private var stakeInfoSection: some View {
         Section(model.assetTitle) {
             ListItemView(
-                title: model.stakeAprTitle,
-                subtitle: model.stakeAprValue,
+                title: model.stakeAprModel.title,
+                subtitle: model.stakeAprModel.subtitle,
                 infoAction: model.onAprInfo
             )
             ListItemView(

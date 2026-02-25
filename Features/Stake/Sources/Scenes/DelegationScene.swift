@@ -34,8 +34,8 @@ public struct DelegationScene: View {
                     ListItemView(title: model.providerTitle, subtitle: model.providerText)
                 }
 
-                if model.showApr {
-                    ListItemView(title: model.aprTitle, subtitle: model.aprText)
+                if model.aprModel.showApr {
+                    ListItemView(title: model.aprModel.title, subtitle: model.aprModel.subtitle)
                 }
 
                 ListItemView(title: model.stateTitle, subtitle: model.stateModel.title, subtitleStyle: model.stateModel.textStyle)

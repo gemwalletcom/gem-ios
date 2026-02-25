@@ -17,7 +17,7 @@ public struct ValidatorView: View {
             ValidatorImageView(model: model)
             ListItemView(
                 title: model.name,
-                subtitle: model.aprText
+                subtitle: model.aprModel.text
             )
         }
     }

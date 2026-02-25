@@ -6,7 +6,6 @@ import SwiftUI
 import Style
 import Components
 import Localization
-import Formatters
 import PrimitivesComponents
 import GemstonePrimitives
 
@@ -50,21 +49,15 @@ public struct DelegationSceneViewModel {
     }
 
     public var providerText: String { model.validatorText }
-    public var aprTitle: String { Localized.Stake.apr("") }
+    public var aprModel: AprViewModel {
+        AprViewModel(apr: model.delegation.validator.apr)
+    }
     public var stateTitle: String { Localized.Transaction.status }
     public var manageTitle: String { Localized.Common.manage }
     public var rewardsTitle: String { Localized.Stake.rewards }
 
     public var stateModel: DelegationStateViewModel {
         DelegationStateViewModel(state: model.state)
-    }
-
-    public var showApr: Bool {
-        !model.delegation.validator.apr.isZero
-    }
-
-    public var aprText: String {
-        CurrencyFormatter.percentSignLess.string(model.delegation.validator.apr)
     }
 
     public var providerUrl: URL? {

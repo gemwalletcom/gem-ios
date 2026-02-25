@@ -8,12 +8,12 @@ import Style
 import Localization
 import Formatters
 import ExplorerService
+import PrimitivesComponents
 
 public struct ValidatorViewModel {
 
     public let validator: DelegationValidator
     private let imageFormatter = AssetImageFormatter()
-    private let aprFormatter = CurrencyFormatter.percentSignLess
     private let exploreService: ExplorerService
 
     public init(
@@ -36,11 +36,8 @@ public struct ValidatorViewModel {
         }
     }
 
-    public var aprText: String {
-        if validator.apr > 0 {
-            return Localized.Stake.apr(aprFormatter.string(validator.apr))
-        }
-        return .empty
+    public var aprModel: AprViewModel {
+        AprViewModel(apr: validator.apr)
     }
 
     public var imageUrl: URL? {

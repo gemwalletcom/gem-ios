@@ -171,12 +171,11 @@ public struct AssetDataViewModel: Sendable {
         assetData.account.address
     }
 
-    public var stakeApr: Double? {
-        assetData.metadata.stakingApr
-    }
-
-    public var earnApr: Double? {
-        assetData.metadata.earnApr
+    public func apr(for type: StakeProviderType) -> Double? {
+        switch type {
+        case .stake: assetData.metadata.stakingApr
+        case .earn: assetData.metadata.earnApr
+        }
     }
     
     public var isPriceAlertsEnabled: Bool {
