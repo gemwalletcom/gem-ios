@@ -143,7 +143,7 @@ public final class StakeSceneViewModel {
     }
     
     var delegationsState: StateViewType<[DelegationViewModel]> {
-        let delegationModels = delegations.map { DelegationViewModel(delegation: $0, currencyCode: currencyCode) }
+        let delegationModels = delegations.map { DelegationViewModel(delegation: $0, asset: asset, currencyCode: currencyCode) }
 
         switch delegatitonsState {
         case .noData: return .noData
