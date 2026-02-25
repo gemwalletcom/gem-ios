@@ -87,14 +87,6 @@ public struct WalletsService: Sendable {
     }
 }
 
-// MARK: - DiscoveryAssetsProcessing
-
-extension WalletsService: DiscoveryAssetsProcessing {
-    func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
-        try await assetSyncService.discoverAssets(for: walletId, preferences: preferences)
-    }
-}
-
 // MARK: - AssetsEnabler
 
 extension WalletsService: AssetsEnabler {

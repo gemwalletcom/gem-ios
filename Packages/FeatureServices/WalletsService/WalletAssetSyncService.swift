@@ -8,7 +8,7 @@ import Preferences
 import WalletSessionService
 import DeviceService
 
-actor WalletAssetSyncService: DiscoveryAssetsProcessing {
+actor WalletAssetSyncService {
     private let deviceService: any DeviceServiceable
     private let discoverAssetService: DiscoverAssetsService
     private let assetService: AssetsService
@@ -36,12 +36,17 @@ actor WalletAssetSyncService: DiscoveryAssetsProcessing {
     }
 
     func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
-        async let updateAssets: () = try updateAssets(walletId: walletId, assetIds: assetIds)
-        async let discoverAssets: () = try discoverAssets(
-            for: walletId,
-            preferences: WalletPreferences(walletId: walletId)
-        )
-        _ = try await (updateAssets, discoverAssets)
+        let preferences = WalletPreferences(walletId: walletId)
+
+        async let updateAssetsTask: () = try updateAssets(walletId: walletId, assetIds: assetIds)
+        async let deviceAssetsTask: [AssetId] = try getDeviceAssets(walletId: walletId, preferences: preferences)
+        let (_, deviceAssets) = try await (updateAssetsTask, deviceAssetsTask)
+
+        let additionalAssetIds = deviceAssets.asSet().subtracting(assetIds).asArray()
+        if additionalAssetIds.isNotEmpty {
+            try await enableAssets(walletId: walletId, assetIds: additionalAssetIds)
+        }
+        setCompleteInitialLoadAssets(preferences: preferences)
     }
 
     func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
@@ -51,25 +56,25 @@ actor WalletAssetSyncService: DiscoveryAssetsProcessing {
     func addPrices(assetIds: [AssetId]) async throws {
         try await priceUpdater.addPrices(assetIds: assetIds)
     }
-
-    func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
+    
+    // MARK: - Private
+    
+    private func getDeviceAssets(walletId: WalletId, preferences: WalletPreferences) async throws -> [AssetId] {
         let wallet = try walletSessionService.getWallet(walletId: walletId)
         _ = try await deviceService.getSubscriptionsDeviceId()
 
-        let assetIds = try await discoverAssetService.getAssets(
+        return try await discoverAssetService.getAssets(
             wallet: wallet,
             fromTimestamp: preferences.assetsTimestamp
         )
-
-        if assetIds.isNotEmpty {
-            try await assetService.prefetchAssets(assetIds: assetIds)
-            try await assetsEnabler.enableAssets(
-                walletId: wallet.walletId,
-                assetIds: assetIds,
-                enabled: true
-            )
-        }
-
+    }
+    
+    private func enableAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
+        try await assetService.prefetchAssets(assetIds: assetIds)
+        try await assetsEnabler.enableAssets(walletId: walletId, assetIds: assetIds, enabled: true)
+    }
+    
+    private func setCompleteInitialLoadAssets(preferences: WalletPreferences) {
         preferences.completeInitialLoadAssets = true
         preferences.assetsTimestamp = Int(Date.now.timeIntervalSince1970)
     }
