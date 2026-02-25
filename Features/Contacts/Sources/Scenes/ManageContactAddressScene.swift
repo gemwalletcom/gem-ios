@@ -30,17 +30,19 @@ public struct ManageContactAddressScene: View {
                 memoSection
             }
         }
-        .safeAreaButton {
-            StateButton(
-                text: model.buttonTitle,
-                type: .primary(model.buttonState),
-                action: onComplete
-            )
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("", systemImage: SystemImage.checkmark, action: onComplete)
+                    .disabled(model.buttonState == .disabled)
+            }
         }
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            focusedField = .address
+        }
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onScan)
         }

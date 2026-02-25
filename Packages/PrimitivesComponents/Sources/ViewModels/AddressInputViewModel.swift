@@ -75,7 +75,11 @@ public final class AddressInputViewModel {
 
     @discardableResult
     public func validate() -> Bool {
-        isValid || update()
+        if nameRecordViewModel.canResolveName(name: text) {
+            isValid
+        } else {
+            update()
+        }
     }
 
     public func updateValidators(_ validators: [any TextValidator]) {

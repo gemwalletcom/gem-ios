@@ -14,9 +14,16 @@ import WalletCorePrimitives
 @Observable
 @MainActor
 public final class ManageContactAddressViewModel {
-    public enum Mode {
+    public enum Mode: Identifiable {
         case add
         case edit(ContactAddress)
+
+        public var id: String {
+            switch self {
+            case .add: "add"
+            case .edit(let address): address.id
+            }
+        }
 
         var contactAddress: ContactAddress? {
             switch self {

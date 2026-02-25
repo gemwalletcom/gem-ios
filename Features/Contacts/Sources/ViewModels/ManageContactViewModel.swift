@@ -31,7 +31,6 @@ public final class ManageContactViewModel {
 
     private let service: ContactService
     private let mode: Mode
-    private let onComplete: (() -> Void)?
 
     let contactId: String
     let nameService: any NameServiceable
@@ -39,19 +38,16 @@ public final class ManageContactViewModel {
     var nameInputModel: InputValidationViewModel
     var description: String = ""
     var addresses: [ContactAddress] = []
-    var isPresentingAddAddress = false
-    var isPresentingContactAddress: ContactAddress?
+    var isPresentingAddress: ManageContactAddressViewModel.Mode?
 
     public init(
         service: ContactService,
         nameService: any NameServiceable,
-        mode: Mode,
-        onComplete: (() -> Void)? = nil
+        mode: Mode
     ) {
         self.service = service
         self.nameService = nameService
         self.mode = mode
-        self.onComplete = onComplete
 
         self.nameInputModel = InputValidationViewModel(
             mode: .onDemand,
@@ -109,16 +105,13 @@ public final class ManageContactViewModel {
         )
     }
 
-    func onAddAddressComplete(_ address: ContactAddress) {
-        addresses.append(address)
-        isPresentingAddAddress = false
-    }
-
-    func onManageAddressComplete(_ address: ContactAddress) {
+    func onAddressComplete(_ address: ContactAddress) {
         if let index = addresses.firstIndex(where: { $0.id == address.id }) {
             addresses[index] = address
+        } else {
+            addresses.append(address)
         }
-        isPresentingContactAddress = nil
+        isPresentingAddress = nil
     }
 
     func deleteAddress(at offsets: IndexSet) {
@@ -131,7 +124,6 @@ public final class ManageContactViewModel {
             case .add: try service.addContact(currentContact, addresses: addresses)
             case .edit: try service.updateContact(currentContact, addresses: addresses)
             }
-            onComplete?()
         } catch {
             debugLog("ManageContactViewModel save error: \(error)")
         }

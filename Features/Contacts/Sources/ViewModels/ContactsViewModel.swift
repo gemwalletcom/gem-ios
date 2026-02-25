@@ -17,7 +17,6 @@ public final class ContactsViewModel {
     public let query: ObservableQuery<ContactsRequest>
     var contacts: [ContactData] { query.value }
 
-    var isPresentingContact: ContactData?
     var isPresentingAddContact = false
 
     public init(
@@ -39,16 +38,9 @@ public final class ContactsViewModel {
         ListItemModel(
             title: contact.contact.name,
             titleExtra: contact.contact.description,
+            titleExtraLineLimit: 1,
             imageStyle: .asset(assetImage: AssetImage(type: String(contact.contact.name.prefix(2))))
         )
-    }
-
-    func onAddContactComplete() {
-        isPresentingAddContact = false
-    }
-
-    func onManageContactComplete() {
-        isPresentingContact = nil
     }
 
     func deleteContacts(at offsets: IndexSet) {

@@ -5,24 +5,21 @@ import Components
 import Primitives
 import PrimitivesComponents
 import Style
-import ContactService
-import Store
 
 public struct ContactsScene: View {
 
-    @State private var model: ContactsViewModel
+    let model: ContactsViewModel
 
     public init(model: ContactsViewModel) {
-        _model = State(initialValue: model)
+        self.model = model
     }
 
     public var body: some View {
         List {
             ForEach(model.contacts) { contact in
-                NavigationCustomLink(
-                    with: ListItemView(model: model.listItemModel(for: contact)),
-                    action: { model.isPresentingContact = contact }
-                )
+                NavigationLink(value: Scenes.Contact(contact: contact)) {
+                    ListItemView(model: model.listItemModel(for: contact))
+                }
             }
             .onDelete(perform: model.deleteContacts)
         }
@@ -36,36 +33,5 @@ public struct ContactsScene: View {
                 EmptyContentView(model: model.emptyContent)
             }
         }
-        .navigationTitle(model.title)
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    model.isPresentingAddContact = true
-                } label: {
-                    Images.System.plus
-                }
-            }
-        }
-        .sheet(isPresented: $model.isPresentingAddContact) {
-            ManageContactNavigationStack(
-                model: ManageContactViewModel(
-                    service: model.service,
-                    nameService: model.nameService,
-                    mode: .add,
-                    onComplete: model.onAddContactComplete
-                )
-            )
-        }
-        .sheet(item: $model.isPresentingContact) { contact in
-            ManageContactNavigationStack(
-                model: ManageContactViewModel(
-                    service: model.service,
-                    nameService: model.nameService,
-                    mode: .edit(contact),
-                    onComplete: model.onManageContactComplete
-                )
-            )
-        }
-        .bindQuery(model.query)
     }
 }
