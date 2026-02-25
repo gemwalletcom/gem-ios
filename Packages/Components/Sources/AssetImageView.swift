@@ -69,7 +69,7 @@ public struct AssetImageView: View {
                                 .font(.system(size: diameter, weight: .semibold))
                         }, elseContent: { view in
                             view
-                                .font(.system(size: diameter * 0.3, weight: .semibold))
+                                .font(.system(size: diameter * 0.35, weight: .semibold))
                                 .padding(.horizontal, .space6)
                         })
                         .minimumScaleFactor(0.4)

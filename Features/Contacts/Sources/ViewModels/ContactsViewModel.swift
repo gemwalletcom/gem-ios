@@ -7,6 +7,7 @@ import PrimitivesComponents
 import Components
 import Store
 import Localization
+import Style
 
 @Observable
 @MainActor
@@ -37,7 +38,9 @@ public final class ContactsViewModel {
     func listItemModel(for contact: ContactData) -> ListItemModel {
         ListItemModel(
             title: contact.contact.name,
+            titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
             titleExtra: contact.contact.description,
+            titleStyleExtra: .calloutSecondary,
             titleExtraLineLimit: 1,
             imageStyle: .asset(assetImage: AssetImage(type: String(contact.contact.name.prefix(2))))
         )
