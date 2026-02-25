@@ -15,6 +15,7 @@ struct CandleTooltipView: View {
                 ListItemView(title: model.lowTitle, subtitle: model.lowValue)
                 ListItemView(title: model.closeTitle, subtitle: model.closeValue)
             }
+            Divider()
             VStack(spacing: Spacing.extraSmall) {
                 ListItemView(title: model.changeTitle, subtitle: model.changeValue)
                 ListItemView(title: model.volumeTitle, subtitle: model.volumeValue)

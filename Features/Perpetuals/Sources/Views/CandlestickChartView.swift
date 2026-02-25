@@ -124,7 +124,7 @@ struct CandlestickChartView: View {
                                 .font(.caption2)
                                 .foregroundStyle(Colors.whiteSolid)
                                 .padding(.horizontal, .extraSmall)
-                                .padding(.vertical, 1)
+                                .padding(.vertical, .space1)
                                 .background(currentPriceColor)
                                 .clipShape(RoundedRectangle(cornerRadius: Spacing.tiny))
                         }
@@ -149,14 +149,14 @@ struct CandlestickChartView: View {
                 yStart: .value(ChartKey.low, candle.low),
                 yEnd: .value(ChartKey.high, candle.high)
             )
-            .lineStyle(StrokeStyle(lineWidth: 1))
+            .lineStyle(StrokeStyle(lineWidth: .space1))
             .foregroundStyle(PriceChangeColor.color(for: candle.close - candle.open))
 
             RectangleMark(
                 x: .value(ChartKey.date, candle.date),
                 yStart: .value(ChartKey.open, candle.open),
                 yEnd: .value(ChartKey.close, candle.close),
-                width: .fixed(4)
+                width: .fixed(.space4)
             )
             .foregroundStyle(PriceChangeColor.color(for: candle.close - candle.open))
         }
@@ -204,14 +204,14 @@ struct CandlestickChartView: View {
             )
             .symbol {
                 Circle()
-                    .strokeBorder(Colors.blue, lineWidth: 2)
+                    .strokeBorder(Colors.blue, lineWidth: .space2)
                     .background(Circle().foregroundStyle(Colors.white))
-                    .frame(width: 12)
+                    .frame(width: .space12)
             }
 
             RuleMark(x: .value(ChartKey.date, selectedCandle.date))
                 .foregroundStyle(Colors.blue)
-                .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                .lineStyle(StrokeStyle(lineWidth: .space1, dash: [5]))
         }
     }
 
@@ -250,7 +250,7 @@ struct CandlestickChartView: View {
             .padding(.top, Spacing.small)
             .padding(.trailing, Spacing.extraLarge + Spacing.medium)
             .transition(.opacity)
-            .animation(.easeInOut(duration: 0.15), value: isRightHalf)
+            .animation(.easeInOut(duration: Interval.AnimationDuration.fast), value: isRightHalf)
             .allowsHitTesting(false)
     }
 
