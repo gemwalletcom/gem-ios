@@ -110,7 +110,7 @@ extension EarnSceneViewModel {
     func fetch() async {
         viewState = .loading
         do {
-            let address = (try? wallet.account(for: asset.id.chain))?.address ?? ""
+            let address = try wallet.account(for: asset.id.chain).address
             try await earnService.update(
                 walletId: wallet.walletId,
                 assetId: asset.id,
