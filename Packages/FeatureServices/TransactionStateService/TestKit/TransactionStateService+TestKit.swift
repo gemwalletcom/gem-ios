@@ -42,10 +42,9 @@ public extension TransactionStateService {
 
 public extension EarnService {
     static func mock(
-        store: StakeStore = .mock(),
-        balanceStore: BalanceStore = .mock()
+        store: StakeStore = .mock()
     ) -> EarnService {
         let provider = NativeProvider(url: Constants.apiURL, requestInterceptor: EmptyRequestInterceptor())
-        return EarnService(store: store, balanceStore: balanceStore, gatewayService: GatewayService(provider: provider))
+        return EarnService(store: store, gatewayService: GatewayService(provider: provider))
     }
 }

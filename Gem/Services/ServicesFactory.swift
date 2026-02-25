@@ -100,7 +100,6 @@ struct ServicesFactory {
         )
         let earnService = EarnService(
             store: storeManager.stakeStore,
-            balanceStore: storeManager.balanceStore,
             gatewayService: gatewayService
         )
         let balanceService = Self.makeBalanceService(

@@ -64,6 +64,7 @@ extension BalanceService {
 
     public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async {
         let walletId = wallet.walletId
+
         await withTaskGroup(of: Void.self) { group in
             for account in wallet.accounts {
                 let chain = account.chain
@@ -150,9 +151,7 @@ extension BalanceService {
 
     @discardableResult
     private func updateEarnBalance(walletId: WalletId, chain: Chain, address: String) async -> [AssetBalanceChange] {
-        guard (try? balanceStore.hasEarnBalance(walletId: walletId, chain: chain)) == true else { return [] }
-
-        return await updateBalanceAsync(
+        await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
             fetchBalance: { try await fetcher.getEarnBalance(chain: chain, address: address) },
