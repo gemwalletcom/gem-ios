@@ -72,7 +72,7 @@ public final class RecipientSceneViewModel {
     let recipientField = Localized.Transfer.Recipient.addressField
     var memoField: String { Localized.Transfer.memo }
 
-    var assetImageTitleModel: AssetImageTitleViewModel { AssetImageTitleViewModel(asset: asset) }
+    var assetModel: AssetViewModel { AssetViewModel(asset: asset) }
 
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: ButtonState {

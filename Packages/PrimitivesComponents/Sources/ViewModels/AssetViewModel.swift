@@ -25,6 +25,10 @@ public struct AssetViewModel: Sendable, Identifiable {
         asset.symbol
     }
 
+    public var subtitleSymbol: String? {
+        asset.name == asset.symbol ? nil : asset.symbol
+    }
+
     public var assetImage: AssetImage {
         AssetIdViewModel(assetId: asset.id).assetImage
     }

@@ -4,10 +4,10 @@ import SwiftUI
 import Components
 import Style
 
-public struct AssetImageTitleView: View {
-    private let model: AssetImageTitleViewModel
+public struct AssetPreviewView: View {
+    private let model: AssetViewModel
 
-    public init(model: AssetImageTitleViewModel) {
+    public init(model: AssetViewModel) {
         self.model = model
     }
 
@@ -18,7 +18,7 @@ public struct AssetImageTitleView: View {
             HStack(alignment: .bottom, spacing: .tiny) {
                 Text(model.name)
                     .textStyle(.headline)
-                if let symbol = model.symbol {
+                if let symbol = model.subtitleSymbol {
                     Text(symbol)
                         .textStyle(TextStyle(font: .subheadline, color: Colors.secondaryText, fontWeight: .medium))
                 }

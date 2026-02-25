@@ -26,7 +26,7 @@ public struct RecipientScene: View {
         @Bindable var model = model
         List {
             Section { } header: {
-                AssetImageTitleView(model: model.assetImageTitleModel)
+                AssetPreviewView(model: model.assetModel)
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, .small)
             }
