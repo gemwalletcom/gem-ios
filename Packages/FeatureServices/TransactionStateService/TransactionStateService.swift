@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import protocol Gemstone.GemSwapperProtocol
 import Primitives
 import Store
 import ChainService
@@ -11,11 +12,13 @@ import NFTService
 public struct TransactionStateService: Sendable {
     private let transactionStore: TransactionStore
     private let stateService: TransactionStateProvider
+    private let swapResultProvider: SwapResultProvider
     private let postProcessingService: TransactionPostProcessingService
     private let runner: JobRunner = JobRunner()
 
     public init(
         transactionStore: TransactionStore,
+        swapper: any GemSwapperProtocol,
         stakeService: StakeService,
         nftService: NFTService,
         chainServiceFactory: any ChainServiceFactorable,
@@ -26,6 +29,7 @@ public struct TransactionStateService: Sendable {
             transactionStore: transactionStore,
             chainServiceFactory: chainServiceFactory
         )
+        self.swapResultProvider = SwapResultProvider(swapper: swapper)
         self.postProcessingService = TransactionPostProcessingService(
             transactionStore: transactionStore,
             balanceUpdater: balanceUpdater,
@@ -35,7 +39,7 @@ public struct TransactionStateService: Sendable {
     }
 
     public func setup() {
-        if let walletsTransactions = try? transactionStore.getTransactionWallets(state: .pending) {
+        if let walletsTransactions = try? transactionStore.getTransactionWallets(states: [.pending, .inTransit]) {
             runUpdate(for: walletsTransactions)
         }
     }
@@ -57,6 +61,7 @@ extension TransactionStateService {
             TransactionStateUpdateJob(
                 transactionWallet: $0,
                 stateService: stateService,
+                swapResultProvider: swapResultProvider,
                 postProcessingService: postProcessingService
             )
         }

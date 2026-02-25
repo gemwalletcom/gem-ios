@@ -10,6 +10,7 @@ import Blockchain
 struct TransactionStateUpdateJob: Job {
     private let transactionWallet: TransactionWallet
     private let stateService: TransactionStateProvider
+    private let swapResultProvider: SwapResultProvider
     private let postProcessingService: TransactionPostProcessingService
     private let minInitialInterval: Duration = .seconds(5)
 
@@ -34,34 +35,23 @@ struct TransactionStateUpdateJob: Job {
     init(
         transactionWallet: TransactionWallet,
         stateService: TransactionStateProvider,
+        swapResultProvider: SwapResultProvider,
         postProcessingService: TransactionPostProcessingService
     ) {
         self.transactionWallet = transactionWallet
         self.stateService = stateService
+        self.swapResultProvider = swapResultProvider
         self.postProcessingService = postProcessingService
     }
 
     func run() async -> JobStatus {
-        do {
-            let stateChanges = try await stateService.getState(for: transaction)
-
-            switch stateChanges.state {
-            case .pending:
-                return .retry
-            case .confirmed, .reverted, .failed:
-                try await stateService.updateStateChanges(stateChanges, for: transaction)
-                return .complete
-            }
-        } catch {
-            let isTimedOut = Date.now.timeIntervalSince(transaction.createdAt) > Double(transaction.assetId.chain.transactionTimeoutSeconds) && isNetworkError(
-                error
-            ) == false
-            if isTimedOut {
-                try? stateService.updateState(state: .failed, for: transaction)
-                return .complete
-            }
-            debugLog("TransactionStateUpdateJob: error \(error)")
-            return .retry
+        switch transaction.state {
+        case .inTransit:
+            return await runWithTimeoutHandling(checkSwapStatus)
+        case .pending:
+            return await runWithTimeoutHandling(checkChainState)
+        case .confirmed, .reverted, .failed:
+            return .complete
         }
     }
 
@@ -70,5 +60,44 @@ struct TransactionStateUpdateJob: Job {
             wallet: transactionWallet.wallet,
             transaction: transactionWallet.transaction
         )
+    }
+
+    // MARK: - Private
+
+    private func checkSwapStatus() async throws -> JobStatus {
+        guard let state = try await swapResultProvider.checkSwapStatus(for: transaction) else {
+            return .retry
+        }
+        try stateService.updateState(state: state, for: transaction)
+        return .complete
+    }
+
+    private func checkChainState() async throws -> JobStatus {
+        let stateChanges = try await stateService.getState(for: transaction)
+
+        switch stateChanges.state {
+        case .pending, .inTransit:
+            return .retry
+        case .confirmed, .reverted, .failed:
+            try await stateService.updateStateChanges(stateChanges, for: transaction)
+            return .complete
+        }
+    }
+
+    private func runWithTimeoutHandling(_ operation: () async throws -> JobStatus) async -> JobStatus {
+        do {
+            return try await operation()
+        } catch {
+            if isTransactionTimedOut && !isNetworkError(error) {
+                try? stateService.updateState(state: .failed, for: transaction)
+                return .complete
+            }
+            debugLog("TransactionStateUpdateJob: error \(error)")
+            return .retry
+        }
+    }
+
+    private var isTransactionTimedOut: Bool {
+        Date.now.timeIntervalSince(transaction.createdAt) > Double(transaction.assetId.chain.transactionTimeoutSeconds)
     }
 }

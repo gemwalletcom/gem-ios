@@ -8,6 +8,10 @@ extension Transaction {
     public static func id(chain: Chain, hash: String) -> String {
         return String(format: "%@_%@", chain.rawValue, hash)
     }
+    
+    public var chain: Chain {
+        assetId.chain
+    }
 
     public var valueBigInt: BigInt {
         return BigInt(value) ?? .zero
