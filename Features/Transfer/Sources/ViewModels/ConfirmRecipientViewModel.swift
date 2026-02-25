@@ -44,22 +44,15 @@ extension ConfirmRecipientViewModel: ItemModelProvidable {
 extension ConfirmRecipientViewModel {
     private var recipientImage: AssetImage? {
         switch model.recipient.type {
-        case .domain(let provider):
-            switch provider {
-            case .ens, .basenames: AssetImage.image(Images.NameResolve.ens)
-            case .ud, .sns, .spaceid, .lens, .ton, .tree, .eths, .did, .suins, .aptos, .injective, .icns, .hyperliquid, .allDomains: nil
-            }
+        case .domain(let provider): provider.assetImage
         case .none: nil
         }
     }
 
     private var addressNameImage: AssetImage? {
         switch addressName?.type {
-        case .contact:
-            guard let name = addressName?.name else { return nil }
-            return AssetImage(type: String(name.prefix(2)))
-        case .address, .contract, .validator, .none:
-            return nil
+        case .contact: .image(Images.NameResolve.contact)
+        case .address, .contract, .validator, .none: nil
         }
     }
 
