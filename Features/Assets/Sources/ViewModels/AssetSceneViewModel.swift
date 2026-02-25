@@ -15,7 +15,6 @@ import TransactionsService
 import WalletsService
 import PriceService
 import BannerService
-import Formatters
 import Store
 
 @Observable
@@ -83,8 +82,8 @@ public final class AssetSceneViewModel: Sendable {
 
     var balancesTitle: String { Localized.Asset.balances }
     var networkTitle: String { Localized.Transfer.network }
-    var stakeTitle: String { Localized.Wallet.stake }
-    
+
+
     var resourcesTitle: String { Localized.Asset.resources }
     var energyTitle: String { ResourceViewModel(resource: .energy).title }
     var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
@@ -93,9 +92,8 @@ public final class AssetSceneViewModel: Sendable {
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
-    var showBalances: Bool { assetDataModel.showBalances || showEarnBalance }
-    private var showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
-    var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
+    var showBalances: Bool { assetDataModel.showBalances || showProviderBalance(for: .earn) }
+
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showPendingUnconfirmedBalance: Bool { assetDataModel.hasPendingUnconfirmedBalance }
     var showResources: Bool { assetDataModel.showResources }
@@ -127,26 +125,9 @@ public final class AssetSceneViewModel: Sendable {
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
 
     var networkText: String { assetModel.networkFullName }
-    func aprModel(for type: StakeProviderType) -> AprViewModel {
-        AprViewModel(apr: assetDataModel.apr(for: type) ?? .zero)
-    }
-
-
-    var earnTitle: String { Localized.Common.earn }
-
 
     var showEarnButton: Bool {
-        assetData.metadata.isEarnEnabled && !wallet.isViewOnly && !showEarnBalance
-    }
-
-    var showEarnBalance: Bool {
-        assetData.balance.earn > 0
-    }
-
-    var earnBalanceText: String {
-        let balance = assetData.balance.earn
-        guard balance > 0 else { return "0" }
-        return ValueFormatter(style: .medium).string(balance, decimals: asset.decimals.asInt, currency: asset.symbol)
+        assetData.metadata.isEarnEnabled && !wallet.isViewOnly && !showProviderBalance(for: .earn)
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -225,6 +206,24 @@ public final class AssetSceneViewModel: Sendable {
                 .swap(assetData.asset, nil)
             }
         }
+    }
+
+    func showProviderBalance(for type: StakeProviderType) -> Bool {
+        switch type {
+        case .stake: assetDataModel.isStakeEnabled || assetData.balances.contains(where: { Self.showStakedBalanceTypes.contains($0.key) && $0.value > 0 })
+        case .earn: assetData.balance.earn > .zero
+        }
+    }
+
+    func balanceTitle(for type: StakeProviderType) -> String {
+        switch type {
+        case .stake: Localized.Wallet.stake
+        case .earn: Localized.Common.earn
+        }
+    }
+
+    func aprModel(for type: StakeProviderType) -> AprViewModel {
+        AprViewModel(apr: assetDataModel.apr(for: type) ?? .zero)
     }
 }
 
@@ -324,11 +323,11 @@ extension AssetSceneViewModel {
         )
     }
 
-    func onSelectBuy() {
+    private func onSelectBuy() {
         onSelectHeader(.buy)
     }
 
-    func onSelectSwap() {
+    private func onSelectSwap() {
         onSelectHeader(.swap)
     }
 
@@ -405,6 +404,8 @@ extension AssetSceneViewModel {
         }
         return explorerService.tokenUrl(chain: assetModel.asset.chain, address: tokenId)
     }
+
+    private static let showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
 
     private var addressLink: BlockExplorerLink {
         explorerService.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
