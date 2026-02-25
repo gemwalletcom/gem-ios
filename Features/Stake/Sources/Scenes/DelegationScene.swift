@@ -4,10 +4,10 @@ import SwiftUI
 import Components
 import PrimitivesComponents
 
-public struct DelegationDetailScene: View {
-    private let model: DelegationDetailSceneViewModel
+public struct DelegationScene: View {
+    private let model: DelegationSceneViewModel
 
-    public init(model: DelegationDetailSceneViewModel) {
+    public init(model: DelegationSceneViewModel) {
         self.model = model
     }
 
@@ -15,7 +15,7 @@ public struct DelegationDetailScene: View {
         List {
             Section { } header: {
                 WalletHeaderView(
-                    model: model.headerViewModel,
+                    model: model.model,
                     isPrivacyEnabled: .constant(false),
                     balanceActionType: .none,
                     onHeaderAction: nil,

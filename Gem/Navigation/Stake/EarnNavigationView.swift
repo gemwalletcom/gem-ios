@@ -41,8 +41,8 @@ struct EarnNavigationView: View {
                 )
             }
             .navigationDestination(for: Delegation.self) { delegation in
-                DelegationDetailScene(
-                    model: viewModelFactory.delegationDetailScene(
+                DelegationScene(
+                    model: viewModelFactory.delegationScene(
                         wallet: wallet,
                         delegation: delegation,
                         asset: asset,

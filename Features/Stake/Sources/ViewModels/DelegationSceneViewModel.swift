@@ -10,7 +10,7 @@ import Formatters
 import PrimitivesComponents
 import GemstonePrimitives
 
-public struct DelegationDetailSceneViewModel {
+public struct DelegationSceneViewModel {
     public let model: DelegationViewModel
     public let validators: [DelegationValidator]
     public let onAmountInputAction: AmountInputAction
@@ -55,10 +55,6 @@ public struct DelegationDetailSceneViewModel {
     public var manageTitle: String { Localized.Common.manage }
     public var rewardsTitle: String { Localized.Stake.rewards }
 
-    public var headerViewModel: HeaderViewModel {
-        DelegationViewModel(delegation: model.delegation, asset: asset, formatter: .auto, currencyCode: model.currencyCode)
-    }
-
     public var stateModel: DelegationStateViewModel {
         DelegationStateViewModel(state: model.state)
     }
@@ -101,14 +97,14 @@ public struct DelegationDetailSceneViewModel {
         .asset(assetImage: AssetViewModel(asset: asset).assetImage)
     }
 
-    public var availableActions: [DelegationDetailActionType] {
+    public var availableActions: [DelegationActionType] {
         guard wallet.canSign else { return [] }
         return switch providerType {
         case .stake:
             switch model.state {
-            case .active: chain.supportRedelegate ? [.stake, .unstake, .redelegate] : [.unstake]
-            case .inactive: chain.supportRedelegate ? [.unstake, .redelegate] : [.unstake]
-            case .awaitingWithdrawal: chain.supportWidthdraw ? [.withdraw] : []
+            case .active: stakeChain.supportRedelegate ? [.stake, .unstake, .redelegate] : [.unstake]
+            case .inactive: stakeChain.supportRedelegate ? [.unstake, .redelegate] : [.unstake]
+            case .awaitingWithdrawal: stakeChain.supportWidthdraw ? [.withdraw] : []
             case .pending, .activating, .deactivating: []
             }
         case .earn:
@@ -124,7 +120,7 @@ public struct DelegationDetailSceneViewModel {
         !availableActions.isEmpty
     }
 
-    public func actionTitle(_ action: DelegationDetailActionType) -> String {
+    public func actionTitle(_ action: DelegationActionType) -> String {
         switch action {
         case .stake: Localized.Transfer.Stake.title
         case .unstake: Localized.Transfer.Unstake.title
@@ -137,19 +133,19 @@ public struct DelegationDetailSceneViewModel {
 
 // MARK: - Actions
 
-extension DelegationDetailSceneViewModel {
-    public func onSelectAction(_ action: DelegationDetailActionType) {
+extension DelegationSceneViewModel {
+    public func onSelectAction(_ action: DelegationActionType) {
         switch action {
         case .stake:
             onAmountInputAction?(amountInput(.stake(.stake(validators: validators, recommended: model.delegation.validator))))
         case .unstake:
-            if chain.canChangeAmountOnUnstake {
+            if stakeChain.canChangeAmountOnUnstake {
                 onAmountInputAction?(amountInput(.stake(.unstake(model.delegation))))
             } else {
                 onTransferAction?(stakeTransferData(.unstake(model.delegation)))
             }
         case .redelegate:
-            onAmountInputAction?(amountInput(.stake(.redelegate(model.delegation, validators: validators, recommended: recommendedCurrentValidator))))
+            onAmountInputAction?(amountInput(.stake(.redelegate(model.delegation, validators: validators, recommended: recommendedValidator))))
         case .deposit:
             onAmountInputAction?(amountInput(.earn(.deposit(model.delegation.validator))))
         case .withdraw:
@@ -163,7 +159,7 @@ extension DelegationDetailSceneViewModel {
 
 // MARK: - Private
 
-extension DelegationDetailSceneViewModel {
+extension DelegationSceneViewModel {
     private func amountInput(_ type: AmountType) -> AmountInput {
         AmountInput(type: type, asset: asset)
     }
@@ -183,11 +179,11 @@ extension DelegationDetailSceneViewModel {
         model.delegation.validator.providerType
     }
 
-    private var chain: StakeChain {
+    private var stakeChain: StakeChain {
         StakeChain(rawValue: asset.chain.rawValue)!
     }
 
-    private var recommendedCurrentValidator: DelegationValidator? {
+    private var recommendedValidator: DelegationValidator? {
         guard let validatorId = StakeRecommendedValidators().randomValidatorId(chain: model.delegation.base.assetId.chain) else {
             return .none
         }
