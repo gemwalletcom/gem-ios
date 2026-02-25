@@ -102,17 +102,23 @@ public struct AssetScene: View {
                         subtitle: model.assetDataModel.availableBalanceTextWithSymbol
                     )
 
-                    if model.showStakedBalance {
+                    if model.showProviderBalance(for: .stake) {
                         NavigationCustomLink(
-                            with: ListItemView(title: model.stakeTitle, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol),
+                            with: ListItemView(
+                                title: model.balanceTitle(for: .stake),
+                                subtitle: model.assetDataModel.balanceTextWithSymbol(for: .stake)
+                            ),
                             action: { model.onSelectHeader(.stake) }
                         )
                         .accessibilityIdentifier("stake")
                     }
 
-                    if model.showEarnBalance {
+                    if model.showProviderBalance(for: .earn) {
                         NavigationCustomLink(
-                            with: ListItemView(title: model.earnTitle, subtitle: model.earnBalanceText),
+                            with: ListItemView(
+                                title: model.balanceTitle(for: .earn),
+                                subtitle: model.assetDataModel.balanceTextWithSymbol(for: .earn)
+                            ),
                             action: { model.onSelectEarn() }
                         )
                         .accessibilityIdentifier("earn")
@@ -147,7 +153,7 @@ public struct AssetScene: View {
                             EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
                                 .frame(size: .image.asset)
                             ListItemView(
-                                title: model.earnTitle,
+                                title: model.balanceTitle(for: .earn),
                                 subtitle: model.aprModel(for: .earn).text
                             )
                         },
@@ -214,7 +220,7 @@ extension AssetScene {
                 EmojiView(color: Colors.grayVeryLight, emoji: "💰")
                     .frame(size: .image.asset)
                 ListItemView(
-                    title: model.stakeTitle,
+                    title: model.balanceTitle(for: .stake),
                     subtitle: model.aprModel(for: .stake).text
                 )
             },
