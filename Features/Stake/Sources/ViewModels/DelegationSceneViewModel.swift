@@ -110,7 +110,7 @@ public struct DelegationSceneViewModel {
     }
 
     public var showManage: Bool {
-        !availableActions.isEmpty
+        availableActions.isNotEmpty
     }
 
     public func actionTitle(_ action: DelegationActionType) -> String {

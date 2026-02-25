@@ -132,7 +132,7 @@ public final class StakeSceneViewModel {
     }
 
     var delegationsSectionTitle: String {
-        guard case .data(let delegations) = delegationsState, !delegations.isEmpty else {
+        guard case .data(let delegations) = delegationsState, delegations.isNotEmpty else {
             return .empty
         }
         return delegationsTitle
