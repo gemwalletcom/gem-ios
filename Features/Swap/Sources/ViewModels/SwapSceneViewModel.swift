@@ -23,7 +23,8 @@ public final class SwapSceneViewModel {
     static let inputPercentSuggestions = [25, 50, 100].map { PercentageSuggestion(value: $0) }
 
     public let wallet: Wallet
-    public let assetSyncService: any AssetSyncServiceable
+    private let balanceUpdater: any BalanceUpdater
+    private let priceUpdater: any PriceUpdater
 
     public var swapState: SwapState = .init()
     public var isPresentingInfoSheet: SwapSheetType?
@@ -53,7 +54,8 @@ public final class SwapSceneViewModel {
     public init(
         preferences: Preferences = Preferences.standard,
         input: SwapInput,
-        assetSyncService: any AssetSyncServiceable,
+        balanceUpdater: any BalanceUpdater,
+        priceUpdater: any PriceUpdater,
         swapQuotesProvider: SwapQuotesProvidable,
         swapQuoteDataProvider: any SwapQuoteDataProvidable,
         onSwap: TransferDataAction = nil
@@ -63,7 +65,8 @@ public final class SwapSceneViewModel {
         self.pairSelectorModel = pairSelectorModel
         self.preferences = preferences
         self.wallet = input.wallet
-        self.assetSyncService = assetSyncService
+        self.balanceUpdater = balanceUpdater
+        self.priceUpdater = priceUpdater
 
         self.fromAssetQuery = ObservableQuery(AssetRequestOptional(walletId: input.wallet.walletId, assetId: pairSelectorModel.fromAssetId), initialValue: nil)
         self.toAssetQuery = ObservableQuery(AssetRequestOptional(walletId: input.wallet.walletId, assetId: pairSelectorModel.toAssetId), initialValue: nil)
@@ -302,7 +305,7 @@ extension SwapSceneViewModel {
 
         Task {
             let assetIds = [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
-            try await assetSyncService.addPrices(assetIds: assetIds)
+            try await priceUpdater.addPrices(assetIds: assetIds)
         }
     }
 
@@ -363,12 +366,8 @@ extension SwapSceneViewModel {
 
     private func performUpdate(for assetIds: [AssetId]) async {
         do {
-            try await assetSyncService.updateAssets(
-                walletId: wallet.walletId,
-                assetIds: assetIds
-            )
+            try await balanceUpdater.updateBalance(for: wallet.walletId, assetIds: assetIds)
         } catch {
-            // TODO: - handle error
             debugLog("SwapScene perform assets update error: \(error)")
         }
     }

@@ -44,7 +44,9 @@ extension EnvironmentValues {
     @Entry var priceObserverService: PriceObserverService = AppResolver.main.services.priceObserverService
     @Entry var explorerService: ExplorerService = AppResolver.main.services.explorerService
     @Entry var assetsEnabler: any AssetsEnabler = AppResolver.main.services.assetsEnabler
-    @Entry var assetSyncService: any AssetSyncServiceable = AppResolver.main.services.assetSyncService
+    @Entry var assetDiscoveryService: any AssetDiscoverable = AppResolver.main.services.assetDiscoveryService
+    @Entry var balanceUpdater: any BalanceUpdater = AppResolver.main.services.balanceUpdater
+    @Entry var priceUpdater: any PriceUpdater = AppResolver.main.services.priceUpdater
     @Entry var walletSetupService: WalletSetupService = AppResolver.main.services.walletSetupService
     @Entry var walletService: WalletService = AppResolver.main.services.walletService
     @Entry var walletSessionService: WalletSessionService = AppResolver.main.services.walletSessionService

@@ -14,7 +14,8 @@ import PriceAlerts
 import Components
 
 struct MainTabView: View {
-    @Environment(\.assetSyncService) private var assetSyncService
+    @Environment(\.assetDiscoveryService) private var assetDiscoveryService
+    @Environment(\.balanceUpdater) private var balanceUpdater
     @Environment(\.balanceService) private var balanceService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.navigationState) private var navigationState
@@ -44,7 +45,8 @@ struct MainTabView: View {
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
                 model: WalletSceneViewModel(
-                    assetSyncService: assetSyncService,
+                    assetDiscoveryService: assetDiscoveryService,
+                    balanceUpdater: balanceUpdater,
                     balanceService: balanceService,
                     bannerService: bannerService,
                     walletService: walletService,

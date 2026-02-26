@@ -19,7 +19,8 @@ import Formatters
 @Observable
 @MainActor
 public final class WalletSceneViewModel: Sendable {
-    private let assetSyncService: any AssetSyncServiceable
+    private let assetDiscoveryService: any AssetDiscoverable
+    private let balanceUpdater: any BalanceUpdater
     private let balanceService: BalanceService
     private let bannerService: BannerService
     private let walletService: WalletService
@@ -54,7 +55,8 @@ public final class WalletSceneViewModel: Sendable {
     public var isLoadingAssets: Bool = false
 
     public init(
-        assetSyncService: any AssetSyncServiceable,
+        assetDiscoveryService: any AssetDiscoverable,
+        balanceUpdater: any BalanceUpdater,
         balanceService: BalanceService,
         bannerService: BannerService,
         walletService: WalletService,
@@ -63,7 +65,8 @@ public final class WalletSceneViewModel: Sendable {
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.wallet = wallet
-        self.assetSyncService = assetSyncService
+        self.assetDiscoveryService = assetDiscoveryService
+        self.balanceUpdater = balanceUpdater
         self.balanceService = balanceService
         self.bannerService = bannerService
         self.walletService = walletService
@@ -130,10 +133,7 @@ extension WalletSceneViewModel {
     func fetch() {
         Task {
             shouldStartLoadingAssets()
-            await fetch(
-                walletId: wallet.walletId,
-                assetIds: assets.map { $0.asset.id }
-            )
+            await fetch(wallet: wallet, assetIds: assets.map { $0.asset.id })
             isLoadingAssets = false
         }
     }
@@ -241,15 +241,11 @@ extension WalletSceneViewModel {
 // MARK: - Private
 
 extension WalletSceneViewModel {
-    private func fetch(
-        walletId: WalletId,
-        assetIds: [AssetId]
-    ) async {
+    private func fetch(wallet: Wallet, assetIds: [AssetId]) async {
         do {
-            try await assetSyncService.fetch(
-                walletId: walletId,
-                assetIds: assetIds
-            )
+            async let updateBalance: () = try balanceUpdater.updateBalance(for: wallet.walletId, assetIds: assetIds)
+            async let discover: () = try assetDiscoveryService.discoverAssets(wallet: wallet)
+            _ = try await (updateBalance, discover)
         } catch {
             debugLog("WalletSceneViewModel fetch error: \(error)")
         }

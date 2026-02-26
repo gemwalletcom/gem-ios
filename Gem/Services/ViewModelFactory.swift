@@ -33,7 +33,8 @@ public struct ViewModelFactory: Sendable {
     let scanService: ScanService
     let swapService: SwapService
     let assetsEnabler: any AssetsEnabler
-    let assetSyncService: any AssetSyncServiceable
+    let balanceUpdater: any BalanceUpdater
+    let priceUpdater: any PriceUpdater
     let walletService: WalletService
     let stakeService: StakeService
     let nameService: NameService
@@ -51,7 +52,8 @@ public struct ViewModelFactory: Sendable {
         scanService: ScanService,
         swapService: SwapService,
         assetsEnabler: any AssetsEnabler,
-        assetSyncService: any AssetSyncServiceable,
+        balanceUpdater: any BalanceUpdater,
+        priceUpdater: any PriceUpdater,
         walletService: WalletService,
         stakeService: StakeService,
         nameService: NameService,
@@ -68,7 +70,8 @@ public struct ViewModelFactory: Sendable {
         self.scanService = scanService
         self.swapService = swapService
         self.assetsEnabler = assetsEnabler
-        self.assetSyncService = assetSyncService
+        self.balanceUpdater = balanceUpdater
+        self.priceUpdater = priceUpdater
         self.walletService = walletService
         self.stakeService = stakeService
         self.nameService = nameService
@@ -166,7 +169,8 @@ public struct ViewModelFactory: Sendable {
     ) -> SwapSceneViewModel {
         SwapSceneViewModel(
             input: input,
-            assetSyncService: assetSyncService,
+            balanceUpdater: balanceUpdater,
+            priceUpdater: priceUpdater,
             swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
             onSwap: onSwap

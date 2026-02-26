@@ -185,14 +185,11 @@ struct ServicesFactory {
             balanceUpdater: balanceUpdater,
             priceUpdater: priceObserverService
         )
-        let assetSyncService = WalletAssetSyncService(
+        let assetDiscoveryService = AssetDiscoveryService(
             deviceService: deviceService,
             discoverAssetService: discoverAssetsService,
             assetService: assetsService,
-            priceUpdater: priceObserverService,
-            balanceUpdater: balanceUpdater,
-            assetsEnabler: assetsEnabler,
-            walletSessionService: walletSessionService
+            assetsEnabler: assetsEnabler
         )
         let walletSetupService = WalletSetupService(balanceUpdater: balanceUpdater)
 
@@ -281,7 +278,8 @@ struct ServicesFactory {
             scanService: scanService,
             swapService: swapService,
             assetsEnabler: assetsEnabler,
-            assetSyncService: assetSyncService,
+            balanceUpdater: balanceUpdater,
+            priceUpdater: priceObserverService,
             walletService: walletService,
             stakeService: stakeService,
             nameService: nameService,
@@ -313,7 +311,9 @@ struct ServicesFactory {
             walletService: walletService,
             walletSessionService: walletSessionService,
             assetsEnabler: assetsEnabler,
-            assetSyncService: assetSyncService,
+            assetDiscoveryService: assetDiscoveryService,
+            balanceUpdater: balanceUpdater,
+            priceUpdater: priceObserverService,
             walletSetupService: walletSetupService,
             explorerService: explorerService,
             scanService: scanService,

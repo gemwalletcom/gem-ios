@@ -62,7 +62,7 @@ extension AssetSceneViewModel {
     static func mock(_ assetData: AssetData = AssetData.mock()) -> AssetSceneViewModel {
         let model = AssetSceneViewModel(
             assetsEnabler: .mock(),
-            assetSyncService: .mock(),
+            balanceUpdater: .mock(),
             balanceService: .mock(),
             assetsService: .mock(),
             transactionsService: .mock(),

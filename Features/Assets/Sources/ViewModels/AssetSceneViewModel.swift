@@ -23,7 +23,7 @@ import Store
 @MainActor
 public final class AssetSceneViewModel: Sendable {
     private let assetsEnabler: any AssetsEnabler
-    private let assetSyncService: any AssetSyncServiceable
+    private let balanceUpdater: any BalanceUpdater
     private let balanceService: BalanceService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
@@ -54,7 +54,7 @@ public final class AssetSceneViewModel: Sendable {
 
     public init(
         assetsEnabler: any AssetsEnabler,
-        assetSyncService: any AssetSyncServiceable,
+        balanceUpdater: any BalanceUpdater,
         balanceService: BalanceService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
@@ -65,7 +65,7 @@ public final class AssetSceneViewModel: Sendable {
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.assetsEnabler = assetsEnabler
-        self.assetSyncService = assetSyncService
+        self.balanceUpdater = balanceUpdater
         self.balanceService = balanceService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
@@ -452,12 +452,9 @@ extension AssetSceneViewModel {
 
     private func updateWallet() async {
         do {
-            async let updateAsset: () = try assetSyncService.updateAssets(
-                walletId: walletModel.wallet.walletId,
-                assetIds: [assetModel.asset.id]
-            )
+            async let updateBalance: () = try balanceUpdater.updateBalance(for: walletModel.wallet.walletId, assetIds: [assetModel.asset.id])
             async let updateTransactions: () = try fetchTransactions()
-            let _ = try await [updateAsset, updateTransactions]
+            let _ = try await [updateBalance, updateTransactions]
         } catch {
             // TODO: - handle fetch error
             debugLog("asset scene: updateWallet error \(error)")

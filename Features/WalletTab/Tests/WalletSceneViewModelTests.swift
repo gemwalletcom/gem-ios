@@ -70,7 +70,8 @@ struct WalletSceneViewModelTests {
 extension WalletSceneViewModel {
     static func mock(wallet: Wallet = .mock()) -> WalletSceneViewModel {
         WalletSceneViewModel(
-            assetSyncService: .mock(),
+            assetDiscoveryService: .mock(),
+            balanceUpdater: .mock(),
             balanceService: .mock(),
             bannerService: .mock(),
             walletService: .mock(),

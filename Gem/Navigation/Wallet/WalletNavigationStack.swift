@@ -18,7 +18,7 @@ import AssetsService
 
 struct WalletNavigationStack: View {
     @Environment(\.assetsEnabler) private var assetsEnabler
-    @Environment(\.assetSyncService) private var assetSyncService
+    @Environment(\.balanceUpdater) private var balanceUpdater
     @Environment(\.balanceService) private var balanceService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
@@ -91,7 +91,7 @@ struct WalletNavigationStack: View {
                 AssetNavigationView(
                     model: AssetSceneViewModel(
                         assetsEnabler: assetsEnabler,
-                        assetSyncService: assetSyncService,
+                        balanceUpdater: balanceUpdater,
                         balanceService: balanceService,
                         assetsService: assetsService,
                         transactionsService: transactionsService,

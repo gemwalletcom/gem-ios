@@ -151,7 +151,8 @@ extension SwapSceneViewModel {
                 wallet: .mock(accounts: [.mock(chain: .ethereum)]),
                 pairSelector: SwapPairSelectorViewModel(fromAssetId: .mockEthereum(), toAssetId: nil)
             ),
-            assetSyncService: .mock(),
+            balanceUpdater: .mock(),
+            priceUpdater: .mock(),
             swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper)),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: LocalKeystore.mock(), swapService: .mock(swapper: swapper))
         )

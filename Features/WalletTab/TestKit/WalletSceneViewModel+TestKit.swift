@@ -12,7 +12,8 @@ import PrimitivesTestKit
 public extension WalletSceneViewModel {
     static func mock() -> WalletSceneViewModel {
         WalletSceneViewModel(
-            assetSyncService: .mock(),
+            assetDiscoveryService: .mock(),
+            balanceUpdater: .mock(),
             balanceService: .mock(),
             bannerService: .mock(),
             walletService: .mock(),
