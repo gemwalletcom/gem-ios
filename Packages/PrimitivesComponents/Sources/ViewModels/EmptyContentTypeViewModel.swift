@@ -29,7 +29,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case false: Localized.Activity.State.Empty.title
             }
         case .stake: Localized.Stake.State.Empty.title
-        case .earn: Localized.Stake.State.Empty.title
+        case .earn: Localized.Earn.State.Empty.title
         case .walletConnect: Localized.WalletConnect.noActiveConnections
         case .markets: Localized.Markets.State.Empty.title
         case .notifications: Localized.Notifications.Inapp.State.Empty.title
@@ -59,7 +59,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case false: Localized.Activity.State.Empty.description
             }
         case let .stake(symbol): Localized.Stake.State.Empty.description(symbol)
-        case let .earn(symbol): Localized.Stake.State.Empty.description(symbol)
+        case let .earn(symbol): Localized.Earn.State.Empty.description(symbol)
         case .walletConnect: Localized.WalletConnect.State.Empty.description
         case let .search(searchType, action):
             switch searchType {
