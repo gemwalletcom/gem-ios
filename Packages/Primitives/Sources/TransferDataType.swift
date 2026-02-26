@@ -12,7 +12,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case perpetual(Asset, PerpetualType)
-    case earn(Asset, EarnType, EarnData)
+    case earn(Asset, EarnType, ContractCallData)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
 
     public var transactionType: TransactionType {
@@ -139,7 +139,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         return (fromAsset, toAsset, data)
     }
 
-    public func earn() throws -> (Asset, EarnType, data: EarnData) {
+    public func earn() throws -> (Asset, EarnType, data: ContractCallData) {
         guard case .earn(let asset, let earnType, let data) = self else {
             throw AnyError("EarnData missed")
         }

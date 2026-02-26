@@ -34,13 +34,17 @@ public struct RedelegateData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct StakeData: Codable, Equatable, Hashable, Sendable {
-	public let data: String?
-	public let to: String?
+public struct ContractCallData: Codable, Equatable, Hashable, Sendable {
+	public let contractAddress: String
+	public let callData: String
+	public let approval: ApprovalData?
+	public let gasLimit: String?
 
-	public init(data: String?, to: String?) {
-		self.data = data
-		self.to = to
+	public init(contractAddress: String, callData: String, approval: ApprovalData? = nil, gasLimit: String? = nil) {
+		self.contractAddress = contractAddress
+		self.callData = callData
+		self.approval = approval
+		self.gasLimit = gasLimit
 	}
 }
 

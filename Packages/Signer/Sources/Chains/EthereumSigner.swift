@@ -256,15 +256,13 @@ class EthereumSigner: Signable {
         }
 
         guard
-            case .evm(_, _, let stakeData) = input.metadata,
-            let stakeData = stakeData,
-            let data = stakeData.data,
-            let to = stakeData.to
+            case .evm(_, _, let contractCall) = input.metadata,
+            let contractCall = contractCall
         else {
             throw AnyError("Invalid metadata for {\(input.asset.chain)} staking")
         }
 
-        let callData = try Data.from(hex: data)
+        let callData = try Data.from(hex: contractCall.callData)
         let valueData = try {
             switch input.asset.chain {
             case .ethereum:
@@ -299,7 +297,7 @@ class EthereumSigner: Signable {
                     $0.data = callData
                 }
             },
-            toAddress: to,
+            toAddress: contractCall.contractAddress,
             privateKey: privateKey
         ))
         return [signedData]
