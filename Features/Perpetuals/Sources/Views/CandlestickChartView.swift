@@ -166,7 +166,7 @@ struct CandlestickChartView: View {
     private func linesMarks(_ bounds: ChartBounds) -> some ChartContent {
         ForEach(bounds.visibleLines) { line in
             RuleMark(y: .value(ChartKey.price, line.price))
-                .foregroundStyle(line.color.opacity(0.6))
+                .foregroundStyle(line.color.opacity(.semiStrong))
                 .lineStyle(line.lineStyle)
         }
 

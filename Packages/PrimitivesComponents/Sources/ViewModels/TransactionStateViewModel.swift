@@ -48,9 +48,9 @@ public struct TransactionStateViewModel {
 
     public var background: Color {
         switch state {
-        case .confirmed: Colors.green.opacity(0.15)
-        case .pending, .inTransit: Colors.orange.opacity(0.15)
-        case .failed, .reverted: Colors.red.opacity(0.15)
+        case .confirmed: Colors.green.opacity(.light)
+        case .pending, .inTransit: Colors.orange.opacity(.light)
+        case .failed, .reverted: Colors.red.opacity(.light)
         }
     }
 }

@@ -55,7 +55,7 @@ public struct StateButtonStyle: ButtonStyle {
     private func foreground(configuration: Configuration) -> Color {
         switch variant.state {
         case .normal: configuration.isPressed ? palette.foregroundPressed : palette.foreground
-        case .loading(let show): show ? palette.foreground : palette.foreground.opacity(0.65)
+        case .loading(let show): show ? palette.foreground : palette.foreground.opacity(.semi)
         case .disabled: palette.foreground
         }
     }
