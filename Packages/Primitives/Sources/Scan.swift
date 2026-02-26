@@ -8,6 +8,7 @@ public enum AddressType: String, Codable, Equatable, Sendable {
 	case address
 	case contract
 	case validator
+	case contact
 }
 
 public struct ScanAddress: Codable, Equatable, Sendable {

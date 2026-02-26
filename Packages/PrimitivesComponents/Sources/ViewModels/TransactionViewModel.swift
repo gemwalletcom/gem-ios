@@ -332,13 +332,13 @@ public struct TransactionViewModel: Sendable {
     private var addressLink: BlockExplorerLink { explorerService.addressUrl(chain: assetId.chain, address: participant) }
     private var assetId: AssetId { transaction.transaction.assetId }
     
-    public func getAddressName(address: String) -> String? {
+    public func getAddressName(address: String) -> AddressName? {
         if address == transaction.transaction.from {
-            return transaction.fromAddress?.name
+            return transaction.fromAddress
         }
 
         if address == transaction.transaction.to {
-            return transaction.toAddress?.name
+            return transaction.toAddress
         }
 
         return .none
@@ -351,7 +351,7 @@ public struct TransactionViewModel: Sendable {
     // MARK: - Private methods
     
     private func getDisplayName(address: String, chain: Chain) -> String {
-        if let name = getAddressName(address: address) {
+        if let name = getAddressName(address: address)?.name {
             return name
         }
         return AddressFormatter(address: address, chain: chain).value()

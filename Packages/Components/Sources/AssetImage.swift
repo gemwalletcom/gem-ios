@@ -10,7 +10,7 @@ public struct AssetImage: Sendable, Equatable {
     public let chainPlaceholder: Image?
 
     public init(
-        type: String? = .none, 
+        type: String? = .none,
         imageURL: URL? = .none,
         placeholder: Image? = .none,
         chainPlaceholder: Image? = .none
