@@ -34,20 +34,6 @@ public struct RedelegateData: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct ContractCallData: Codable, Equatable, Hashable, Sendable {
-	public let contractAddress: String
-	public let callData: String
-	public let approval: ApprovalData?
-	public let gasLimit: String?
-
-	public init(contractAddress: String, callData: String, approval: ApprovalData? = nil, gasLimit: String? = nil) {
-		self.contractAddress = contractAddress
-		self.callData = callData
-		self.approval = approval
-		self.gasLimit = gasLimit
-	}
-}
-
 public struct TronUnfreeze: Codable, Equatable, Hashable, Sendable {
 	public let resource: Resource
 	public let amount: UInt64
