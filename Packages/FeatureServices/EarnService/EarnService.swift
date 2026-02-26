@@ -6,7 +6,7 @@ import Primitives
 import Store
 
 public protocol EarnDataProvidable: Sendable {
-    func getEarnData(assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData
+    func getEarnData(assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> ContractCallData
 }
 
 public struct EarnService: Sendable {
@@ -41,7 +41,7 @@ public struct EarnService: Sendable {
 // MARK: - EarnDataProvidable
 
 extension EarnService: EarnDataProvidable {
-    public func getEarnData(assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> EarnData {
+    public func getEarnData(assetId: AssetId, address: String, value: String, earnType: EarnType) async throws -> ContractCallData {
         try await gatewayService.getEarnData(assetId: assetId, address: address, value: value, earnType: earnType)
     }
 }

@@ -4,9 +4,9 @@ import Foundation
 import Gemstone
 import Primitives
 
-extension GemEarnData {
-    public func map() -> Primitives.EarnData {
-        Primitives.EarnData(
+extension GemContractCallData {
+    public func map() -> ContractCallData {
+        ContractCallData(
             contractAddress: contractAddress,
             callData: callData,
             approval: approval?.map(),
@@ -15,9 +15,9 @@ extension GemEarnData {
     }
 }
 
-extension Primitives.EarnData {
-    public func map() -> GemEarnData {
-        GemEarnData(
+extension ContractCallData {
+    public func map() -> GemContractCallData {
+        GemContractCallData(
             contractAddress: contractAddress,
             callData: callData,
             approval: approval?.map(),

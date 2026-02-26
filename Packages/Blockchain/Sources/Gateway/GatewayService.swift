@@ -176,13 +176,9 @@ extension GatewayService {
         address: String,
         value: String,
         earnType: EarnType
-    ) async throws -> EarnData {
-        try await gateway.getEarnData(
-            assetId: assetId.identifier,
-            address: address,
-            value: value,
-            earnType: earnType.map()
-        ).map()
+    ) async throws -> ContractCallData {
+        try await gateway.getEarnData(assetId: assetId.identifier, address: address, value: value, earnType: earnType.map())
+            .map()
     }
 }
 
