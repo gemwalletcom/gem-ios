@@ -97,12 +97,16 @@ struct SelectedAssetNavigationStack: View  {
                         navigationPath: $navigationPath
                     )
                 case .earn:
+                    #if DEBUG
                     EarnNavigationView(
                         wallet: wallet,
                         asset: input.asset,
                         viewModelFactory: viewModelFactory,
                         navigationPath: $navigationPath
                     )
+                    #else
+                    EmptyView()
+                    #endif
                 }
             }
             .toolbarDismissItem(type: .close, placement: .topBarLeading)
