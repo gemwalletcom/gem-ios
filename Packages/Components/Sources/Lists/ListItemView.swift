@@ -84,7 +84,7 @@ public struct ListItemView: View {
                 AssetImageView(
                     assetImage: imageStyle.assetImage,
                     size: imageStyle.imageSize,
-                    cornerRadius: imageStyle.cornerRadius
+                    style: .init(cornerRadius: imageStyle.cornerRadius)
                 )
             }
             HStack {

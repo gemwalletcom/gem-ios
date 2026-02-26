@@ -18,17 +18,23 @@ public struct AddressListItemViewModel {
     public let title: String
     public let account: SimpleAccount
     public let mode: Mode
+    public let assetImageStyle: AssetImageView.Style?
+    public let assetImageSize: CGFloat
     private let addressLink: BlockExplorerLink
 
     public init(
         title: String,
         account: SimpleAccount,
         mode: Mode,
+        assetImageStyle: AssetImageView.Style? = nil,
+        assetImageSize: CGFloat = .list.image,
         addressLink: BlockExplorerLink
     ) {
         self.title = title
         self.account = account
         self.mode = mode
+        self.assetImageStyle = assetImageStyle
+        self.assetImageSize = assetImageSize
         self.addressLink = addressLink
     }
 

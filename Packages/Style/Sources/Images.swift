@@ -177,7 +177,6 @@ public enum Images {
     public enum NameResolve {
         public static let success = Image(.nameResolveSuccess)
         public static let error = Image(.nameResolveError)
-        public static let ens = Image(.ens)
         public static let contact = Image(.contact)
     }
 

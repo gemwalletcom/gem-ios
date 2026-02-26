@@ -20,7 +20,9 @@ public struct AddressListItemView: View {
         ListItemImageView(
             title: model.title,
             subtitle: model.subtitle,
-            assetImage: model.assetImage
+            assetImage: model.assetImage,
+            assetImageStyle: model.assetImageStyle,
+            imageSize: model.assetImageSize
         )
         .contextMenu(
             [

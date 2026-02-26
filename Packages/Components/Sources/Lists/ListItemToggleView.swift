@@ -28,7 +28,7 @@ public struct ListItemToggleView: View {
                     AssetImageView(
                         assetImage: imageStyle.assetImage,
                         size: imageStyle.imageSize,
-                        cornerRadius: imageStyle.cornerRadius
+                        style: .init(cornerRadius: imageStyle.cornerRadius)
                     )
                 }
                 Text(title.text)
