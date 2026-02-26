@@ -174,7 +174,7 @@ extension RecipientSceneViewModel {
     private func makeRecipientData(name: NameRecord?, address: String, memo: String?, amount: String?) -> RecipientData {
         let recipient: Recipient = {
             if let result = name {
-                return Recipient(name: result.name, address: result.address, memo: memo, type: .domain(result.provider))
+                return Recipient(name: result.name, address: result.address, memo: memo)
             }
             return Recipient(name: .none, address: address, memo: memo)
         }()
