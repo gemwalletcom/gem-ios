@@ -130,7 +130,11 @@ public final class AssetSceneViewModel: Sendable {
     var networkText: String { assetModel.networkFullName }
 
     var showEarnButton: Bool {
+        #if DEBUG
         assetData.metadata.isEarnEnabled && !wallet.isViewOnly && !showProviderBalance(for: .earn)
+        #else
+        false
+        #endif
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -214,7 +218,11 @@ public final class AssetSceneViewModel: Sendable {
     func showProviderBalance(for type: StakeProviderType) -> Bool {
         switch type {
         case .stake: assetDataModel.isStakeEnabled || assetData.balances.contains(where: { Self.showStakedBalanceTypes.contains($0.key) && $0.value > 0 })
+        #if DEBUG
         case .earn: assetData.balance.earn > .zero
+        #else
+        case .earn: false
+        #endif
         }
     }
 
