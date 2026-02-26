@@ -29,13 +29,13 @@ final class ImportWalletSceneViewModel {
     var isPresentingScanner = false
     var isPresentingAlertMessage: AlertMessage?
 
-    private let onComplete: ((WalletImportData) -> Void)?
+    private let onComplete: ((Wallet) -> Void)?
 
     init(
         walletService: WalletService,
         nameService: any NameServiceable,
         type: ImportWalletType,
-        onComplete: ((WalletImportData) -> Void)?
+        onComplete: ((Wallet) -> Void)?
     ) {
         self.walletService = walletService
         self.nameService = nameService
@@ -175,12 +175,12 @@ extension ImportWalletSceneViewModel {
             }
             switch type {
             case .multicoin:
-                importWallet(
+                try await importWallet(
                     name: recipient.name,
                     keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
                 )
             case .chain(let chain):
-                importWallet(
+                try await importWallet(
                     name: recipient.name,
                     keystoreType: .single(words: words, chain: chain)
                 )
@@ -189,7 +189,7 @@ extension ImportWalletSceneViewModel {
             guard try validateForm(type: importType, address: recipient.address, words: [trimmedInput]) else {
                 return
             }
-            importWallet(name: recipient.name, keystoreType: .privateKey(text: trimmedInput, chain: chain!))
+            try await importWallet(name: recipient.name, keystoreType: .privateKey(text: trimmedInput, chain: chain!))
         case .address:
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
@@ -197,12 +197,16 @@ extension ImportWalletSceneViewModel {
             let chain = chain!
             let address = chain.checksumAddress(recipient.address)
 
-            importWallet(name: recipient.name, keystoreType: .address(address: address, chain: chain))
+            try await importWallet(name: recipient.name, keystoreType: .address(address: address, chain: chain))
         }
     }
 
-    private func importWallet(name: String, keystoreType: KeystoreImportType) {
-        onComplete?(WalletImportData(name: name, keystoreType: keystoreType))
+    private func importWallet(name: String, keystoreType: KeystoreImportType) async throws {
+        let wallet = try await walletService.loadOrCreateWallet(name: name, type: keystoreType, source: .import)
+        walletService.acceptTerms()
+        try await walletService.setCurrent(wallet: wallet)
+        buttonState = .normal
+        onComplete?(wallet)
     }
 
     private func validateForm(type: WalletImportType, address: String, words: [String]) throws  -> Bool {
