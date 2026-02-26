@@ -71,7 +71,7 @@ extension ChartView {
 
             if let selectedValue, let date = selectedValue.date {
                 RuleMark(x: .value(ChartKey.date, date))
-                    .foregroundStyle(model.lineColor.opacity(0.5))
+                    .foregroundStyle(model.lineColor.opacity(.medium))
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
 
                 PointMark(x: .value(ChartKey.date, date), y: .value(ChartKey.value, selectedValue.price))
@@ -79,14 +79,14 @@ extension ChartView {
                         Circle()
                             .fill(
                                 RadialGradient(
-                                    colors: [Colors.white, model.lineColor.opacity(0.8)],
+                                    colors: [Colors.white, model.lineColor.opacity(.strong)],
                                     center: .center,
                                     startRadius: 0,
                                     endRadius: Metrics.selectionDotSize / 2
                                 )
                             )
                             .frame(width: Metrics.selectionDotSize, height: Metrics.selectionDotSize)
-                            .shadow(color: model.lineColor.opacity(0.6), radius: 6)
+                            .shadow(color: model.lineColor.opacity(.semiStrong), radius: 6)
                             .overlay(Circle().strokeBorder(model.lineColor, lineWidth: Metrics.lineWidth))
                     }
             }
@@ -145,11 +145,11 @@ extension ChartView {
     private var areaGradient: LinearGradient {
         .linearGradient(
             stops: [
-                .init(color: model.lineColor.opacity(0.45), location: 0),
-                .init(color: model.lineColor.opacity(0.38), location: 0.25),
-                .init(color: model.lineColor.opacity(0.28), location: 0.5),
-                .init(color: model.lineColor.opacity(0.15), location: 0.75),
-                .init(color: model.lineColor.opacity(0.05), location: 0.92),
+                .init(color: model.lineColor.opacity(.opacity45), location: 0),
+                .init(color: model.lineColor.opacity(.opacity38), location: 0.25),
+                .init(color: model.lineColor.opacity(.opacity28), location: 0.5),
+                .init(color: model.lineColor.opacity(.light), location: 0.75),
+                .init(color: model.lineColor.opacity(.faint), location: 0.92),
                 .init(color: model.lineColor.opacity(0), location: 1.0)
             ],
             startPoint: .top,

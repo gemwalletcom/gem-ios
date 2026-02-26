@@ -26,9 +26,9 @@ struct CandleTooltipView: View {
         .clipShape(RoundedRectangle(cornerRadius: Spacing.small))
         .overlay(
             RoundedRectangle(cornerRadius: Spacing.small)
-                .stroke(Colors.black.opacity(0.08), lineWidth: 1)
+                .stroke(Colors.black.opacity(.opacity8), lineWidth: 1)
         )
-        .shadow(color: .black.opacity(0.12), radius: Spacing.small, y: Spacing.tiny)
+        .shadow(color: .black.opacity(.opacity12), radius: Spacing.small, y: Spacing.tiny)
         .fixedSize()
     }
 }

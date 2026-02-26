@@ -41,8 +41,8 @@ extension PulsingDotView {
                 )
             )
             .frame(width: dotSize, height: dotSize)
-            .shadow(color: color.opacity(0.8), radius: 6)
-            .shadow(color: color.opacity(0.4), radius: 12)
+            .shadow(color: color.opacity(.strong), radius: 6)
+            .shadow(color: color.opacity(.semiMedium), radius: 12)
     }
 
     private func pulseRing(scale: CGFloat, delay: Double) -> some View {
@@ -71,7 +71,7 @@ private struct PulseRingView: View {
         TimelineView(.animation(paused: !isAnimated)) { timeline in
             let progress = progress(at: timeline.date)
             Circle()
-                .stroke(color.opacity(0.4), lineWidth: 1.5)
+                .stroke(color.opacity(.semiMedium), lineWidth: 1.5)
                 .frame(width: size, height: size)
                 .scaleEffect(1.0 + (maxScale - 1.0) * progress)
                 .opacity(0.8 * (1.0 - progress))

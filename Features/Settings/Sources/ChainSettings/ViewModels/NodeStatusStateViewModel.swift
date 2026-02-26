@@ -42,10 +42,10 @@ struct NodeStatusStateViewModel: Sendable {
 
     public var background: Color {
         switch nodeStatus {
-        case .error: Colors.red.opacity(0.15)
+        case .error: Colors.red.opacity(.light)
         case .none: .clear
         case .result(let nodeStatus):
-            nodeStatus.latestBlockNumber.isZero ? Colors.red.opacity(0.15) : LatencyViewModel(latency: nodeStatus.latency).background
+            nodeStatus.latestBlockNumber.isZero ? Colors.red.opacity(.light) : LatencyViewModel(latency: nodeStatus.latency).background
         }
     }
 }
