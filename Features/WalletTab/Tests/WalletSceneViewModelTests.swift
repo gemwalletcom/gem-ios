@@ -2,14 +2,9 @@
 
 import Testing
 import Primitives
-import Preferences
-
-import WalletsServiceTestKit
-import BalanceServiceTestKit
-import BannerServiceTestKit
-import WalletServiceTestKit
 import PrimitivesTestKit
-import PreferencesTestKit
+import BannerServiceTestKit
+import WalletTabTestKit
 
 @testable import WalletTab
 @testable import Store
@@ -64,20 +59,5 @@ struct WalletSceneViewModelTests {
         model.onChangeWallet(wallet, newWallet)
 
         #expect(model.wallet.id == "2")
-    }
-}
-
-extension WalletSceneViewModel {
-    static func mock(wallet: Wallet = .mock()) -> WalletSceneViewModel {
-        WalletSceneViewModel(
-            assetDiscoveryService: .mock(),
-            balanceUpdater: .mock(),
-            balanceService: .mock(),
-            bannerService: .mock(),
-            walletService: .mock(),
-            observablePreferences: .mock(),
-            wallet: wallet,
-            isPresentingSelectedAssetInput: .constant(.none)
-        )
     }
 }

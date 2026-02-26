@@ -46,12 +46,4 @@ public struct WalletSessionService: WalletSessionManageable {
     public func getWallets() throws -> [Wallet] {
         try walletStore.getWallets()
     }
-
-    public func walletsCount() throws -> Int {
-        try getWallets().count
-    }
-
-    public func hasMulticoinWallet() -> Bool {
-        (try? getWallets().contains { $0.type == .multicoin }) ?? false
-    }
 }

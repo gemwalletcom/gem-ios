@@ -52,7 +52,7 @@ extension AppResolver {
         let transactionsService: TransactionsService
         let transactionStateService: TransactionStateService
         let walletService: WalletService
-        let walletSessionService: WalletSessionService
+        let walletSessionService: any WalletSessionManageable
         let assetsEnabler: any AssetsEnabler
         let assetDiscoveryService: any AssetDiscoverable
         let balanceUpdater: any BalanceUpdater
@@ -104,7 +104,7 @@ extension AppResolver {
             transactionsService: TransactionsService,
             transactionStateService: TransactionStateService,
             walletService: WalletService,
-            walletSessionService: WalletSessionService,
+            walletSessionService: any WalletSessionManageable,
             assetsEnabler: any AssetsEnabler,
             assetDiscoveryService: any AssetDiscoverable,
             balanceUpdater: any BalanceUpdater,

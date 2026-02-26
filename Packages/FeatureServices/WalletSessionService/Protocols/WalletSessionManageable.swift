@@ -49,4 +49,12 @@ public extension WalletSessionManageable {
         }
         return wallet
     }
+
+    func walletsCount() throws -> Int {
+        try getWallets().count
+    }
+
+    func hasMulticoinWallet() -> Bool {
+        (try? getWallets().contains { $0.type == .multicoin }) ?? false
+    }
 }

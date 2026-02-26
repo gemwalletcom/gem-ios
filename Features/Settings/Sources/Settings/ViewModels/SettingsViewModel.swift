@@ -16,12 +16,12 @@ import Components
 @MainActor
 public final class SettingsViewModel {
     private let walletId: WalletId
-    private let walletSessionService: WalletSessionService
+    private let walletSessionService: any WalletSessionManageable
     private let observablePrefereces: ObservablePreferences
 
     public init(
         walletId: WalletId,
-        walletSessionService: WalletSessionService,
+        walletSessionService: any WalletSessionManageable,
         observablePrefereces: ObservablePreferences
     ) {
         self.walletId = walletId
