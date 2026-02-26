@@ -7,20 +7,25 @@ import PrimitivesComponents
 import Components
 import Store
 import Localization
+import Style
 
 @Observable
 @MainActor
 public final class ContactsViewModel {
     let service: ContactService
+    let nameService: any NameServiceable
 
     public let query: ObservableQuery<ContactsRequest>
     var contacts: [ContactData] { query.value }
 
-    var isPresentingContact: ContactData?
     var isPresentingAddContact = false
 
-    public init(service: ContactService) {
+    public init(
+        service: ContactService,
+        nameService: any NameServiceable
+    ) {
         self.service = service
+        self.nameService = nameService
         self.query = ObservableQuery(ContactsRequest(), initialValue: [])
     }
 
@@ -33,17 +38,12 @@ public final class ContactsViewModel {
     func listItemModel(for contact: ContactData) -> ListItemModel {
         ListItemModel(
             title: contact.contact.name,
+            titleStyle: TextStyle(font: .body, color: .primary, fontWeight: .semibold),
             titleExtra: contact.contact.description,
+            titleStyleExtra: .calloutSecondary,
+            titleExtraLineLimit: 1,
             imageStyle: .asset(assetImage: AssetImage(type: String(contact.contact.name.prefix(2))))
         )
-    }
-
-    func onAddContactComplete() {
-        isPresentingAddContact = false
-    }
-
-    func onManageContactComplete() {
-        isPresentingContact = nil
     }
 
     func deleteContacts(at offsets: IndexSet) {

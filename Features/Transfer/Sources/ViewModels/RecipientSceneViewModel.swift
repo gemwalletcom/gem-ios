@@ -28,15 +28,13 @@ public final class RecipientSceneViewModel {
     let onTransferAction: TransferDataAction
 
     private let walletService: WalletService
-    private let nameService: any NameServiceable
     private let onRecipientDataAction: RecipientDataAction
     private let formatter = ValueFormatter(style: .full)
 
     var isPresentingScanner: RecipientScene.Field?
-    var nameResolveState: NameRecordState = .none
+    var addressInputModel: AddressInputViewModel
     var memo: String = ""
     var amount: String = ""
-    var addressInputModel: InputValidationViewModel
 
     public let contactsQuery: ObservableQuery<ContactsRequest>
     var contacts: [ContactData] { contactsQuery.value }
@@ -53,15 +51,16 @@ public final class RecipientSceneViewModel {
         self.wallet = wallet
         self.asset = asset
         self.walletService = walletService
-        self.nameService = nameService
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
 
-        self.addressInputModel = InputValidationViewModel(
-            mode: .manual,
+        self.addressInputModel = AddressInputViewModel(
+            chain: asset.chain,
+            nameService: nameService,
+            placeholder: recipientField,
             validators: [
-                .required(requireName: Localized.Transfer.Recipient.addressField),
+                .required(requireName: recipientField),
                 .address(asset)
             ]
         )
@@ -70,30 +69,18 @@ public final class RecipientSceneViewModel {
     }
 
     var tittle: String { Localized.Transfer.Recipient.title }
-    var recipientField: String { Localized.Transfer.Recipient.addressField }
+    let recipientField = Localized.Transfer.Recipient.addressField
     var memoField: String { Localized.Transfer.memo }
 
     var assetImageTitleModel: AssetImageTitleViewModel { AssetImageTitleViewModel(asset: asset) }
 
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: ButtonState {
-        switch nameResolveState {
-        case .none: addressInputModel.isValid && addressInputModel.text.isNotEmpty ? .normal : .disabled
-        case .loading, .error: .disabled
-        case .complete: .normal
-        }
+        addressInputModel.isValid ? .normal : .disabled
     }
 
     var showMemo: Bool { asset.chain.isMemoSupported }
     var chain: Chain { asset.chain }
-    
-    var nameRecordViewModel: NameRecordViewModel {
-        NameRecordViewModel(chain: chain, nameService: nameService)
-    }
-
-    var pasteImage: Image { Images.System.paste }
-    var qrImage: Image { Images.System.qrCodeViewfinder }
-    var shouldShowInputActions: Bool { addressInputModel.text.isEmpty }
 
     var recipientSections: [ListItemValueSection<RecipientAddress>] {
         RecipientAddressType.allCases
@@ -112,21 +99,16 @@ public final class RecipientSceneViewModel {
 
 extension RecipientSceneViewModel {
     func onContinue() {
-        guard nameResolveState.result != nil || addressInputModel.update() else { return }
+        guard addressInputModel.validate() else { return }
 
         handle(
             recipientData: makeRecipientData(
-                name: nameResolveState.result,
+                name: addressInputModel.nameResolveState.result,
                 address: addressInputModel.text,
                 memo: memo,
                 amount: amount.isEmpty ? .none : amount
             )
         )
-    }
-
-    func onSelectPaste(field: RecipientScene.Field) {
-        guard let string = UIPasteboard.general.string else { return }
-        addressInputModel.update(text: string.trim())
     }
 
     func onSelectScan(field: RecipientScene.Field) {
@@ -147,15 +129,7 @@ extension RecipientSceneViewModel {
         }
     }
 
-    func onChangeNameResolverState(_: NameRecordState, newState: NameRecordState) {
-        // Remove address if any error, on success resolve
-        if newState.result != nil {
-            addressInputModel.update(error: nil)
-        }
-    }
-
     func onChangeAddressText(_: String, new: String) {
-        // Clear previously auto-filled amount if user edits the address
         if !amount.isEmpty {
             amount = .empty
         }
