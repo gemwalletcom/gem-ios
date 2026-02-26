@@ -48,8 +48,14 @@ struct WalletKeyStore: Sendable {
             }
             switch encoding {
             case .base58:
-                if let decoded = Base58.decodeNoCheck(string: key), decoded.count % 32 == 0 {
-                    data = decoded.prefix(32)
+                if let decoded = Base58.decodeNoCheck(string: key) {
+                    if decoded.count % 32 == 0 {
+                        data = Data(decoded.prefix(32))
+                    } else if decoded.count == 37 || decoded.count == 38 {
+                        // WIF format: [1 version] + [32 key] + [4 checksum] (37 bytes, uncompressed)
+                        // or [1 version] + [32 key] + [1 compression flag] + [4 checksum] (38 bytes, compressed)
+                        data = Data(decoded[1..<33])
+                    }
                 }
             case .hex:
                 data = Data(hexString: key)

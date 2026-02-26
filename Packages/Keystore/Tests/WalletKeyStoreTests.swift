@@ -81,6 +81,17 @@ final class WalletKeyStoreTests {
         #expect(address == "GADB4BDKTOE36L6QN2JLIPNNJ7EZPSY5BIVKWXLWYZLIPXNQWIRQQZKT")
     }
     
+    @Test func importBitcoinWIF() throws {
+        let hex = "0x0000000000000000000000000000000000000000000000000000000000000001"
+        let wif = "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn"
+
+        let keyFromHex = try WalletKeyStore.decodeKey(hex, chain: .bitcoin)
+        let keyFromWIF = try WalletKeyStore.decodeKey(wif, chain: .bitcoin)
+
+        #expect(keyFromWIF.data == keyFromHex.data)
+        #expect(CoinType.bitcoin.deriveAddress(privateKey: keyFromWIF) == "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4")
+    }
+
     @Test func addImportWallet() async throws {
         let store = WalletKeyStore.mock()
         let newWallet = try store.importWallet(
