@@ -78,12 +78,12 @@ public final class SwapSceneViewModel {
     var errorTitle: String { Localized.Errors.errorOccured }
 
     public var swapDetailsViewModel: SwapDetailsViewModel? {
-        guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }
+        guard let selectedSwapQuote, let fromAsset, let toAsset, let selectedQuote = try? selectedSwapQuote.map() else { return nil }
         return SwapDetailsViewModel(
             state: swapState.quotes,
             fromAssetPrice: AssetPriceValue(asset: fromAsset.asset, price: fromAsset.price),
             toAssetPrice: AssetPriceValue(asset: toAsset.asset, price: toAsset.price),
-            selectedQuote: selectedSwapQuote.map(),
+            selectedQuote: selectedQuote,
             preferences: preferences,
             swapProviderSelectAction: { [weak self] quote in
                 self?.onFinishSwapProviderSelection(quote)

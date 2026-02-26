@@ -14,7 +14,7 @@ public extension NameRecord {
             name: name,
             chain: chain,
             address: address,
-            provider: provider.rawValue
+            provider: provider
         )
     }
 }

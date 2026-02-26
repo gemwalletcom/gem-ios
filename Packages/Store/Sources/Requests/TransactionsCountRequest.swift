@@ -6,7 +6,7 @@ import Primitives
 
 public struct TransactionsCountRequest: DatabaseQueryable {
 
-    private let walletId: WalletId
+    public var walletId: WalletId
     private let state: TransactionState
 
     public init(

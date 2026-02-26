@@ -4,13 +4,13 @@ import Gemstone
 import Primitives
 
 public extension SwapProvider {
-    func map() -> SwapperProvider {
-        swapperProviderFromStr(s: rawValue)!
+    func map() throws -> SwapperProvider {
+        try swapperProviderFromStr(s: rawValue).unwrapOrThrow()
     }
 }
 
 public extension SwapperProvider {
-    func asPrimitives() -> SwapProvider {
-        SwapProvider(rawValue: swapperProviderToStr(provider: self))!
+    func map() throws -> SwapProvider {
+        try SwapProvider(rawValue: swapperProviderToStr(provider: self)).unwrapOrThrow()
     }
 }

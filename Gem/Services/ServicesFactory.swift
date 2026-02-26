@@ -8,6 +8,7 @@ import DeviceService
 import PriceAlertService
 import StakeService
 import NotificationService
+import Gemstone
 import GemstonePrimitives
 import NodeService
 import WalletConnector
@@ -120,6 +121,7 @@ struct ServicesFactory {
         )
         let transactionStateService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
+            nativeProvider: nativeProvider,
             stakeService: stakeService,
             nftService: nftService,
             chainFactory: chainServiceFactory,
@@ -462,6 +464,7 @@ extension ServicesFactory {
 
     private static func makeTransactionService(
         transactionStore: TransactionStore,
+        nativeProvider: NativeProvider,
         stakeService: StakeService,
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
@@ -469,6 +472,7 @@ extension ServicesFactory {
     ) -> TransactionStateService {
         TransactionStateService(
             transactionStore: transactionStore,
+            swapper: GemSwapper(rpcProvider: nativeProvider),
             stakeService: stakeService,
             nftService: nftService,
             chainServiceFactory: chainFactory,

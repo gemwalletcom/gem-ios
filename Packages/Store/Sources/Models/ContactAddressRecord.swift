@@ -36,7 +36,6 @@ extension ContactAddressRecord: CreateTable {
                 .references(ContactRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.address.name, .text)
                 .notNull()
-                .references(AssetRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
             $0.column(Columns.chain.name, .text)
                 .notNull()
             $0.column(Columns.memo.name, .text)

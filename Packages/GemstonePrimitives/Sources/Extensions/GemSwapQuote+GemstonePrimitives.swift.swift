@@ -20,8 +20,8 @@ public extension Gemstone.GemSwapQuote {
 }
 
 extension Primitives.SwapQuote {
-    func map() -> Gemstone.GemSwapQuote {
-        Gemstone.GemSwapQuote(
+    func map() throws -> Gemstone.GemSwapQuote {
+        try Gemstone.GemSwapQuote(
             fromAddress: fromAddress,
             fromValue: fromValue,
             toAddress: toAddress,

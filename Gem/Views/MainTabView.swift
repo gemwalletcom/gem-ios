@@ -125,6 +125,7 @@ struct MainTabView: View {
         }
         .toast(message: $model.isPresentingToastMessage)
         .bindQuery(model.transactionsQuery)
+        .onChange(of: walletService.currentWallet, model.onChangeWallet)
     }
 }
 

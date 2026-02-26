@@ -22,7 +22,7 @@ public extension SwapProvider {
         case .relay: Images.SwapProviders.relay
         case .aerodrome: Images.SwapProviders.aerodrome
         case .hyperliquid: Images.SwapProviders.hyperliquid
-        case .nearIntents: Images.Chains.near
+        case .nearIntents: Images.SwapProviders.nearIntents
         case .orca: Images.SwapProviders.orca
         case .panora: Images.SwapProviders.panora
         case .okx: Images.SwapProviders.okx

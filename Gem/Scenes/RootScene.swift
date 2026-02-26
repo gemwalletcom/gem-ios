@@ -21,7 +21,6 @@ struct RootScene: View {
         VStack {
             if let currentWallet = model.currentWallet {
                 MainTabView(model: .init(wallet: currentWallet))
-                    .id(currentWallet.walletId)
                     .alertSheet($model.updateVersionAlertMessage)
             } else {
                 OnboardingScene(
