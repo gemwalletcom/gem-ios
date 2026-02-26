@@ -9,11 +9,13 @@ public struct SimpleAccount {
     public let chain: Chain
     public let address: String
     public let assetImage: AssetImage?
+    public let addressType: AddressType?
 
-    public init(name: String?, chain: Chain, address: String, assetImage: AssetImage?) {
+    public init(name: String?, chain: Chain, address: String, assetImage: AssetImage?, addressType: AddressType? = nil) {
         self.name = name
         self.chain = chain
         self.address = address
         self.assetImage = assetImage
+        self.addressType = addressType
     }
 }

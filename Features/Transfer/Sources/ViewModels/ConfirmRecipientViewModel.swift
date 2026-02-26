@@ -30,11 +30,10 @@ extension ConfirmRecipientViewModel: ItemModelProvidable {
                     name: addressName?.name ?? model.recipient.name,
                     chain: model.chain,
                     address: model.recipient.address,
-                    assetImage: addressNameImage
+                    assetImage: addressNameImage,
+                    addressType: addressName?.type
                 ),
                 mode: .nameOrAddress,
-                assetImageStyle: addressNameImageStyle,
-                assetImageSize: .list.accessory,
                 addressLink: addressLink
             )
         )
@@ -47,13 +46,6 @@ extension ConfirmRecipientViewModel {
     private var addressNameImage: AssetImage? {
         switch addressName?.type {
         case .contact: .image(Images.System.person)
-        case .address, .contract, .validator, .none: nil
-        }
-    }
-
-    private var addressNameImageStyle: AssetImageView.Style? {
-        switch addressName?.type {
-        case .contact: AssetImageView.Style(foregroundColor: Colors.secondaryText, cornerRadius: 0)
         case .address, .contract, .validator, .none: nil
         }
     }

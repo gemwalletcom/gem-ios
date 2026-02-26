@@ -38,11 +38,13 @@ extension TransactionParticipantViewModel {
 
         let address = transactionViewModel.participant
         let chain = transactionViewModel.transaction.transaction.assetId.chain
+        let addressName = transactionViewModel.getAddressName(address: address)
         let account = SimpleAccount(
-            name: transactionViewModel.getAddressName(address: address),
+            name: addressName?.name,
             chain: chain,
             address: address,
-            assetImage: nil
+            assetImage: nil,
+            addressType: addressName?.type
         )
 
         return .participant(
