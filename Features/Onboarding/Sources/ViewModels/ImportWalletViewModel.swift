@@ -34,10 +34,6 @@ public final class ImportWalletViewModel {
     public var isAcceptTermsCompleted: Bool {
         walletService.isAcceptTermsCompleted
     }
-
-    func dismiss() {
-        onComplete?()
-    }
 }
 
 // MARK: - Actions
@@ -45,16 +41,5 @@ public final class ImportWalletViewModel {
 extension ImportWalletViewModel {
     func presentSelectImage(wallet: Wallet) {
         isPresentingSelectImageWallet = wallet
-    }
-
-    func importWallet(data: WalletImportData) async throws -> Wallet {
-        let wallet = try await walletService.loadOrCreateWallet(name: data.name, type: data.keystoreType, source: .import)
-        walletService.acceptTerms()
-        try await walletService.setCurrent(wallet: wallet)
-        return wallet
-    }
-
-    func setupWalletComplete() async throws {
-        dismiss()
     }
 }
