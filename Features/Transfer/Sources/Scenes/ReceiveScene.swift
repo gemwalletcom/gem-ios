@@ -43,7 +43,7 @@ public struct ReceiveScene: View {
                     .background(
                         RoundedRectangle(cornerRadius: .medium)
                             .fill(Colors.listStyleColor)
-                            .shadow(color: Color.black.opacity(Sizing.shadow.opacity), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
+                            .shadow(color: Color.black.opacity(.opacity25), radius: Sizing.shadow.radius, x: .zero, y: Sizing.shadow.yOffset)
                     )
                 }
                 Text(model.warningMessage)

@@ -15,16 +15,17 @@ public struct AssetImageView: View {
     }
     private let assetImage: AssetImage
     private let overlayPadding: CGFloat = 2
-    private let cornerRadius: CGFloat
+    private var cornerRadius: CGFloat { style?.cornerRadius ?? size / 2 }
+    private let style: Style?
 
     public init(
         assetImage: AssetImage,
         size: CGFloat = .image.asset,
-        cornerRadius: CGFloat? = nil
+        style: Style? = nil
     ) {
         self.assetImage = assetImage
         self.size = max(1, size)
-        self.cornerRadius = cornerRadius ?? size / 2
+        self.style = style
     }
 
     private var overlayOffset: CGFloat { (size / 2) - (overlaySize / 2) }
@@ -42,6 +43,9 @@ public struct AssetImageView: View {
         )
         .frame(width: size, height: size)
         .cornerRadius(cornerRadius)
+        .ifLet(style?.foregroundColor) { view, color in
+            view.foregroundStyle(color)
+        }
         .overlay(overlayBadge)
     }
 
@@ -69,7 +73,7 @@ public struct AssetImageView: View {
                                 .font(.system(size: diameter, weight: .semibold))
                         }, elseContent: { view in
                             view
-                                .font(.system(size: diameter * 0.3, weight: .semibold))
+                                .font(.system(size: diameter * 0.35, weight: .semibold))
                                 .padding(.horizontal, .space6)
                         })
                         .minimumScaleFactor(0.4)
@@ -96,6 +100,23 @@ public struct AssetImageView: View {
                 .background(Colors.listStyleColor)
                 .clipShape(Circle())
                 .offset(x: overlayOffset + (size / overlaySize), y: overlayOffset + (size / overlaySize))
+        }
+    }
+}
+
+// MARK: - Style
+
+extension AssetImageView {
+    public struct Style: Sendable, Equatable {
+        public let foregroundColor: Color?
+        public let cornerRadius: CGFloat?
+
+        public init(
+            foregroundColor: Color? = nil,
+            cornerRadius: CGFloat? = nil
+        ) {
+            self.foregroundColor = foregroundColor
+            self.cornerRadius = cornerRadius
         }
     }
 }

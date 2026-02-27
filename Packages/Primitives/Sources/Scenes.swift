@@ -206,4 +206,12 @@ public struct Scenes {
     public struct Contacts: Hashable, Codable {
         public init() {}
     }
+
+    public struct Contact: Hashable, Codable {
+        public let contact: ContactData
+
+        public init(contact: ContactData) {
+            self.contact = contact
+        }
+    }
 }

@@ -52,7 +52,7 @@ extension AddressListItemViewModel {
         title: String = "Recipient",
         account: SimpleAccount = SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil),
         mode: Mode = .auto(addressStyle: .short),
-        addressLink: BlockExplorerLink = BlockExplorerLink(name: "Mock", link: "https://mock.com")
+        addressLink: BlockExplorerLink = .init(name: "Mock", link: "https://mock.com")
     ) -> AddressListItemViewModel {
         AddressListItemViewModel(
             title: title,

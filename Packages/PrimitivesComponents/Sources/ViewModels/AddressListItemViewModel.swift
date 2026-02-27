@@ -8,7 +8,7 @@ import Formatters
 import Style
 
 public struct AddressListItemViewModel {
-    
+
     public enum Mode {
         case auto(addressStyle: AddressFormatter.Style)
         case address(addressStyle: AddressFormatter.Style)
@@ -42,6 +42,20 @@ public struct AddressListItemViewModel {
     
     public var assetImage: AssetImage? {
         account.assetImage
+    }
+
+    public var assetImageStyle: AssetImageView.Style? {
+        switch account.addressType {
+        case .contact: AssetImageView.Style(foregroundColor: Colors.secondaryText, cornerRadius: 0)
+        case .address, .contract, .validator, .none: nil
+        }
+    }
+
+    public var assetImageSize: CGFloat {
+        switch account.addressType {
+        case .contact: .list.accessory
+        case .address, .contract, .validator, .none: .list.image
+        }
     }
 
     public var addressExplorerText: String {

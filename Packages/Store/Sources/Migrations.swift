@@ -395,6 +395,12 @@ struct Migrations {
             try? ContactAddressRecord.create(db: db)
         }
 
+        migrator.registerMigration("Add type to \(AddressRecord.databaseTableName)") { db in
+            try? db.alter(table: AddressRecord.databaseTableName) {
+                $0.add(column: AddressRecord.Columns.type.name, .text)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

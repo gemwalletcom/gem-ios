@@ -134,7 +134,6 @@ public extension Sizing {
     }
 
     struct shadow {
-        public static let opacity: CGFloat = 0.25
         public static let radius: CGFloat = 10
         public static let yOffset: CGFloat = 5
     }

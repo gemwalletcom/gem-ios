@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Primitives
-import Localization
 import PrimitivesComponents
 
 public struct ImportWalletNavigationStack: View {
@@ -82,24 +81,11 @@ extension ImportWalletNavigationStack {
         }
     }
 
-    func onImportComplete(data: WalletImportData) {
-        Task {
-            do {
-                let wallet = try await model.importWallet(data: data)
-                navigate(to: .walletProfile(wallet: wallet))
-            } catch {
-                debugLog("Failed to import wallet: \(error)")
-            }
-        }
+    func onImportComplete(wallet: Wallet) {
+        navigate(to: .walletProfile(wallet: wallet))
     }
 
     func onSetupWalletComplete(_ wallet: Wallet) {
-        Task {
-            do {
-                try await model.setupWalletComplete()
-            } catch {
-                debugLog("Failed to setup wallet: \(error)")
-            }
-        }
+        model.onComplete?()
     }
 }

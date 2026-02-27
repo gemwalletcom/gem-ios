@@ -145,7 +145,7 @@ public struct WalletService: Sendable {
         try await keystore.getMnemonic(wallet: wallet)
     }
 
-    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
-        try await keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
+    public func getPrivateKeyEncoded(wallet: Primitives.Wallet, chain: Chain) async throws -> String {
+        try await keystore.getPrivateKeyEncoded(wallet: wallet, chain: chain)
     }
 }

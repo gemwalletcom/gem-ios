@@ -9,14 +9,16 @@ public struct ListItemImageView: View {
     public let subtitle: String?
     public let subtitleStyle: TextStyle
     public let assetImage: AssetImage?
+    public let assetImageStyle: AssetImageView.Style?
     public let imageSize: CGFloat
     public let infoAction: (() -> Void)?
-    
+
     public init(
         title: String?,
         subtitle: String?,
         subtitleStyle: TextStyle = .calloutSecondary,
         assetImage: AssetImage? = nil,
+        assetImageStyle: AssetImageView.Style? = nil,
         imageSize: CGFloat = .list.image,
         infoAction: (() -> Void)? = nil
     ) {
@@ -24,6 +26,7 @@ public struct ListItemImageView: View {
         self.subtitle = subtitle
         self.subtitleStyle = subtitleStyle
         self.assetImage = assetImage
+        self.assetImageStyle = assetImageStyle
         self.imageSize = imageSize
         self.infoAction = infoAction
     }
@@ -48,7 +51,7 @@ public struct ListItemImageView: View {
                 infoAction: infoAction
             )
             if let assetImage {
-                AssetImageView(assetImage: assetImage, size: imageSize)
+                AssetImageView(assetImage: assetImage, size: imageSize, style: assetImageStyle)
             }
         }
     }

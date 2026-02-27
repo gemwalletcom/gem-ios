@@ -18,7 +18,8 @@ public struct AddressStore: Sendable {
                 try AddressRecord(
                     chain: addressName.chain,
                     address: addressName.address,
-                    name: addressName.name
+                    name: addressName.name,
+                    type: addressName.type
                 ).save(db, onConflict: .replace)
             }
         }

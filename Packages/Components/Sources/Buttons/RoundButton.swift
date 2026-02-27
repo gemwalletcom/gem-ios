@@ -32,7 +32,7 @@ public struct RoundButton: View {
                     .frame(size: 48)
                     .background(Colors.blue)
                     .clipShape(Circle())
-                    .opacity(isEnabled ? 1 : 0.5)
+                    .opacity(isEnabled ? 1 : .medium)
                     .liquidGlass()
                 Text(title)
                     .allowsTightening(true)

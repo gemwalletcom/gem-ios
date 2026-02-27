@@ -96,11 +96,7 @@ extension WalletDetailViewModel {
 
     func getPrivateKey() async throws -> String {
         let chain = wallet.accounts[0].chain
-        return try await walletService.getPrivateKey(
-            wallet: wallet,
-            chain: chain,
-            encoding: chain.defaultKeyEncodingType
-        )
+        return try await walletService.getPrivateKeyEncoded(wallet: wallet, chain: chain)
     }
 
     func delete() async throws {

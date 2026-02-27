@@ -30,17 +30,19 @@ public struct ManageContactAddressScene: View {
                 memoSection
             }
         }
-        .safeAreaButton {
-            StateButton(
-                text: model.buttonTitle,
-                type: .primary(model.buttonState),
-                action: onComplete
-            )
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("", systemImage: SystemImage.checkmark, action: onComplete)
+                    .disabled(model.buttonState == .disabled)
+            }
         }
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            focusedField = .address
+        }
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onScan)
         }
@@ -60,23 +62,11 @@ extension ManageContactAddressScene {
 
     private var addressSection: some View {
         Section {
-            InputValidationField(
+            AddressInputView(
                 model: $model.addressInputModel,
-                placeholder: model.addressTitle,
-                allowClean: true,
-                trailingView: {
-                    if model.shouldShowInputActions {
-                        HStack(spacing: .medium) {
-                            ListButton(image: model.pasteImage, action: onSelectPaste)
-                            ListButton(image: model.qrImage, action: onSelectScan)
-                        }
-                    }
-                }
+                onSelectScan: model.onSelectScan
             )
             .focused($focusedField, equals: .address)
-            .keyboardType(.alphabet)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
         }
     }
 
@@ -97,15 +87,6 @@ extension ManageContactAddressScene {
 // MARK: - Actions
 
 extension ManageContactAddressScene {
-    private func onSelectPaste() {
-        model.onSelectPaste()
-        focusedField = nil
-    }
-
-    private func onSelectScan() {
-        model.onSelectScan()
-    }
-
     private func onScan(_ result: String) {
         model.onHandleScan(result)
         focusedField = nil

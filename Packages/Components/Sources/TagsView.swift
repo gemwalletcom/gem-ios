@@ -52,7 +52,7 @@ public struct TagView<T: TagItemViewable>: View {
                 Text(tag.title)
                     .font(.subheadline.weight(.semibold))
             }
-            .foregroundStyle(Color.primary.opacity(tag.opacity))
+            .foregroundStyle(Color.primary.opacity(tag.viewOpacity))
             .padding(.horizontal, .small)
             .padding(.vertical, .space6)
             .background {
@@ -61,7 +61,7 @@ public struct TagView<T: TagItemViewable>: View {
                     style: .continuous
                 )
                 .fill(Colors.listStyleColor)
-                .opacity(tag.opacity)
+                .opacity(tag.viewOpacity)
             }
 
         }
