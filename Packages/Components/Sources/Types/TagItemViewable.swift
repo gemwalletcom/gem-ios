@@ -13,9 +13,9 @@ public protocol TagItemViewable: TagItem {
 
     var id: String { get }
 
-    var opacity: CGFloat { get }
+    var viewOpacity: CGFloat { get }
 }
 
 public extension TagItemViewable {
-    var opacity: CGFloat { isSelected ? 1.0 : 0.5 }
+    var viewOpacity: CGFloat { isSelected ? 1.0 : .medium }
 }

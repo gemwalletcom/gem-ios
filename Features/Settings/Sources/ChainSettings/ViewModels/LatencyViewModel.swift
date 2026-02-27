@@ -26,7 +26,7 @@ struct LatencyViewModel: Sendable {
     }
 
     var background: Color {
-        color.opacity(0.15)
+        color.opacity(.light)
     }
 
     var value: Int {

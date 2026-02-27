@@ -2,14 +2,11 @@
 
 import SwiftUI
 import Primitives
-import Localization
-import Components
 import PrimitivesComponents
 
 public struct ImportWalletNavigationStack: View {
     @State private var model: ImportWalletViewModel
     @State private var navigationPath = NavigationPath()
-    @State private var isPresentingAlertMessage: AlertMessage?
 
     public init(model: ImportWalletViewModel) {
         _model = State(initialValue: model)
@@ -58,7 +55,6 @@ public struct ImportWalletNavigationStack: View {
                     }
                 }
         }
-        .alertSheet($isPresentingAlertMessage)
     }
 
     @ViewBuilder
@@ -85,22 +81,11 @@ extension ImportWalletNavigationStack {
         }
     }
 
-    func onImportComplete(data: WalletImportData) async {
-        do {
-            let wallet = try await model.importWallet(data: data)
-            navigate(to: .walletProfile(wallet: wallet))
-        } catch {
-            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
-        }
+    func onImportComplete(wallet: Wallet) {
+        navigate(to: .walletProfile(wallet: wallet))
     }
 
     func onSetupWalletComplete(_ wallet: Wallet) {
-        Task {
-            do {
-                try await model.setupWalletComplete()
-            } catch {
-                debugLog("Failed to setup wallet: \(error)")
-            }
-        }
+        model.onComplete?()
     }
 }

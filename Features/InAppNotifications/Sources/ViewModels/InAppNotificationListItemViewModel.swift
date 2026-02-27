@@ -25,7 +25,7 @@ public struct InAppNotificationListItemViewModel: Identifiable, Sendable {
         ListItemModel(
             title: item.title,
             titleTag: isRead ? nil : Localized.Assets.Tags.new,
-            titleTagStyle: TextStyle(font: .footnote.weight(.medium), color: .blue, background: Colors.blue.opacity(0.15)),
+            titleTagStyle: TextStyle(font: .footnote.weight(.medium), color: .blue, background: Colors.blue.opacity(.light)),
             titleExtra: item.subtitle,
             subtitle: item.value,
             subtitleStyle: TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold),

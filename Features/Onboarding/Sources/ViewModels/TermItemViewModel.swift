@@ -6,7 +6,7 @@ import Style
 final class TermItemViewModel: Identifiable {
     let message: String
     var style: TextStyle {
-        isConfirmed ? .body : TextStyle(font: .body, color: Colors.black.opacity(0.8))
+        isConfirmed ? .body : TextStyle(font: .body, color: Colors.black.opacity(.strong))
     }
     var isConfirmed: Bool = false
     

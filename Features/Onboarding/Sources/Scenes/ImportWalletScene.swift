@@ -48,11 +48,7 @@ struct ImportWalletScene: View {
                         .padding(.top, .space12)
                         
                         if let nameRecordViewModel = model.nameRecordViewModel, model.importType == .address {
-                            NameRecordView(
-                                model: nameRecordViewModel,
-                                state: $model.nameResolveState,
-                                address: $model.input
-                            )
+                            NameRecordView(model: nameRecordViewModel)
                         }
                     }
                     

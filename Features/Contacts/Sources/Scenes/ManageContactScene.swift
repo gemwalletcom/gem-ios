@@ -11,7 +11,7 @@ public struct ManageContactScene: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @Binding private var model: ManageContactViewModel
+    @State private var model: ManageContactViewModel
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
@@ -19,8 +19,8 @@ public struct ManageContactScene: View {
         case description
     }
 
-    public init(model: Binding<ManageContactViewModel>) {
-        _model = model
+    public init(model: ManageContactViewModel) {
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
@@ -28,28 +28,30 @@ public struct ManageContactScene: View {
             contactSection
             addressesSection
         }
-        .safeAreaButton {
-            StateButton(
-                text: model.buttonTitle,
-                type: .primary(model.buttonState),
-                action: onSave
-            )
-        }
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button(action: onAddAddress) {
-                    Images.System.plus
-                }
+                Button("", systemImage: SystemImage.checkmark, action: onSave)
+                    .disabled(model.buttonState == .disabled)
             }
         }
         .onAppear {
             if model.isAddMode {
                 focusedField = .name
             }
+        }
+        .sheet(item: $model.isPresentingAddress) {
+            ManageContactAddressNavigationStack(
+                model: ManageContactAddressViewModel(
+                    contactId: model.contactId,
+                    nameService: model.nameService,
+                    mode: $0,
+                    onComplete: model.onAddressComplete
+                )
+            )
         }
     }
 }
@@ -73,8 +75,6 @@ extension ManageContactScene {
                 allowClean: true
             )
             .focused($focusedField, equals: .description)
-        } header: {
-            Text(model.contactSectionTitle)
         }
     }
 
@@ -83,7 +83,7 @@ extension ManageContactScene {
             ForEach(model.addresses, id: \.id) { address in
                 NavigationCustomLink(
                     with: ListItemView(model: model.listItemModel(for: address)),
-                    action: { model.isPresentingContactAddress = address }
+                    action: { model.isPresentingAddress = .edit(address) }
                 )
             }
             .onDelete(perform: model.deleteAddress)
@@ -105,7 +105,7 @@ extension ManageContactScene {
 extension ManageContactScene {
     private func onAddAddress() {
         focusedField = .none
-        model.isPresentingAddAddress = true
+        model.isPresentingAddress = .add
     }
 
     private func onSave() {

@@ -62,12 +62,12 @@ public struct SelectionView<T: Hashable, Content: View>: View {
                             Text(item)
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.gray.opacity(0.1))
+                                .background(Color.gray.opacity(.extraLight))
                                 .cornerRadius(8)
                         }
                     )
                     .background(
-                        selectedValue == item ? Color.blue.opacity(0.2) : Color.clear
+                        selectedValue == item ? Color.blue.opacity(.opacity20) : Color.clear
                     )
                 }
             }
