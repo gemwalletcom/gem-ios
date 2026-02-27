@@ -7,7 +7,6 @@ import Transfer
 import Keystore
 import SwapService
 import Swap
-import WalletsService
 import ScanService
 import WalletConnector
 import WalletService
@@ -32,7 +31,8 @@ public struct ViewModelFactory: Sendable {
     let chainServiceFactory: ChainServiceFactory
     let scanService: ScanService
     let swapService: SwapService
-    let walletsService: WalletsService
+    let assetsEnabler: any AssetsEnabler
+    let priceUpdater: any PriceUpdater
     let walletService: WalletService
     let stakeService: StakeService
     let nameService: NameService
@@ -49,7 +49,8 @@ public struct ViewModelFactory: Sendable {
         chainServiceFactory: ChainServiceFactory,
         scanService: ScanService,
         swapService: SwapService,
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
+        priceUpdater: any PriceUpdater,
         walletService: WalletService,
         stakeService: StakeService,
         nameService: NameService,
@@ -65,7 +66,8 @@ public struct ViewModelFactory: Sendable {
         self.chainServiceFactory = chainServiceFactory
         self.scanService = scanService
         self.swapService = swapService
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
+        self.priceUpdater = priceUpdater
         self.walletService = walletService
         self.stakeService = stakeService
         self.nameService = nameService
@@ -88,7 +90,7 @@ public struct ViewModelFactory: Sendable {
         let confirmService = ConfirmServiceFactory.create(
             keystore: keystore,
             chainServiceFactory: chainServiceFactory,
-            walletsService: walletsService,
+            assetsEnabler: assetsEnabler,
             scanService: scanService,
             balanceService: balanceService,
             priceService: priceService,
@@ -163,7 +165,8 @@ public struct ViewModelFactory: Sendable {
     ) -> SwapSceneViewModel {
         SwapSceneViewModel(
             input: input,
-            walletsService: walletsService,
+            balanceUpdater: balanceService,
+            priceUpdater: priceUpdater,
             swapQuotesProvider: SwapQuotesProvider(swapService: swapService),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: keystore, swapService: swapService),
             onSwap: onSwap

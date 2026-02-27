@@ -2,7 +2,8 @@
 
 import Testing
 import PrimitivesTestKit
-import WalletsServiceTestKit
+import BalanceServiceTestKit
+import PriceServiceTestKit
 import SwapService
 import StoreTestKit
 import ChainServiceTestKit
@@ -13,6 +14,7 @@ import enum Gemstone.SwapperError
 import Keystore
 import KeystoreTestKit
 import Primitives
+import PreferencesTestKit
 @testable import Swap
 @testable import Store
 
@@ -150,7 +152,8 @@ extension SwapSceneViewModel {
                 wallet: .mock(accounts: [.mock(chain: .ethereum)]),
                 pairSelector: SwapPairSelectorViewModel(fromAssetId: .mockEthereum(), toAssetId: nil)
             ),
-            walletsService: .mock(),
+            balanceUpdater: .mock(),
+            priceUpdater: .mock(),
             swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper)),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: LocalKeystore.mock(), swapService: .mock(swapper: swapper))
         )

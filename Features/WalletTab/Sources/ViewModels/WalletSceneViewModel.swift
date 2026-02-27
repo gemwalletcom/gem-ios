@@ -4,8 +4,9 @@ import Foundation
 import SwiftUI
 import Style
 import Primitives
-import WalletsService
+import BalanceService
 import BannerService
+import DiscoverAssetsService
 import Store
 import Preferences
 import Localization
@@ -18,7 +19,8 @@ import Formatters
 @Observable
 @MainActor
 public final class WalletSceneViewModel: Sendable {
-    private let walletsService: WalletsService
+    private let assetDiscoveryService: any AssetDiscoverable
+    private let balanceService: BalanceService
     private let bannerService: BannerService
     private let walletService: WalletService
 
@@ -52,7 +54,8 @@ public final class WalletSceneViewModel: Sendable {
     public var isLoadingAssets: Bool = false
 
     public init(
-        walletsService: WalletsService,
+        assetDiscoveryService: any AssetDiscoverable,
+        balanceService: BalanceService,
         bannerService: BannerService,
         walletService: WalletService,
         observablePreferences: ObservablePreferences,
@@ -60,7 +63,8 @@ public final class WalletSceneViewModel: Sendable {
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.wallet = wallet
-        self.walletsService = walletsService
+        self.assetDiscoveryService = assetDiscoveryService
+        self.balanceService = balanceService
         self.bannerService = bannerService
         self.walletService = walletService
         self.observablePreferences = observablePreferences
@@ -126,10 +130,7 @@ extension WalletSceneViewModel {
     func fetch() {
         Task {
             shouldStartLoadingAssets()
-            await fetch(
-                walletId: wallet.walletId,
-                assetIds: assets.map { $0.asset.id }
-            )
+            await fetch(wallet: wallet, assetIds: assets.map { $0.asset.id })
             isLoadingAssets = false
         }
     }
@@ -186,7 +187,7 @@ extension WalletSceneViewModel {
 
     func onHideAsset(_ assetId: AssetId) {
         do {
-            try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
+            try balanceService.hideAsset(walletId: wallet.walletId, assetId: assetId)
         } catch {
             debugLog("WalletSceneViewModel hide Asset error: \(error)")
         }
@@ -194,7 +195,7 @@ extension WalletSceneViewModel {
 
     func onPinAsset(_ asset: Asset, value: Bool) {
         do {
-            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
+            try balanceService.setPinned(value, walletId: wallet.walletId, assetId: asset.id)
             isPresentingToastMessage = .pin(asset.name, pinned: value)
         } catch {
             debugLog("WalletSceneViewModel pin asset error: \(error)")
@@ -237,17 +238,17 @@ extension WalletSceneViewModel {
 // MARK: - Private
 
 extension WalletSceneViewModel {
-    private func fetch(
-        walletId: WalletId,
-        assetIds: [AssetId]
-    ) async {
+    private func fetch(wallet: Wallet, assetIds: [AssetId]) async {
+        async let balance: () = balanceService.updateBalance(for: wallet, assetIds: assetIds)
+        async let discovery: () = discoverAssets(wallet: wallet)
+        _ = await (balance, discovery)
+    }
+
+    private func discoverAssets(wallet: Wallet) async {
         do {
-            try await walletsService.fetch(
-                walletId: walletId,
-                assetIds: assetIds
-            )
+            try await assetDiscoveryService.discoverAssets(wallet: wallet)
         } catch {
-            debugLog("WalletSceneViewModel fetch error: \(error)")
+            debugLog("WalletSceneViewModel discoverAssets error: \(error)")
         }
     }
 

@@ -6,7 +6,6 @@ import PriceService
 import TransactionStateService
 import ExplorerService
 import Keystore
-import WalletsService
 import ScanService
 import Primitives
 import ChainService
@@ -19,7 +18,7 @@ public struct ConfirmServiceFactory {
     public static func create(
         keystore: any Keystore,
         chainServiceFactory: any ChainServiceFactorable,
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
         scanService: ScanService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -44,7 +43,8 @@ public struct ConfirmServiceFactory {
             transferExecutor: TransferExecutor(
                 signer: TransactionSigner(keystore: keystore),
                 chainService: chainService,
-                walletsService: walletsService,
+                assetsEnabler: assetsEnabler,
+                balanceService: balanceService,
                 transactionStateService: transactionStateService
             ),
             keystore: keystore,

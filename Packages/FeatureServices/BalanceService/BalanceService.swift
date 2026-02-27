@@ -7,7 +7,7 @@ import ChainService
 import Formatters
 import AssetsService
 
-public struct BalanceService: BalancerUpdater, Sendable {
+public struct BalanceService: Sendable {
     private let balanceStore: BalanceStore
     private let assetsService: AssetsService
     private let fetcher: BalanceFetcher
@@ -38,20 +38,18 @@ extension BalanceService {
     public func unpinAsset(walletId: WalletId, assetId: AssetId) throws {
         try balanceStore.pinAsset(walletId: walletId, assetId: assetId, value: false)
     }
+
+    public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
+        switch isPinned {
+        case true: try pinAsset(walletId: walletId, assetId: assetId)
+        case false: try unpinAsset(walletId: walletId, assetId: assetId)
+        }
+    }
 }
 
-// MARK: - Balances
+// MARK: - BalanceUpdater
 
-extension BalanceService {
-
-    public func getBalance(walletId: WalletId, assetId: AssetId) throws -> Balance? {
-        try balanceStore.getBalance(walletId: walletId, assetId: assetId)
-    }
-
-    public func getBalance(assetId: AssetId, address: String) async throws -> AssetBalance  {
-        try await fetcher.getBalance(assetId: assetId, address: address)
-    }
-
+extension BalanceService: BalanceUpdater {
     @discardableResult
     public func updateBalance(walletId: WalletId, asset: AssetId, address: String) async throws -> [AssetBalanceChange] {
         switch asset.type {
@@ -93,6 +91,18 @@ extension BalanceService {
 
             for await _ in group { }
         }
+    }
+}
+
+// MARK: - Balances
+
+extension BalanceService {
+    public func getBalance(walletId: WalletId, assetId: AssetId) throws -> Balance? {
+        try balanceStore.getBalance(walletId: walletId, assetId: assetId)
+    }
+
+    public func getBalance(assetId: AssetId, address: String) async throws -> AssetBalance {
+        try await fetcher.getBalance(assetId: assetId, address: address)
     }
 
     public func addAssetsBalancesIfMissing(assetIds: [AssetId], wallet: Wallet, isEnabled: Bool?) throws {

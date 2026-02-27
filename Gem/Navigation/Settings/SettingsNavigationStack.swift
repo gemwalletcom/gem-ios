@@ -15,6 +15,7 @@ import InAppNotifications
 import NotificationService
 import ContactService
 import Contacts
+import WalletSessionService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -24,8 +25,9 @@ struct SettingsNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
-    @Environment(\.walletsService) private var walletsService
+    @Environment(\.assetsEnabler) private var assetsEnabler
     @Environment(\.walletService) private var walletService
+    @Environment(\.walletSessionService) private var walletSessionService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
@@ -70,7 +72,7 @@ struct SettingsNavigationStack: View {
             SettingsScene(
                 model: SettingsViewModel(
                     walletId: walletId,
-                    walletsService: walletsService,
+                    walletSessionService: walletSessionService,
                     observablePrefereces: observablePreferences
                 ),
                 isPresentingWallets: $isPresentingWallets,
@@ -169,7 +171,7 @@ struct SettingsNavigationStack: View {
                     RewardsScene(
                         model: RewardsViewModel(
                             rewardsService: rewardsService,
-                            assetsEnabler: walletsService,
+                            assetsEnabler: assetsEnabler,
                             wallet: wallet,
                             wallets: wallets,
                             activateCode: scene.code,

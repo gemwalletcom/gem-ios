@@ -4,8 +4,9 @@ import Testing
 import SwiftUI
 import Primitives
 import PrimitivesTestKit
-import WalletsServiceTestKit
+import BalanceServiceTestKit
 import AssetsServiceTestKit
+import BalanceServiceTestKit
 import TransactionsServiceTestKit
 import PriceServiceTestKit
 import PriceAlertServiceTestKit
@@ -60,7 +61,8 @@ struct AssetSceneViewModelTests {
 extension AssetSceneViewModel {
     static func mock(_ assetData: AssetData = AssetData.mock()) -> AssetSceneViewModel {
         let model = AssetSceneViewModel(
-            walletsService: .mock(),
+            assetsEnabler: .mock(),
+            balanceService: .mock(),
             assetsService: .mock(),
             transactionsService: .mock(),
             priceObserverService: .mock(),

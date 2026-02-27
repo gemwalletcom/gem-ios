@@ -7,10 +7,12 @@ import AssetsService
 import AssetsServiceTestKit
 import ActivityService
 import ActivityServiceTestKit
+import BalanceService
+import BalanceServiceTestKit
 import Preferences
 import PreferencesTestKit
-import WalletsService
-import WalletsServiceTestKit
+import BalanceService
+import BalanceServiceTestKit
 import PerpetualService
 import PerpetualServiceTestKit
 
@@ -20,7 +22,8 @@ public extension WalletSearchSceneViewModel {
         wallet: Wallet = .mock(),
         searchService: WalletSearchService = .mock(),
         activityService: ActivityService = .mock(),
-        walletsService: WalletsService = .mock(),
+        assetsEnabler: any AssetsEnabler = .mock(),
+        balanceService: BalanceService = .mock(),
         perpetualService: PerpetualService = .mock(),
         preferences: ObservablePreferences = .mock()
     ) -> WalletSearchSceneViewModel {
@@ -28,7 +31,8 @@ public extension WalletSearchSceneViewModel {
             wallet: wallet,
             searchService: searchService,
             activityService: activityService,
-            walletsService: walletsService,
+            assetsEnabler: assetsEnabler,
+            balanceService: balanceService,
             perpetualService: perpetualService,
             preferences: preferences,
             onDismissSearch: {},

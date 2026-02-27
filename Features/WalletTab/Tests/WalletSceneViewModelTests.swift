@@ -2,13 +2,9 @@
 
 import Testing
 import Primitives
-import Preferences
-
-import WalletsServiceTestKit
-import BannerServiceTestKit
-import WalletServiceTestKit
 import PrimitivesTestKit
-import PreferencesTestKit
+import BannerServiceTestKit
+import WalletTabTestKit
 
 @testable import WalletTab
 @testable import Store
@@ -19,14 +15,14 @@ struct WalletSceneViewModelTests {
     func isLoading() {
         let model = WalletSceneViewModel.mock()
         #expect(model.isLoadingAssets == false)
-        
+
         model.shouldStartLoadingAssets()
         #expect(model.isLoadingAssets)
-        
+
         model.fetch()
         #expect(!model.isLoadingAssets == false)
     }
-    
+
     @Test
     func priorityBannerReturnsHighestPriority() {
         let model = WalletSceneViewModel.mock()
@@ -63,18 +59,5 @@ struct WalletSceneViewModelTests {
         model.onChangeWallet(wallet, newWallet)
 
         #expect(model.wallet.id == "2")
-    }
-}
-
-extension WalletSceneViewModel {
-    static func mock(wallet: Wallet = .mock()) -> WalletSceneViewModel {
-        WalletSceneViewModel(
-            walletsService: .mock(),
-            bannerService: .mock(),
-            walletService: .mock(),
-            observablePreferences: .mock(),
-            wallet: wallet,
-            isPresentingSelectedAssetInput: .constant(.none)
-        )
     }
 }

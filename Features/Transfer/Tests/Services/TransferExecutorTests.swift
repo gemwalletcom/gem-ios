@@ -7,7 +7,7 @@ import PrimitivesTestKit
 import Blockchain
 import BlockchainTestKit
 import SignerTestKit
-import WalletsServiceTestKit
+import BalanceServiceTestKit
 import TransactionStateService
 import TransactionStateServiceTestKit
 import Store
@@ -23,7 +23,8 @@ struct TransferExecutorTests {
         let executor = TransferExecutor(
             signer: TransactionSignerMock(signedData: ["setup1", "setup2", "setup3", "actual_order"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1", "hash2", "hash3"]),
-            walletsService: .mock(),
+            assetsEnabler: .mock(),
+            balanceService: .mock(),
             transactionStateService: .mock(transactionStore: transactionStore)
         )
 
@@ -48,7 +49,8 @@ struct TransferExecutorTests {
         let executor = TransferExecutor(
             signer: TransactionSignerMock(signedData: ["approval_tx", "swap_tx"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1"]),
-            walletsService: .mock(),
+            assetsEnabler: .mock(),
+            balanceService: .mock(),
             transactionStateService: .mock(transactionStore: transactionStore)
         )
 
@@ -73,7 +75,8 @@ struct TransferExecutorTests {
         let executor = TransferExecutor(
             signer: TransactionSignerMock(signedData: ["tx"]),
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash"]),
-            walletsService: .mock(),
+            assetsEnabler: .mock(),
+            balanceService: .mock(),
             transactionStateService: .mock(transactionStore: transactionStore)
         )
 

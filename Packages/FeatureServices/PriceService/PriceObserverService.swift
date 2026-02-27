@@ -151,7 +151,15 @@ public actor PriceObserverService: Sendable {
     private func sendMessage(_ message: StreamMessage) async throws {
         let data = try encoder.encode(message)
         try await webSocket.send(data)
-        
+
         debugLog("price observer send message: \(message)")
+    }
+}
+
+// MARK: - PriceUpdater
+
+extension PriceObserverService: PriceUpdater {
+    public func addPrices(assetIds: [AssetId]) async throws {
+        try await addAssets(assets: assetIds)
     }
 }

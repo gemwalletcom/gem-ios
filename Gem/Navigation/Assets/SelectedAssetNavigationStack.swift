@@ -20,7 +20,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.keystore) private var keystore
     @Environment(\.chainServiceFactory) private var chainServiceFactory
-    @Environment(\.walletsService) private var walletsService
+    @Environment(\.assetsEnabler) private var assetsEnabler
     @Environment(\.scanService) private var scanService
     @Environment(\.balanceService) private var balanceService
     @Environment(\.priceService) private var priceService
@@ -54,7 +54,7 @@ struct SelectedAssetNavigationStack: View  {
                         confirmService: ConfirmServiceFactory.create(
                             keystore: keystore,
                             chainServiceFactory: chainServiceFactory,
-                            walletsService: walletsService,
+                            assetsEnabler: assetsEnabler,
                             scanService: scanService,
                             balanceService: balanceService,
                             priceService: priceService,
@@ -80,9 +80,9 @@ struct SelectedAssetNavigationStack: View  {
                     ReceiveScene(
                         model: ReceiveViewModel(
                             assetModel: AssetViewModel(asset: input.asset),
-                            walletId: wallet.walletId,
+                            wallet: wallet,
                             address: input.address,
-                            walletsService: walletsService,
+                            assetsEnabler: assetsEnabler
                         )
                     )
                 case let .buy(_, amount):

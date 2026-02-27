@@ -52,7 +52,7 @@ let package = Package(
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "AssetsService", package: "FeatureServices"),
                 .product(name: "TransactionsService", package: "FeatureServices"),
-                .product(name: "WalletsService", package: "FeatureServices"),
+                .product(name: "BalanceService", package: "FeatureServices"),
                 .product(name: "PriceService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "ChainService", package: "ChainServices"),
@@ -64,7 +64,7 @@ let package = Package(
             name: "AssetsTestKit",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceAlertServiceTestKit", package: "FeatureServices"),
                 .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
@@ -77,8 +77,8 @@ let package = Package(
             name: "AssetsTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "TransactionsServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceAlertServiceTestKit", package: "FeatureServices"),

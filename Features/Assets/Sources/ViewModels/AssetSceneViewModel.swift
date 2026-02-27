@@ -12,7 +12,7 @@ import Preferences
 import ExplorerService
 import AssetsService
 import TransactionsService
-import WalletsService
+import BalanceService
 import PriceService
 import BannerService
 import Formatters
@@ -21,7 +21,8 @@ import Store
 @Observable
 @MainActor
 public final class AssetSceneViewModel: Sendable {
-    private let walletsService: WalletsService
+    private let assetsEnabler: any AssetsEnabler
+    private let balanceService: BalanceService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
@@ -50,7 +51,8 @@ public final class AssetSceneViewModel: Sendable {
     private var wallet: Wallet { walletModel.wallet }
 
     public init(
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
+        balanceService: BalanceService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
         priceObserverService: PriceObserverService,
@@ -59,7 +61,8 @@ public final class AssetSceneViewModel: Sendable {
         input: AssetSceneInput,
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
+        self.balanceService = balanceService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
         self.priceObserverService = priceObserverService
@@ -340,7 +343,7 @@ extension AssetSceneViewModel {
         do {
             let pinned = !assetData.metadata.isPinned
             isPresentingToastMessage = .pin(asset.name, pinned: pinned)
-            try walletsService.setPinned(pinned, walletId: wallet.walletId, assetId: asset.id)
+            try balanceService.setPinned(pinned, walletId: wallet.walletId, assetId: asset.id)
             if !assetData.metadata.isBalanceEnabled {
                 onSelectEnable()
             }
@@ -353,7 +356,7 @@ extension AssetSceneViewModel {
         Task {
             let enabled = !assetData.metadata.isBalanceEnabled
             do {
-                try await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: enabled)
+                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: enabled)
                 isPresentingToastMessage = .showAsset(visible: enabled)
             } catch {
                 debugLog("onSelectEnable error: \(error)")
@@ -399,7 +402,7 @@ extension AssetSceneViewModel {
         isPresentingAssetSheet = .url(url)
     }
 
-    private func fetchTransactions() async throws {
+    private func fetchTransactions() async {
         do {
             try await transactionsService.updateForAsset(wallet: walletModel.wallet, assetId: assetModel.asset.id)
         } catch {
@@ -444,16 +447,8 @@ extension AssetSceneViewModel {
     }
 
     private func updateWallet() async {
-        do {
-            async let updateAsset: () = try walletsService.updateAssets(
-                walletId: walletModel.wallet.walletId,
-                assetIds: [assetModel.asset.id]
-            )
-            async let updateTransactions: () = try fetchTransactions()
-            let _ = try await [updateAsset, updateTransactions]
-        } catch {
-            // TODO: - handle fetch error
-            debugLog("asset scene: updateWallet error \(error)")
-        }
+        async let balance: Void = balanceService.updateBalance(for: walletModel.wallet, assetIds: [assetModel.asset.id])
+        async let transactions: Void = fetchTransactions()
+        _ = await (balance, transactions)
     }
 }

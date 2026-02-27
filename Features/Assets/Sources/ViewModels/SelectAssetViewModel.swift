@@ -8,7 +8,7 @@ import Components
 import Localization
 import PrimitivesComponents
 import AssetsService
-import WalletsService
+import BalanceService
 import Preferences
 import PriceAlertService
 import ActivityService
@@ -20,7 +20,7 @@ public final class SelectAssetViewModel {
     let preferences: Preferences
     let selectType: SelectAssetType
     let searchService: AssetSearchService
-    let walletsService: WalletsService
+    let assetsEnabler: any AssetsEnabler
     let priceAlertService: PriceAlertService
     let activityService: ActivityService
 
@@ -51,7 +51,7 @@ public final class SelectAssetViewModel {
         wallet: Wallet,
         selectType: SelectAssetType,
         searchService: AssetSearchService,
-        walletsService: WalletsService,
+        assetsEnabler: any AssetsEnabler,
         priceAlertService: PriceAlertService,
         activityService: ActivityService,
         selectAssetAction: AssetAction = .none
@@ -60,7 +60,7 @@ public final class SelectAssetViewModel {
         self.wallet = wallet
         self.selectType = selectType
         self.searchService = searchService
-        self.walletsService = walletsService
+        self.assetsEnabler = assetsEnabler
         self.priceAlertService = priceAlertService
         self.activityService = activityService
         self.onSelectAssetAction = selectAssetAction
@@ -239,7 +239,7 @@ extension SelectAssetViewModel {
         switch selectType {
         case .manage:
             do {
-                try await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
+                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [assetId], enabled: enabled)
             } catch {
                 debugLog("SelectAssetViewModel handleAction error: \(error)")
             }

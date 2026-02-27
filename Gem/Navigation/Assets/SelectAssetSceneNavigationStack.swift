@@ -19,7 +19,7 @@ import Recents
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
     @Environment(\.chainServiceFactory) private var chainServiceFactory
-    @Environment(\.walletsService) private var walletsService
+    @Environment(\.assetsEnabler) private var assetsEnabler
     @Environment(\.keystore) private var keystore
     @Environment(\.scanService) private var scanService
     @Environment(\.balanceService) private var balanceService
@@ -80,7 +80,7 @@ struct SelectAssetSceneNavigationStack: View {
                             confirmService: ConfirmServiceFactory.create(
                                 keystore: keystore,
                                 chainServiceFactory: chainServiceFactory,
-                                walletsService: walletsService,
+                                assetsEnabler: assetsEnabler,
                                 scanService: scanService,
                                 balanceService: balanceService,
                                 priceService: priceService,
@@ -106,9 +106,9 @@ struct SelectAssetSceneNavigationStack: View {
                         ReceiveScene(
                             model: ReceiveViewModel(
                                 assetModel: AssetViewModel(asset: input.asset),
-                                walletId: model.wallet.walletId,
+                                wallet: model.wallet,
                                 address: input.assetAddress.address,
-                                walletsService: walletsService
+                                assetsEnabler: assetsEnabler
                             )
                         )
                     case .buy:

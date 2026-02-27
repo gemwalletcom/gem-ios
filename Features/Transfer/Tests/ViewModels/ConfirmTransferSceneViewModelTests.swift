@@ -6,7 +6,6 @@ import Primitives
 import PrimitivesTestKit
 import TransferTestKit
 import PrimitivesComponents
-import WalletsServiceTestKit
 import BlockchainTestKit
 import ScanServiceTestKit
 import KeystoreTestKit
@@ -340,7 +339,7 @@ private extension ConfirmTransferSceneViewModel {
             confirmService: ConfirmServiceFactory.create(
                 keystore: KeystoreMock(),
                 chainServiceFactory: ChainServiceFactoryMock(),
-                walletsService: .mock(),
+                assetsEnabler: .mock(),
                 scanService: .mock(),
                 balanceService: .mock(),
                 priceService: .mock(),

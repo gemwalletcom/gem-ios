@@ -42,7 +42,8 @@ let package = Package(
                 .product(name: "SwapService", package: "FeatureServices"),
                 "Store",
                 "Preferences",
-                .product(name: "WalletsService", package: "FeatureServices"),
+                .product(name: "BalanceService", package: "FeatureServices"),
+                .product(name: "PriceService", package: "FeatureServices"),
                 "PrimitivesComponents",
                 "InfoSheet",
                 "Keystore",
@@ -53,16 +54,16 @@ let package = Package(
             name: "SwapTests",
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "SwapServiceTestKit", package: "FeatureServices"),
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
-                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "TransactionStateServiceTestKit", package: "FeatureServices"),
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "Swap"
             ]
         )

@@ -29,7 +29,7 @@ public extension TransactionStateService {
             stakeService: stakeService,
             nftService: nftService,
             chainServiceFactory: chainServiceFactory,
-            balanceUpdater: BalancerUpdaterMock()
+            balanceUpdater: .mock()
         )
     }
 }

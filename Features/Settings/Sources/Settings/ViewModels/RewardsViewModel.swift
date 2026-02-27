@@ -9,7 +9,7 @@ import Preferences
 import Localization
 import Style
 import GemstonePrimitives
-import WalletsService
+import BalanceService
 
 @Observable
 @MainActor
@@ -268,7 +268,7 @@ public final class RewardsViewModel: Sendable {
             if let asset = result.redemption.option.asset {
                 Task {
                     do {
-                        try await assetsEnabler.enableAssetId(walletId: selectedWallet.walletId, assetId: asset.id)
+                        try await assetsEnabler.enableAssetId(wallet: selectedWallet, assetId: asset.id)
                     } catch {
                         debugLog("RewardsViewModel enable reward asset error: \(error)")
                     }

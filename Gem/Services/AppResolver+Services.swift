@@ -15,8 +15,9 @@ import BalanceService
 import AssetsService
 import TransactionsService
 import TransactionStateService
-import WalletsService
+import DiscoverAssetsService
 import WalletService
+import WalletSessionService
 import AppService
 import ScanService
 import NFTService
@@ -51,7 +52,10 @@ extension AppResolver {
         let transactionsService: TransactionsService
         let transactionStateService: TransactionStateService
         let walletService: WalletService
-        let walletsService: WalletsService
+        let walletSessionService: any WalletSessionManageable
+        let assetsEnabler: any AssetsEnabler
+        let assetDiscoveryService: any AssetDiscoverable
+        let walletSetupService: WalletSetupService
         let explorerService: ExplorerService
         let scanService: ScanService
         let nftService: NFTService
@@ -98,7 +102,10 @@ extension AppResolver {
             transactionsService: TransactionsService,
             transactionStateService: TransactionStateService,
             walletService: WalletService,
-            walletsService: WalletsService,
+            walletSessionService: any WalletSessionManageable,
+            assetsEnabler: any AssetsEnabler,
+            assetDiscoveryService: any AssetDiscoverable,
+            walletSetupService: WalletSetupService,
             explorerService: ExplorerService,
             scanService: ScanService,
             nftService: NFTService,
@@ -144,7 +151,11 @@ extension AppResolver {
             self.transactionsService = transactionsService
             self.transactionStateService = transactionStateService
             self.walletService = walletService
-            self.walletsService = walletsService
+            self.walletSessionService = walletSessionService
+            self.assetsEnabler = assetsEnabler
+            self.assetDiscoveryService = assetDiscoveryService
+
+            self.walletSetupService = walletSetupService
             self.explorerService = explorerService
             self.scanService = scanService
             self.nftService = nftService

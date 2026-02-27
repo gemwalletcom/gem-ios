@@ -32,8 +32,6 @@ let package = Package(
         .library(name: "SwapServiceTestKit", targets: ["SwapServiceTestKit"]),
         .library(name: "AssetsService", targets: ["AssetsService"]),
         .library(name: "AssetsServiceTestKit", targets: ["AssetsServiceTestKit"]),
-        .library(name: "WalletsService", targets: ["WalletsService"]),
-        .library(name: "WalletsServiceTestKit", targets: ["WalletsServiceTestKit"]),
         .library(name: "WalletSessionService", targets: ["WalletSessionService"]),
         .library(name: "WalletSessionServiceTestKit", targets: ["WalletSessionServiceTestKit"]),
         .library(name: "WalletService", targets: ["WalletService"]),
@@ -103,6 +101,7 @@ let package = Package(
                 "Store",
                 .product(name: "ChainService", package: "ChainServices"),
                 "AssetsService",
+                "PriceService",
                 "Formatters"
             ],
             path: "BalanceService",
@@ -115,6 +114,7 @@ let package = Package(
                 .product(name: "ChainServiceTestKit", package: "ChainServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 "AssetsServiceTestKit",
+                "PriceServiceTestKit",
                 "BalanceService",
                 "Primitives"
             ],
@@ -279,8 +279,10 @@ let package = Package(
             name: "DiscoverAssetsService",
             dependencies: [
                 "Primitives",
-                .product(name: "ChainService", package: "ChainServices"),
                 "BalanceService",
+                "AssetsService",
+                "DeviceService",
+                "Preferences",
                 "GemAPI",
             ],
             path: "DiscoverAssetsService",
@@ -290,7 +292,6 @@ let package = Package(
             name: "DiscoverAssetsServiceTestKit",
             dependencies: [
                 "DiscoverAssetsService",
-                "BalanceServiceTestKit",
             ],
             path: "DiscoverAssetsService/TestKit"
         ),
@@ -344,37 +345,6 @@ let package = Package(
             path: "AssetsService/TestKit"
         ),
         .target(
-            name: "WalletsService",
-            dependencies: [
-                "Primitives",
-                "Store",
-                "PriceService",
-                "Preferences",
-                "BalanceService",
-                "AssetsService",
-                "DiscoverAssetsService",
-                "WalletSessionService",
-                "DeviceService"
-            ],
-            path: "WalletsService",
-            exclude: ["TestKit", "Tests"]
-        ),
-        .target(
-            name: "WalletsServiceTestKit",
-            dependencies: [
-                "DeviceServiceTestKit",
-                "DiscoverAssetsServiceTestKit",
-                .product(name: "StoreTestKit", package: "Store"),
-                .product(name: "PreferencesTestKit", package: "Preferences"),
-                "PriceServiceTestKit",
-                "BalanceServiceTestKit",
-                "WalletSessionService",
-                "WalletSessionServiceTestKit",
-                "WalletsService"
-            ],
-            path: "WalletsService/TestKit"
-        ),
-        .target(
             name: "WalletSessionService",
             dependencies: [
                 "Primitives",
@@ -401,7 +371,8 @@ let package = Package(
                 "Store",
                 "Preferences",
                 "AvatarService",
-                "WalletSessionService"
+                "WalletSessionService",
+                "BalanceService"
             ],
             path: "WalletService",
             exclude: ["TestKit", "Tests"]
@@ -412,6 +383,7 @@ let package = Package(
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "StoreTestKit", package: "Store"),
+                "BalanceServiceTestKit",
                 "WalletService"
             ],
             path: "WalletService/TestKit"
@@ -639,26 +611,11 @@ let package = Package(
             path: "WalletSessionService/Tests"
         ),
         .testTarget(
-            name: "WalletsServiceTests",
-            dependencies: [
-                "WalletsService",
-                "WalletsServiceTestKit",
-                "WalletSessionService",
-                .product(name: "StoreTestKit", package: "Store"),
-                "BalanceServiceTestKit",
-                "PriceServiceTestKit",
-                "AssetsServiceTestKit",
-                "DeviceServiceTestKit",
-                .product(name: "PreferencesTestKit", package: "Preferences"),
-                .product(name: "PrimitivesTestKit", package: "Primitives")
-            ],
-            path: "WalletsService/Tests"
-        ),
-        .testTarget(
             name: "WalletServiceTests",
             dependencies: [
                 "WalletService",
                 "WalletServiceTestKit",
+                "BalanceServiceTestKit",
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
