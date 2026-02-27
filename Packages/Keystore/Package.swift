@@ -17,7 +17,8 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Formatters", path: "../Formatters"),
         .package(name: "WalletCore", path: "../WalletCore"),
-        .package(name: "Keychain", path: "../Keychain")
+        .package(name: "Keychain", path: "../Keychain"),
+        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
     ],
     targets: [
         .target(
@@ -27,7 +28,8 @@ let package = Package(
                 .product(name: "WalletCorePrimitives", package: "WalletCore"),
                 "Primitives",
                 "Formatters",
-                "Keychain"
+                "Keychain",
+                "GemstonePrimitives",
             ],
             path: "Sources"
         ),

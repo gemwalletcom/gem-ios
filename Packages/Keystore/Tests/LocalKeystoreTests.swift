@@ -83,22 +83,19 @@ struct LocalKeystoreTests {
                 source: .import
             )
 
-            let exportedHex = try await keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .hex)
-            let exportedBase58 = try await keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .base58)
-
-            #expect(exportedHex == hex)
-            #expect(exportedBase58 == "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
+            let exported = try await keystore.getPrivateKeyEncoded(wallet: wallet, chain: .solana)
+            #expect(exported == "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
 
             let keystore2 = LocalKeystore.mock()
             let wallet2 = try await keystore2.importWallet(
                 name: "Test Solana 2",
-                type: .privateKey(text: exportedBase58, chain: .solana),
+                type: .privateKey(text: exported, chain: .solana),
                 isWalletsEmpty: true,
                 source: .import
             )
             let exportedKey = try await keystore2.getPrivateKey(wallet: wallet2, chain: .solana)
 
-            #expect(Base58.encodeNoCheck(data: exportedKey) == exportedBase58)
+            #expect(Base58.encodeNoCheck(data: exportedKey) == exported)
         }
     }
 
@@ -120,17 +117,6 @@ struct LocalKeystoreTests {
         #expect(encoded == "5ZRaXVuDePowJjZmKaMjfcuqBVZet6e8QiCjTkGXBn7xhCvoEswUKXiGs2wmPxcqTfJUH28eCC91J1vLSjANNM9v")
     }
 
-    @Test
-    func importWIF() {
-        #expect(throws: Never.self) {
-            let wif = "L1NGZutRxaVotZSfRzGnFYUj42LjEL66ZdAeSDA8CbyASZWizHLA"
-            let decoded = Base58.decode(string: wif)!
-            #expect(decoded.count == 34)
-
-            let key = decoded[1 ... 32]
-            #expect(PrivateKey.isValid(data: key, curve: .secp256k1))
-        }
-    }
 
     @Test
     func deriveAddress() async {

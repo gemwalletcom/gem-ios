@@ -8,6 +8,7 @@ import PrimitivesComponents
 import SwiftUI
 import Components
 import GemstonePrimitives
+internal import func Gemstone.supportsPrivateKeyImport
 import enum Keystore.KeystoreImportType
 import struct Keystore.Mnemonic
 
@@ -63,18 +64,17 @@ final class ImportWalletSceneViewModel {
         case .chain(let chain): chain
         }
     }
-    
 
     var showImportTypes: Bool { importTypes.count > 1 }
     var importTypes: [WalletImportType] {
         switch type {
         case .multicoin:
             return [.phrase]
-        case .chain:
-            if chain?.keyEncodingTypes.isEmpty ?? true {
-                return [.phrase, .address]
+        case .chain(let chain):
+            if supportsPrivateKeyImport(chain: chain.rawValue) {
+                return [.phrase, .privateKey, .address]
             }
-            return [.phrase, .privateKey, .address]
+            return [.phrase, .address]
         }
     }
 

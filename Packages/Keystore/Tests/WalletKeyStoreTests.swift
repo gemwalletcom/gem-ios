@@ -81,6 +81,7 @@ final class WalletKeyStoreTests {
         #expect(address == "GADB4BDKTOE36L6QN2JLIPNNJ7EZPSY5BIVKWXLWYZLIPXNQWIRQQZKT")
     }
     
+
     @Test func addImportWallet() async throws {
         let store = WalletKeyStore.mock()
         let newWallet = try store.importWallet(
