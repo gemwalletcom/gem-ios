@@ -5,14 +5,23 @@ import Primitives
 import BalanceService
 
 public struct AssetsEnablerMock: AssetsEnabler {
-    public init() {}
+    private let onEnableAssets: (@Sendable (Wallet, [AssetId], Bool) async throws -> Void)?
 
-    public func enableAssets(wallet: Wallet, assetIds: [AssetId], enabled: Bool) async throws {}
+    public init(onEnableAssets: (@Sendable (Wallet, [AssetId], Bool) async throws -> Void)? = nil) {
+        self.onEnableAssets = onEnableAssets
+    }
+
+    public func enableAssets(wallet: Wallet, assetIds: [AssetId], enabled: Bool) async throws {
+        try await onEnableAssets?(wallet, assetIds, enabled)
+    }
+
     public func enableAssetId(wallet: Wallet, assetId: AssetId) async throws {}
 }
 
 public extension AssetsEnabler where Self == AssetsEnablerMock {
-    static func mock() -> AssetsEnablerMock {
-        AssetsEnablerMock()
+    static func mock(
+        onEnableAssets: (@Sendable (Wallet, [AssetId], Bool) async throws -> Void)? = nil
+    ) -> AssetsEnablerMock {
+        AssetsEnablerMock(onEnableAssets: onEnableAssets)
     }
 }

@@ -4,6 +4,8 @@ import Testing
 import Primitives
 import PrimitivesTestKit
 import PreferencesTestKit
+import BalanceServiceTestKit
+import StoreTestKit
 import WalletTabTestKit
 
 @testable import WalletTab
@@ -46,5 +48,19 @@ struct WalletSearchSceneViewModelTests {
 
         model.searchQuery.value = WalletSearchResult(assets: [], perpetuals: (0..<4).map { _ in .mock() })
         #expect(model.hasMorePerpetuals == true)
+    }
+
+    @Test
+    func pinAssetEnablesAsset() async {
+        let db = DB.mockAssets()
+        let enabledAssetIds: [AssetId] = await withCheckedContinuation { continuation in
+            let model = WalletSearchSceneViewModel.mock(
+                assetsEnabler: .mock(onEnableAssets: { _, assetIds, _ in continuation.resume(returning: assetIds) }),
+                balanceService: .mock(balanceStore: .mock(db: db))
+            )
+            model.onSelectPinAsset(.mock(metadata: .mock(isBalanceEnabled: false, isPinned: false)), value: true)
+        }
+
+        #expect(enabledAssetIds == [AssetId.mock()])
     }
 }
