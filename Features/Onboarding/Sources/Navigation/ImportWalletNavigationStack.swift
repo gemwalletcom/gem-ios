@@ -3,11 +3,13 @@
 import SwiftUI
 import Primitives
 import Localization
+import Components
 import PrimitivesComponents
 
 public struct ImportWalletNavigationStack: View {
     @State private var model: ImportWalletViewModel
     @State private var navigationPath = NavigationPath()
+    @State private var isPresentingAlertMessage: AlertMessage?
 
     public init(model: ImportWalletViewModel) {
         _model = State(initialValue: model)
@@ -56,6 +58,7 @@ public struct ImportWalletNavigationStack: View {
                     }
                 }
         }
+        .alertSheet($isPresentingAlertMessage)
     }
 
     @ViewBuilder
@@ -82,14 +85,12 @@ extension ImportWalletNavigationStack {
         }
     }
 
-    func onImportComplete(data: WalletImportData) {
-        Task {
-            do {
-                let wallet = try await model.importWallet(data: data)
-                navigate(to: .walletProfile(wallet: wallet))
-            } catch {
-                debugLog("Failed to import wallet: \(error)")
-            }
+    func onImportComplete(data: WalletImportData) async {
+        do {
+            let wallet = try await model.importWallet(data: data)
+            navigate(to: .walletProfile(wallet: wallet))
+        } catch {
+            isPresentingAlertMessage = AlertMessage(message: error.localizedDescription)
         }
     }
 

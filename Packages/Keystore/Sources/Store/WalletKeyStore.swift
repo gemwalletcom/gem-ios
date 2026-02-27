@@ -6,6 +6,7 @@ import Primitives
 
 internal import struct Formatters.MnemonicFormatter
 internal import WalletCorePrimitives
+internal import func Gemstone.decodePrivateKey
 
 struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
@@ -41,60 +42,11 @@ struct WalletKeyStore: Sendable {
     }
 
     static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
-        var data: Data?
-        for encoding in chain.keyEncodingTypes {
-            if data != nil {
-                break
-            }
-            switch encoding {
-            case .base58:
-                if let decoded = Base58.decodeNoCheck(string: key) {
-                    if decoded.count % 32 == 0 {
-                        data = Data(decoded.prefix(32))
-                    } else if decoded.count == 37 || decoded.count == 38 {
-                        // WIF format: [1 version] + [32 key] + [4 checksum] (37 bytes, uncompressed)
-                        // or [1 version] + [32 key] + [1 compression flag] + [4 checksum] (38 bytes, compressed)
-                        data = Data(decoded[1..<33])
-                    }
-                }
-            case .hex:
-                data = Data(hexString: key)
-            case .base32:
-                if let decoded = try? decodeBase32Key(string: key, chain: chain) {
-                    data = decoded
-                }
-            }
+        let bytes = try decodePrivateKey(chain: chain.rawValue, value: key)
+        guard let privateKey = PrivateKey(data: bytes) else {
+            throw AnyError("Invalid private key")
         }
-
-        guard
-            let data = data,
-            PrivateKey.isValid(data: data, curve: chain.coinType.curve) == true,
-            let key = PrivateKey(data: data)
-        else {
-            throw AnyError("Invalid private key format")
-        }
-        return key
-    }
-
-    static func decodeBase32Key(string: String, chain: Chain) throws -> Data {
-        switch chain {
-        case .stellar:
-            // test against https://lab.stellar.org/account/create
-            guard
-                string.count == 56,
-                string.hasPrefix("S"),
-                let decoded = Base32.decode(string: string),
-                decoded.count == 35,
-                decoded[0] == 0x90 // Mainnet
-            else {
-                throw KeystoreError.invalidPrivateKeyEncoding
-            }
-            // 35-byte format: [1 version] + [32 payload] + [2 checksum/padding]
-            return Data(decoded[1 ..< 33])
-
-        default:
-            throw KeystoreError.invalidPrivateKeyEncoding
-        }
+        return privateKey
     }
 
     func importPrivateKey(id: WalletIdentifier, name: String, key: String, chain: Chain, password: String, source: WalletSource) throws -> Primitives.Wallet {

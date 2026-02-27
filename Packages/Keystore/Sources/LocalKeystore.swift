@@ -1,4 +1,5 @@
 import Foundation
+import GemstonePrimitives
 import Primitives
 import WalletCore
 
@@ -112,16 +113,14 @@ public final class LocalKeystore: Keystore, @unchecked Sendable {
         }
     }
 
-    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) async throws -> String {
+    public func getPrivateKeyEncoded(wallet: Primitives.Wallet, chain: Chain) async throws -> String {
         var data = try await getPrivateKey(wallet: wallet, chain: chain)
         defer { data.zeroize() }
-        switch encoding {
-        case .base58:
+        switch chain.type {
+        case .bitcoin, .solana:
             return Base58.encodeNoCheck(data: data)
-        case .hex:
+        default:
             return data.hexString.append0x
-        case .base32:
-            throw KeystoreError.invalidPrivateKeyEncoding
         }
     }
 

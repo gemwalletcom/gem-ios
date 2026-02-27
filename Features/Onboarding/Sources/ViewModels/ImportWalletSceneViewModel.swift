@@ -8,6 +8,7 @@ import PrimitivesComponents
 import SwiftUI
 import Components
 import GemstonePrimitives
+internal import func Gemstone.supportsPrivateKeyImport
 import enum Keystore.KeystoreImportType
 import struct Keystore.Mnemonic
 
@@ -29,13 +30,13 @@ final class ImportWalletSceneViewModel {
     var isPresentingScanner = false
     var isPresentingAlertMessage: AlertMessage?
 
-    private let onComplete: ((WalletImportData) -> Void)?
+    private let onComplete: ((WalletImportData) async -> Void)?
 
     init(
         walletService: WalletService,
         nameService: any NameServiceable,
         type: ImportWalletType,
-        onComplete: ((WalletImportData) -> Void)?
+        onComplete: ((WalletImportData) async -> Void)?
     ) {
         self.walletService = walletService
         self.nameService = nameService
@@ -73,11 +74,11 @@ final class ImportWalletSceneViewModel {
         switch type {
         case .multicoin:
             return [.phrase]
-        case .chain:
-            if chain?.keyEncodingTypes.isEmpty ?? true {
-                return [.phrase, .address]
+        case .chain(let chain):
+            if supportsPrivateKeyImport(chain: chain.rawValue) {
+                return [.phrase, .privateKey, .address]
             }
-            return [.phrase, .privateKey, .address]
+            return [.phrase, .address]
         }
     }
 
@@ -175,12 +176,12 @@ extension ImportWalletSceneViewModel {
             }
             switch type {
             case .multicoin:
-                importWallet(
+                await importWallet(
                     name: recipient.name,
                     keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
                 )
             case .chain(let chain):
-                importWallet(
+                await importWallet(
                     name: recipient.name,
                     keystoreType: .single(words: words, chain: chain)
                 )
@@ -189,7 +190,7 @@ extension ImportWalletSceneViewModel {
             guard try validateForm(type: importType, address: recipient.address, words: [trimmedInput]) else {
                 return
             }
-            importWallet(name: recipient.name, keystoreType: .privateKey(text: trimmedInput, chain: chain!))
+            await importWallet(name: recipient.name, keystoreType: .privateKey(text: trimmedInput, chain: chain!))
         case .address:
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
@@ -197,12 +198,13 @@ extension ImportWalletSceneViewModel {
             let chain = chain!
             let address = chain.checksumAddress(recipient.address)
 
-            importWallet(name: recipient.name, keystoreType: .address(address: address, chain: chain))
+            await importWallet(name: recipient.name, keystoreType: .address(address: address, chain: chain))
         }
     }
 
-    private func importWallet(name: String, keystoreType: KeystoreImportType) {
-        onComplete?(WalletImportData(name: name, keystoreType: keystoreType))
+    private func importWallet(name: String, keystoreType: KeystoreImportType) async {
+        await onComplete?(WalletImportData(name: name, keystoreType: keystoreType))
+        buttonState = .normal
     }
 
     private func validateForm(type: WalletImportType, address: String, words: [String]) throws  -> Bool {

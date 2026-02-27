@@ -12,7 +12,7 @@ public protocol Keystore: Sendable {
     func setupChains(chains: [Chain], for wallets: [Wallet]) throws -> [Wallet]
     func deleteKey(for wallet: Wallet) async throws
     func getPrivateKey(wallet: Wallet, chain: Chain) async throws -> Data
-    func getPrivateKey(wallet: Wallet, chain: Chain, encoding: EncodingType) async throws -> String
+    func getPrivateKeyEncoded(wallet: Wallet, chain: Chain) async throws -> String
     func getMnemonic(wallet: Wallet) async throws -> [String]
     func getPasswordAuthentication() throws -> KeystoreAuthentication
     func sign(hash: Data, wallet: Wallet, chain: Chain) async throws -> Data
