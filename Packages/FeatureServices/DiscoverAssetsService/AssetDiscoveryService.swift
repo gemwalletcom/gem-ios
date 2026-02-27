@@ -2,25 +2,26 @@
 
 import Foundation
 import AssetsService
-import DiscoverAssetsService
+import BalanceService
+import GemAPI
 import Primitives
 import Preferences
 import DeviceService
 
-public actor AssetDiscoveryService: AssetDiscoverable {
+public struct AssetDiscoveryService: AssetDiscoverable {
     private let deviceService: any DeviceServiceable
-    private let discoverAssetService: DiscoverAssetsService
+    private let assetsListService: any GemAPIAssetsListService
     private let assetService: AssetsService
     private let assetsEnabler: any AssetsEnabler
 
     public init(
         deviceService: any DeviceServiceable,
-        discoverAssetService: DiscoverAssetsService,
+        assetsListService: any GemAPIAssetsListService,
         assetService: AssetsService,
         assetsEnabler: any AssetsEnabler
     ) {
         self.deviceService = deviceService
-        self.discoverAssetService = discoverAssetService
+        self.assetsListService = assetsListService
         self.assetService = assetService
         self.assetsEnabler = assetsEnabler
     }
@@ -29,11 +30,11 @@ public actor AssetDiscoveryService: AssetDiscoverable {
         let preferences = WalletPreferences(walletId: wallet.walletId)
         _ = try await deviceService.getSubscriptionsDeviceId()
 
-        let assetIds = try await discoverAssetService.getAssets(wallet: wallet, fromTimestamp: preferences.assetsTimestamp)
+        let assetIds = try await assetsListService.getDeviceAssets(walletId: wallet.id, fromTimestamp: preferences.assetsTimestamp)
 
         if assetIds.isNotEmpty {
             try await assetService.prefetchAssets(assetIds: assetIds)
-            try await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: assetIds, enabled: true)
+            try await assetsEnabler.enableAssets(wallet: wallet, assetIds: assetIds, enabled: true)
         }
 
         preferences.completeInitialLoadAssets = true

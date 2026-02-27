@@ -17,7 +17,6 @@ import TransactionsService
 import WalletConnector
 import ConnectionsService
 import WalletService
-import WalletsService
 import Preferences
 
 @Observable

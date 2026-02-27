@@ -3,7 +3,7 @@ import SwiftUI
 import Primitives
 import Localization
 import PrimitivesComponents
-import WalletsService
+import BalanceService
 import Components
 import Formatters
 
@@ -13,25 +13,25 @@ public final class ReceiveViewModel: Sendable {
     var qrSize: CGFloat {
         UIDevice.current.userInterfaceIdiom == .pad ? 180 : 260
     }
-    
+
     let assetModel: AssetViewModel
-    let walletId: WalletId
+    let wallet: Wallet
     let address: String
     let assetsEnabler: any AssetsEnabler
     let generator = QRCodeGenerator()
-    
+
     public var isPresentingShareSheet: Bool = false
     public var isPresentingCopyToast: Bool = false
     public var renderedImage: UIImage? = nil
 
     public init(
         assetModel: AssetViewModel,
-        walletId: WalletId,
+        wallet: Wallet,
         address: String,
         assetsEnabler: any AssetsEnabler
     ) {
         self.assetModel = assetModel
-        self.walletId = walletId
+        self.wallet = wallet
         self.address = address
         self.assetsEnabler = assetsEnabler
     }
@@ -39,7 +39,7 @@ public final class ReceiveViewModel: Sendable {
     var title: String {
         Localized.Receive.title("")
     }
-    
+
     var addressShort: String {
         AddressFormatter(style: .short, address: address, chain: assetModel.asset.chain).value()
     }
@@ -78,22 +78,22 @@ public final class ReceiveViewModel: Sendable {
             copyValue: address
         )
     }
-    
+
     func activityItems(qrImage: UIImage?) -> [Any] {
         if let qrImage {
             return [qrImage, address]
         }
         return [address]
     }
-    
+
     func enableAsset() async {
         do {
-            try await assetsEnabler.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
+            try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [assetModel.asset.id], enabled: true)
         } catch {
             debugLog("ReceiveViewModel enableAsset error: \(error)")
         }
     }
-    
+
     func generateQRCode() async -> UIImage? {
         await generator.generate(
             from: address,

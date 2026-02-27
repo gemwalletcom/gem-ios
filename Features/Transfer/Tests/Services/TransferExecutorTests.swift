@@ -7,7 +7,6 @@ import PrimitivesTestKit
 import Blockchain
 import BlockchainTestKit
 import SignerTestKit
-import WalletsServiceTestKit
 import BalanceServiceTestKit
 import TransactionStateService
 import TransactionStateServiceTestKit

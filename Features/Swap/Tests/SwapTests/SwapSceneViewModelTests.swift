@@ -2,7 +2,8 @@
 
 import Testing
 import PrimitivesTestKit
-import WalletsServiceTestKit
+import BalanceServiceTestKit
+import PriceServiceTestKit
 import SwapService
 import StoreTestKit
 import ChainServiceTestKit

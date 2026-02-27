@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import WalletsService
+import DiscoverAssetsService
 
 public struct AssetDiscoveryServiceMock: AssetDiscoverable {
     public init() {}

@@ -6,7 +6,6 @@ import PriceService
 import TransactionStateService
 import ExplorerService
 import Keystore
-import WalletsService
 import ScanService
 import Primitives
 import ChainService

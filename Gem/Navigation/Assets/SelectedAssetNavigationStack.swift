@@ -80,9 +80,9 @@ struct SelectedAssetNavigationStack: View  {
                     ReceiveScene(
                         model: ReceiveViewModel(
                             assetModel: AssetViewModel(asset: input.asset),
-                            walletId: wallet.walletId,
+                            wallet: wallet,
                             address: input.address,
-                            assetsEnabler: assetsEnabler,
+                            assetsEnabler: assetsEnabler
                         )
                     )
                 case let .buy(_, amount):

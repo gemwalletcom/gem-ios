@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import AssetsService
+import PriceService
 
 public struct AssetsEnablerService: AssetsEnabler {
     private let assetsService: AssetsService
@@ -19,7 +20,8 @@ public struct AssetsEnablerService: AssetsEnabler {
         self.priceUpdater = priceUpdater
     }
 
-    public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async throws {
+    public func enableAssets(wallet: Wallet, assetIds: [AssetId], enabled: Bool) async throws {
+        let walletId = wallet.walletId
         for assetId in assetIds {
             try assetsService.addBalanceIfMissing(walletId: walletId, assetId: assetId)
         }
@@ -28,13 +30,14 @@ public struct AssetsEnablerService: AssetsEnabler {
 
         guard enabled else { return }
 
-        async let balanceUpdate: () = balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
+        async let balanceUpdate: () = balanceUpdater.updateBalance(for: wallet, assetIds: assetIds)
         async let priceUpdate: () = priceUpdater.addPrices(assetIds: assetIds)
-        _ = try await (balanceUpdate, priceUpdate)
+        _ = await balanceUpdate
+        _ = try await priceUpdate
     }
 
-    public func enableAssetId(walletId: WalletId, assetId: AssetId) async throws {
+    public func enableAssetId(wallet: Wallet, assetId: AssetId) async throws {
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
-        try await enableAssets(walletId: walletId, assetIds: [asset.id], enabled: true)
+        try await enableAssets(wallet: wallet, assetIds: [asset.id], enabled: true)
     }
 }

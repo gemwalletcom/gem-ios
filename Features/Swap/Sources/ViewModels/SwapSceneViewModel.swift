@@ -11,7 +11,8 @@ import PrimitivesComponents
 import Store
 import Style
 import SwapService
-import WalletsService
+import BalanceService
+import PriceService
 import enum Gemstone.SwapperError
 import struct Gemstone.SwapperQuote
 import Formatters
@@ -365,11 +366,7 @@ extension SwapSceneViewModel {
     }
 
     private func performUpdate(for assetIds: [AssetId]) async {
-        do {
-            try await balanceUpdater.updateBalance(for: wallet.walletId, assetIds: assetIds)
-        } catch {
-            debugLog("SwapScene perform assets update error: \(error)")
-        }
+        await balanceUpdater.updateBalance(for: wallet, assetIds: assetIds)
     }
 
     private func updateValidators(for assetData: AssetData?) {

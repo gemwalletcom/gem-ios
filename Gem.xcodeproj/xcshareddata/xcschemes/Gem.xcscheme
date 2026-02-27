@@ -264,16 +264,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "WalletsServiceTests"
-               BuildableName = "WalletsServiceTests"
-               BlueprintName = "WalletsServiceTests"
-               ReferencedContainer = "container:Services/WalletsService">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "WalletTabTests"
                BuildableName = "WalletTabTests"
                BlueprintName = "WalletTabTests"

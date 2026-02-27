@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import WalletsService
+import PriceService
 
 public struct PriceUpdaterMock: PriceUpdater {
     public init() {}

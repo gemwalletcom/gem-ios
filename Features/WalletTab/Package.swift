@@ -46,13 +46,13 @@ let package = Package(
                 "InfoSheet",
                 "Store",
                 "Preferences",
-                .product(name: "WalletsService", package: "FeatureServices"),
                 .product(name: "BalanceService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "WalletService", package: "FeatureServices"),
                 .product(name: "ActivityService", package: "FeatureServices"),
                 .product(name: "AssetsService", package: "FeatureServices"),
                 .product(name: "PerpetualService", package: "FeatureServices"),
+                .product(name: "DiscoverAssetsService", package: "FeatureServices"),
                 "Perpetuals",
                 "Recents"
             ],
@@ -61,7 +61,6 @@ let package = Package(
         .target(
             name: "WalletTabTestKit",
             dependencies: [
-                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
                 .product(name: "PriceServiceTestKit", package: "FeatureServices"),
                 .product(name: "BannerServiceTestKit", package: "FeatureServices"),
@@ -71,6 +70,7 @@ let package = Package(
                 .product(name: "AssetsServiceTestKit", package: "FeatureServices"),
                 .product(name: "ActivityServiceTestKit", package: "FeatureServices"),
                 .product(name: "PerpetualServiceTestKit", package: "FeatureServices"),
+                .product(name: "DiscoverAssetsServiceTestKit", package: "FeatureServices"),
                 "WalletTab"
             ],
             path: "TestKit"
@@ -78,7 +78,6 @@ let package = Package(
         .testTarget(
             name: "WalletTabTests",
             dependencies: [
-                .product(name: "WalletsServiceTestKit", package: "FeatureServices"),
                 .product(name: "BannerServiceTestKit", package: "FeatureServices"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),

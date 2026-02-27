@@ -9,13 +9,13 @@ import Primitives
 
 struct TransactionPostProcessingService: Sendable {
     private let transactionStore: TransactionStore
-    private let balanceUpdater: any BalancerUpdater
+    private let balanceUpdater: any BalanceUpdater
     private let stakeService: StakeService
     private let nftService: NFTService
 
     init(
         transactionStore: TransactionStore,
-        balanceUpdater: any BalancerUpdater,
+        balanceUpdater: any BalanceUpdater,
         stakeService: StakeService,
         nftService: NFTService
     ) {

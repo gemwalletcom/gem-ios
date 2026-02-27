@@ -2,12 +2,13 @@
 
 import Foundation
 import Primitives
+import BalanceService
 
 public struct WalletSetupService: Sendable {
-    private let balanceUpdater: any BalanceUpdater
+    private let balanceService: BalanceService
 
-    public init(balanceUpdater: any BalanceUpdater) {
-        self.balanceUpdater = balanceUpdater
+    public init(balanceService: BalanceService) {
+        self.balanceService = balanceService
     }
 
     public func setup(wallet: Wallet) throws {
@@ -21,10 +22,10 @@ public struct WalletSetupService: Sendable {
             }
         }
 
-        try balanceUpdater.addBalancesIfMissing(for: wallet.walletId, assetIds: chainsEnabledByDefault.ids, isEnabled: true)
-        try balanceUpdater.addBalancesIfMissing(for: wallet.walletId, assetIds: chainsDisabledByDefault.ids, isEnabled: false)
+        try balanceService.addAssetsBalancesIfMissing(assetIds: chainsEnabledByDefault.ids, wallet: wallet, isEnabled: true)
+        try balanceService.addAssetsBalancesIfMissing(assetIds: chainsDisabledByDefault.ids, wallet: wallet, isEnabled: false)
 
         let defaultAssets = chains.map { $0.defaultAssets.assetIds }.flatMap { $0 }
-        try balanceUpdater.addBalancesIfMissing(for: wallet.walletId, assetIds: defaultAssets, isEnabled: false)
+        try balanceService.addAssetsBalancesIfMissing(assetIds: defaultAssets, wallet: wallet, isEnabled: false)
     }
 }

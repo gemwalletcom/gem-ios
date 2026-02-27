@@ -15,7 +15,6 @@ import Components
 
 struct MainTabView: View {
     @Environment(\.assetDiscoveryService) private var assetDiscoveryService
-    @Environment(\.balanceUpdater) private var balanceUpdater
     @Environment(\.balanceService) private var balanceService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.navigationState) private var navigationState
@@ -46,7 +45,6 @@ struct MainTabView: View {
             WalletNavigationStack(
                 model: WalletSceneViewModel(
                     assetDiscoveryService: assetDiscoveryService,
-                    balanceUpdater: balanceUpdater,
                     balanceService: balanceService,
                     bannerService: bannerService,
                     walletService: walletService,

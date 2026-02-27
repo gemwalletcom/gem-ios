@@ -106,7 +106,7 @@ struct SelectAssetSceneNavigationStack: View {
                         ReceiveScene(
                             model: ReceiveViewModel(
                                 assetModel: AssetViewModel(asset: input.asset),
-                                walletId: model.wallet.walletId,
+                                wallet: model.wallet,
                                 address: input.assetAddress.address,
                                 assetsEnabler: assetsEnabler
                             )

@@ -31,7 +31,6 @@ import ScanService
 import SwapService
 import NameService
 import PerpetualService
-import WalletsService
 import AppService
 import AddressNameService
 import Blockchain
@@ -175,23 +174,18 @@ struct ServicesFactory {
             interactor: walletConnectorManager
         )
 
-        let discoverAssetsService = DiscoverAssetsService(balanceService: balanceService, assetsService: apiService)
-        let balanceUpdater = BalanceUpdateService(
-            balanceService: balanceService,
-            walletSessionService: walletSessionService
-        )
         let assetsEnabler = AssetsEnablerService(
             assetsService: assetsService,
-            balanceUpdater: balanceUpdater,
+            balanceUpdater: balanceService,
             priceUpdater: priceObserverService
         )
         let assetDiscoveryService = AssetDiscoveryService(
             deviceService: deviceService,
-            discoverAssetService: discoverAssetsService,
+            assetsListService: apiService,
             assetService: assetsService,
             assetsEnabler: assetsEnabler
         )
-        let walletSetupService = WalletSetupService(balanceUpdater: balanceUpdater)
+        let walletSetupService = WalletSetupService(balanceService: balanceService)
 
         let configService = ConfigService(apiService: apiService)
         let releaseService = AppReleaseService(configService: configService)
@@ -278,7 +272,6 @@ struct ServicesFactory {
             scanService: scanService,
             swapService: swapService,
             assetsEnabler: assetsEnabler,
-            balanceUpdater: balanceUpdater,
             priceUpdater: priceObserverService,
             walletService: walletService,
             stakeService: stakeService,
@@ -312,8 +305,6 @@ struct ServicesFactory {
             walletSessionService: walletSessionService,
             assetsEnabler: assetsEnabler,
             assetDiscoveryService: assetDiscoveryService,
-            balanceUpdater: balanceUpdater,
-            priceUpdater: priceObserverService,
             walletSetupService: walletSetupService,
             explorerService: explorerService,
             scanService: scanService,

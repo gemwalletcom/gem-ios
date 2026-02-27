@@ -12,7 +12,6 @@ import Preferences
 import ExplorerService
 import AssetsService
 import TransactionsService
-import WalletsService
 import BalanceService
 import PriceService
 import BannerService
@@ -23,7 +22,6 @@ import Store
 @MainActor
 public final class AssetSceneViewModel: Sendable {
     private let assetsEnabler: any AssetsEnabler
-    private let balanceUpdater: any BalanceUpdater
     private let balanceService: BalanceService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
@@ -54,7 +52,6 @@ public final class AssetSceneViewModel: Sendable {
 
     public init(
         assetsEnabler: any AssetsEnabler,
-        balanceUpdater: any BalanceUpdater,
         balanceService: BalanceService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
@@ -65,7 +62,6 @@ public final class AssetSceneViewModel: Sendable {
         isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.assetsEnabler = assetsEnabler
-        self.balanceUpdater = balanceUpdater
         self.balanceService = balanceService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
@@ -360,7 +356,7 @@ extension AssetSceneViewModel {
         Task {
             let enabled = !assetData.metadata.isBalanceEnabled
             do {
-                try await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: enabled)
+                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: enabled)
                 isPresentingToastMessage = .showAsset(visible: enabled)
             } catch {
                 debugLog("onSelectEnable error: \(error)")
@@ -406,7 +402,7 @@ extension AssetSceneViewModel {
         isPresentingAssetSheet = .url(url)
     }
 
-    private func fetchTransactions() async throws {
+    private func fetchTransactions() async {
         do {
             try await transactionsService.updateForAsset(wallet: walletModel.wallet, assetId: assetModel.asset.id)
         } catch {
@@ -451,13 +447,8 @@ extension AssetSceneViewModel {
     }
 
     private func updateWallet() async {
-        do {
-            async let updateBalance: () = try balanceUpdater.updateBalance(for: walletModel.wallet.walletId, assetIds: [assetModel.asset.id])
-            async let updateTransactions: () = try fetchTransactions()
-            let _ = try await [updateBalance, updateTransactions]
-        } catch {
-            // TODO: - handle fetch error
-            debugLog("asset scene: updateWallet error \(error)")
-        }
+        async let balance: Void = balanceService.updateBalance(for: walletModel.wallet, assetIds: [assetModel.asset.id])
+        async let transactions: Void = fetchTransactions()
+        _ = await (balance, transactions)
     }
 }

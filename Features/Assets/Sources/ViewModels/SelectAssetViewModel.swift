@@ -8,7 +8,7 @@ import Components
 import Localization
 import PrimitivesComponents
 import AssetsService
-import WalletsService
+import BalanceService
 import Preferences
 import PriceAlertService
 import ActivityService
@@ -239,7 +239,7 @@ extension SelectAssetViewModel {
         switch selectType {
         case .manage:
             do {
-                try await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
+                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [assetId], enabled: enabled)
             } catch {
                 debugLog("SelectAssetViewModel handleAction error: \(error)")
             }

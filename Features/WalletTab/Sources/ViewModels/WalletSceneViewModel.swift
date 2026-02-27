@@ -4,9 +4,9 @@ import Foundation
 import SwiftUI
 import Style
 import Primitives
-import WalletsService
 import BalanceService
 import BannerService
+import DiscoverAssetsService
 import Store
 import Preferences
 import Localization
@@ -20,7 +20,6 @@ import Formatters
 @MainActor
 public final class WalletSceneViewModel: Sendable {
     private let assetDiscoveryService: any AssetDiscoverable
-    private let balanceUpdater: any BalanceUpdater
     private let balanceService: BalanceService
     private let bannerService: BannerService
     private let walletService: WalletService
@@ -56,7 +55,6 @@ public final class WalletSceneViewModel: Sendable {
 
     public init(
         assetDiscoveryService: any AssetDiscoverable,
-        balanceUpdater: any BalanceUpdater,
         balanceService: BalanceService,
         bannerService: BannerService,
         walletService: WalletService,
@@ -66,7 +64,6 @@ public final class WalletSceneViewModel: Sendable {
     ) {
         self.wallet = wallet
         self.assetDiscoveryService = assetDiscoveryService
-        self.balanceUpdater = balanceUpdater
         self.balanceService = balanceService
         self.bannerService = bannerService
         self.walletService = walletService
@@ -242,12 +239,16 @@ extension WalletSceneViewModel {
 
 extension WalletSceneViewModel {
     private func fetch(wallet: Wallet, assetIds: [AssetId]) async {
+        async let balance: () = balanceService.updateBalance(for: wallet, assetIds: assetIds)
+        async let discovery: () = discoverAssets(wallet: wallet)
+        _ = await (balance, discovery)
+    }
+
+    private func discoverAssets(wallet: Wallet) async {
         do {
-            async let updateBalance: () = try balanceUpdater.updateBalance(for: wallet.walletId, assetIds: assetIds)
-            async let discover: () = try assetDiscoveryService.discoverAssets(wallet: wallet)
-            _ = try await (updateBalance, discover)
+            try await assetDiscoveryService.discoverAssets(wallet: wallet)
         } catch {
-            debugLog("WalletSceneViewModel fetch error: \(error)")
+            debugLog("WalletSceneViewModel discoverAssets error: \(error)")
         }
     }
 

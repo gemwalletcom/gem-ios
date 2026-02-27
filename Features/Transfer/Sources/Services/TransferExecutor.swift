@@ -6,7 +6,7 @@ import Foundation
 import Primitives
 import Signer
 import TransactionStateService
-import WalletsService
+import BalanceService
 
 public protocol TransferExecutable: Sendable {
     func execute(input: TransferConfirmationInput) async throws
@@ -73,7 +73,7 @@ public struct TransferExecutor: TransferExecutable {
                 Task {
                     do {
                         try balanceService.addAssetsBalancesIfMissing(assetIds: assetIds, wallet: input.wallet, isEnabled: true)
-                        try await assetsEnabler.enableAssets(walletId: input.wallet.walletId, assetIds: assetIds, enabled: true)
+                        try await assetsEnabler.enableAssets(wallet: input.wallet, assetIds: assetIds, enabled: true)
                     } catch {
                         debugLog("TransferExecutor post-transfer asset update error: \(error)")
                     }

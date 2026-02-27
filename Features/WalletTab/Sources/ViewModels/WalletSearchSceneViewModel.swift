@@ -11,7 +11,6 @@ import Preferences
 import Style
 import Localization
 import ActivityService
-import WalletsService
 import BalanceService
 import PerpetualService
 import Recents
@@ -195,7 +194,7 @@ extension WalletSearchSceneViewModel {
     func onSelectAddToWallet(_ asset: Asset) {
         Task {
             do {
-                try await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
+                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: true)
                 isPresentingToastMessage = .addedToWallet()
             } catch {
                 debugLog("WalletSearchSceneViewModel add to wallet error: \(error)")

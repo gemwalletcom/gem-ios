@@ -11,8 +11,8 @@ import BalanceService
 import BalanceServiceTestKit
 import Preferences
 import PreferencesTestKit
-import WalletsService
-import WalletsServiceTestKit
+import BalanceService
+import BalanceServiceTestKit
 import PerpetualService
 import PerpetualServiceTestKit
 

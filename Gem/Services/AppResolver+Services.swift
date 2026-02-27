@@ -15,7 +15,7 @@ import BalanceService
 import AssetsService
 import TransactionsService
 import TransactionStateService
-import WalletsService
+import DiscoverAssetsService
 import WalletService
 import WalletSessionService
 import AppService
@@ -55,8 +55,6 @@ extension AppResolver {
         let walletSessionService: any WalletSessionManageable
         let assetsEnabler: any AssetsEnabler
         let assetDiscoveryService: any AssetDiscoverable
-        let balanceUpdater: any BalanceUpdater
-        let priceUpdater: any PriceUpdater
         let walletSetupService: WalletSetupService
         let explorerService: ExplorerService
         let scanService: ScanService
@@ -107,8 +105,6 @@ extension AppResolver {
             walletSessionService: any WalletSessionManageable,
             assetsEnabler: any AssetsEnabler,
             assetDiscoveryService: any AssetDiscoverable,
-            balanceUpdater: any BalanceUpdater,
-            priceUpdater: any PriceUpdater,
             walletSetupService: WalletSetupService,
             explorerService: ExplorerService,
             scanService: ScanService,
@@ -158,8 +154,7 @@ extension AppResolver {
             self.walletSessionService = walletSessionService
             self.assetsEnabler = assetsEnabler
             self.assetDiscoveryService = assetDiscoveryService
-            self.balanceUpdater = balanceUpdater
-            self.priceUpdater = priceUpdater
+
             self.walletSetupService = walletSetupService
             self.explorerService = explorerService
             self.scanService = scanService

@@ -41,7 +41,7 @@ let package = Package(
                 "Preferences",
                 "GemstonePrimitives",
                 "Keystore",
-                .product(name: "WalletsService", package: "FeatureServices"),
+                .product(name: "BalanceService", package: "FeatureServices"),
                 .product(name: "WalletSessionService", package: "FeatureServices"),
                 .product(name: "BannerService", package: "FeatureServices"),
                 .product(name: "StakeService", package: "ChainServices"),

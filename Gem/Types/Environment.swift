@@ -21,7 +21,7 @@ import NFTService
 import BalanceService
 import AssetsService
 import TransactionsService
-import WalletsService
+import DiscoverAssetsService
 import WalletService
 import WalletSessionService
 import AvatarService
@@ -45,9 +45,6 @@ extension EnvironmentValues {
     @Entry var explorerService: ExplorerService = AppResolver.main.services.explorerService
     @Entry var assetsEnabler: any AssetsEnabler = AppResolver.main.services.assetsEnabler
     @Entry var assetDiscoveryService: any AssetDiscoverable = AppResolver.main.services.assetDiscoveryService
-    @Entry var balanceUpdater: any BalanceUpdater = AppResolver.main.services.balanceUpdater
-    @Entry var priceUpdater: any PriceUpdater = AppResolver.main.services.priceUpdater
-    @Entry var walletSetupService: WalletSetupService = AppResolver.main.services.walletSetupService
     @Entry var walletService: WalletService = AppResolver.main.services.walletService
     @Entry var walletSessionService: any WalletSessionManageable = AppResolver.main.services.walletSessionService
     @Entry var priceAlertService: PriceAlertService = AppResolver.main.services.priceAlertService

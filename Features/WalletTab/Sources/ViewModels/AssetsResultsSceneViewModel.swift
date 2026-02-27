@@ -6,7 +6,6 @@ import Primitives
 import Store
 import Preferences
 import Localization
-import WalletsService
 import BalanceService
 import PrimitivesComponents
 import Components
@@ -74,7 +73,7 @@ extension AssetsResultsSceneViewModel {
     private func onAddToWallet(_ asset: Asset) {
         Task {
             do {
-                try await assetsEnabler.enableAssets(walletId: wallet.walletId, assetIds: [asset.id], enabled: true)
+                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: true)
                 isPresentingToastMessage = .addedToWallet()
             } catch {
                 debugLog("AssetsResultsSceneViewModel add to wallet error: \(error)")

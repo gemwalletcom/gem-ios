@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import PrimitivesTestKit
 import Components
-import WalletsServiceTestKit
+import BalanceServiceTestKit
 import AssetsServiceTestKit
 import PriceAlertServiceTestKit
 import ActivityServiceTestKit

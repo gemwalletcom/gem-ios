@@ -2,13 +2,13 @@
 
 import Foundation
 import Primitives
-import WalletsService
+import BalanceService
 
 public struct AssetsEnablerMock: AssetsEnabler {
     public init() {}
 
-    public func enableAssets(walletId: WalletId, assetIds: [AssetId], enabled: Bool) async throws {}
-    public func enableAssetId(walletId: WalletId, assetId: AssetId) async throws {}
+    public func enableAssets(wallet: Wallet, assetIds: [AssetId], enabled: Bool) async throws {}
+    public func enableAssetId(wallet: Wallet, assetId: AssetId) async throws {}
 }
 
 public extension AssetsEnabler where Self == AssetsEnablerMock {
