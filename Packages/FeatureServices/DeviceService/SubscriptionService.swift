@@ -34,7 +34,7 @@ public struct SubscriptionService: Sendable {
             WalletSubscription(
                 walletId: wallet.id,
                 source: wallet.source,
-                subscriptions: wallet.accounts.map { ChainAddress(chain: $0.chain, address: $0.address) }
+                subscriptions: wallet.addressChains
             )
         }
         let remote = try await subscriptionProvider.getSubscriptions()
@@ -65,16 +65,20 @@ public struct SubscriptionService: Sendable {
 
         let toAdd = local.compactMap { wallet -> WalletSubscription? in
             let remoteChains = Set(remoteByWallet[wallet.walletId]?.chains ?? [])
-            let newChains = wallet.subscriptions.filter { !remoteChains.contains($0.chain) }
-            guard !newChains.isEmpty else { return nil }
-            return WalletSubscription(walletId: wallet.walletId, source: wallet.source, subscriptions: newChains)
+            let newSubscriptions = wallet.subscriptions.compactMap { addressChains -> AddressChains? in
+                let newChains = addressChains.chains.filter { !remoteChains.contains($0) }
+                guard !newChains.isEmpty else { return nil }
+                return AddressChains(address: addressChains.address, chains: newChains)
+            }
+            guard !newSubscriptions.isEmpty else { return nil }
+            return WalletSubscription(walletId: wallet.walletId, source: wallet.source, subscriptions: newSubscriptions)
         }
 
         let toDelete = remote.compactMap { remoteWallet -> WalletSubscriptionChains? in
             guard let localWallet = localByWallet[remoteWallet.walletId] else {
                 return remoteWallet
             }
-            let localChains = Set(localWallet.subscriptions.map(\.chain))
+            let localChains = Set(localWallet.subscriptions.flatMap(\.chains))
             let chainsToDelete = remoteWallet.chains.filter { !localChains.contains($0) }
             guard !chainsToDelete.isEmpty else { return nil }
             return WalletSubscriptionChains(walletId: remoteWallet.walletId, chains: chainsToDelete.sorted())

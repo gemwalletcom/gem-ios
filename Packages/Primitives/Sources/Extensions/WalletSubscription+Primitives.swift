@@ -6,7 +6,7 @@ extension WalletSubscription {
     public var asWalletSubscriptionChains: WalletSubscriptionChains {
         WalletSubscriptionChains(
             walletId: walletId,
-            chains: subscriptions.map(\.chain).sorted()
+            chains: subscriptions.flatMap(\.chains).sorted()
         )
     }
 }

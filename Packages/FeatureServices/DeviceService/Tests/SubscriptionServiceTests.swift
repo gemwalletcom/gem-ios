@@ -13,8 +13,8 @@ struct SubscriptionServiceTests {
                 walletId: "wallet1",
                 source: .import,
                 subscriptions: [
-                    ChainAddress(chain: .bitcoin, address: "btc1"),
-                    ChainAddress(chain: .ethereum, address: "eth1")
+                    AddressChains(address: "btc1", chains: [.bitcoin]),
+                    AddressChains(address: "eth1", chains: [.ethereum])
                 ]
             )
         ]
@@ -27,7 +27,7 @@ struct SubscriptionServiceTests {
         #expect(changes.toAdd.count == 1)
         #expect(changes.toAdd[0].walletId == "wallet1")
         #expect(changes.toAdd[0].subscriptions.count == 1)
-        #expect(changes.toAdd[0].subscriptions[0].chain == Chain.ethereum)
+        #expect(changes.toAdd[0].subscriptions[0].chains == [Chain.ethereum])
         #expect(changes.toDelete.isEmpty)
     }
 
@@ -38,7 +38,7 @@ struct SubscriptionServiceTests {
                 walletId: "wallet1",
                 source: .import,
                 subscriptions: [
-                    ChainAddress(chain: .bitcoin, address: "btc1")
+                    AddressChains(address: "btc1", chains: [.bitcoin])
                 ]
             )
         ]
@@ -76,8 +76,8 @@ struct SubscriptionServiceTests {
                 walletId: "wallet1",
                 source: .import,
                 subscriptions: [
-                    ChainAddress(chain: .bitcoin, address: "btc1"),
-                    ChainAddress(chain: .ethereum, address: "eth1")
+                    AddressChains(address: "btc1", chains: [.bitcoin]),
+                    AddressChains(address: "eth1", chains: [.ethereum])
                 ]
             )
         ]
@@ -98,8 +98,8 @@ struct SubscriptionServiceTests {
                 walletId: "wallet1",
                 source: .import,
                 subscriptions: [
-                    ChainAddress(chain: .bitcoin, address: "btc1"),
-                    ChainAddress(chain: .ethereum, address: "eth1")
+                    AddressChains(address: "btc1", chains: [.bitcoin]),
+                    AddressChains(address: "eth1", chains: [.ethereum])
                 ]
             )
         ]
@@ -121,15 +121,15 @@ struct SubscriptionServiceTests {
                 walletId: "wallet1",
                 source: .import,
                 subscriptions: [
-                    ChainAddress(chain: .bitcoin, address: "btc1")
+                    AddressChains(address: "btc1", chains: [.bitcoin])
                 ]
             ),
             WalletSubscription(
                 walletId: "wallet2",
                 source: .import,
                 subscriptions: [
-                    ChainAddress(chain: .ethereum, address: "eth1"),
-                    ChainAddress(chain: .polygon, address: "poly1")
+                    AddressChains(address: "eth1", chains: [.ethereum]),
+                    AddressChains(address: "poly1", chains: [.polygon])
                 ]
             )
         ]
@@ -161,8 +161,8 @@ struct SubscriptionServiceTests {
                 walletId: "wallet1",
                 source: .import,
                 subscriptions: [
-                    ChainAddress(chain: .ethereum, address: "eth1"),
-                    ChainAddress(chain: .bitcoin, address: "btc1")
+                    AddressChains(address: "eth1", chains: [.ethereum]),
+                    AddressChains(address: "btc1", chains: [.bitcoin])
                 ]
             )
         ]

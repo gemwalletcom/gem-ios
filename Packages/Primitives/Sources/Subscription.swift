@@ -4,12 +4,22 @@
 
 import Foundation
 
+public struct AddressChains: Codable, Equatable, Hashable, Sendable {
+	public let address: String
+	public let chains: [Chain]
+
+	public init(address: String, chains: [Chain]) {
+		self.address = address
+		self.chains = chains
+	}
+}
+
 public struct WalletSubscription: Codable, Equatable, Hashable, Sendable {
 	public let walletId: String
 	public let source: WalletSource?
-	public let subscriptions: [ChainAddress]
+	public let subscriptions: [AddressChains]
 
-	public init(walletId: String, source: WalletSource?, subscriptions: [ChainAddress]) {
+	public init(walletId: String, source: WalletSource?, subscriptions: [AddressChains]) {
 		self.walletId = walletId
 		self.source = source
 		self.subscriptions = subscriptions

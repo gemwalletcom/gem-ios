@@ -25,6 +25,11 @@ public extension Wallet {
         try WalletIdentifier.from(type: type, accounts: accounts)
     }
 
+    var addressChains: [AddressChains] {
+        Dictionary(grouping: accounts, by: \.address)
+            .map { AddressChains(address: $0.key, chains: Set($0.value.map(\.chain)).sorted()) }
+    }
+
     var hasTokenSupport: Bool {
         accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).isNotEmpty
     }
