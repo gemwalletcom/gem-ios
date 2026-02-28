@@ -192,20 +192,17 @@ extension WalletSearchSceneViewModel {
     }
 
     func onSelectAddToWallet(_ asset: Asset) {
-        Task {
-            do {
-                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: true)
-                isPresentingToastMessage = .addedToWallet()
-            } catch {
-                debugLog("WalletSearchSceneViewModel add to wallet error: \(error)")
-            }
-        }
+        enableAsset(asset.id)
+        isPresentingToastMessage = .addedToWallet()
     }
 
     func onSelectPinAsset(_ assetData: AssetData, value: Bool) {
         do {
             try balanceService.setPinned(value, walletId: wallet.walletId, assetId: assetData.asset.id)
             isPresentingToastMessage = .pin(assetData.asset.name, pinned: value)
+            if value && !assetData.metadata.isBalanceEnabled {
+                enableAsset(assetData.asset.id)
+            }
         } catch {
             debugLog("WalletSearchSceneViewModel pin asset error: \(error)")
         }
@@ -257,6 +254,16 @@ extension WalletSearchSceneViewModel {
 extension WalletSearchSceneViewModel {
     private var assetsPreviewLimit: Int {
         searchModel.assetsLimit(tag: searchQuery.request.tag, isPerpetualEnabled: preferences.isPerpetualEnabled)
+    }
+
+    private func enableAsset(_ assetId: AssetId) {
+        Task {
+            do {
+                try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [assetId], enabled: true)
+            } catch {
+                debugLog("WalletSearchSceneViewModel enable asset error: \(error)")
+            }
+        }
     }
 
     private func activityData(for asset: Asset) -> RecentActivityData {
