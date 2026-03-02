@@ -12,14 +12,7 @@ import Recents
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.viewModelFactory) private var viewModelFactory
-    @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.assetsEnabler) private var assetsEnabler
-    @Environment(\.keystore) private var keystore
-    @Environment(\.scanService) private var scanService
-    @Environment(\.balanceService) private var balanceService
-    @Environment(\.priceService) private var priceService
-    @Environment(\.transactionStateService) private var transactionStateService
-    @Environment(\.addressNameService) private var addressNameService
     @Environment(\.activityService) private var activityService
 
     @State private var isPresentingFilteringView: Bool = false
@@ -70,19 +63,6 @@ struct SelectAssetSceneNavigationStack: View {
                     switch input.type {
                     case .send:
                         RecipientNavigationView(
-                            confirmService: ConfirmServiceFactory.create(
-                                keystore: keystore,
-                                chainServiceFactory: chainServiceFactory,
-                                assetsEnabler: assetsEnabler,
-                                scanService: scanService,
-                                balanceService: balanceService,
-                                priceService: priceService,
-                                transactionStateService: transactionStateService,
-                                addressNameService: addressNameService,
-                                activityService: activityService,
-                                eventPresenterService: eventPresenterService,
-                                chain: input.asset.chain
-                            ),
                             model: viewModelFactory.recipientScene(
                                 wallet: model.wallet,
                                 asset: input.asset,

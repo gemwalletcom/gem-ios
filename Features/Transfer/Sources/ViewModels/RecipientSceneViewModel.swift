@@ -31,7 +31,7 @@ public final class RecipientSceneViewModel {
     private let onRecipientDataAction: RecipientDataAction
     private let formatter = ValueFormatter(style: .full)
 
-    var isPresentingScanner: RecipientScene.Field?
+    public var isPresentingScanner: RecipientScene.Field?
     var addressInputModel: AddressInputViewModel
     var memo: String = ""
     var amount: String = ""
