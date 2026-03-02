@@ -18,7 +18,7 @@ public struct ValidatorsRequest: DatabaseQueryable {
         let excludeValidatorIds = [DelegationValidator.systemId, DelegationValidator.legacySystemId]
         return try StakeValidatorRecord
             .filter(StakeValidatorRecord.Columns.assetId == chain.assetId.identifier)
-            .filter(StakeValidatorRecord.Columns.providerType == providerType)
+            .filter(StakeValidatorRecord.Columns.providerType == providerType.rawValue)
             .filter(StakeValidatorRecord.Columns.isActive == true)
             .filter(!excludeValidatorIds.contains(StakeValidatorRecord.Columns.validatorId))
             .filter(StakeValidatorRecord.Columns.name != "")

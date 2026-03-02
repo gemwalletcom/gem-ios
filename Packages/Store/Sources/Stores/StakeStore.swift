@@ -62,7 +62,7 @@ public struct StakeStore: Sendable {
         try db.read { db in
             try StakeValidatorRecord
                 .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)
-                .filter(StakeValidatorRecord.Columns.providerType == providerType)
+                .filter(StakeValidatorRecord.Columns.providerType == providerType.rawValue)
                 .order(StakeValidatorRecord.Columns.apr.desc)
                 .fetchAll(db)
                 .map { $0.validator }

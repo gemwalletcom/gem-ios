@@ -23,7 +23,7 @@ public struct DelegationsRequest: DatabaseQueryable {
             .filter(StakeDelegationRecord.Columns.walletId == walletId.id)
             .filter(StakeDelegationRecord.Columns.assetId == assetId.identifier)
             .joining(required: StakeDelegationRecord.validator
-                .filter(StakeValidatorRecord.Columns.providerType == providerType))
+                .filter(StakeValidatorRecord.Columns.providerType == providerType.rawValue))
             .order(StakeDelegationRecord.Columns.balance.desc)
             .asRequest(of: StakeDelegationInfo.self)
             .fetchAll(db)
