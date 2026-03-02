@@ -18,11 +18,23 @@ struct EstimateFeeService: Sendable {
     }
 
     func getFee(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> Gemstone.GemTransactionLoadFee? {
-        try await provider(chain: try chain.map()).getFee(chain: chain, input: input)
+        do {
+            return try await provider(chain: try chain.map()).getFee(chain: chain, input: input)
+        } catch let error as GatewayError {
+            throw error
+        } catch {
+            throw GatewayError.PlatformError(msg: String(describing: error))
+        }
     }
 
     func getFeeData(chain: Gemstone.Chain, input: Gemstone.GemTransactionLoadInput) async throws -> String? {
-        try await provider(chain: try chain.map()).getFeeData(chain: chain, input: input)
+        do {
+            return try await provider(chain: try chain.map()).getFeeData(chain: chain, input: input)
+        } catch let error as GatewayError {
+            throw error
+        } catch {
+            throw GatewayError.PlatformError(msg: String(describing: error))
+        }
     }
 }
 
