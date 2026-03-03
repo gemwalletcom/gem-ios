@@ -4,6 +4,7 @@ import Foundation
 import BigInt
 import Primitives
 import Localization
+import Formatters
 
 public enum TransferAmountCalculatorError: Equatable {
     case insufficientBalance(Asset)
@@ -18,8 +19,8 @@ extension TransferAmountCalculatorError: LocalizedError {
             Localized.Transfer.insufficientBalance(Self.title(asset: asset))
         case .insufficientNetworkFee(let asset, _):
             Localized.Transfer.insufficientNetworkFeeBalance(Self.title(asset: asset))
-        case .minimumAccountBalanceTooLow(let asset, _):
-            Localized.Transfer.minimumAccountBalance(Self.title(asset: asset))
+        case .minimumAccountBalanceTooLow(let asset, let required):
+            Localized.Transfer.minimumAccountBalance(ValueFormatter(style: .full).string(required, asset: asset))
         }
     }
 
