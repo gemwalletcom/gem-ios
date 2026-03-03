@@ -17,6 +17,10 @@ struct BitcoinSigner: Signable {
         fatalError()
     }
 
+    func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        try ChainSigner(chain: .bitcoin).signSwap(input: input, privateKey: privateKey)
+    }
+
     func sign(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
         let utxos = try input.metadata.getUtxos().map {
