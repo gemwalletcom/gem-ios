@@ -6,7 +6,6 @@ import Primitives
 import PrimitivesTestKit
 import BalanceServiceTestKit
 import AssetsServiceTestKit
-import BalanceServiceTestKit
 import TransactionsServiceTestKit
 import PriceServiceTestKit
 import PriceAlertServiceTestKit
@@ -65,7 +64,7 @@ extension AssetSceneViewModel {
             balanceService: .mock(),
             assetsService: .mock(),
             transactionsService: .mock(),
-            priceObserverService: .mock(),
+            priceUpdater: .mock(),
             priceAlertService: .mock(),
             bannerService: .mock(),
             input: AssetSceneInput(
