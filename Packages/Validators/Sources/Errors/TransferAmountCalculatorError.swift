@@ -20,11 +20,15 @@ extension TransferAmountCalculatorError: LocalizedError {
         case .insufficientNetworkFee(let asset, _):
             Localized.Transfer.insufficientNetworkFeeBalance(Self.title(asset: asset))
         case .minimumAccountBalanceTooLow(let asset, let required):
-            Localized.Transfer.minimumAccountBalance(ValueFormatter(style: .full).string(required, asset: asset))
+            Localized.Transfer.minimumAccountBalance(Self.formattedValue(required, asset: asset))
         }
     }
 
     static private func title(asset: Asset) -> String {
         String(format: "%@ (%@)", asset.name, asset.symbol)
+    }
+
+    static private func formattedValue(_ value: BigInt, asset: Asset) -> String {
+        ValueFormatter(style: .full).string(value, asset: asset)
     }
 }
