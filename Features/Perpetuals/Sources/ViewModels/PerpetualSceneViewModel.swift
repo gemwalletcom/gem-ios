@@ -143,6 +143,14 @@ public extension PerpetualSceneViewModel {
         await unsubscribeCandles(currentChartSubscription)
     }
 
+    func onScenePhaseChange(_ oldPhase: ScenePhase, _ newPhase: ScenePhase) {
+        switch newPhase {
+        case .active: Task { try? await fetchCandlesticks() }
+        case .inactive, .background: break
+        @unknown default: break
+        }
+    }
+
     func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
         Task {
             do {
