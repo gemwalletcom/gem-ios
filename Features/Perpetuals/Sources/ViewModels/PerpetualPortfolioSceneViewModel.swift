@@ -123,22 +123,6 @@ extension PerpetualPortfolioSceneViewModel {
         case .value: timeframe.accountValueHistory
         case .pnl: timeframe.pnlHistory
         }
-        guard let values = try? ChartValues.from(charts: charts), values.hasVariation else {
-            return nil
-        }
-        let valueChange = values.lastValue - values.firstValue
-        let price = Price(
-            price: valueChange,
-            priceChangePercentage24h: PriceChangeCalculator.calculate(.percentage(from: values.firstValue, to: values.lastValue)),
-            updatedAt: .now
-        )
-        return ChartValuesViewModel(
-            period: selectedPeriod,
-            price: price,
-            values: values,
-            lineColor: Colors.blue,
-            formatter: currencyFormatter,
-            type: .priceChange
-        )
+        return .priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter)
     }
 }
