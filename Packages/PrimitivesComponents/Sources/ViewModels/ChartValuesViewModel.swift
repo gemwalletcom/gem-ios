@@ -46,8 +46,32 @@ public struct ChartValuesViewModel: Sendable {
         return ChartPriceViewModel(period: period, date: nil, price: price.price, priceChangePercentage: priceChangePercentage, formatter: formatter, type: type)
     }
 
+    public static func priceChange(
+        charts: [ChartDateValue],
+        period: ChartPeriod,
+        formatter: CurrencyFormatter
+    ) -> ChartValuesViewModel? {
+        guard let values = try? ChartValues.from(charts: charts), values.hasVariation else {
+            return nil
+        }
+        let valueChange = values.lastValue - values.firstValue
+        let price = Price(
+            price: valueChange,
+            priceChangePercentage24h: PriceChangeCalculator.calculate(.percentage(from: values.firstValue, to: values.lastValue)),
+            updatedAt: .now
+        )
+        return ChartValuesViewModel(
+            period: period,
+            price: price,
+            values: values,
+            formatter: formatter,
+            type: .priceChange
+        )
+    }
+
     func priceViewModel(for element: ChartDateValue) -> ChartPriceViewModel {
         let priceChangePercentage = PriceChangeCalculator.calculate(.percentage(from: values.baseValue, to: element.value))
-        return ChartPriceViewModel(period: period, date: element.date, price: element.value, priceChangePercentage: priceChangePercentage, formatter: formatter, type: type)
+        let displayPrice = type == .priceChange ? element.value - values.baseValue : element.value
+        return ChartPriceViewModel(period: period, date: element.date, price: displayPrice, priceChangePercentage: priceChangePercentage, formatter: formatter, type: type)
     }
 }
