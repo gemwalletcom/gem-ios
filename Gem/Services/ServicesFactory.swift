@@ -41,6 +41,8 @@ import AuthService
 import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
+import EarnService
+import Transfer
 import SwiftHTTPClient
 import ContactService
 import WebSocketClient
@@ -97,6 +99,10 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
+        let earnService = EarnService(
+            store: storeManager.stakeStore,
+            gatewayService: gatewayService
+        )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
             assetsService: assetsService,
@@ -124,6 +130,7 @@ struct ServicesFactory {
             transactionStore: storeManager.transactionStore,
             nativeProvider: nativeProvider,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainFactory: chainServiceFactory,
             balanceService: balanceService
@@ -291,6 +298,8 @@ struct ServicesFactory {
             priceUpdater: streamSubscriptionService,
             walletService: walletService,
             stakeService: stakeService,
+            earnService: earnService,
+            amountService: AmountService(earnDataProvider: earnService),
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,
@@ -474,6 +483,7 @@ extension ServicesFactory {
         transactionStore: TransactionStore,
         nativeProvider: NativeProvider,
         stakeService: StakeService,
+        earnService: EarnService,
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
         balanceService: BalanceService
@@ -482,6 +492,7 @@ extension ServicesFactory {
             transactionStore: transactionStore,
             swapper: GemSwapper(rpcProvider: nativeProvider),
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainServiceFactory: chainFactory,
             balanceUpdater: balanceService
