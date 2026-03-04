@@ -159,7 +159,7 @@ struct ServicesFactory {
         let perpetualService = Self.makePerpetualService(
             perpetualStore: storeManager.perpetualStore,
             assetStore: storeManager.assetStore,
-            priceAstore: storeManager.priceStore,
+            priceStore: storeManager.priceStore,
             balanceStore: storeManager.balanceStore,
             nodeProvider: nodeProvider,
             preferences: preferences
@@ -619,7 +619,7 @@ extension ServicesFactory {
     private static func makePerpetualService(
         perpetualStore: PerpetualStore,
         assetStore: AssetStore,
-        priceAstore: PriceStore,
+        priceStore: PriceStore,
         balanceStore: BalanceStore,
         nodeProvider: any NodeURLFetchable,
         preferences: Preferences
@@ -627,7 +627,7 @@ extension ServicesFactory {
         PerpetualService(
             store: perpetualStore,
             assetStore: assetStore,
-            priceStore: priceAstore,
+            priceStore: priceStore,
             balanceStore: balanceStore,
             provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider(),
             preferences: preferences
