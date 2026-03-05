@@ -105,8 +105,7 @@ extension NavigationHandler {
         case .transaction(let walletId, let assetId, let transaction):
             try await navigateToTransaction(walletId: walletId, assetId: assetId, transaction: transaction)
         case .priceAlert(let assetId):
-            let asset = try await assetsService.getOrFetchAsset(for: assetId)
-            navigationState.wallet.append(Scenes.AssetPriceAlert(asset: asset, price: nil))
+            try await navigateToAsset(assetId)
         case .buyAsset(let assetId, let amount):
             try await presentBuy(assetId: assetId, amount: amount)
         case .swapAsset(let fromId, let toId):
@@ -115,6 +114,8 @@ extension NavigationHandler {
             presenter.isPresentingSupport.wrappedValue = true
         case .rewards:
             navigationState.settings.append(Scenes.Referral(code: nil))
+        case .stake: break
+            //TODO: Select wallet and open stake screen of an asset
         case .test, .unknown: break
         }
 
@@ -205,7 +206,7 @@ private extension URLAction {
 private extension PushNotification {
     var selectTab: TabItem? {
         switch self {
-        case .transaction, .asset, .priceAlert: .wallet
+        case .transaction, .asset, .priceAlert, .stake: .wallet
         case .buyAsset, .swapAsset: nil
         case .support, .rewards: .settings
         case .test, .unknown: nil
