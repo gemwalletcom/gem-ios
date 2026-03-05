@@ -16,11 +16,11 @@ struct AppReleaseServiceTests {
         configPreferences.config = .mock()
         let service = AppReleaseService(configService: ConfigService(configPreferences: configPreferences))
 
-        #expect(await service.getNewestRelease()?.version == "16.1")
+        #expect(await service.getNewestRelease()?.version == "99.0")
     }
 
     @Test
     func releaseFromConfig() {
-        #expect(AppReleaseService(configService: .mock()).release(ConfigResponse.mock())?.version == "16.1")
+        #expect(AppReleaseService(configService: .mock()).release(ConfigResponse.mock())?.version == "99.0")
     }
 }
