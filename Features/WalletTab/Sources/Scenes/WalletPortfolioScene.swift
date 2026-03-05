@@ -34,11 +34,8 @@ public struct WalletPortfolioScene: View {
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
-            .task {
+            .task(id: model.selectedPeriod) {
                 await model.fetch()
-            }
-            .onChange(of: model.selectedPeriod) {
-                Task { await model.fetch() }
             }
             .listSectionSpacing(.compact)
         }
