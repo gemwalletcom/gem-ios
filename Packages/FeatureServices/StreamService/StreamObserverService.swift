@@ -20,13 +20,13 @@ public actor StreamObserverService: Sendable {
     private let balanceUpdater: any BalanceUpdater
     private let transactionsService: TransactionsService
     private let nftService: NFTService
-    private let perpetualService: any HyperliquidPerpetualServiceable
+    private let perpetualService: any PerpetualServiceable
     private let subscriptionService: StreamSubscriptionService
 
     private let preferences: Preferences
     private let decoder = JSONDateDecoder.standard
 
-    private var webSocket: any WebSocketConnectable
+    private let webSocket: any WebSocketConnectable
     private var observeTask: Task<Void, Never>?
 
     public init(
@@ -37,7 +37,7 @@ public actor StreamObserverService: Sendable {
         balanceUpdater: any BalanceUpdater,
         transactionsService: TransactionsService,
         nftService: NFTService,
-        perpetualService: any HyperliquidPerpetualServiceable,
+        perpetualService: any PerpetualServiceable,
         subscriptionService: StreamSubscriptionService,
         preferences: Preferences,
         webSocket: any WebSocketConnectable
@@ -128,14 +128,6 @@ extension StreamObserverService {
         }
     }
 
-    private func getWallet(id: WalletId) throws -> Wallet? {
-        guard let wallet = try walletStore.getWallet(id: id) else {
-            debugLog("stream observer: wallet not found for \(id)")
-            return nil
-        }
-        return wallet
-    }
-
     private func handlePrices(_ payload: WebSocketPricePayload) throws {
         debugLog("stream observer: prices: \(payload.prices.count), rates: \(payload.rates.count)")
         try priceService.addRates(payload.rates)
@@ -144,18 +136,18 @@ extension StreamObserverService {
 
     private func handleBalanceUpdates(_ updates: [StreamBalanceUpdate]) async throws {
         for (walletId, walletUpdates) in Dictionary(grouping: updates, by: \.walletId) {
-            guard let wallet = try getWallet(id: walletId) else { continue }
+            guard let wallet = try walletStore.getWallet(id: walletId) else { continue }
             await balanceUpdater.updateBalance(for: wallet, assetIds: walletUpdates.map(\.assetId))
         }
     }
 
     private func handleNftUpdate(_ update: StreamNftUpdate) async throws {
-        guard let wallet = try getWallet(id: update.walletId) else { return }
+        guard let wallet = try walletStore.getWallet(id: update.walletId) else { return }
         try await nftService.updateAssets(wallet: wallet)
     }
 
     private func handlePerpetualUpdate(_ update: StreamPerpetualUpdate) async throws {
-        guard let wallet = try getWallet(id: update.walletId), let account = wallet.hyperliquidAccount else { return }
+        guard let wallet = try walletStore.getWallet(id: update.walletId), let account = wallet.hyperliquidAccount else { return }
         try await perpetualService.fetchPositions(walletId: update.walletId, address: account.address)
     }
 }
