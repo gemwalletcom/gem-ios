@@ -24,6 +24,12 @@ public struct WalletPortfolioScene: View {
                     )
                 }
                 .cleanListRow()
+
+                Section {
+                    ForEach(model.allTimeValues, id: \.title) {
+                        ListItemView(model: $0)
+                    }
+                }
             }
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)

@@ -15,8 +15,9 @@ public final class WalletPortfolioSceneViewModel {
     private let priceService: PriceService
     private let currencyCode: String
     private let currencyFormatter: CurrencyFormatter
+    private let allTimeViewModel: AllTimeValueViewModel
 
-    var state: StateViewType<[ChartDateValue]> = .loading
+    var state: StateViewType<PortfolioAssets> = .loading
     var selectedPeriod: ChartPeriod = .week
 
     public init(
@@ -30,6 +31,7 @@ public final class WalletPortfolioSceneViewModel {
         self.priceService = priceService
         self.currencyCode = currencyCode
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
+        self.allTimeViewModel = AllTimeValueViewModel(currency: currencyCode)
     }
 
     var navigationTitle: String { "Portfolio" }
@@ -43,8 +45,16 @@ public final class WalletPortfolioSceneViewModel {
         case .loading: .loading
         case .noData: .noData
         case .error(let error): .error(error)
-        case .data(let charts): chartModel(charts: charts).map { .data($0) } ?? .noData
+        case .data(let portfolio): chartModel(portfolio: portfolio).map { .data($0) } ?? .noData
         }
+    }
+
+    var allTimeValues: [ListItemModel] {
+        guard case .data(let portfolio) = state else { return [] }
+        return [
+            portfolio.allTimeHigh.map { allTimeViewModel.allTimeHigh(chartValue: $0) },
+            portfolio.allTimeLow.map { allTimeViewModel.allTimeLow(chartValue: $0) },
+        ].compactMap { $0 }
     }
 }
 
@@ -54,12 +64,8 @@ extension WalletPortfolioSceneViewModel {
     func fetch() async {
         state = .loading
         do {
-            let portfolioAssets = try await service.getPortfolioAssets(assets: assets, period: selectedPeriod)
-            let rate = try priceService.getRate(currency: currencyCode)
-            let charts = portfolioAssets.values.map {
-                ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
-            }
-            state = charts.isEmpty ? .noData : .data(charts)
+            let result = try await service.getPortfolioAssets(assets: assets, period: selectedPeriod)
+            state = result.values.isEmpty ? .noData : .data(result)
         } catch {
             state = .error(error)
         }
@@ -69,7 +75,11 @@ extension WalletPortfolioSceneViewModel {
 // MARK: - Private
 
 extension WalletPortfolioSceneViewModel {
-    private func chartModel(charts: [ChartDateValue]) -> ChartValuesViewModel? {
-        .priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter)
+    private func chartModel(portfolio: PortfolioAssets) -> ChartValuesViewModel? {
+        let rate = (try? priceService.getRate(currency: currencyCode)) ?? 1.0
+        let charts = portfolio.values.map {
+            ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
+        }
+        return .priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter)
     }
 }
