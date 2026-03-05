@@ -12,6 +12,7 @@ import PriceService
 public final class WalletPortfolioSceneViewModel {
     private let assets: [AssetData]
     private let service: PortfolioService
+    private let priceService: PriceService
     private let currencyCode: String
     private let currencyFormatter: CurrencyFormatter
 
@@ -20,11 +21,13 @@ public final class WalletPortfolioSceneViewModel {
 
     public init(
         assets: [AssetData],
+        portfolioService: PortfolioService,
         priceService: PriceService,
         currencyCode: String
     ) {
         self.assets = assets
-        self.service = PortfolioService(priceService: priceService)
+        self.service = portfolioService
+        self.priceService = priceService
         self.currencyCode = currencyCode
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
     }
@@ -51,11 +54,11 @@ extension WalletPortfolioSceneViewModel {
     func fetch() async {
         state = .loading
         do {
-            let charts = try await service.getCharts(
-                assets: assets,
-                period: selectedPeriod,
-                currencyCode: currencyCode
-            )
+            let portfolioAssets = try await service.getPortfolioAssets(assets: assets, period: selectedPeriod)
+            let rate = try priceService.getRate(currency: currencyCode)
+            let charts = portfolioAssets.values.map {
+                ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
+            }
             state = charts.isEmpty ? .noData : .data(charts)
         } catch {
             state = .error(error)

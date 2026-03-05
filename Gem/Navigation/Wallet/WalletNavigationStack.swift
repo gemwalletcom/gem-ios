@@ -22,6 +22,7 @@ struct WalletNavigationStack: View {
     @Environment(\.balanceService) private var balanceService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
+    @Environment(\.portfolioService) private var portfolioService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
@@ -224,6 +225,7 @@ struct WalletNavigationStack: View {
                 WalletPortfolioScene(
                     model: WalletPortfolioSceneViewModel(
                         assets: model.assets,
+                        portfolioService: portfolioService,
                         priceService: priceService,
                         currencyCode: preferences.preferences.currency
                     )

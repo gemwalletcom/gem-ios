@@ -156,6 +156,7 @@ struct ServicesFactory {
             priceStore: storeManager.priceStore,
             fiatRateStore: storeManager.fiatRateStore
         )
+        let portfolioService = PortfolioService(apiService: apiService)
         let perpetualService = Self.makePerpetualService(
             perpetualStore: storeManager.perpetualStore,
             assetStore: storeManager.assetStore,
@@ -358,6 +359,7 @@ struct ServicesFactory {
             assetSearchService: assetSearchService,
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
+            portfolioService: portfolioService,
             fiatService: apiService,
             contactService: contactService
         )
