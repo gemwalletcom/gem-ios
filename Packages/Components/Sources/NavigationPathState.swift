@@ -57,11 +57,7 @@ extension NavigationPathState {
     }
 
     private func isLastElement<T: Hashable & Codable>(_ value: T) -> Bool {
-        guard !path.isEmpty else { return false }
-        guard let currentCodable = path.codable else {
-            assertionFailure("NavigationPath lost CodableRepresentation — a value was likely pushed via a Hashable-only generic context. Ensure all NavigationLink wrappers use Hashable & Codable constraints.")
-            return false
-        }
+        guard !path.isEmpty, let currentCodable = path.codable else { return false }
 
         let currentElements = encodedElements(currentCodable)
 
