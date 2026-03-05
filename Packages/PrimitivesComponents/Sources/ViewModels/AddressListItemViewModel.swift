@@ -67,7 +67,10 @@ public struct AddressListItemViewModel {
     }
     
     public var canToggleAddress: Bool {
-        account.name != nil && account.name != account.address
+        guard let name = account.name, name.isNotEmpty else {
+            return false
+        }
+        return name != account.address
     }
 
     public var addressSubtitle: String {

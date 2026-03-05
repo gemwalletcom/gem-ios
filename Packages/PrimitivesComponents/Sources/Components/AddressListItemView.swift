@@ -23,8 +23,7 @@ public struct AddressListItemView: View {
             assetImageStyle: model.assetImageStyle,
             imageSize: model.assetImageSize
         )
-        .contentShape(Rectangle())
-        .onTapGesture {
+        .onTap {
             if model.canToggleAddress {
                 showAddress.toggle()
             }
