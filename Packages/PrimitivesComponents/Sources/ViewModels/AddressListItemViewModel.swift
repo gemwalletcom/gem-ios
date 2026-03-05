@@ -66,6 +66,14 @@ public struct AddressListItemViewModel {
         addressLink.url
     }
     
+    public var canToggleAddress: Bool {
+        account.name != nil && account.name != account.address
+    }
+
+    public var addressSubtitle: String {
+        address(for: .short)
+    }
+
     // MARK: - Private methods
     
     private func auto(for style: AddressFormatter.Style) -> String {
