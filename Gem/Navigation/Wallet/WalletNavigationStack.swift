@@ -225,6 +225,7 @@ struct WalletNavigationStack: View {
                 WalletPortfolioScene(
                     model: WalletPortfolioSceneViewModel(
                         assets: model.assets,
+                        wallet: model.wallet,
                         portfolioService: portfolioService,
                         priceService: priceService,
                         currencyCode: preferences.preferences.currency

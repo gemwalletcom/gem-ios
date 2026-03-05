@@ -11,49 +11,49 @@ import PriceService
 @MainActor
 public final class WalletPortfolioSceneViewModel {
     private let assets: [AssetData]
+    private let wallet: Wallet
+
     private let service: PortfolioService
     private let priceService: PriceService
+
     private let currencyCode: String
     private let currencyFormatter: CurrencyFormatter
-    private let allTimeViewModel: AllTimeValueViewModel
+    private let priceFormatter: CurrencyFormatter
+    private let percentFormatter: CurrencyFormatter
 
-    var state: StateViewType<PortfolioAssets> = .loading
+    var state: StateViewType<WalletPortfolioData> = .loading
     var selectedPeriod: ChartPeriod = .week
 
     public init(
         assets: [AssetData],
+        wallet: Wallet,
         portfolioService: PortfolioService,
         priceService: PriceService,
         currencyCode: String
     ) {
-        self.assets = assets
         self.service = portfolioService
         self.priceService = priceService
+
+        self.assets = assets
+        self.wallet = wallet
+
         self.currencyCode = currencyCode
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
-        self.allTimeViewModel = AllTimeValueViewModel(currency: currencyCode)
+        self.priceFormatter = CurrencyFormatter(currencyCode: currencyCode)
+        self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: currencyCode)
     }
 
-    var navigationTitle: String { "Portfolio" }
+    var navigationTitle: String { wallet.name }
 
-    var periods: [ChartPeriod] {
-        [.day, .week, .month, .year, .all]
-    }
-
-    var chartState: StateViewType<ChartValuesViewModel> {
-        switch state {
-        case .loading: .loading
-        case .noData: .noData
-        case .error(let error): .error(error)
-        case .data(let portfolio): chartModel(portfolio: portfolio).map { .data($0) } ?? .noData
-        }
-    }
+    var periods: [ChartPeriod] { [.day, .week, .month, .year, .all] }
+    var chartState: StateViewType<ChartValuesViewModel> { state.map { $0.chart } }
 
     var allTimeValues: [ListItemModel] {
-        guard case .data(let portfolio) = state else { return [] }
+        guard case .data(let data) = state else { return [] }
+        let allTime = AllTimeValueViewModel(priceFormatter: priceFormatter, percentFormatter: percentFormatter)
         return [
-            portfolio.allTimeHigh.map { allTimeViewModel.allTimeHigh(chartValue: $0) },
-            portfolio.allTimeLow.map { allTimeViewModel.allTimeLow(chartValue: $0) },
+            data.portfolio.allTimeHigh.map { allTime.allTimeHigh(chartValue: $0) },
+            data.portfolio.allTimeLow.map { allTime.allTimeLow(chartValue: $0) },
         ].compactMap { $0 }
     }
 }
@@ -64,22 +64,15 @@ extension WalletPortfolioSceneViewModel {
     func fetch() async {
         state = .loading
         do {
-            let result = try await service.getPortfolioAssets(assets: assets, period: selectedPeriod)
-            state = result.values.isEmpty ? .noData : .data(result)
+            let rate = try priceService.getRate(currency: currencyCode)
+            let portfolio = try await service.getPortfolioAssets(assets: assets, period: selectedPeriod)
+            let charts = portfolio.values.map {
+                ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
+            }
+            let chart = ChartValuesViewModel.priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter)
+            state = chart.map { .data(WalletPortfolioData(chart: $0, portfolio: portfolio)) } ?? .noData
         } catch {
             state = .error(error)
         }
-    }
-}
-
-// MARK: - Private
-
-extension WalletPortfolioSceneViewModel {
-    private func chartModel(portfolio: PortfolioAssets) -> ChartValuesViewModel? {
-        let rate = (try? priceService.getRate(currency: currencyCode)) ?? 1.0
-        let charts = portfolio.values.map {
-            ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
-        }
-        return .priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter)
     }
 }

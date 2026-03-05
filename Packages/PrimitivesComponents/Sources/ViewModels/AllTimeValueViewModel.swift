@@ -11,9 +11,9 @@ public struct AllTimeValueViewModel: Sendable {
     private let priceFormatter: CurrencyFormatter
     private let percentFormatter: CurrencyFormatter
 
-    public init(currency: String) {
-        self.priceFormatter = CurrencyFormatter(currencyCode: currency)
-        self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: currency)
+    public init(priceFormatter: CurrencyFormatter, percentFormatter: CurrencyFormatter) {
+        self.priceFormatter = priceFormatter
+        self.percentFormatter = percentFormatter
     }
 
     public func allTimeHigh(chartValue: ChartValuePercentage) -> ListItemModel {
