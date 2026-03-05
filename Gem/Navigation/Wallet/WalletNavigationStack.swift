@@ -26,7 +26,7 @@ struct WalletNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.bannerService) private var bannerService
-    @Environment(\.priceObserverService) private var priceObserverService
+    @Environment(\.streamSubscriptionService) private var streamSubscriptionService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.hyperliquidObserverService) private var hyperliquidObserverService
     @Environment(\.activityService) private var activityService
@@ -94,7 +94,7 @@ struct WalletNavigationStack: View {
                         balanceService: balanceService,
                         assetsService: assetsService,
                         transactionsService: transactionsService,
-                        priceObserverService: priceObserverService,
+                        priceUpdater: streamSubscriptionService,
                         priceAlertService: priceAlertService,
                         bannerService: bannerService,
                         input: AssetSceneInput(
