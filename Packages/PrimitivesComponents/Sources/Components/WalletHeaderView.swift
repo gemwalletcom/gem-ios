@@ -93,8 +93,8 @@ public struct WalletHeaderView: View {
             .font(.app.headline)
             .foregroundStyle(model.subtitleColor)
 
-            if onSubtitleAction != nil {
-                Image(systemName: SystemImage.chartLineUptrendXyaxis)
+            if let subtitleImage = model.subtitleImage {
+                subtitleImage
                     .font(.footnote)
                     .foregroundStyle(Colors.secondaryText)
             }
