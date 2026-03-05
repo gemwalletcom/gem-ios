@@ -137,7 +137,9 @@ struct SwapSceneViewModelTests {
     private func model(
         toValueMock: String = "250000000000"
     ) async -> SwapSceneViewModel {
-        let swapper = GemSwapperMock(quotes: [.mock(toValue: toValueMock)])
+        let swapper = GemSwapperMock(
+            quoteByProvider: .mock(toValue: toValueMock)
+        )
         let model = SwapSceneViewModel.mock(swapper: swapper)
         await model.fetch()
         return model

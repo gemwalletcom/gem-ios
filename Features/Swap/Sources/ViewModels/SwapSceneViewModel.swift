@@ -342,18 +342,29 @@ extension SwapSceneViewModel {
             swapState.swapTransferData = .noData
             swapState.quotes = .loading
             resetToValue()
-            let swapQuotes = try await swapQuotesProvider.fetchQuotes(
-                wallet: wallet,
-                fromAsset: input.fromAsset,
-                toAsset: input.toAsset,
-                amount: input.value,
-                useMaxAmount: input.useMaxAmount
-            )
 
-            swapState.quotes = .data(swapQuotes)
-            selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
-            if let selectedSwapQuote, let asset = toAsset?.asset {
-                applyQuote(selectedSwapQuote, asset: asset)
+            var accumulated: [SwapperQuote] = []
+            var errors: [Error] = []
+
+            for await result in swapQuotesProvider.fetchQuotes(wallet: wallet, input: input) {
+                try Task.checkCancellation()
+
+                switch result {
+                case .success(let quote):
+                    accumulated.append(quote)
+                    applyAccumulatedQuotes(&accumulated)
+                case .failure(let error):
+                    errors.append(error)
+                }
+            }
+
+            try Task.checkCancellation()
+
+            if accumulated.isEmpty {
+                let swapError = prioritizedSwapError(errors) ?? SwapperError.NoQuoteAvailable
+                swapState.quotes = .error(swapError)
+                selectedSwapQuote = nil
+                amountInputModel.update(error: nil)
             }
         } catch {
             if !error.isCancelled && !Task.isCancelled {
@@ -363,6 +374,28 @@ extension SwapSceneViewModel {
                 debugLog("SwapScene get quotes error: \(error)")
             }
         }
+    }
+
+    private func applyAccumulatedQuotes(_ accumulated: inout [SwapperQuote]) {
+        accumulated.sort { BigInt.fromString($0.toValue) > BigInt.fromString($1.toValue) }
+        swapState.quotes = .data(accumulated)
+        selectedSwapQuote = accumulated.first
+        if let selectedSwapQuote, let asset = toAsset?.asset {
+            applyQuote(selectedSwapQuote, asset: asset)
+        }
+    }
+
+    private func prioritizedSwapError(_ errors: [Error]) -> SwapperError? {
+        let inputErrors: [(BigInt?, String?)] = errors.compactMap { error in
+            guard let swapperError = error as? SwapperError, case .InputAmountError(let minAmount) = swapperError else { return nil }
+            return (minAmount.flatMap { BigInt($0) }, minAmount)
+        }
+        guard !inputErrors.isEmpty else { return nil }
+        if let best = inputErrors.filter({ $0.0 != nil }).min(by: { ($0.0 ?? 0) < ($1.0 ?? 0) }) {
+            let adjusted = best.0.map { String($0.increase(byPercent: 10)) }
+            return .InputAmountError(minAmount: adjusted)
+        }
+        return .InputAmountError(minAmount: nil)
     }
 
     private func performUpdate(for assetIds: [AssetId]) async {

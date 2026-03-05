@@ -15,7 +15,6 @@ import struct Gemstone.SwapperSwapResult
 
 public final class GemSwapperMock: GemSwapperProtocol {
     private let permit2ForQuote: Permit2ApprovalData
-    private let quotes: [SwapperQuote]
     private let quoteByProvider: SwapperQuote
     private let quoteData: GemSwapQuoteData
     private let providers: [SwapperProviderType]
@@ -28,7 +27,6 @@ public final class GemSwapperMock: GemSwapperProtocol {
 
     public init(
         permit2ForQuote: Permit2ApprovalData = .mock(),
-        quotes: [SwapperQuote] = [.mock()],
         quoteByProvider: SwapperQuote = .mock(),
         quoteData: GemSwapQuoteData = .mock(),
         providers: [SwapperProviderType] = [.mock()],
@@ -40,7 +38,6 @@ public final class GemSwapperMock: GemSwapperProtocol {
         fetchQuoteError: Error? = nil
     ) {
         self.permit2ForQuote = permit2ForQuote
-        self.quotes = quotes
         self.quoteByProvider = quoteByProvider
         self.quoteData = quoteData
         self.providers = providers
@@ -63,11 +60,17 @@ public final class GemSwapperMock: GemSwapperProtocol {
         if let error = fetchQuoteError {
             throw error
         }
-        return quotes
+        return [quoteByProvider]
     }
 
     public func fetchQuoteByProvider(provider: SwapperProvider, request: SwapperQuoteRequest) async throws -> SwapperQuote {
-        quoteByProvider
+        if let delay = fetchQuoteDelay {
+            try await Task.sleep(for: delay)
+        }
+        if let error = fetchQuoteError {
+            throw error
+        }
+        return quoteByProvider
     }
 
     public func getQuoteData(quote: SwapperQuote, data: FetchQuoteData) async throws -> GemSwapQuoteData {
