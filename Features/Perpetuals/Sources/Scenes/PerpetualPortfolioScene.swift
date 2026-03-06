@@ -27,10 +27,10 @@ struct PerpetualPortfolioScene: View {
 
                 Section(header: Text(model.infoSectionTitle)) {
                     ListItemView(field: model.unrealizedPnlField)
-                    ListItemView(title: model.accountLeverageTitle, subtitle: model.accountLeverageText)
-                    ListItemView(title: model.marginUsageTitle, subtitle: model.marginUsageText)
+                    ListItemView(field: model.accountLeverageField)
+                    ListItemView(field: model.marginUsageField)
                     ListItemView(field: model.allTimePnlField)
-                    ListItemView(title: model.volumeTitle, subtitle: model.volumeText)
+                    ListItemView(field: model.volumeField)
                 }
             }
             .navigationTitle(model.navigationTitle)

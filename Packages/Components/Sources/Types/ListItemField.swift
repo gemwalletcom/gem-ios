@@ -10,4 +10,11 @@ public struct ListItemField {
         self.title = title
         self.value = value
     }
+
+    public init(title: String, value: String) {
+        self.init(
+            title: TextValue(text: title, style: .body),
+            value: TextValue(text: value, style: .calloutSecondary)
+        )
+    }
 }

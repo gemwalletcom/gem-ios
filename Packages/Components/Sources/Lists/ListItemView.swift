@@ -44,8 +44,8 @@ public struct ListItemView: View {
         ))
     }
     
-    public init(field: ListItemField) {
-        self.init(title: field.title, subtitle: field.value)
+    public init(field: ListItemField, infoAction: (() -> Void)? = nil) {
+        self.init(title: field.title, subtitle: field.value, infoAction: infoAction)
     }
 
     public init(
