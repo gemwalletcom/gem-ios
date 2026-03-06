@@ -26,10 +26,10 @@ struct PerpetualPortfolioScene: View {
                 .cleanListRow()
 
                 Section(header: Text(model.infoSectionTitle)) {
-                    ListItemView(title: model.unrealizedPnlTitle, subtitle: model.unrealizedPnlValue.text, subtitleStyle: model.unrealizedPnlValue.style)
+                    ListItemView(field: model.unrealizedPnlField)
                     ListItemView(title: model.accountLeverageTitle, subtitle: model.accountLeverageText)
                     ListItemView(title: model.marginUsageTitle, subtitle: model.marginUsageText)
-                    ListItemView(title: model.allTimePnlTitle, subtitle: model.allTimePnlValue.text, subtitleStyle: model.allTimePnlValue.style)
+                    ListItemView(field: model.allTimePnlField)
                     ListItemView(title: model.volumeTitle, subtitle: model.volumeText)
                 }
             }

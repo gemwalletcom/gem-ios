@@ -83,8 +83,12 @@ final class PerpetualPortfolioSceneViewModel {
 // MARK: - Stats
 
 extension PerpetualPortfolioSceneViewModel {
-    var unrealizedPnlTitle: String { Localized.Perpetual.unrealizedPnl }
-    var unrealizedPnlValue: TextValue { TextValue(text: unrealizedPnlModel.text ?? "-", style: unrealizedPnlModel.textStyle) }
+    var unrealizedPnlField: ListItemField {
+        ListItemField(
+            title: TextValue(text: Localized.Perpetual.unrealizedPnl, style: ListItemModel.StyleDefaults.titleStyle),
+            value: TextValue(text: unrealizedPnlModel.text ?? "-", style: unrealizedPnlModel.textStyle)
+        )
+    }
 
     var accountLeverageTitle: String { Localized.Perpetual.accountLeverage }
     var accountLeverageText: String { portfolio?.accountSummary.map { String(format: "%.2fx", $0.accountLeverage) } ?? "-" }
@@ -98,8 +102,12 @@ extension PerpetualPortfolioSceneViewModel {
         } ?? "-"
     }
 
-    var allTimePnlTitle: String { Localized.Perpetual.allTimePnl }
-    var allTimePnlValue: TextValue { TextValue(text: allTimePnlModel.text ?? "-", style: allTimePnlModel.textStyle) }
+    var allTimePnlField: ListItemField {
+        ListItemField(
+            title: TextValue(text: Localized.Perpetual.allTimePnl, style: ListItemModel.StyleDefaults.titleStyle),
+            value: TextValue(text: allTimePnlModel.text ?? "-", style: allTimePnlModel.textStyle)
+        )
+    }
 
     var volumeTitle: String { Localized.Perpetual.volume }
     var volumeText: String { portfolio.map { currencyFormatter.string($0.allTime?.volume ?? 0) } ?? "-" }
