@@ -52,7 +52,7 @@ public final class GemSwapperMock: GemSwapperProtocol {
         self.fetchQuoteError = fetchQuoteError
     }
 
-    public func fetchPermit2ForQuote(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
+    public func getPermit2ForQuote(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
         permit2ForQuote
     }
 
