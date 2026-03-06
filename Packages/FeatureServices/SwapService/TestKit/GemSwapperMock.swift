@@ -66,7 +66,7 @@ public final class GemSwapperMock: GemSwapperProtocol {
         return quotes
     }
 
-    public func fetchQuoteByProvider(provider: SwapperProvider, request: SwapperQuoteRequest) async throws -> SwapperQuote {
+    public func getQuoteByProvider(provider: SwapperProvider, request: SwapperQuoteRequest) async throws -> SwapperQuote {
         quoteByProvider
     }
 
