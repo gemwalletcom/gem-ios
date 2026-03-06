@@ -91,7 +91,7 @@ struct WalletConnectorSignerTests {
 
     @Test
     func validateChainPresent() async throws {
-        let db = DB.mock()
+        let db = DB.mockWithChains([.ethereum])
         let walletStore = WalletStore(db: db)
         let connectionsStore = ConnectionsStore(db: db)
 
@@ -117,7 +117,7 @@ struct WalletConnectorSignerTests {
 
     @Test
     func validateChainEmptyChains() async throws {
-        let db = DB.mock()
+        let db = DB.mockWithChains([.ethereum])
         let walletStore = WalletStore(db: db)
         let connectionsStore = ConnectionsStore(db: db)
 
@@ -143,7 +143,7 @@ struct WalletConnectorSignerTests {
 
     @Test
     func sessionBindsToConnectedWallet() throws {
-        let db = DB.mock()
+        let db = DB.mockWithChains([.ethereum])
         let walletStore = WalletStore(db: db)
         let connectionsStore = ConnectionsStore(db: db)
 
@@ -194,7 +194,8 @@ extension WalletConnectorSigner {
     }
     
     static func mock(wallets: [Wallet]) throws -> WalletConnectorSigner {
-        let db = DB.mock()
+        let chains = wallets.flatMap { $0.accounts.map(\.chain) }.asSet()
+        let db = DB.mockWithChains(chains.asArray())
         let walletStore = WalletStore(db: db)
         for wallet in wallets {
             try walletStore.addWallet(wallet)
