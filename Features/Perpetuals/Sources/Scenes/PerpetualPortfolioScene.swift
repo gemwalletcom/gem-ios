@@ -3,7 +3,6 @@
 import SwiftUI
 import Primitives
 import Components
-import Style
 import PrimitivesComponents
 
 struct PerpetualPortfolioScene: View {

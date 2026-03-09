@@ -1,10 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import SwiftUI
 import Primitives
 import Components
-import Style
 import Formatters
 import PerpetualService
 import PrimitivesComponents

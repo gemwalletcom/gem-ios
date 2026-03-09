@@ -1,9 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Primitives
 import Components
-import Style
 import PrimitivesComponents
 
 public struct WalletPortfolioScene: View {

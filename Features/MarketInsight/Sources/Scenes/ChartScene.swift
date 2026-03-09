@@ -1,9 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Charts
 import Primitives
-import Style
 import Components
 import Store
 import PrimitivesComponents

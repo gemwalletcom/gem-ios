@@ -4,7 +4,6 @@ import Foundation
 import Primitives
 import Components
 import Store
-import Style
 import Localization
 import PrimitivesComponents
 import PriceService
@@ -35,8 +34,6 @@ public final class ChartSceneViewModel: ChartListViewable {
     public var isPresentingSetPriceAlert: Binding<Asset?>
 
     var title: String { assetModel.name }
-    var emptyTitle: String { Localized.Common.notAvailable }
-    var errorTitle: String { Localized.Errors.errorOccured }
 
     var priceAlertsViewModel: PriceAlertsViewModel { PriceAlertsViewModel(priceAlerts: priceData?.priceAlerts ?? []) }
     var showPriceAlerts: Bool { priceAlertsViewModel.hasPriceAlerts && isPriceAvailable }
