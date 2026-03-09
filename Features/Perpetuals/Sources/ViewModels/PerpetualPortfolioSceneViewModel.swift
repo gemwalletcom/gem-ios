@@ -12,7 +12,7 @@ import Localization
 
 @Observable
 @MainActor
-final class PerpetualPortfolioSceneViewModel {
+final class PerpetualPortfolioSceneViewModel: ChartListViewable {
     private let wallet: Wallet
     private let perpetualService: PerpetualServiceable
     private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Currency.usd.rawValue)
@@ -26,7 +26,7 @@ final class PerpetualPortfolioSceneViewModel {
             }
         }
     }
-    var selectedPeriod: ChartPeriod = .day
+    public var selectedPeriod: ChartPeriod = .day
     var selectedChartType: PerpetualPortfolioChartType = .pnl
 
     private var portfolio: PerpetualPortfolio?
@@ -42,14 +42,14 @@ final class PerpetualPortfolioSceneViewModel {
     var navigationTitle: String { Localized.Perpetuals.title }
     var infoSectionTitle: String { Localized.Common.info }
 
-    var periods: [ChartPeriod] {
+    public var periods: [ChartPeriod] {
         guard let periods = portfolio?.availablePeriods, !periods.isEmpty else {
             return [.day, .week, .month, .all]
         }
         return periods
     }
 
-    var chartState: StateViewType<ChartValuesViewModel> {
+    public var chartState: StateViewType<ChartValuesViewModel> {
         switch state {
         case .loading: .loading
         case .noData: .noData
@@ -65,9 +65,11 @@ final class PerpetualPortfolioSceneViewModel {
         }
     }
 
-    func fetch() async {
+    public func fetch() async {
         guard let address = wallet.hyperliquidAccount?.address else { return }
-        state = .loading
+        if portfolio == nil {
+            state = .loading
+        }
         do {
             let data = try await perpetualService.portfolio(address: address)
             if !data.availablePeriods.contains(selectedPeriod), let first = data.availablePeriods.first {
@@ -119,10 +121,13 @@ extension PerpetualPortfolioSceneViewModel {
         guard let timeframe = data.timeframeData(for: selectedPeriod) else {
             return nil
         }
+        let accountValue = data.accountSummary?.accountValue ?? .zero
         let charts: [ChartDateValue] = switch selectedChartType {
-        case .value: timeframe.accountValueHistory
+        case .value:
+            Array(timeframe.accountValueHistory.drop(while: { $0.value == .zero }))
+            + (accountValue > 0 ? [ChartDateValue(date: .now, value: accountValue)] : [])
         case .pnl: timeframe.pnlHistory
         }
-        return .priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter)
+        return .priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter, showHeaderValue: selectedChartType == .value)
     }
 }

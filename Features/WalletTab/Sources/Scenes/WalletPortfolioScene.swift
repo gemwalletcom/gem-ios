@@ -15,16 +15,7 @@ public struct WalletPortfolioScene: View {
 
     public var body: some View {
         NavigationStack {
-            List {
-                Section { } header: {
-                    ChartStateView(
-                        state: model.chartState,
-                        selectedPeriod: $model.selectedPeriod,
-                        periods: model.periods
-                    )
-                }
-                .cleanListRow()
-
+            ChartListView(model: model) {
                 Section {
                     ForEach(model.allTimeValues, id: \.title) {
                         ListItemView(model: $0)
@@ -34,10 +25,7 @@ public struct WalletPortfolioScene: View {
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
-            .task(id: model.selectedPeriod) {
-                await model.fetch()
-            }
-            .listSectionSpacing(.compact)
+            .bindQuery(model.assetsQuery, model.totalFiatQuery)
         }
     }
 }

@@ -16,7 +16,7 @@ import InfoSheet
 
 @MainActor
 @Observable
-public final class ChartSceneViewModel {
+public final class ChartSceneViewModel: ChartListViewable {
     private let service: ChartService
     private let priceService: PriceService
     private let preferences: Preferences = .standard
@@ -25,12 +25,8 @@ public final class ChartSceneViewModel {
     let assetModel: AssetViewModel
     let priceAlertService: PriceAlertService
 
-    var state: StateViewType<ChartValuesViewModel> = .loading
-    var selectedPeriod: ChartPeriod {
-        didSet {
-            Task { await fetch() }
-        }
-    }
+    public var chartState: StateViewType<ChartValuesViewModel> = .loading
+    public var selectedPeriod: ChartPeriod
 
     public let priceQuery: ObservableQuery<PriceRequest>
     var priceData: PriceData? { priceQuery.value }
@@ -75,7 +71,7 @@ public final class ChartSceneViewModel {
 
 extension ChartSceneViewModel {
     public func fetch() async {
-        state = .loading
+        chartState = .loading
         do {
             let values = try await service.getCharts(
                 assetId: assetModel.asset.id,
@@ -103,9 +99,9 @@ extension ChartSceneViewModel {
                 values: chartValues,
                 formatter: formatter
             )
-            state = .data(model)
+            chartState = .data(model)
         } catch {
-            state = .error(error)
+            chartState = .error(error)
         }
     }
 

@@ -15,16 +15,7 @@ struct PerpetualPortfolioScene: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section { } header: {
-                    ChartStateView(
-                        state: model.chartState,
-                        selectedPeriod: $model.selectedPeriod,
-                        periods: model.periods
-                    )
-                }
-                .cleanListRow()
-
+            ChartListView(model: model) {
                 Section(header: Text(model.infoSectionTitle)) {
                     ListItemView(title: model.unrealizedPnlTitle, subtitle: model.unrealizedPnlValue.text, subtitleStyle: model.unrealizedPnlValue.style)
                     ListItemView(title: model.accountLeverageTitle, subtitle: model.accountLeverageText)
@@ -50,13 +41,6 @@ struct PerpetualPortfolioScene: View {
                 }
             }
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
-            .task {
-                await model.fetch()
-            }
-            .refreshableTimer(every: .minutes(1)) {
-                await model.fetch()
-            }
-            .listSectionSpacing(.compact)
         }
     }
 }
