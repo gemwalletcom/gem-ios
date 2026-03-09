@@ -66,8 +66,7 @@ final class PerpetualPortfolioSceneViewModel: ChartListViewable {
     public func fetch() async {
         guard let address = wallet.hyperliquidAccount?.address else { return }
         if portfolio == nil {
-            state = .loading
-        }
+        state = .loading
         do {
             let data = try await perpetualService.portfolio(address: address)
             if !data.availablePeriods.contains(selectedPeriod), let first = data.availablePeriods.first {
