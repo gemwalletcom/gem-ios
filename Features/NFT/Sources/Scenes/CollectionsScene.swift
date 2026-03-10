@@ -66,7 +66,8 @@ extension CollectionsScene {
                 GridPosterView(
                     assetImage: item.assetImage,
                     title: item.title,
-                    count: item.count
+                    count: item.count,
+                    isVerified: item.isVerified
                 )
             }
         }

@@ -9,15 +9,18 @@ public struct GridPosterView: View {
     private let assetImage: AssetImage
     private let title: String?
     private let count: Int?
+    private let isVerified: Bool
 
     public init(
         assetImage: AssetImage,
         title: String?,
-        count: Int? = nil
+        count: Int? = nil,
+        isVerified: Bool = false
     ) {
         self.assetImage = assetImage
         self.title = title
         self.count = count
+        self.isVerified = isVerified
     }
 
     public var body: some View {
@@ -32,10 +35,18 @@ public struct GridPosterView: View {
                 }
 
             if let title {
-                Text(title)
-                    .font(.body)
-                    .lineLimit(1)
-                    .multilineTextAlignment(.leading)
+                HStack(spacing: Spacing.tiny) {
+                    Text(title)
+                        .font(.body)
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+
+                    if isVerified {
+                        Images.TokenStatus.verified
+                            .resizable()
+                            .frame(size: Sizing.image.overlayImage.chain)
+                    }
+                }
             }
             Spacer()
         }

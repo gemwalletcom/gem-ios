@@ -9,18 +9,21 @@ public struct GridPosterViewItem: Identifiable, Sendable {
     public let assetImage: AssetImage
     public let title: String
     public let count: Int?
+    public let isVerified: Bool
 
     public init(
         id: String,
         destination: any Hashable & Sendable,
         assetImage: AssetImage,
         title: String,
-        count: Int? = nil
+        count: Int? = nil,
+        isVerified: Bool = false
     ) {
         self.id = id
         self.destination = destination
         self.assetImage = assetImage
         self.title = title
         self.count = count
+        self.isVerified = isVerified
     }
 }

@@ -57,7 +57,8 @@ extension CollectionsViewable {
             destination: Scenes.Collection(id: data.collection.id, name: data.collection.name),
             assetImage: AssetImage(type: data.collection.name, imageURL: data.collection.images.preview.url.asURL),
             title: data.collection.name,
-            count: data.assets.count
+            count: data.assets.count,
+            isVerified: data.collection.isVerified
         )
     }
 
@@ -66,7 +67,8 @@ extension CollectionsViewable {
             id: asset.id,
             destination: Scenes.Collectible(assetData: NFTAssetData(collection: collection, asset: asset)),
             assetImage: AssetImage(type: collection.name, imageURL: asset.images.preview.url.asURL),
-            title: asset.name
+            title: asset.name,
+            isVerified: collection.isVerified
         )
     }
 }

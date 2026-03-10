@@ -213,6 +213,7 @@ public enum Images {
     public enum TokenStatus {
         public static let warning = Image(.verificationOrange)
         public static let risk = Image(.verificationRed)
+        public static let verified = Image(.verificationBlue)
     }
 
     public enum AppIcons {
