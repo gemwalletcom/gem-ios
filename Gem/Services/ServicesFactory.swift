@@ -254,7 +254,7 @@ struct ServicesFactory {
             perpetualService: perpetualService
         )
 
-        let nameService = NameService()
+        let nameService = NameService(provider: apiService)
         let scanService = ScanService(gatewayService: gatewayService)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
