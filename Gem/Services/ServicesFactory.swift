@@ -99,14 +99,15 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
-        let earnService = EarnService(
-            store: storeManager.stakeStore,
-            gatewayService: gatewayService
-        )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
             assetsService: assetsService,
             chainFactory: chainServiceFactory
+        )
+        let earnService = EarnService(
+            store: storeManager.stakeStore,
+            gatewayService: gatewayService,
+            earnBalanceUpdater: balanceService
         )
         let stakeService = Self.makeStakeService(
             stakeStore: storeManager.stakeStore,

@@ -137,7 +137,7 @@ public struct TransactionViewModel: Sendable {
             case .perpetualModifyPosition:
                 return .empty
             case .earnDeposit:
-                return Localized.Transfer.Stake.title
+                return Localized.Common.earn
             case .earnWithdraw:
                 return Localized.Transfer.Withdraw.title
             }

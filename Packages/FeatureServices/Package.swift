@@ -620,6 +620,7 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "Blockchain",
+                "BalanceService",
             ],
             path: "EarnService",
             exclude: ["TestKit"]

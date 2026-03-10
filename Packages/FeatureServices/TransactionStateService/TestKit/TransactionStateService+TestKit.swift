@@ -42,9 +42,14 @@ public extension TransactionStateService {
 
 public extension EarnService {
     static func mock(
-        store: StakeStore = .mock()
+        store: StakeStore = .mock(),
+        earnBalanceUpdater: any EarnBalanceUpdatable = EarnBalanceUpdaterMock()
     ) -> EarnService {
         let provider = NativeProvider(url: Constants.apiURL, requestInterceptor: EmptyRequestInterceptor())
-        return EarnService(store: store, gatewayService: GatewayService(provider: provider))
+        return EarnService(store: store, gatewayService: GatewayService(provider: provider), earnBalanceUpdater: earnBalanceUpdater)
     }
+}
+
+public struct EarnBalanceUpdaterMock: EarnBalanceUpdatable {
+    public func updateEarnBalance(walletId: WalletId, chain: Chain, address: String) async -> [AssetBalanceChange] { [] }
 }
