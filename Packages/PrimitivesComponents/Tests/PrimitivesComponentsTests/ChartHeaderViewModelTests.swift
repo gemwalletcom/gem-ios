@@ -27,7 +27,7 @@ struct ChartHeaderViewModelTests {
         #expect(ChartHeaderViewModel.mock(price: 100, priceChangePercentage: 5.5).priceChangeText == "+5.50%")
         #expect(ChartHeaderViewModel.mock(price: 100, type: .priceChange).priceChangeText == nil)
         #expect(ChartHeaderViewModel.mock(price: 0).priceChangeText == nil)
-        #expect(ChartHeaderViewModel.mock(price: 50, priceChangePercentage: 10, headerValue: 200, type: .priceChange).priceChangeText == "(10%)")
+        #expect(ChartHeaderViewModel.mock(price: 50, priceChangePercentage: 10, headerValue: 200, type: .priceChange).priceChangeText == "(10.00%)")
         #expect(ChartHeaderViewModel.mock(price: 50, priceChangePercentage: 0, headerValue: 200, type: .priceChange).priceChangeText == nil)
     }
 
