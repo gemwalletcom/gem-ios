@@ -132,11 +132,9 @@ extension PerpetualPortfolioSceneViewModel {
         guard let timeframe = data.timeframeData(for: selectedPeriod) else {
             return nil
         }
-        let accountValue = data.accountSummary?.accountValue ?? .zero
         let charts: [ChartDateValue] = switch selectedChartType {
         case .value:
             Array(timeframe.accountValueHistory.drop(while: { $0.value == .zero }))
-            + (accountValue > 0 ? [ChartDateValue(date: .now, value: accountValue)] : [])
         case .pnl: timeframe.pnlHistory
         }
         return .priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter, showHeaderValue: selectedChartType == .value)

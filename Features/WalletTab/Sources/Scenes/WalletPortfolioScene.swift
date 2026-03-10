@@ -23,7 +23,7 @@ public struct WalletPortfolioScene: View {
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
-            .bindQuery(model.assetsQuery, model.totalFiatQuery)
+            .bindQuery(model.assetsQuery)
         }
     }
 }
