@@ -50,18 +50,9 @@ extension BalanceService {
 // MARK: - BalanceUpdater
 
 extension BalanceService: BalanceUpdater {
-    @discardableResult
-    public func updateBalance(walletId: WalletId, asset: AssetId, address: String) async throws -> [AssetBalanceChange] {
-        switch asset.type {
-        case .native:
-            await updateCoinBalance(walletId: walletId, asset: asset, address: address)
-        case .token:
-            await updateTokenBalances(walletId: walletId, chain: asset.chain, tokenIds: [asset], address: address)
-        }
-    }
-
     public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async {
         let walletId = wallet.walletId
+
         await withTaskGroup(of: Void.self) { group in
             for account in wallet.accounts {
                 let chain = account.chain
@@ -78,6 +69,9 @@ extension BalanceService: BalanceUpdater {
                     }
                     group.addTask {
                         await updateCoinStakeBalance(walletId: walletId, asset: chain.assetId, address: address)
+                    }
+                    group.addTask {
+                        await updateEarnBalance(walletId: walletId, chain: chain, address: address)
                     }
                 }
 
@@ -152,6 +146,16 @@ extension BalanceService {
             chain: chain,
             fetchBalance: { [try await fetcher.getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
             mapBalance: { $0 }
+        )
+    }
+
+    @discardableResult
+    private func updateEarnBalance(walletId: WalletId, chain: Chain, address: String) async -> [AssetBalanceChange] {
+        await updateBalanceAsync(
+            walletId: walletId,
+            chain: chain,
+            fetchBalance: { try await fetcher.getEarnBalance(chain: chain, address: address) },
+            mapBalance: { $0.earnChange }
         )
     }
 
@@ -237,6 +241,12 @@ extension BalanceService {
                     metadata: metadata
                 )
             )
+        case .earn(let earn):
+            let earnValue = try UpdateBalanceValue(
+                value: earn.description,
+                amount: formatter.double(from: earn, decimals: decimals)
+            )
+            return .earn(UpdateEarnBalance(balance: earnValue))
         }
     }
 

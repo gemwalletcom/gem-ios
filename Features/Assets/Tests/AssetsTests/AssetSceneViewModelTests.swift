@@ -2,11 +2,11 @@
 
 import Testing
 import SwiftUI
+import BigInt
 import Primitives
 import PrimitivesTestKit
 import BalanceServiceTestKit
 import AssetsServiceTestKit
-import BalanceServiceTestKit
 import TransactionsServiceTestKit
 import PriceServiceTestKit
 import PriceAlertServiceTestKit
@@ -54,6 +54,29 @@ struct AssetSceneViewModelTests {
 
         #expect(model.swapAssetType == .swap(asset, nil))
     }
+
+    @Test
+    func showProviderBalance() {
+        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isStakeEnabled: true))).showProviderBalance(for: .stake) == true)
+        #expect(AssetSceneViewModel.mock(.mock(balance: .mock(staked: BigInt(100)), metadata: .mock(isStakeEnabled: false))).showProviderBalance(for: .stake) == true)
+        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isStakeEnabled: false))).showProviderBalance(for: .stake) == false)
+        #expect(AssetSceneViewModel.mock(.mock(balance: .mock(earn: BigInt(100)))).showProviderBalance(for: .earn) == true)
+        #expect(AssetSceneViewModel.mock(.mock()).showProviderBalance(for: .earn) == false)
+    }
+
+    @Test
+    func showEarnButton() {
+        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isEarnEnabled: true))).showEarnButton == true)
+        #expect(AssetSceneViewModel.mock(.mock(metadata: .mock(isEarnEnabled: false))).showEarnButton == false)
+        #expect(AssetSceneViewModel.mock(.mock(balance: .mock(earn: BigInt(100)), metadata: .mock(isEarnEnabled: true))).showEarnButton == false)
+    }
+
+    @Test
+    func balanceTitle() {
+        let model = AssetSceneViewModel.mock()
+        #expect(model.balanceTitle(for: .stake).isEmpty == false)
+        #expect(model.balanceTitle(for: .earn).isEmpty == false)
+    }
 }
 
 // MARK: - Mock Extensions
@@ -65,7 +88,7 @@ extension AssetSceneViewModel {
             balanceService: .mock(),
             assetsService: .mock(),
             transactionsService: .mock(),
-            priceObserverService: .mock(),
+            priceUpdater: .mock(),
             priceAlertService: .mock(),
             bannerService: .mock(),
             input: AssetSceneInput(

@@ -15,7 +15,6 @@ import TransactionsService
 import BalanceService
 import PriceService
 import BannerService
-import Formatters
 import Store
 
 @Observable
@@ -25,7 +24,7 @@ public final class AssetSceneViewModel: Sendable {
     private let balanceService: BalanceService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
-    private let priceObserverService: PriceObserverService
+    private let priceUpdater: any PriceUpdater
     private let bannerService: BannerService
 
     private let preferences: ObservablePreferences = .default
@@ -55,7 +54,7 @@ public final class AssetSceneViewModel: Sendable {
         balanceService: BalanceService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
-        priceObserverService: PriceObserverService,
+        priceUpdater: any PriceUpdater,
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
         input: AssetSceneInput,
@@ -65,7 +64,7 @@ public final class AssetSceneViewModel: Sendable {
         self.balanceService = balanceService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
-        self.priceObserverService = priceObserverService
+        self.priceUpdater = priceUpdater
         self.priceAlertService = priceAlertService
         self.bannerService = bannerService
 
@@ -85,20 +84,23 @@ public final class AssetSceneViewModel: Sendable {
     public var title: String { assetModel.name }
 
     var balancesTitle: String { Localized.Asset.balances }
-    var networkTitle: String { Localized.Transfer.network }
-    var stakeTitle: String { Localized.Wallet.stake }
-    
+
+    var networkField: ListItemField {
+        ListItemField(title: Localized.Transfer.network, value: assetModel.networkFullName)
+    }
+
     var resourcesTitle: String { Localized.Asset.resources }
-    var energyTitle: String { ResourceViewModel(resource: .energy).title }
-    var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
-    var energyText: String { feeAssetDataModel.energyText }
-    var bandwidthText: String { feeAssetDataModel.bandwidthText }
+    var energyField: ListItemField {
+        ListItemField(title: ResourceViewModel(resource: .energy).title, value: feeAssetDataModel.energyText)
+    }
+    var bandwidthField: ListItemField {
+        ListItemField(title: ResourceViewModel(resource: .bandwidth).title, value: feeAssetDataModel.bandwidthText)
+    }
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
-    var showBalances: Bool { assetDataModel.showBalances }
-    private var showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
-    var showStakedBalance: Bool { assetDataModel.isStakeEnabled || assetData.balances.contains(where: { showStakedBalanceTypes.contains($0.key) && $0.value > 0 }) }
+    var showBalances: Bool { assetDataModel.showBalances || showProviderBalance(for: .earn) }
+
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
     var showPendingUnconfirmedBalance: Bool { assetDataModel.hasPendingUnconfirmedBalance }
     var showResources: Bool { assetDataModel.showResources }
@@ -129,10 +131,12 @@ public final class AssetSceneViewModel: Sendable {
     
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
 
-    var networkText: String { assetModel.networkFullName }
-    var stakeAprText: String {
-        guard let apr = assetDataModel.stakeApr else { return .empty }
-        return Localized.Stake.apr(CurrencyFormatter.percentSignLess.string(apr))
+    var showEarnButton: Bool {
+        #if DEBUG
+        assetData.metadata.isEarnEnabled && !wallet.isViewOnly && !showProviderBalance(for: .earn)
+        #else
+        false
+        #endif
     }
 
     var priceItemViewModel: PriceListItemViewModel {
@@ -211,6 +215,28 @@ public final class AssetSceneViewModel: Sendable {
                 .swap(assetData.asset, nil)
             }
         }
+    }
+
+    func showProviderBalance(for type: StakeProviderType) -> Bool {
+        switch type {
+        case .stake: assetDataModel.isStakeEnabled || assetData.balances.contains(where: { Self.showStakedBalanceTypes.contains($0.key) && $0.value > 0 })
+        #if DEBUG
+        case .earn: assetData.balance.earn > .zero
+        #else
+        case .earn: false
+        #endif
+        }
+    }
+
+    func balanceTitle(for type: StakeProviderType) -> String {
+        switch type {
+        case .stake: Localized.Wallet.stake
+        case .earn: Localized.Common.earn
+        }
+    }
+
+    func aprModel(for type: StakeProviderType) -> AprViewModel {
+        AprViewModel(apr: assetDataModel.apr(for: type) ?? .zero)
     }
 }
 
@@ -303,11 +329,18 @@ extension AssetSceneViewModel {
         onSelect(url: action.url)
     }
 
-    func onSelectBuy() {
+    func onSelectEarn() {
+        isPresentingSelectedAssetInput.wrappedValue = SelectedAssetInput(
+            type: .earn(assetData.asset),
+            assetAddress: assetData.assetAddress
+        )
+    }
+
+    private func onSelectBuy() {
         onSelectHeader(.buy)
     }
 
-    func onSelectSwap() {
+    private func onSelectSwap() {
         onSelectHeader(.swap)
     }
 
@@ -385,6 +418,8 @@ extension AssetSceneViewModel {
         return explorerService.tokenUrl(chain: assetModel.asset.chain, address: tokenId)
     }
 
+    private static let showStakedBalanceTypes: [Primitives.BalanceType] = [.staked, .pending, .rewards]
+
     private var addressLink: BlockExplorerLink {
         explorerService.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
     }
@@ -439,9 +474,9 @@ extension AssetSceneViewModel {
 
         Task {
             do {
-                try await priceObserverService.addAssets(assets: [assetModel.asset.id])
+                try await priceUpdater.addPrices(assetIds: [assetModel.asset.id])
             } catch {
-                debugLog("asset scene: priceObserverService.addAssets error \(error)")
+                debugLog("asset scene: addPrices error \(error)")
             }
         }
     }

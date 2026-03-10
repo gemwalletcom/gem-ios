@@ -102,8 +102,26 @@ public struct AssetScene: View {
                         subtitle: model.assetDataModel.availableBalanceTextWithSymbol
                     )
 
-                    if model.showStakedBalance {
-                        stakeView
+                    if model.showProviderBalance(for: .stake) {
+                        NavigationCustomLink(
+                            with: ListItemView(
+                                title: model.balanceTitle(for: .stake),
+                                subtitle: model.assetDataModel.balanceTextWithSymbol(for: .stake)
+                            ),
+                            action: { model.onSelectHeader(.stake) }
+                        )
+                        .accessibilityIdentifier("stake")
+                    }
+
+                    if model.showProviderBalance(for: .earn) {
+                        NavigationCustomLink(
+                            with: ListItemView(
+                                title: model.balanceTitle(for: .earn),
+                                subtitle: model.assetDataModel.balanceTextWithSymbol(for: .earn)
+                            ),
+                            action: { model.onSelectEarn() }
+                        )
+                        .accessibilityIdentifier("earn")
                     }
 
                     if model.showPendingUnconfirmedBalance {
@@ -128,17 +146,27 @@ public struct AssetScene: View {
                     .listRowInsets(.assetListRowInsets)
             }
 
+            if model.showEarnButton {
+                Section {
+                    NavigationCustomLink(
+                        with: HStack(spacing: Spacing.medium) {
+                            EmojiView(color: Colors.grayVeryLight, emoji: Emoji.WalletAvatar.moneyBag.rawValue)
+                                .frame(size: .image.asset)
+                            ListItemView(
+                                title: model.balanceTitle(for: .earn),
+                                subtitle: model.aprModel(for: .earn).text,
+                                subtitleStyle: model.aprModel(for: .earn).subtitle.style
+                            )
+                        },
+                        action: { model.onSelectEarn() }
+                    )
+                }
+            }
+
             if model.showResources {
                 Section(model.resourcesTitle) {
-                    ListItemView(
-                        title: model.energyTitle,
-                        subtitle: model.energyText
-                    )
-
-                    ListItemView(
-                        title: model.bandwidthTitle,
-                        subtitle: model.bandwidthText
-                    )
+                    ListItemView(field: model.energyField)
+                    ListItemView(field: model.bandwidthField)
                 }
             }
 
@@ -173,19 +201,11 @@ public struct AssetScene: View {
 extension AssetScene {
     private var networkView: some View {
         ListItemImageView(
-            title: model.networkTitle,
-            subtitle: model.networkText,
+            title: model.networkField.title.text,
+            subtitle: model.networkField.value.text,
             assetImage: model.networkAssetImage,
             imageSize: .list.image
         )
-    }
-
-    private var stakeView: some View {
-        NavigationCustomLink(
-            with: ListItemView(title: model.stakeTitle, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol),
-            action: { model.onSelectHeader(.stake) }
-        )
-        .accessibilityIdentifier("stake")
     }
     
     private var stakeViewEmpty: some View {
@@ -194,12 +214,13 @@ extension AssetScene {
                 EmojiView(color: Colors.grayVeryLight, emoji: "💰")
                     .frame(size: .image.asset)
                 ListItemView(
-                    title: model.stakeTitle,
-                    subtitle: model.stakeAprText,
-                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                    title: model.balanceTitle(for: .stake),
+                    subtitle: model.aprModel(for: .stake).text,
+                    subtitleStyle: model.aprModel(for: .stake).subtitle.style
                 )
             },
             action: { model.onSelectHeader(.stake) }
         )
     }
+
 }

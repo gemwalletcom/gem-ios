@@ -17,6 +17,7 @@ import Store
 import GemAPI
 import Keystore
 import PriceService
+import StreamService
 import Preferences
 import ExplorerService
 import BalanceService
@@ -40,8 +41,11 @@ import AuthService
 import DiscoverAssetsService
 import RewardsService
 import EventPresenterService
+import EarnService
+import Transfer
 import SwiftHTTPClient
 import ContactService
+import WebSocketClient
 
 
 struct ServicesFactory {
@@ -95,6 +99,10 @@ struct ServicesFactory {
             walletStore: storeManager.walletStore,
             avatarService: avatarService
         )
+        let earnService = EarnService(
+            store: storeManager.stakeStore,
+            gatewayService: gatewayService
+        )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
             assetsService: assetsService,
@@ -122,6 +130,7 @@ struct ServicesFactory {
             transactionStore: storeManager.transactionStore,
             nativeProvider: nativeProvider,
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainFactory: chainServiceFactory,
             balanceService: balanceService
@@ -147,17 +156,38 @@ struct ServicesFactory {
             priceStore: storeManager.priceStore,
             fiatRateStore: storeManager.fiatRateStore
         )
-        let priceObserverService = Self.makePriceObserverService(
+        let perpetualService = Self.makePerpetualService(
+            perpetualStore: storeManager.perpetualStore,
+            assetStore: storeManager.assetStore,
+            priceStore: storeManager.priceStore,
+            balanceStore: storeManager.balanceStore,
+            nodeProvider: nodeProvider,
+            preferences: preferences
+        )
+        let webSocket = Self.makeWebSocket(securePreferences: securePreferences)
+        let streamSubscriptionService = StreamSubscriptionService(
             priceService: priceService,
-            preferences: preferences,
-            securePreferences: securePreferences
+            webSocket: webSocket
         )
         let priceAlertService = Self.makePriceAlertService(
             apiService: apiService,
             priceAlertStore: storeManager.priceAlertStore,
             deviceService: deviceService,
-            priceObserverService: priceObserverService,
+            priceUpdater: streamSubscriptionService,
             preferences: preferences
+        )
+        let streamObserverService = Self.makeStreamObserverService(
+            walletStore: storeManager.walletStore,
+            notificationStore: storeManager.inAppNotificationStore,
+            priceService: priceService,
+            priceAlertService: priceAlertService,
+            balanceUpdater: balanceService,
+            transactionsService: transactionsService,
+            nftService: nftService,
+            perpetualService: perpetualService,
+            subscriptionService: streamSubscriptionService,
+            preferences: preferences,
+            webSocket: webSocket
         )
         let explorerService = ExplorerService.standard
         let swapService = SwapService(nodeProvider: nodeProvider)
@@ -177,7 +207,7 @@ struct ServicesFactory {
         let assetsEnabler = AssetsEnablerService(
             assetsService: assetsService,
             balanceUpdater: balanceService,
-            priceUpdater: priceObserverService
+            priceUpdater: streamSubscriptionService
         )
         let assetDiscoveryService = AssetDiscoveryService(
             deviceService: deviceService,
@@ -219,14 +249,6 @@ struct ServicesFactory {
             pushNotificationEnablerService: pushNotificationEnablerService
         )
 
-        let perpetualService = Self.makePerpetualService(
-            perpetualStore: storeManager.perpetualStore,
-            assetStore: storeManager.assetStore,
-            priceAstore: storeManager.priceStore,
-            balanceStore: storeManager.balanceStore,
-            nodeProvider: nodeProvider,
-            preferences: preferences
-        )
         let hyperliquidObserverService = HyperliquidObserverService(
             nodeProvider: PerpetualNodeService(nodeProvider: nodeProvider),
             perpetualService: perpetualService
@@ -262,7 +284,8 @@ struct ServicesFactory {
             preferences: preferences,
             connectionsService: connectionsService,
             deviceObserverService: deviceObserverService,
-            priceObserverService: priceObserverService,
+            streamObserverService: streamObserverService,
+            streamSubscriptionService: streamSubscriptionService,
             hyperliquidObserverService: hyperliquidObserverService
         )
 
@@ -272,9 +295,11 @@ struct ServicesFactory {
             scanService: scanService,
             swapService: swapService,
             assetsEnabler: assetsEnabler,
-            priceUpdater: priceObserverService,
+            priceUpdater: streamSubscriptionService,
             walletService: walletService,
             stakeService: stakeService,
+            earnService: earnService,
+            amountService: AmountService(earnDataProvider: earnService),
             nameService: nameService,
             balanceService: balanceService,
             priceService: priceService,
@@ -296,7 +321,8 @@ struct ServicesFactory {
             navigationHandler: navigationHandler,
             navigationPresenter: navigationPresenter,
             priceAlertService: priceAlertService,
-            priceObserverService: priceObserverService,
+            streamObserverService: streamObserverService,
+            streamSubscriptionService: streamSubscriptionService,
             priceService: priceService,
             stakeService: stakeService,
             transactionsService: transactionsService,
@@ -457,6 +483,7 @@ extension ServicesFactory {
         transactionStore: TransactionStore,
         nativeProvider: NativeProvider,
         stakeService: StakeService,
+        earnService: EarnService,
         nftService: NFTService,
         chainFactory: ChainServiceFactory,
         balanceService: BalanceService
@@ -465,6 +492,7 @@ extension ServicesFactory {
             transactionStore: transactionStore,
             swapper: GemSwapper(rpcProvider: nativeProvider),
             stakeService: stakeService,
+            earnService: earnService,
             nftService: nftService,
             chainServiceFactory: chainFactory,
             balanceUpdater: balanceService
@@ -485,14 +513,14 @@ extension ServicesFactory {
         apiService: GemAPIService,
         priceAlertStore: PriceAlertStore,
         deviceService: DeviceService,
-        priceObserverService: PriceObserverService,
+        priceUpdater: any PriceUpdater,
         preferences: Preferences
     ) -> PriceAlertService {
         PriceAlertService(
             store: priceAlertStore,
             apiService: apiService,
             deviceService: deviceService,
-            priceObserverService: priceObserverService,
+            priceUpdater: priceUpdater,
             preferences: preferences
         )
     }
@@ -591,7 +619,7 @@ extension ServicesFactory {
     private static func makePerpetualService(
         perpetualStore: PerpetualStore,
         assetStore: AssetStore,
-        priceAstore: PriceStore,
+        priceStore: PriceStore,
         balanceStore: BalanceStore,
         nodeProvider: any NodeURLFetchable,
         preferences: Preferences
@@ -599,22 +627,44 @@ extension ServicesFactory {
         PerpetualService(
             store: perpetualStore,
             assetStore: assetStore,
-            priceStore: priceAstore,
+            priceStore: priceStore,
             balanceStore: balanceStore,
             provider: PerpetualProviderFactory(nodeProvider: nodeProvider).createProvider(),
             preferences: preferences
         )
     }
 
-    private static func makePriceObserverService(
+    private static func makeWebSocket(securePreferences: SecurePreferences) -> any WebSocketConnectable {
+        let requestProvider = AuthenticatedRequestProvider(securePreferences: securePreferences)
+        let configuration = WebSocketConfiguration(requestProvider: requestProvider)
+        return WebSocketConnection(configuration: configuration)
+    }
+
+    private static func makeStreamObserverService(
+        walletStore: WalletStore,
+        notificationStore: InAppNotificationStore,
         priceService: PriceService,
+        priceAlertService: PriceAlertService,
+        balanceUpdater: any BalanceUpdater,
+        transactionsService: TransactionsService,
+        nftService: NFTService,
+        perpetualService: any HyperliquidPerpetualServiceable,
+        subscriptionService: StreamSubscriptionService,
         preferences: Preferences,
-        securePreferences: SecurePreferences
-    ) -> PriceObserverService {
-        PriceObserverService(
+        webSocket: any WebSocketConnectable
+    ) -> StreamObserverService {
+        StreamObserverService(
+            walletStore: walletStore,
+            notificationStore: notificationStore,
             priceService: priceService,
+            priceAlertService: priceAlertService,
+            balanceUpdater: balanceUpdater,
+            transactionsService: transactionsService,
+            nftService: nftService,
+            perpetualService: perpetualService,
+            subscriptionService: subscriptionService,
             preferences: preferences,
-            securePreferences: securePreferences
+            webSocket: webSocket
         )
     }
 }
