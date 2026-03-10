@@ -42,9 +42,9 @@ public struct GridPosterView: View {
                         .multilineTextAlignment(.leading)
 
                     if isVerified {
-                        Images.TokenStatus.verified
-                            .resizable()
-                            .frame(size: Sizing.image.overlayImage.chain)
+                        Images.System.checkmarkSealFill
+                            .font(.callout)
+                            .foregroundStyle(Colors.blue)
                     }
                 }
             }
