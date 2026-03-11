@@ -32,19 +32,8 @@ extension BalanceService {
         try balanceStore.setIsEnabled(walletId: walletId, assetIds: [assetId], value: false)
     }
 
-    public func pinAsset(walletId: WalletId, assetId: AssetId) throws {
-        try balanceStore.pinAsset(walletId: walletId, assetId: assetId, value: true)
-    }
-
-    public func unpinAsset(walletId: WalletId, assetId: AssetId) throws {
-        try balanceStore.pinAsset(walletId: walletId, assetId: assetId, value: false)
-    }
-
     public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
-        switch isPinned {
-        case true: try pinAsset(walletId: walletId, assetId: assetId)
-        case false: try unpinAsset(walletId: walletId, assetId: assetId)
-        }
+        try balanceStore.pinAsset(walletId: walletId, assetId: assetId, value: isPinned)
     }
 }
 
