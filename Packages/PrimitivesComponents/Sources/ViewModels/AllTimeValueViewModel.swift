@@ -24,7 +24,7 @@ public struct AllTimeValueViewModel: Sendable {
         model(title: Localized.Asset.allTimeLow, chartValue: chartValue)
     }
 
-    private func model(title: String, chartValue: ChartValuePercentage) -> ListItemModel {
+    public func model(title: String, chartValue: ChartValuePercentage) -> ListItemModel {
         let percentage = Double(chartValue.percentage)
         return ListItemModel(
             title: title,
