@@ -18,7 +18,7 @@ import Formatters
 public final class StakeSceneViewModel {
     private let stakeService: any StakeServiceable
 
-    private var delegatitonsState: StateViewType<Bool> = .loading
+    private var delegationsLoadState: StateViewType<Bool> = .loading
     private let chain: StakeChain
 
     private let formatter = ValueFormatter(style: .medium)
@@ -100,10 +100,6 @@ public final class StakeSceneViewModel {
         return ListItemField(title: Localized.Stake.minimumAmount, value: value)
     }
 
-    var delegationsErrorTitle: String { Localized.Errors.errorOccured }
-    var delegationsRetryTitle: String { Localized.Common.tryAgain }
-    var emptyDelegationsTitle: String { Localized.Stake.noActiveStaking }
-
     var showManage: Bool {
         wallet.canSign
     }
@@ -143,7 +139,7 @@ public final class StakeSceneViewModel {
     var delegationsState: StateViewType<[DelegationViewModel]> {
         let delegationModels = delegations.map { DelegationViewModel(delegation: $0, asset: asset, currencyCode: currencyCode) }
 
-        switch delegatitonsState {
+        switch delegationsLoadState {
         case .noData: return .noData
         case .loading: return delegationModels.isEmpty ? .loading : .data(delegationModels)
         case .data: return delegationModels.isEmpty ? .noData : .data(delegationModels)
@@ -224,14 +220,14 @@ public final class StakeSceneViewModel {
 
 extension StakeSceneViewModel {
     func fetch() async {
-        delegatitonsState = .loading
+        delegationsLoadState = .loading
         do {
             let acccount = try wallet.account(for: chain.chain)
             try await stakeService.update(walletId: wallet.walletId, chain: chain.chain, address: acccount.address)
-            delegatitonsState = .data(true)
+            delegationsLoadState = .data(true)
         } catch {
             debugLog("Stake scene fetch error: \(error)")
-            delegatitonsState = .error(error)
+            delegationsLoadState = .error(error)
         }
     }
     
