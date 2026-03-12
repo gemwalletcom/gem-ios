@@ -6,24 +6,15 @@ import Components
 public struct GridPosterViewItem: Identifiable, Sendable {
     public let id: String
     public let destination: any Hashable & Sendable
-    public let assetImage: AssetImage
-    public let title: String
-    public let count: Int?
-    public let isVerified: Bool
+    public let model: GridPosterViewModel
 
     public init(
         id: String,
         destination: any Hashable & Sendable,
-        assetImage: AssetImage,
-        title: String,
-        count: Int? = nil,
-        isVerified: Bool = false
+        model: GridPosterViewModel
     ) {
         self.id = id
         self.destination = destination
-        self.assetImage = assetImage
-        self.title = title
-        self.count = count
-        self.isVerified = isVerified
+        self.model = model
     }
 }
