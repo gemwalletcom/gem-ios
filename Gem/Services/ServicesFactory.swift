@@ -157,6 +157,7 @@ struct ServicesFactory {
             priceStore: storeManager.priceStore,
             fiatRateStore: storeManager.fiatRateStore
         )
+        let portfolioService = PortfolioService(apiService: apiService)
         let perpetualService = Self.makePerpetualService(
             perpetualStore: storeManager.perpetualStore,
             assetStore: storeManager.assetStore,
@@ -205,7 +206,8 @@ struct ServicesFactory {
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
             walletSessionService: walletSessionService,
-            interactor: walletConnectorManager
+            interactor: walletConnectorManager,
+            nodeProvider: nodeProvider
         )
 
         let assetsEnabler = AssetsEnablerService(
@@ -261,7 +263,7 @@ struct ServicesFactory {
 
         let nameService = NameService(provider: apiService)
         let scanService = ScanService(gatewayService: gatewayService)
-        let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
+        let addressNameService = AddressNameService(addressStore: storeManager.addressStore, apiService: apiService)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
         let authService = AuthService(apiService: apiService, keystore: storages.keystore)
         let rewardsService = RewardsService(apiService: apiService, authService: authService)
@@ -312,7 +314,8 @@ struct ServicesFactory {
             addressNameService: addressNameService,
             activityService: activityService,
             eventPresenterService: eventPresenterService,
-            fiatService: apiService
+            fiatService: apiService,
+            assetsService: assetsService
         )
 
         return AppResolver.Services(
@@ -363,6 +366,7 @@ struct ServicesFactory {
             assetSearchService: assetSearchService,
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
+            portfolioService: portfolioService,
             fiatService: apiService,
             contactService: contactService
         )
@@ -533,7 +537,8 @@ extension ServicesFactory {
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
         walletSessionService: WalletSessionService,
-        interactor: any WalletConnectorInteractable
+        interactor: any WalletConnectorInteractable,
+        nodeProvider: any NodeURLFetchable
     ) -> ConnectionsService {
         ConnectionsService(
             store: connectionsStore,
@@ -541,7 +546,8 @@ extension ServicesFactory {
                 connectionsStore: connectionsStore,
                 walletSessionService: walletSessionService,
                 walletConnectorInteractor: interactor
-            )
+            ),
+            nodeProvider: nodeProvider
         )
     }
 

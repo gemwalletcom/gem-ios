@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Testing
 import Primitives
 import Foundation
@@ -91,7 +93,7 @@ struct WalletConnectorSignerTests {
 
     @Test
     func validateChainPresent() async throws {
-        let db = DB.mock()
+        let db = DB.mockWithChains([.ethereum])
         let walletStore = WalletStore(db: db)
         let connectionsStore = ConnectionsStore(db: db)
 
@@ -111,13 +113,13 @@ struct WalletConnectorSignerTests {
 
         let message = SignMessage(chain: "ethereum", signType: .eip191, data: Data())
         await #expect(throws: WalletConnectorServiceError.unresolvedChainId(Chain.polygon.rawValue)) {
-            try await signer.signMessage(sessionId: sessionId, chain: .polygon, message: message)
+            try await signer.signMessage(sessionId: sessionId, chain: .polygon, message: message, simulation: .mock())
         }
     }
 
     @Test
     func validateChainEmptyChains() async throws {
-        let db = DB.mock()
+        let db = DB.mockWithChains([.ethereum])
         let walletStore = WalletStore(db: db)
         let connectionsStore = ConnectionsStore(db: db)
 
@@ -137,13 +139,13 @@ struct WalletConnectorSignerTests {
 
         let message = SignMessage(chain: "ethereum", signType: .eip191, data: Data())
         await #expect(throws: WalletConnectorServiceError.unresolvedChainId(Chain.ethereum.rawValue)) {
-            try await signer.signMessage(sessionId: sessionId, chain: .ethereum, message: message)
+            try await signer.signMessage(sessionId: sessionId, chain: .ethereum, message: message, simulation: .mock())
         }
     }
 
     @Test
     func sessionBindsToConnectedWallet() throws {
-        let db = DB.mock()
+        let db = DB.mockWithChains([.ethereum])
         let walletStore = WalletStore(db: db)
         let connectionsStore = ConnectionsStore(db: db)
 
@@ -194,7 +196,8 @@ extension WalletConnectorSigner {
     }
     
     static func mock(wallets: [Wallet]) throws -> WalletConnectorSigner {
-        let db = DB.mock()
+        let chains = wallets.flatMap { $0.accounts.map(\.chain) }.asSet()
+        let db = DB.mockWithChains(chains.asArray())
         let walletStore = WalletStore(db: db)
         for wallet in wallets {
             try walletStore.addWallet(wallet)
