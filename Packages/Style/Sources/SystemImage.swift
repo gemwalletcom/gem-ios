@@ -55,6 +55,7 @@ public struct SystemImage {
     public static let person = "person"
     public static let personBadgePlus = "person.crop.circle.badge.plus"
     public static let chartLineUptrendXyaxis = "chart.line.uptrend.xyaxis"
+    public static let checkmarkSealFill = "checkmark.seal.fill"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
