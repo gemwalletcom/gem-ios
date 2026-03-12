@@ -177,7 +177,7 @@ struct ServicesFactory {
             priceUpdater: streamSubscriptionService,
             preferences: preferences
         )
-        let streamObserverService = Self.makeStreamObserverService(
+        let streamEventService = StreamEventService(
             walletStore: storeManager.walletStore,
             notificationStore: storeManager.inAppNotificationStore,
             priceService: priceService,
@@ -186,8 +186,11 @@ struct ServicesFactory {
             transactionsService: transactionsService,
             nftService: nftService,
             perpetualService: perpetualService,
+            preferences: preferences
+        )
+        let streamObserverService = StreamObserverService(
             subscriptionService: streamSubscriptionService,
-            preferences: preferences,
+            eventService: streamEventService,
             webSocket: webSocket
         )
         let explorerService = ExplorerService.standard
@@ -227,6 +230,7 @@ struct ServicesFactory {
         let rateService = RateService(preferences: preferences)
 
         let onStartService = Self.makeOnstartService(
+            assetListService: apiService,
             assetStore: storeManager.assetStore,
             nodeStore: storeManager.nodeStore,
             preferences: preferences,
@@ -255,7 +259,7 @@ struct ServicesFactory {
             perpetualService: perpetualService
         )
 
-        let nameService = NameService()
+        let nameService = NameService(provider: apiService)
         let scanService = ScanService(gatewayService: gatewayService)
         let addressNameService = AddressNameService(addressStore: storeManager.addressStore)
         let activityService = ActivityService(store: storeManager.recentActivityStore)
@@ -542,6 +546,7 @@ extension ServicesFactory {
     }
 
     private static func makeOnstartService(
+        assetListService: any GemAPIAssetsListService,
         assetStore: AssetStore,
         nodeStore: NodeStore,
         preferences: Preferences,
@@ -549,6 +554,7 @@ extension ServicesFactory {
         walletService: WalletService
     ) -> OnstartService {
         OnstartService(
+            assetListService: assetListService,
             assetsService: assetsService,
             assetStore: assetStore,
             nodeStore: nodeStore,
@@ -641,31 +647,4 @@ extension ServicesFactory {
         return WebSocketConnection(configuration: configuration)
     }
 
-    private static func makeStreamObserverService(
-        walletStore: WalletStore,
-        notificationStore: InAppNotificationStore,
-        priceService: PriceService,
-        priceAlertService: PriceAlertService,
-        balanceUpdater: any BalanceUpdater,
-        transactionsService: TransactionsService,
-        nftService: NFTService,
-        perpetualService: any HyperliquidPerpetualServiceable,
-        subscriptionService: StreamSubscriptionService,
-        preferences: Preferences,
-        webSocket: any WebSocketConnectable
-    ) -> StreamObserverService {
-        StreamObserverService(
-            walletStore: walletStore,
-            notificationStore: notificationStore,
-            priceService: priceService,
-            priceAlertService: priceAlertService,
-            balanceUpdater: balanceUpdater,
-            transactionsService: transactionsService,
-            nftService: nftService,
-            perpetualService: perpetualService,
-            subscriptionService: subscriptionService,
-            preferences: preferences,
-            webSocket: webSocket
-        )
-    }
 }
