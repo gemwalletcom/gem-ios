@@ -20,8 +20,9 @@ extension TransactionParticipantViewModel: ItemModelProvidable {
     var itemModel: TransactionItemModel {
         switch transactionViewModel.transaction.transaction.type {
         case .stakeFreeze, .stakeUnfreeze: resourceItemModel
+        case .earnDeposit, .earnWithdraw: earnProviderItemModel
         case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate: participantItemModel
-        case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition, .earnDeposit, .earnWithdraw: .empty
+        case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: .empty
         }
     }
 }
@@ -56,6 +57,16 @@ extension TransactionParticipantViewModel {
         )
     }
 
+    private var earnProviderItemModel: TransactionItemModel {
+        let address = transactionViewModel.participant
+        let addressName = transactionViewModel.getAddressName(address: address)
+        let name = (addressName?.name ?? address).capitalized
+        return .listItem(ListItemModel(
+            title: Localized.Common.provider,
+            subtitle: name
+        ))
+    }
+
     private var resourceItemModel: TransactionItemModel {
         guard let resourceType = transactionViewModel.transaction.transaction.metadata?.decode(TransactionResourceTypeMetadata.self)?.resourceType else {
             return .empty
@@ -82,8 +93,10 @@ extension TransactionParticipantViewModel {
             Localized.Stake.validator
         case .stakeFreeze, .stakeUnfreeze:
             Localized.Stake.resource
+        case .earnDeposit, .earnWithdraw:
+            Localized.Common.provider
         case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw,
-                .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition, .earnDeposit, .earnWithdraw: nil
+                .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: nil
         }
     }
 }
