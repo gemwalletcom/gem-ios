@@ -31,7 +31,7 @@ public final class TransactionSceneViewModel {
         self.query = ObservableQuery(TransactionRequest(walletId: walletId, transactionId: transaction.id), initialValue: transaction)
     }
 
-    var title: String { model.titleTextValue.text }
+    var title: String { model.title.text }
     var explorerURL: URL { explorerViewModel.url }
 }
 

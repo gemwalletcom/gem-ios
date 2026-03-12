@@ -9,7 +9,7 @@ import Primitives
 import Style
 import SwiftUI
 
-public struct TransactionViewModel: Sendable {
+public struct TransactionViewModel: Sendable, ListItemViewDisplayable {
     public let transaction: TransactionExtended
 
     private let explorerService: any ExplorerLinkFetchable
@@ -43,6 +43,10 @@ public struct TransactionViewModel: Sendable {
             placeholder: asset.placeholder,
             chainPlaceholder: overlayImage
         )
+    }
+
+    public var imageStyle: ListItemImageStyle? {
+        .asset(assetImage: assetImage)
     }
 
     public var overlayImage: Image? {
@@ -89,7 +93,7 @@ public struct TransactionViewModel: Sendable {
         )
     }
 
-    public var titleTextValue: TextValue {
+    public var title: TextValue {
         let title: String = {
             switch transaction.transaction.type {
             case .transfer, .transferNFT, .smartContractCall:
@@ -156,7 +160,7 @@ public struct TransactionViewModel: Sendable {
         }
     }
 
-    public var titleTagTextValue: TextValue? {
+    public var titleTag: TextValue? {
         let title: String? = switch transaction.transaction.state {
         case .confirmed: .none
         case .pending, .inTransit, .failed, .reverted: TransactionStateViewModel(state: transaction.transaction.state).title
@@ -174,7 +178,7 @@ public struct TransactionViewModel: Sendable {
         }
     }
 
-    public var titleExtraTextValue: TextValue? {
+    public var titleExtra: TextValue? {
         let title: String? = {
             let chain = assetId.chain
             switch transaction.transaction.type {
@@ -237,7 +241,7 @@ public struct TransactionViewModel: Sendable {
         }
     }
 
-    public var subtitleTextValue: TextValue? {
+    public var subtitle: TextValue? {
         switch transaction.transaction.type {
         case .transfer,
             .smartContractCall,
@@ -283,7 +287,7 @@ public struct TransactionViewModel: Sendable {
         }
     }
 
-    public var subtitleExtraTextValue: TextValue? {
+    public var subtitleExtra: TextValue? {
         switch transaction.transaction.type {
         case .transfer,
                 .transferNFT,

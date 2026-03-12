@@ -1,9 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
 import Components
 import Primitives
-import Style
+import SwiftUI
 
 public struct TransactionView: View {
     @State private var isPresentingUrl: URL? = nil
@@ -14,15 +13,7 @@ public struct TransactionView: View {
     }
 
     public var body: some View {
-        ListItemView(
-            title: model.titleTextValue,
-            titleExtra: model.titleExtraTextValue,
-            titleTag: model.titleTagTextValue,
-            titleTagType: model.titleTagType,
-            subtitle: model.subtitleTextValue,
-            subtitleExtra: model.subtitleExtraTextValue,
-            imageStyle: .asset(assetImage: model.assetImage)
-        )
+        ListItemView(model)
         .contextMenu(
             .url(title: model.viewOnTransactionExplorerText, onOpen: { isPresentingUrl = model.transactionExplorerUrl })
         )

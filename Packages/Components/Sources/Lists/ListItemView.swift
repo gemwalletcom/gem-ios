@@ -48,6 +48,18 @@ public struct ListItemView: View {
         self.init(title: field.title, subtitle: field.value, infoAction: infoAction)
     }
 
+    public init(_ displayable: some ListItemViewDisplayable) {
+        self.init(
+            title: displayable.title,
+            titleExtra: displayable.titleExtra,
+            titleTag: displayable.titleTag,
+            titleTagType: displayable.titleTagType,
+            subtitle: displayable.subtitle,
+            subtitleExtra: displayable.subtitleExtra,
+            imageStyle: displayable.imageStyle
+        )
+    }
+
     public init(
         title: TextValue? = nil,
         titleExtra: TextValue? = nil,
