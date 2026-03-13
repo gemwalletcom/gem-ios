@@ -17,19 +17,26 @@ final class UpgradeVerificationTests: XCTestCase {
 
         XCTAssertFalse(app.isOnboarding, "App should not show onboarding after upgrade — wallet data was lost")
 
-        // WalletScene
-        let receiveButton = app.buttons["receive_button"].firstMatch
-        XCTAssertTrue(receiveButton.waitForExistence(timeout: 10), "receive_button not found")
-        receiveButton.tap()
+        // Navigate to wallet detail
+        app.buttons["Wallet"].firstMatch.tap()
+        app.tapWalletBar()
 
-        // SelectAssetScene
-        let bitcoinButton = app.buttons["Bitcoin, BTC"].firstMatch
-        XCTAssertTrue(bitcoinButton.waitForExistence(timeout: 10), "Bitcoin asset not found after upgrade")
-        bitcoinButton.tap()
+        // WalletsScene
+        let gearButton = app.buttons["gearshape"].firstMatch
+        XCTAssertTrue(gearButton.waitForExistence(timeout: 10), "No wallets found after upgrade")
+        gearButton.tap()
 
-        // ReceiveScene
-        let copyButton = app.buttons["Copy"].firstMatch
-        XCTAssertTrue(copyButton.waitForExistence(timeout: 10), "Copy button not found")
-        copyButton.tap()
+        // WalletDetailScene
+        let showPhraseButton = app.buttons["Show Secret Phrase"].firstMatch
+        XCTAssertTrue(showPhraseButton.waitForExistence(timeout: 10), "Show Secret Phrase not found")
+        showPhraseButton.tap()
+
+        // SecurityReminderScene
+        app.tapContinue()
+
+        // ShowSecretDataScene
+        let expectedWords = UITestKitConstants.words.components(separatedBy: " ")
+        let displayedWords = app.getWords()
+        XCTAssertEqual(displayedWords, expectedWords, "Secret phrase mismatch after upgrade — keys were corrupted")
     }
 }
