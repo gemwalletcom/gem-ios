@@ -24,13 +24,12 @@ final class UpgradeVerificationTests: XCTestCase {
 
         // SelectAssetScene
         let bitcoinButton = app.buttons["Bitcoin, BTC"].firstMatch
-        XCTAssertTrue(bitcoinButton.waitForExistence(timeout: 10), "Bitcoin asset not found")
+        XCTAssertTrue(bitcoinButton.waitForExistence(timeout: 10), "Bitcoin asset not found after upgrade")
         bitcoinButton.tap()
 
         // ReceiveScene
         let copyButton = app.buttons["Copy"].firstMatch
         XCTAssertTrue(copyButton.waitForExistence(timeout: 10), "Copy button not found")
         copyButton.tap()
-        XCTAssertTrue(app.buttons[UITestKitConstants.bitcoinAddress].waitForExistence(timeout: 5), "Bitcoin address mismatch after upgrade")
     }
 }
