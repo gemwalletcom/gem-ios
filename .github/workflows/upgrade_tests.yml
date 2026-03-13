@@ -1,6 +1,9 @@
 name: Upgrade Tests
 
 on:
+  # TODO: Remove pull_request trigger before merging — added only to test the workflow on this branch
+  pull_request:
+    branches: ["main"]
   workflow_dispatch:
     inputs:
       old_version:
