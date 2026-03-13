@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       old_version:
-        description: "Old version tag to upgrade from"
+        description: "Old version tag to upgrade from (must be >= 1.3.328)"
         required: true
-        default: "1.3.327"
+        default: "1.3.335"
 
 concurrency:
   group: upgrade-tests-${{ github.ref }}
@@ -17,11 +17,11 @@ concurrency:
 
 jobs:
   upgrade_test:
-    name: Upgrade from ${{ github.event.inputs.old_version || '1.3.327' }}
+    name: Upgrade from ${{ github.event.inputs.old_version || '1.3.335' }}
     runs-on: [self-hosted, macOS]
 
     env:
-      OLD_VERSION: ${{ github.event.inputs.old_version || '1.3.327' }}
+      OLD_VERSION: ${{ github.event.inputs.old_version || '1.3.335' }}
 
     steps:
       - name: Setup simulator for runner
@@ -31,7 +31,7 @@ jobs:
           xcrun simctl list devices -j | jq -r ".devices[][] | select(.name == \"$SIMULATOR_NAME\") | .udid" | xargs -I {} xcrun simctl delete {} 2>/dev/null || true
           xcrun simctl create "$SIMULATOR_NAME" "iPhone 17"
 
-      # Phase 1: Install old version and create wallet
+      # Phase 1: Build and run old version to create wallet
       - name: Checkout old version
         uses: actions/checkout@v4
         with:
@@ -45,18 +45,39 @@ jobs:
         run: just generate-stone
 
       - name: Resolve SPM Dependencies (old)
-        run: just spm-resolve
+        run: xcodebuild -resolvePackageDependencies -project Gem.xcodeproj -scheme Gem -derivedDataPath build/DerivedData -clonedSourcePackagesDirPath build/SourcePackages
 
-      - name: Build for Testing (old)
-        run: just build-for-testing-ui
+      - name: Build for Testing UI (old)
+        run: |
+          set -o pipefail && xcodebuild -project Gem.xcodeproj \
+            -scheme GemUITests \
+            -testPlan ui_tests \
+            ONLY_ACTIVE_ARCH=YES \
+            -destination "platform=iOS Simulator,name=$SIMULATOR_NAME" \
+            -derivedDataPath build/DerivedData \
+            -clonedSourcePackagesDirPath build/SourcePackages \
+            -allowProvisioningUpdates \
+            -allowProvisioningDeviceRegistration \
+            build-for-testing | xcbeautify --quieter --is-ci
 
       - name: Reset simulator
         run: just reset-simulator
 
-      - name: Create wallet on old version
-        run: just test-upgrade-setup
+      - name: "Phase 1: Create wallet on old version"
+        run: |
+          set -o pipefail && xcodebuild -project Gem.xcodeproj \
+            -scheme GemUITests \
+            -testPlan ui_tests \
+            ONLY_ACTIVE_ARCH=YES \
+            -destination "platform=iOS Simulator,name=$SIMULATOR_NAME" \
+            -derivedDataPath build/DerivedData \
+            -clonedSourcePackagesDirPath build/SourcePackages \
+            -allowProvisioningUpdates \
+            -allowProvisioningDeviceRegistration \
+            -only-testing GemUITests/ImportWalletReceiveBitcoinUITests \
+            test-without-building | xcbeautify --quieter --is-ci
 
-      # Phase 2: Upgrade to current version and verify
+      # Phase 2: Build and run current version to verify wallet survived
       - name: Checkout current branch
         uses: actions/checkout@v4
         with:
@@ -76,5 +97,5 @@ jobs:
       - name: Build for Testing (current)
         run: just build-for-testing-ui
 
-      - name: Verify wallet survived upgrade
+      - name: "Phase 2: Verify wallet survived upgrade"
         run: just test-upgrade-verify
