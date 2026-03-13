@@ -18,13 +18,19 @@ final class UpgradeVerificationTests: XCTestCase {
         XCTAssertFalse(app.isOnboarding, "App should not show onboarding after upgrade — wallet data was lost")
 
         // WalletScene
-        app.buttons["receive_button"].firstMatch.tap()
+        let receiveButton = app.buttons["receive_button"].firstMatch
+        XCTAssertTrue(receiveButton.waitForExistence(timeout: 10), "receive_button not found")
+        receiveButton.tap()
 
         // SelectAssetScene
-        app.buttons["Bitcoin, BTC"].firstMatch.tap()
+        let bitcoinButton = app.buttons["Bitcoin, BTC"].firstMatch
+        XCTAssertTrue(bitcoinButton.waitForExistence(timeout: 10), "Bitcoin asset not found")
+        bitcoinButton.tap()
 
         // ReceiveScene
-        app.buttons["Copy"].firstMatch.tap()
-        XCTAssertTrue(app.buttons[UITestKitConstants.bitcoinAddress].exists, "Bitcoin address mismatch after upgrade")
+        let copyButton = app.buttons["Copy"].firstMatch
+        XCTAssertTrue(copyButton.waitForExistence(timeout: 10), "Copy button not found")
+        copyButton.tap()
+        XCTAssertTrue(app.buttons[UITestKitConstants.bitcoinAddress].waitForExistence(timeout: 5), "Bitcoin address mismatch after upgrade")
     }
 }
