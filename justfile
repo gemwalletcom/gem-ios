@@ -120,7 +120,7 @@ test-without-building: (_test "test-without-building")
 # Example: just test PrimitivesTests
 test TARGET: (_test "test" TARGET)
 
-_test-ui action:
+_test-ui action target="":
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -testPlan ui_tests \
@@ -130,6 +130,7 @@ _test-ui action:
     -clonedSourcePackagesDirPath {{SPM_CACHE}} \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
+    {{ if target != "" { "-only-testing " + target } else { "" } }} \
     {{action}} | xcbeautify {{XCBEAUTIFY_ARGS}}
 
 test-ui: reset-simulator (_test-ui "test")
@@ -137,6 +138,12 @@ test-ui: reset-simulator (_test-ui "test")
 build-for-testing-ui: (_test-ui "build-for-testing")
 
 test-ui-without-building: reset-simulator (_test-ui "test-without-building")
+
+# Run ImportWalletReceiveBitcoinUITests without building (phase 1 of upgrade test)
+test-upgrade-setup: (_test-ui "test-without-building" "GemUITests/ImportWalletReceiveBitcoinUITests")
+
+# Run UpgradeVerificationTests without building and without resetting the simulator (phase 2 of upgrade test)
+test-upgrade-verify: (_test-ui "test-without-building" "GemUITests/UpgradeVerificationTests")
 
 reset-simulator NAME=SIMULATOR_NAME:
     @echo "==> Resetting {{NAME}} simulator to clean state"

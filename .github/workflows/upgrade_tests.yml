@@ -1,0 +1,77 @@
+name: Upgrade Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      old_version:
+        description: "Old version tag to upgrade from"
+        required: true
+        default: "1.3.327"
+
+concurrency:
+  group: upgrade-tests-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  upgrade_test:
+    name: Upgrade from ${{ github.event.inputs.old_version || '1.3.327' }}
+    runs-on: [self-hosted, macOS]
+
+    env:
+      OLD_VERSION: ${{ github.event.inputs.old_version || '1.3.327' }}
+
+    steps:
+      - name: Setup simulator for runner
+        run: |
+          SIMULATOR_NAME="${{ runner.name }}-iPhone"
+          echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
+          xcrun simctl list devices -j | jq -r ".devices[][] | select(.name == \"$SIMULATOR_NAME\") | .udid" | xargs -I {} xcrun simctl delete {} 2>/dev/null || true
+          xcrun simctl create "$SIMULATOR_NAME" "iPhone 17"
+
+      # Phase 1: Install old version and create wallet
+      - name: Checkout old version
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.OLD_VERSION }}
+          submodules: true
+
+      - name: Install dependencies (old)
+        run: just install-toolchains
+
+      - name: Build Core (old)
+        run: just generate-stone
+
+      - name: Resolve SPM Dependencies (old)
+        run: just spm-resolve
+
+      - name: Build for Testing (old)
+        run: just build-for-testing-ui
+
+      - name: Reset simulator
+        run: just reset-simulator
+
+      - name: Create wallet on old version
+        run: just test-upgrade-setup
+
+      # Phase 2: Upgrade to current version and verify
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          submodules: true
+          clean: false
+
+      - name: Install dependencies (current)
+        run: just install-toolchains
+
+      - name: Build Core (current)
+        run: just generate-stone
+
+      - name: Resolve SPM Dependencies (current)
+        run: just spm-resolve
+
+      - name: Build for Testing (current)
+        run: just build-for-testing-ui
+
+      - name: Verify wallet survived upgrade
+        run: just test-upgrade-verify
