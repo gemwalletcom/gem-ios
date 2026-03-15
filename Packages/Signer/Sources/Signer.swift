@@ -43,7 +43,8 @@ public struct Signer: Sendable {
                         privateKey: privateKey
                     )
             }
-            return try signer.signSwap(input: input, privateKey: privateKey)
+            let chainSwapSigner: Signable = chain.type == .cosmos ? ChainSigner(chain: chain) : signer
+            return try chainSwapSigner.signSwap(input: input, privateKey: privateKey)
         case .generic:
             return try [signer.signData(input: input, privateKey: privateKey)]
         case .stake:

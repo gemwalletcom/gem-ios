@@ -3,22 +3,6 @@
 import Foundation
 import WalletCore
 import Primitives
-import Keystore
-
-struct CosmosExecuteContractValue: Decodable {
-    let contract: String
-    let msg: String
-    let funds: [CosmosCoinData]
-}
-
-struct CosmosCoinData: Decodable {
-    let denom: String
-    let amount: String
-}
-
-struct CosmosExecuteContractData: Decodable {
-    let value: CosmosExecuteContractValue
-}
 
 // https://github.com/trustwallet/wallet-core/blob/master/swift/Tests/Blockchains/THORChainTests.swift#L27
 struct CosmosSigner: Signable {
@@ -78,26 +62,6 @@ struct CosmosSigner: Signable {
         return output.serialized
     }
     
-    func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
-        let swapData = try input.type.swap().data.data
-        let cosmosData = try JSONDecoder().decode(CosmosExecuteContractData.self, from: Data(swapData.data.utf8))
-        let message = CosmosMessage.with {
-            $0.wasmExecuteContractGeneric = .with {
-                $0.senderAddress = input.senderAddress
-                $0.contractAddress = cosmosData.value.contract
-                $0.executeMsg = cosmosData.value.msg
-                $0.coins = cosmosData.value.funds.map { fund in
-                    CosmosAmount.with {
-                        $0.denom = fund.denom
-                        $0.amount = fund.amount
-                    }
-                }
-            }
-        }
-        return [try sign(input: input, messages: [message], chain: chain, memo: input.memo, privateKey: privateKey)]
-    }
-
     func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
