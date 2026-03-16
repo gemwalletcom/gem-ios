@@ -62,6 +62,10 @@ struct CosmosSigner: Signable {
         return output.serialized
     }
     
+    func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        try ChainSigner(chain: input.asset.chain).signSwap(input: input, privateKey: privateKey)
+    }
+
     func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
