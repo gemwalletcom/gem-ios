@@ -1,0 +1,13 @@
+[package]
+name = "verify-build"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+zip = { version = "8.2", default-features = false, features = ["deflate"] }
+plist = "1.7"
+goblin = "0.9"
+walkdir = "2.5"
+tempfile = "3.15"
+anyhow = "1.0"

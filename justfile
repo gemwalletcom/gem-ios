@@ -167,4 +167,27 @@ generate-stone:
 bump TYPE="":
     @sh ./scripts/bump.sh {{TYPE}}
 
+# Reproducible builds
+
+verify-environment:
+    @bash build-system/scripts/verify-environment.sh
+
+reproducible-build OUTPUT="build/reproducible/Gem.ipa":
+    @bash build-system/scripts/reproducible-build.sh {{OUTPUT}}
+
+build-verify-tool:
+    @cargo build --release --manifest-path tools/verify-build/Cargo.toml
+
+compare-builds IPA1 IPA2: build-verify-tool
+    @tools/verify-build/target/release/verify-build compare {{IPA1}} {{IPA2}}
+
+verify-build IPA:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "==> Building reproducible IPA for comparison..."
+    just reproducible-build build/reproducible/Gem-verify.ipa
+    echo ""
+    echo "==> Comparing with provided IPA..."
+    just compare-builds {{IPA}} build/reproducible/Gem-verify.ipa
+
 mod core

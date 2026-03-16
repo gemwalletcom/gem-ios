@@ -1,0 +1,9 @@
+{
+  "xcode": "26.2",
+  "xcode_build": "17C52",
+  "macos": "26",
+  "rust": "1.92.0",
+  "typeshare_cli": "1.13.3",
+  "swiftgen": "6.6.3",
+  "swiftformat": "0.55.6"
+}

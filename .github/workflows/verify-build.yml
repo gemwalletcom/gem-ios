@@ -1,0 +1,116 @@
+name: Verify Reproducible Build
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+    inputs:
+      appstore_ipa:
+        description: 'Path or URL to App Store IPA for comparison (optional)'
+        required: false
+        type: string
+
+concurrency:
+  group: verify-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-environment:
+    name: Verify Environment
+    runs-on: [self-hosted, macOS]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Verify tool versions
+        run: just verify-environment
+
+  build-1:
+    name: Reproducible Build #1
+    needs: verify-environment
+    runs-on: [self-hosted, macOS]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: just install-toolchains
+
+      - name: Build IPA
+        run: just reproducible-build build/reproducible/Gem-build1.ipa
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipa-build-1
+          path: build/reproducible/Gem-build1.ipa
+          retention-days: 30
+
+  build-2:
+    name: Reproducible Build #2
+    needs: verify-environment
+    runs-on: [self-hosted, macOS]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: just install-toolchains
+
+      - name: Build IPA
+        run: just reproducible-build build/reproducible/Gem-build2.ipa
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipa-build-2
+          path: build/reproducible/Gem-build2.ipa
+          retention-days: 30
+
+  compare:
+    name: Compare Builds
+    needs: [build-1, build-2]
+    runs-on: [self-hosted, macOS]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Build #1
+        uses: actions/download-artifact@v4
+        with:
+          name: ipa-build-1
+          path: build/compare/
+
+      - name: Download Build #2
+        uses: actions/download-artifact@v4
+        with:
+          name: ipa-build-2
+          path: build/compare/
+
+      - name: Compare IPAs
+        run: just compare-builds build/compare/Gem-build1.ipa build/compare/Gem-build2.ipa
+
+  compare-appstore:
+    name: Compare with App Store IPA
+    needs: [build-1]
+    if: github.event.inputs.appstore_ipa != ''
+    runs-on: [self-hosted, macOS]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Build #1
+        uses: actions/download-artifact@v4
+        with:
+          name: ipa-build-1
+          path: build/compare/
+
+      - name: Compare with App Store IPA
+        run: just compare-builds "${{ github.event.inputs.appstore_ipa }}" build/compare/Gem-build1.ipa

@@ -52,3 +52,6 @@ sources.png
 
 # rust
 target/
+
+# Reproducible build tools (compiled)
+tools/verify-build/target/
