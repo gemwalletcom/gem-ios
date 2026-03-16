@@ -95,7 +95,7 @@ public enum Images {
         public static let transak = Image(.transak)
         public static let banxa = Image(.banxa)
         public static let mercuryo = Image(.mercuryo)
-        public static let ramp = Image(.ramp)
+        public static let cashapp = Image(.cashapp)
         public static let paybis = Image(.paybis)
     }
 
@@ -271,7 +271,7 @@ public enum Images {
             (Images.Fiat.transak, "Transak"),
             (Images.Fiat.banxa, "Banxa"),
             (Images.Fiat.mercuryo, "Mercuryo"),
-            (Images.Fiat.ramp, "Ramp")
+            (Images.Fiat.cashapp, "CashApp")
         ]),
         ("Actions", [
             (Images.Actions.send, "Send"),
@@ -339,7 +339,7 @@ public enum Images {
         ])
     ]
 
-    return List {
+    List {
         ForEach(imageCategories, id: \.0) { category in
             Section(header: Text(category.0)) {
                 ForEach(category.1.indices, id: \.self) { index in
