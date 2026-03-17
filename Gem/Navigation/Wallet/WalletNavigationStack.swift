@@ -208,7 +208,7 @@ struct WalletNavigationStack: View {
                             priceAlertService: priceAlertService
                         ) { model.onSetPriceAlertComplete(message: $0) }
                     )
-                case .addToken:
+                case .addAsset:
                     AddAssetNavigationStack(wallet: model.wallet)
                 case .portfolio:
                     WalletPortfolioScene(

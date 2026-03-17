@@ -142,7 +142,7 @@ extension WalletSceneViewModel {
     }
 
     public func onSelectAddCustomToken() {
-        isPresentingSheet = .addToken
+        isPresentingSheet = .addAsset
     }
 
     func onSelectPortfolio() {

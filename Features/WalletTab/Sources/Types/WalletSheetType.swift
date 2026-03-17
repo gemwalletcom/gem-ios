@@ -11,7 +11,7 @@ public enum WalletSheetType: Identifiable, Equatable, Sendable {
     case transferData(TransferData)
     case perpetualRecipientData(PerpetualRecipientData)
     case setPriceAlert(Asset)
-    case addToken
+    case addAsset
     case portfolio
 
     public var id: String {
@@ -22,7 +22,7 @@ public enum WalletSheetType: Identifiable, Equatable, Sendable {
         case .transferData(let data): "transferData-\(data.id)"
         case .perpetualRecipientData: "perpetualRecipientData"
         case .setPriceAlert(let asset): "setPriceAlert-\(asset.id.identifier)"
-        case .addToken: "addToken"
+        case .addAsset: "addAsset"
         case .portfolio: "portfolio"
         }
     }
