@@ -145,7 +145,7 @@ struct SelectAssetSceneNavigationStack: View {
             }
         }
         .sheet(isPresented: $model.isPresentingAddToken) {
-            AddTokenNavigationStack(wallet: model.wallet)
+            AddAssetNavigationStack(wallet: model.wallet)
         }
         .sheet(isPresented: $isPresentingFilteringView) {
             NavigationStack {

@@ -6,6 +6,7 @@ import Store
 import PerpetualService
 import Perpetuals
 import WalletTab
+import TransactionsService
 
 public struct PerpetualNavigationView: View {
     @State private var model: PerpetualSceneViewModel
@@ -15,6 +16,7 @@ public struct PerpetualNavigationView: View {
         asset: Asset,
         wallet: Wallet,
         perpetualService: any PerpetualServiceable,
+        transactionsService: TransactionsService,
         observerService: any PerpetualObservable<HyperliquidSubscription>,
         isPresentingSheet: Binding<WalletSheetType?>
     ) {
@@ -23,6 +25,7 @@ public struct PerpetualNavigationView: View {
             wallet: wallet,
             asset: asset,
             perpetualService: perpetualService,
+            transactionsService: transactionsService,
             observerService: observerService,
             onTransferData: { isPresentingSheet.wrappedValue = .transferData($0) },
             onPerpetualRecipientData: { isPresentingSheet.wrappedValue = .perpetualRecipientData($0) }

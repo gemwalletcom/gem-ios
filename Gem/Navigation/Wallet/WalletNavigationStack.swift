@@ -157,6 +157,7 @@ struct WalletNavigationStack: View {
                     asset: $0.asset,
                     wallet: model.wallet,
                     perpetualService: perpetualService,
+                    transactionsService: transactionsService,
                     observerService: hyperliquidObserverService,
                     isPresentingSheet: $model.isPresentingSheet
                 )
@@ -208,7 +209,7 @@ struct WalletNavigationStack: View {
                         ) { model.onSetPriceAlertComplete(message: $0) }
                     )
                 case .addToken:
-                    AddTokenNavigationStack(wallet: model.wallet)
+                    AddAssetNavigationStack(wallet: model.wallet)
                 case .portfolio:
                     WalletPortfolioScene(
                         model: WalletPortfolioSceneViewModel(
