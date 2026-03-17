@@ -29,10 +29,10 @@ struct BalanceFetcher: Sendable {
             .getStakeBalance(for: address)
     }
 
-    func getEarnBalance(chain: Chain, address: String) async throws -> [AssetBalance] {
+    func getEarnBalance(chain: Chain, address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         try await chainServiceFactory
             .service(for: chain)
-            .getEarnBalance(for: address)
+            .getEarnBalance(for: address, tokenIds: tokenIds)
     }
 
     func getTokenBalance(
