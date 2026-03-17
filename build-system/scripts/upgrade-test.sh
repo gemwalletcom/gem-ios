@@ -7,8 +7,6 @@ WORKTREE_DIR="/tmp/gem-upgrade-test-$$"
 SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 17}"
 SIMULATOR_DEST="platform=iOS Simulator,name=$SIMULATOR_NAME"
 OLD_DERIVED_DATA="$WORKTREE_DIR/build/DerivedData"
-OLD_SPM_CACHE="$WORKTREE_DIR/build/SourcePackages"
-BUILD_THREADS="$(sysctl -n hw.ncpu)"
 
 cleanup() {
     echo "==> Cleaning up worktree"
@@ -33,11 +31,8 @@ set -o pipefail && xcodebuild -project Gem.xcodeproj \
     ONLY_ACTIVE_ARCH=YES \
     -destination "$SIMULATOR_DEST" \
     -derivedDataPath "$OLD_DERIVED_DATA" \
-    -clonedSourcePackagesDirPath "$OLD_SPM_CACHE" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
-    -parallelizeTargets \
-    -jobs "$BUILD_THREADS" \
     build-for-testing | xcbeautify --quieter --is-ci
 
 echo "==> Resetting simulator"
@@ -52,7 +47,6 @@ set -o pipefail && xcodebuild -project Gem.xcodeproj \
     ONLY_ACTIVE_ARCH=YES \
     -destination "$SIMULATOR_DEST" \
     -derivedDataPath "$OLD_DERIVED_DATA" \
-    -clonedSourcePackagesDirPath "$OLD_SPM_CACHE" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     -only-testing GemUITests/ImportWalletReceiveBitcoinUITests \
@@ -64,7 +58,6 @@ cd "$REPO_ROOT"
 just build-for-testing-ui
 
 DERIVED_DATA="build/DerivedData"
-SPM_CACHE="build/SourcePackages"
 
 echo "==> Running UpgradeVerificationTests (current version)"
 set -o pipefail && xcodebuild -project Gem.xcodeproj \
@@ -73,7 +66,6 @@ set -o pipefail && xcodebuild -project Gem.xcodeproj \
     ONLY_ACTIVE_ARCH=YES \
     -destination "$SIMULATOR_DEST" \
     -derivedDataPath "$DERIVED_DATA" \
-    -clonedSourcePackagesDirPath "$SPM_CACHE" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     -only-testing GemUITests/UpgradeVerificationTests \
