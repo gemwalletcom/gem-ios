@@ -32,7 +32,7 @@ public struct ValidatorViewModel {
             }
             return validator.name
         case .earn:
-            return validator.name.capitalized
+            return validator.name
         }
     }
 

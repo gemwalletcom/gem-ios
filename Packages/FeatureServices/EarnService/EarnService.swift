@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import BalanceService
 import Blockchain
 import Foundation
 import Primitives
@@ -13,12 +12,10 @@ public protocol EarnDataProvidable: Sendable {
 public struct EarnService: Sendable {
     private let store: StakeStore
     private let gatewayService: GatewayService
-    private let earnBalanceUpdater: any EarnBalanceUpdatable
 
-    public init(store: StakeStore, gatewayService: GatewayService, earnBalanceUpdater: any EarnBalanceUpdatable) {
+    public init(store: StakeStore, gatewayService: GatewayService) {
         self.store = store
         self.gatewayService = gatewayService
-        self.earnBalanceUpdater = earnBalanceUpdater
     }
 
     public func update(walletId: WalletId, assetId: AssetId, address: String) async throws {
@@ -27,8 +24,6 @@ public struct EarnService: Sendable {
 
         let positions = try await gatewayService.earnPositions(address: address, assetId: assetId)
         try updatePositions(walletId: walletId, assetId: assetId, positions: positions)
-
-        await earnBalanceUpdater.updateEarnBalance(walletId: walletId, chain: assetId.chain, address: address)
     }
 
     private func updatePositions(walletId: WalletId, assetId: AssetId, positions: [DelegationBase]) throws {

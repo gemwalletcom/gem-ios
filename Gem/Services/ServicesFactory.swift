@@ -106,8 +106,7 @@ struct ServicesFactory {
         )
         let earnService = EarnService(
             store: storeManager.stakeStore,
-            gatewayService: gatewayService,
-            earnBalanceUpdater: balanceService
+            gatewayService: gatewayService
         )
         let stakeService = Self.makeStakeService(
             stakeStore: storeManager.stakeStore,

@@ -97,16 +97,6 @@ public struct BalanceStore: Sendable {
         }
     }
 
-    public func hasEarnBalance(walletId: WalletId, chain: Chain) throws -> Bool {
-        try db.read { db in
-            try BalanceRecord
-                .filter(BalanceRecord.Columns.walletId == walletId.id)
-                .filter(BalanceRecord.Columns.assetId.like("\(chain.rawValue)%"))
-                .filter(BalanceRecord.Columns.earnAmount > 0)
-                .fetchCount(db) > 0
-        }
-    }
-
     @discardableResult
     public func getBalance(walletId: WalletId, assetId: AssetId) throws -> Balance? {
         try db.read { db in

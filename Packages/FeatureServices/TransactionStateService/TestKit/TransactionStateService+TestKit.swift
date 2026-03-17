@@ -45,6 +45,6 @@ public extension EarnService {
         store: StakeStore = .mock()
     ) -> EarnService {
         let provider = NativeProvider(url: Constants.apiURL, requestInterceptor: EmptyRequestInterceptor())
-        return EarnService(store: store, gatewayService: GatewayService(provider: provider), earnBalanceUpdater: .mock())
+        return EarnService(store: store, gatewayService: GatewayService(provider: provider))
     }
 }

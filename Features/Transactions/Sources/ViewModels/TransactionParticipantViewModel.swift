@@ -60,7 +60,7 @@ extension TransactionParticipantViewModel {
     private var earnProviderItemModel: TransactionItemModel {
         let address = transactionViewModel.participant
         let addressName = transactionViewModel.getAddressName(address: address)
-        let name = (addressName?.name ?? address).capitalized
+        let name = addressName?.name ?? address
         return .listItem(ListItemModel(
             title: Localized.Common.provider,
             subtitle: name
