@@ -22,10 +22,10 @@ public struct EarnService: Sendable {
     }
 
     public func update(walletId: WalletId, assetId: AssetId, address: String) async throws {
-        let providers = await gatewayService.earnProviders(assetId: assetId)
+        let providers = try await gatewayService.earnProviders(assetId: assetId)
         try store.updateValidators(providers)
 
-        let positions = try await gatewayService.earnPositions(chain: assetId.chain, address: address, assetIds: [assetId])
+        let positions = try await gatewayService.earnPositions(address: address, assetId: assetId)
         try updatePositions(walletId: walletId, assetId: assetId, positions: positions)
 
         await earnBalanceUpdater.updateEarnBalance(walletId: walletId, chain: assetId.chain, address: address)

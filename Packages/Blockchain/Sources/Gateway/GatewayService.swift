@@ -162,13 +162,12 @@ extension GatewayService {
 // MARK: - Earn
 
 extension GatewayService {
-    public func earnProviders(assetId: Primitives.AssetId) -> [DelegationValidator] {
-        gateway.getEarnProviders(assetId: assetId.identifier).compactMap { try? $0.map() }
+    public func earnProviders(assetId: Primitives.AssetId) throws -> [DelegationValidator] {
+        try gateway.getEarnProviders(assetId: assetId.identifier).map { try $0.map() }
     }
 
-    public func earnPositions(chain: Primitives.Chain, address: String, assetIds: [Primitives.AssetId]) async throws -> [DelegationBase] {
-        try await gateway.getEarnPositions(chain: chain.rawValue, address: address, assetIds: assetIds.ids)
-            .map { try $0.map() }
+    public func earnPositions(address: String, assetId: Primitives.AssetId) async throws -> [DelegationBase] {
+        try await gateway.getEarnPositions(address: address, assetId: assetId.identifier).map { try $0.map() }
     }
 
     public func getEarnData(
