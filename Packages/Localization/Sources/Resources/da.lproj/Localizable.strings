@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "Fuld adgang til NFT-samling anmodes";
 "simulation.warning.unlimited_token_approval.title" = "Ubegrænset tokengodkendelse";
 "transfer.review_request" = "Anmodning om gennemgang";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

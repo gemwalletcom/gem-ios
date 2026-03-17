@@ -2,7 +2,9 @@
 
 import SwiftUI
 import Components
+import Localization
 import PrimitivesComponents
+import Store
 
 public struct WalletPortfolioScene: View {
     @State private var model: WalletPortfolioSceneViewModel
@@ -14,15 +16,22 @@ public struct WalletPortfolioScene: View {
     public var body: some View {
         NavigationStack {
             ChartListView(model: model) {
-                Section {
-                    ForEach(model.allTimeValues, id: \.title) {
-                        ListItemView(model: $0)
+                if model.allTimeValues.isNotEmpty {
+                    Section {
+                        ForEach(model.allTimeValues, id: \.title) {
+                            ListItemView(model: $0)
+                        }
+                    } header: {
+                        Text(model.footerText)
+                            .font(.footnote)
+                            .textCase(nil)
                     }
                 }
             }
             .navigationTitle(model.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarDismissItem(type: .close, placement: .cancellationAction)
+            .bindQuery(model.assetsQuery)
         }
     }
 }

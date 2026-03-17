@@ -1600,6 +1600,12 @@ public enum Localized {
       /// New Wallet
       public static let title = Localized.tr("Localizable", "wallet.new.title", fallback: "New Wallet")
     }
+    public enum Portfolio {
+      /// Estimated value based on current holdings and market prices.
+      public static let footer = Localized.tr("Localizable", "wallet.portfolio.footer", fallback: "Estimated value based on current holdings and market prices.")
+      /// Portfolio
+      public static let title = Localized.tr("Localizable", "wallet.portfolio.title", fallback: "Portfolio")
+    }
     public enum Receive {
       /// No destination tag required
       public static let noDestinationTagRequired = Localized.tr("Localizable", "wallet.receive.no_destination_tag_required", fallback: "No destination tag required")

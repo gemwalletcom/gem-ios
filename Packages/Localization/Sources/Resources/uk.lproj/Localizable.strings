@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "Запитується повний доступ до колекції NFT";
 "simulation.warning.unlimited_token_approval.title" = "Необмежене схвалення токенів";
 "transfer.review_request" = "Запит на перегляд";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

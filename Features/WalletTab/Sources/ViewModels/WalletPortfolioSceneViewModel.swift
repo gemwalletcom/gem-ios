@@ -4,14 +4,15 @@ import Foundation
 import Primitives
 import Components
 import Formatters
+import Localization
 import PrimitivesComponents
 import PriceService
+import Store
 
 @Observable
 @MainActor
 public final class WalletPortfolioSceneViewModel: ChartListViewable {
     private let wallet: Wallet
-    private let assets: [AssetData]
 
     private let service: PortfolioService
     private let priceService: PriceService
@@ -21,12 +22,13 @@ public final class WalletPortfolioSceneViewModel: ChartListViewable {
     private let priceFormatter: CurrencyFormatter
     private let percentFormatter: CurrencyFormatter
 
+    public let assetsQuery: ObservableQuery<AssetsRequest>
+
     var state: StateViewType<WalletPortfolioData> = .loading
     public var selectedPeriod: ChartPeriod = .day
 
     public init(
         wallet: Wallet,
-        assets: [AssetData],
         portfolioService: PortfolioService,
         priceService: PriceService,
         currencyCode: String
@@ -34,15 +36,18 @@ public final class WalletPortfolioSceneViewModel: ChartListViewable {
         self.service = portfolioService
         self.priceService = priceService
         self.wallet = wallet
-        self.assets = assets
 
+        self.assetsQuery = ObservableQuery(AssetsRequest(walletId: wallet.walletId, filters: [.enabledBalance]), initialValue: [])
         self.currencyCode = currencyCode
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
         self.priceFormatter = CurrencyFormatter(currencyCode: currencyCode)
         self.percentFormatter = CurrencyFormatter(type: .percent, currencyCode: currencyCode)
     }
 
-    var navigationTitle: String { wallet.name }
+    var navigationTitle: String { Localized.Wallet.Portfolio.title }
+    var footerText: String { Localized.Wallet.Portfolio.footer }
+    
+    private var assets: [AssetData] { assetsQuery.value }
 
     public var periods: [ChartPeriod] { [.day, .week, .month, .year, .all] }
     public var chartState: StateViewType<ChartValuesViewModel> {

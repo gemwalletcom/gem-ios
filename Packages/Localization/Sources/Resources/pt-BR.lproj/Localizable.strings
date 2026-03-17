@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "É solicitado acesso à coleção completa de NFTs.";
 "simulation.warning.unlimited_token_approval.title" = "Aprovação ilimitada de tokens";
 "transfer.review_request" = "Solicitação de revisão";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

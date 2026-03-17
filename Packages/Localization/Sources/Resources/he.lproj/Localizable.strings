@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "התבקשה גישה מלאה לאוסף NFT";
 "simulation.warning.unlimited_token_approval.title" = "אישור אסימונים ללא הגבלה";
 "transfer.review_request" = "בקשת סקירה";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

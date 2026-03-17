@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "请求访问完整的NFT收藏集";
 "simulation.warning.unlimited_token_approval.title" = "无限代币批准";
 "transfer.review_request" = "审查请求";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

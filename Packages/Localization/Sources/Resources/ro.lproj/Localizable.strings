@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "Acces complet la colecția NFT solicitat";
 "simulation.warning.unlimited_token_approval.title" = "Aprobare nelimitată de tokenuri";
 "transfer.review_request" = "Cerere de revizuire";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

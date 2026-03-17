@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "NFT koleksiyonunun tamamına erişim talep edildi.";
 "simulation.warning.unlimited_token_approval.title" = "Sınırsız token onayı";
 "transfer.review_request" = "İnceleme Talebi";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

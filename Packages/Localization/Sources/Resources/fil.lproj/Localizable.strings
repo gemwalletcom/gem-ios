@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "Hiniling ang kumpletong access sa koleksyon ng NFT";
 "simulation.warning.unlimited_token_approval.title" = "Walang limitasyong pag-apruba ng token";
 "transfer.review_request" = "Kahilingan sa Pagsusuri";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";

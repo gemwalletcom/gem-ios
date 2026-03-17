@@ -558,3 +558,5 @@
 "simulation.warning.nft_collection_approval.title" = "NFT 컬렉션 전체 접근 권한이 요청되었습니다.";
 "simulation.warning.unlimited_token_approval.title" = "무제한 토큰 승인";
 "transfer.review_request" = "검토 요청";
+"wallet.portfolio.title" = "Portfolio";
+"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";
