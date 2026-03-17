@@ -7,20 +7,19 @@ import Assets
 import Style
 import Localization
 
-struct AddTokenNavigationStack: View {
-    
+struct AddAssetNavigationStack: View {
+
     let wallet: Wallet
-    @State var isPresenting: Binding<Bool>
-    
     @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.assetsService) private var assetsService
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
-            AddTokenScene(
-                model: AddTokenViewModel(
+            AddAssetScene(
+                model: AddAssetSceneViewModel(
                     wallet: wallet,
-                    service: AddTokenService(chainServiceFactory: chainServiceFactory)
+                    service: AddAssetService(chainServiceFactory: chainServiceFactory)
                 ),
                 action: addAsset
             )
@@ -29,7 +28,7 @@ struct AddTokenNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("", systemImage: SystemImage.xmark) {
-                        isPresenting.wrappedValue = false
+                        dismiss()
                     }
                 }
             }
@@ -37,11 +36,11 @@ struct AddTokenNavigationStack: View {
     }
 }
 
-extension AddTokenNavigationStack {
+extension AddAssetNavigationStack {
     private func addAsset(_ asset: Asset) {
         Task {
             try assetsService.addNewAsset(walletId: wallet.walletId, asset: asset)
         }
-        isPresenting.wrappedValue = false
+        dismiss()
     }
 }
