@@ -15,6 +15,7 @@ import BalanceService
 import PriceService
 import enum Gemstone.SwapperError
 import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperProviderType
 import Formatters
 import Validators
 
@@ -29,6 +30,8 @@ public final class SwapSceneViewModel {
 
     public var swapState: SwapState = .init()
     public var isPresentingInfoSheet: SwapSheetType?
+
+    private(set) var isStreaming: Bool = false
 
     public let fromAssetQuery: ObservableQuery<AssetRequestOptional>
     public let toAssetQuery: ObservableQuery<AssetRequestOptional>
@@ -113,7 +116,7 @@ public final class SwapSceneViewModel {
     }
 
     var isLoading: Bool {
-        swapState.quotes.isLoading
+        swapState.quotes.isLoading || isStreaming
     }
 
     var assetIds: [AssetId] {
@@ -339,11 +342,13 @@ extension SwapSceneViewModel {
     }
     private func performFetch(input: SwapQuoteInput) async {
         do {
+            let preferredProvider = selectedSwapQuote?.data.provider
             swapState.swapTransferData = .noData
             swapState.quotes = .loading
+            isStreaming = true
             resetToValue()
 
-            var accumulated: [SwapperQuote] = []
+            var quotes: [SwapperQuote] = []
             var errors: [Error] = []
 
             for await result in swapQuotesProvider.fetchQuotes(wallet: wallet, input: input) {
@@ -351,8 +356,8 @@ extension SwapSceneViewModel {
 
                 switch result {
                 case .success(let quote):
-                    accumulated.append(quote)
-                    applyAccumulatedQuotes(&accumulated)
+                    quotes.append(quote)
+                    applyQuotes(&quotes)
                 case .failure(let error):
                     errors.append(error)
                 }
@@ -360,11 +365,13 @@ extension SwapSceneViewModel {
 
             try Task.checkCancellation()
 
-            if accumulated.isEmpty {
-                let swapError = prioritizedSwapError(errors) ?? SwapperError.NoQuoteAvailable
+            if quotes.isEmpty {
+                let swapError = minInputAmountError(errors) ?? SwapperError.NoQuoteAvailable
                 swapState.quotes = .error(swapError)
                 selectedSwapQuote = nil
                 amountInputModel.update(error: nil)
+            } else {
+                selectedSwapQuote = quotes.first(where: { $0.data.provider == preferredProvider }) ?? quotes.first
             }
         } catch {
             if !error.isCancelled && !Task.isCancelled {
@@ -374,28 +381,25 @@ extension SwapSceneViewModel {
                 debugLog("SwapScene get quotes error: \(error)")
             }
         }
+        isStreaming = false
     }
 
-    private func applyAccumulatedQuotes(_ accumulated: inout [SwapperQuote]) {
-        accumulated.sort { BigInt.fromString($0.toValue) > BigInt.fromString($1.toValue) }
-        swapState.quotes = .data(accumulated)
-        selectedSwapQuote = accumulated.first
+    private func applyQuotes(_ quotes: inout [SwapperQuote]) {
+        quotes.sort { BigInt.fromString($0.toValue) > BigInt.fromString($1.toValue) }
+        swapState.quotes = .data(quotes)
+        selectedSwapQuote = quotes.first
         if let selectedSwapQuote, let asset = toAsset?.asset {
             applyQuote(selectedSwapQuote, asset: asset)
         }
     }
 
-    private func prioritizedSwapError(_ errors: [Error]) -> SwapperError? {
-        let inputErrors: [(BigInt?, String?)] = errors.compactMap { error in
-            guard let swapperError = error as? SwapperError, case .InputAmountError(let minAmount) = swapperError else { return nil }
-            return (minAmount.flatMap { BigInt($0) }, minAmount)
+    private func minInputAmountError(_ errors: [Error]) -> SwapperError? {
+        let minAmounts: [BigInt] = errors.compactMap { error in
+            guard case .InputAmountError(let minAmount) = error as? SwapperError else { return nil }
+            return minAmount.flatMap { BigInt($0) }
         }
-        guard !inputErrors.isEmpty else { return nil }
-        if let best = inputErrors.filter({ $0.0 != nil }).min(by: { ($0.0 ?? 0) < ($1.0 ?? 0) }) {
-            let adjusted = best.0.map { String($0.increase(byPercent: 10)) }
-            return .InputAmountError(minAmount: adjusted)
-        }
-        return .InputAmountError(minAmount: nil)
+        guard let min = minAmounts.min() else { return nil }
+        return .InputAmountError(minAmount: String(min.increase(byPercent: 10)))
     }
 
     private func performUpdate(for assetIds: [AssetId]) async {

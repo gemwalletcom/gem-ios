@@ -5,12 +5,12 @@ import enum Gemstone.SwapperProvider
 import struct Gemstone.SwapperProviderType
 
 public extension SwapperProviderType {
-    static func mock() -> SwapperProviderType {
+    static func mock(id: SwapperProvider = .pancakeswapV3) -> SwapperProviderType {
         SwapperProviderType(
-            id: .pancakeswapV3,
-            name: "PancakeSwap",
+            id: id,
+            name: "\(id)",
             protocol: "v3",
-            protocolId: "pancakeswap_v3",
+            protocolId: "\(id)_v3",
             mode: .onChain
         )
     }

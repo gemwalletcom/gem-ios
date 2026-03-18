@@ -94,7 +94,8 @@ extension SwapScene {
         } footer: {
             SwapChangeView(
                 fromId: $model.pairSelectorModel.fromAssetId,
-                toId: $model.pairSelectorModel.toAssetId
+                toId: $model.pairSelectorModel.toAssetId,
+                isLoading: model.isLoading
             )
                 .padding(.top, .small)
                 .frame(maxWidth: .infinity)
@@ -110,7 +111,7 @@ extension SwapScene {
             SwapTokenView(
                 model: model.swapTokenModel(type: .receive(chains: [], assetIds: [])),
                 text: $model.toValue,
-                showLoading: model.isLoading,
+                isLoading: model.isLoading,
                 disabledTextField: true,
                 onBalanceAction: {},
                 onSelectAssetAction: model.onSelectAssetReceive
