@@ -134,11 +134,7 @@ extension NavigationHandler {
 
     private func navigateToAsset(_ assetId: AssetId) async throws {
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
-        if asset.type == .perpetual {
-            navigationState.wallet.append(Scenes.Perpetual(asset))
-        } else {
-            navigationState.wallet.append(Scenes.Asset(asset: asset))
-        }
+         navigationState.wallet.append(Scenes.Asset(asset: asset))
     }
 
     private func navigateToTransaction(walletId: WalletId, assetId: AssetId, transaction: Primitives.Transaction) async throws {
