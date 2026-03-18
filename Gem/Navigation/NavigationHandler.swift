@@ -134,7 +134,11 @@ extension NavigationHandler {
 
     private func navigateToAsset(_ assetId: AssetId) async throws {
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
-        navigationState.wallet.append(Scenes.Asset(asset: asset))
+        if asset.type == .perpetual {
+            navigationState.wallet.append(Scenes.Perpetual(asset))
+        } else {
+            navigationState.wallet.append(Scenes.Asset(asset: asset))
+        }
     }
 
     private func navigateToTransaction(walletId: WalletId, assetId: AssetId, transaction: Primitives.Transaction) async throws {
@@ -151,7 +155,11 @@ extension NavigationHandler {
             await Task.yield()
         }
 
-        navigationState.wallet.setPath([Scenes.Asset(asset: asset), Scenes.Transaction(transaction: transactionExtended)])
+        if asset.type == .perpetual {
+            navigationState.wallet.setPath([Scenes.Perpetual(asset), Scenes.Transaction(transaction: transactionExtended)])
+        } else {
+            navigationState.wallet.setPath([Scenes.Asset(asset: asset), Scenes.Transaction(transaction: transactionExtended)])
+        }
         navigationState.selectedTab = .wallet
     }
 
