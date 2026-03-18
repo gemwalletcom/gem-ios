@@ -8,6 +8,7 @@ import PriceAlertService
 import StakeService
 import NodeService
 import PriceService
+import StreamService
 import WalletConnector
 import ConnectionsService
 import ExplorerService
@@ -47,7 +48,8 @@ extension AppResolver {
         let navigationPresenter: NavigationPresenter
         let priceAlertService: PriceAlertService
         let priceService: PriceService
-        let priceObserverService: PriceObserverService
+        let streamObserverService: StreamObserverService
+        let streamSubscriptionService: StreamSubscriptionService
         let stakeService: StakeService
         let transactionsService: TransactionsService
         let transactionStateService: TransactionStateService
@@ -82,6 +84,7 @@ extension AppResolver {
         let assetSearchService: AssetSearchService
         let appLifecycleService: AppLifecycleService
         let inAppNotificationService: InAppNotificationService
+        let portfolioService: PortfolioService
         let fiatService: any GemAPIFiatService
         let contactService: ContactService
 
@@ -96,7 +99,8 @@ extension AppResolver {
             navigationHandler: NavigationHandler,
             navigationPresenter: NavigationPresenter,
             priceAlertService: PriceAlertService,
-            priceObserverService: PriceObserverService,
+            streamObserverService: StreamObserverService,
+            streamSubscriptionService: StreamSubscriptionService,
             priceService: PriceService,
             stakeService: StakeService,
             transactionsService: TransactionsService,
@@ -132,6 +136,7 @@ extension AppResolver {
             assetSearchService: AssetSearchService,
             appLifecycleService: AppLifecycleService,
             inAppNotificationService: InAppNotificationService,
+            portfolioService: PortfolioService,
             fiatService: any GemAPIFiatService,
             contactService: ContactService
         ) {
@@ -146,7 +151,8 @@ extension AppResolver {
             self.navigationPresenter = navigationPresenter
             self.priceAlertService = priceAlertService
             self.priceService = priceService
-            self.priceObserverService = priceObserverService
+            self.streamObserverService = streamObserverService
+            self.streamSubscriptionService = streamSubscriptionService
             self.stakeService = stakeService
             self.transactionsService = transactionsService
             self.transactionStateService = transactionStateService
@@ -182,6 +188,7 @@ extension AppResolver {
             self.assetSearchService = assetSearchService
             self.appLifecycleService = appLifecycleService
             self.inAppNotificationService = inAppNotificationService
+            self.portfolioService = portfolioService
             self.fiatService = fiatService
             self.contactService = contactService
         }

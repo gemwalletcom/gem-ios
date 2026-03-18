@@ -80,16 +80,16 @@ struct PerpetualPortfolioSceneViewModelTests {
 
     @Test
     @MainActor
-    func marginUsageText() {
+    func marginUsageField() {
         let model = PerpetualPortfolioSceneViewModel.mock()
 
-        #expect(model.marginUsageText == "-")
+        #expect(model.marginUsageField.value.text == "-")
 
         model.state = .data(.mock(accountSummary: .mock(accountValue: 100, marginUsage: 0.168)))
-        #expect(model.marginUsageText == "$16.80 (16.80%)")
+        #expect(model.marginUsageField.value.text == "$16.80 (16.80%)")
 
         model.state = .data(.mock(accountSummary: .mock(accountValue: 0, marginUsage: 0)))
-        #expect(model.marginUsageText == "$0.00 (0.00%)")
+        #expect(model.marginUsageField.value.text == "$0.00 (0.00%)")
     }
 
     @Test
@@ -100,8 +100,8 @@ struct PerpetualPortfolioSceneViewModelTests {
         model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [0, 50, 30, 100]))))
 
         if case .data(let chartModel) = model.chartState {
-            #expect(chartModel.price?.price == 100)
-            #expect(chartModel.price?.priceChangePercentage24h == 0)
+            #expect(chartModel.price?.price == 50)
+            #expect(chartModel.price?.priceChangePercentage24h == 100)
         }
 
         model.state = .data(.mock(day: .mock(accountValueHistory: ChartDateValue.mockHistory(values: [50, 100, 75]))))

@@ -51,34 +51,50 @@ public final class CollectibleViewModel {
     var title: String { assetData.asset.name }
     var description: String? { assetData.asset.description }
 
-    var collectionTitle: String { Localized.Nft.collection }
-    var collectionText: String { assetData.collection.name }
+    var collectionField: ListItemField {
+        ListItemField(title: Localized.Nft.collection, value: assetData.collection.name)
+    }
 
-    var networkTitle: String { Localized.Transfer.network }
-    var networkText: String { assetData.asset.chain.asset.name }
+    var isVerified: Bool {
+        assetData.collection.status == .verified
+    }
 
-    var contractTitle: String { Localized.Asset.contract }
+    var networkField: ListItemField {
+        ListItemField(title: Localized.Transfer.network, value: assetData.asset.chain.asset.name)
+    }
+
     var contractValue: String { assetData.collection.contractAddress }
-    var contractText: String? {
+    var contractField: ListItemField? {
         if contractValue.isEmpty || contractValue == assetData.asset.tokenId {
             return .none
         }
-        return AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
-    }
-    
-    var contractContextMenu: [ContextMenuItemType] {
-        [.copy(value: contractValue, onCopy: { [weak self] value in
-            self?.isPresentingToast = .copied(value)
-        })]
+        let text = AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
+        return ListItemField(title: Localized.Asset.contract, value: text)
     }
 
-    var tokenIdTitle: String { Localized.Asset.tokenId }
+    var contractExplorerUrl: BlockExplorerLink? {
+        explorerService.tokenUrl(chain: assetData.asset.chain, address: contractValue)
+    }
+
+    var contractContextMenu: [ContextMenuItemType] {
+        [
+            .copy(value: contractValue, onCopy: { [weak self] value in
+                self?.isPresentingToast = .copied(value)
+            }),
+            contractExplorerUrl.map {
+                .url(title: Localized.Transaction.viewOn($0.name), onOpen: onSelectViewContractInExplorer)
+            }
+        ].compactMap { $0 }
+    }
+
     var tokenIdValue: String { assetData.asset.tokenId }
-    var tokenIdText: String {
-        if assetData.asset.tokenId.count > 16 {
-            return assetData.asset.tokenId
+    var tokenIdField: ListItemField {
+        let text = if assetData.asset.tokenId.count > 16 {
+            assetData.asset.tokenId
+        } else {
+            "#\(assetData.asset.tokenId)"
         }
-        return "#\(assetData.asset.tokenId)"
+        return ListItemField(title: Localized.Asset.tokenId, value: text)
     }
 
     var attributesTitle: String { Localized.Nft.properties }
@@ -134,11 +150,11 @@ public final class CollectibleViewModel {
     }
 
     var scoreViewModel: AssetScoreTypeViewModel {
-        AssetScoreTypeViewModel(scoreType: .unverified)
+        AssetScoreTypeViewModel(scoreType: AssetScoreType(verificationStatus: assetData.collection.status))
     }
 
     var showStatus: Bool {
-        assetData.collection.isVerified == false
+        assetData.collection.status != .verified
     }
 
     var socialLinksViewModel: SocialLinksViewModel {
@@ -154,8 +170,8 @@ public final class CollectibleViewModel {
             .copy(value: tokenIdValue, onCopy: { [weak self] value in
                 self?.isPresentingToast = .copied(value)
             }),
-            tokenExplorerUrl.map { explorerLink in
-                .url(title: Localized.Transaction.viewOn(explorerLink.name), onOpen: onSelectViewTokenInExplorer)
+            tokenExplorerUrl.map {
+                .url(title: Localized.Transaction.viewOn($0.name), onOpen: onSelectViewTokenInExplorer)
             }
         ].compactMap { $0 }
         
@@ -224,9 +240,11 @@ extension CollectibleViewModel {
     }
     
     func onSelectViewTokenInExplorer() {
-        guard let explorerLink = tokenExplorerUrl else { return }
-        guard let url = URL(string: explorerLink.link) else { return }
-        isPresentingTokenExplorerUrl = url
+        isPresentingTokenExplorerUrl = tokenExplorerUrl?.url
+    }
+
+    func onSelectViewContractInExplorer() {
+        isPresentingTokenExplorerUrl = contractExplorerUrl?.url
     }
 
     func onSelectReport() {

@@ -34,6 +34,10 @@ public protocol GemAPINameService: Sendable {
     func getName(name: String, chain: String) async throws -> NameRecord?
 }
 
+public protocol GemAPIAddressNamesService: Sendable {
+    func getAddressNames(requests: [ChainAddress]) async throws -> [AddressName]
+}
+
 public protocol GemAPIChartService: Sendable {
     func getCharts(assetId: AssetId, period: String) async throws -> Charts
 }
@@ -83,7 +87,6 @@ public protocol GemAPIAuthService: Sendable {
 
 public protocol GemAPIRewardsService: Sendable {
     func getRewards(walletId: String) async throws -> Rewards
-    func getRewardsEvents(walletId: String) async throws -> [RewardEvent]
     func createReferral(walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards
     func useReferralCode(walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws
     func getRedemptionOption(code: String) async throws -> RewardRedemptionOption
@@ -160,6 +163,14 @@ extension GemAPIService: GemAPINameService {
         try await deviceProvider
             .request(.getNameRecord(name: name, chain: chain))
             .mapResponse(as: NameRecord?.self)
+    }
+}
+
+extension GemAPIService: GemAPIAddressNamesService {
+    public func getAddressNames(requests: [ChainAddress]) async throws -> [AddressName] {
+        try await deviceProvider
+            .request(.getAddressNames(requests: requests))
+            .mapResponse(as: [AddressName].self)
     }
 }
 
@@ -360,12 +371,6 @@ extension GemAPIService: GemAPIRewardsService {
         try await deviceProvider
             .request(.getDeviceRewards(walletId: walletId))
             .mapResponse(as: Rewards.self)
-    }
-
-    public func getRewardsEvents(walletId: String) async throws -> [RewardEvent] {
-        try await deviceProvider
-            .request(.getDeviceRewardsEvents(walletId: walletId))
-            .mapResponse(as: [RewardEvent].self)
     }
 
     public func createReferral(walletId: String, request: AuthenticatedRequest<ReferralCode>) async throws -> Rewards {

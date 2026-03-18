@@ -14,12 +14,14 @@ import ExplorerService
 import Preferences
 import BigInt
 import GemstonePrimitives
+import TransactionsService
 
 @Observable
 @MainActor
 public final class PerpetualSceneViewModel {
     private let perpetualService: PerpetualServiceable
     private let observerService: any PerpetualObservable<HyperliquidSubscription>
+    private let transactionsService: TransactionsService
     private let onTransferData: TransferDataAction
     private let onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)?
     private let perpetualOrderFactory = PerpetualOrderFactory()
@@ -54,6 +56,7 @@ public final class PerpetualSceneViewModel {
         wallet: Wallet,
         asset: Asset,
         perpetualService: PerpetualServiceable,
+        transactionsService: TransactionsService,
         observerService: any PerpetualObservable<HyperliquidSubscription>,
         onTransferData: TransferDataAction = nil,
         onPerpetualRecipientData: ((PerpetualRecipientData) -> Void)? = nil
@@ -61,6 +64,7 @@ public final class PerpetualSceneViewModel {
         self.wallet = wallet
         self.asset = asset
         self.perpetualService = perpetualService
+        self.transactionsService = transactionsService
         self.observerService = observerService
         self.onTransferData = onTransferData
         self.onPerpetualRecipientData = onPerpetualRecipientData
@@ -69,10 +73,10 @@ public final class PerpetualSceneViewModel {
         self.perpetualQuery = ObservableQuery(PerpetualRequest(assetId: asset.id), initialValue: .empty)
         self.perpetualTotalValueQuery = ObservableQuery(TotalValueRequest(walletId: wallet.walletId, balanceType: .perpetual), initialValue: .zero)
         self.transactionsQuery = ObservableQuery(
-            TransactionsRequest(
+            TransactionsRequest.perpetualScene(
                 walletId: wallet.walletId,
-                type: .asset(assetId: asset.id),
-                filters: [.types([TransactionType.perpetualOpenPosition, .perpetualClosePosition].map { $0.rawValue })]
+                assetId: asset.id,
+                limit: 50
             ),
             initialValue: []
         )
@@ -125,12 +129,14 @@ public final class PerpetualSceneViewModel {
 
 public extension PerpetualSceneViewModel {
     func fetch() {
-        Task {
-            await observerService.update(for: wallet)
-        }
+        Task { await observerService.update(for: wallet) }
+        Task { try await perpetualService.updateMarket(symbol: perpetual.name) }
+        Task { await fetchTransactions() }
+        Task { await updateCandlesticks() }
     }
 
     func onAppear() async {
+        fetch()
         await subscribeCandles(currentChartSubscription)
         observeTask = Task {
             await observeCandles()
@@ -143,15 +149,22 @@ public extension PerpetualSceneViewModel {
         await unsubscribeCandles(currentChartSubscription)
     }
 
+    func onScenePhaseChange(_ oldPhase: ScenePhase, _ newPhase: ScenePhase) {
+        switch newPhase {
+        case .active:
+            Task { try? await perpetualService.updateMarket(symbol: perpetual.name) }
+            Task { await fetchTransactions() }
+            Task { await updateCandlesticks() }
+        case .inactive, .background: break
+        @unknown default: break
+        }
+    }
+
     func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
         Task {
-            do {
-                await unsubscribeCandles(ChartSubscription(coin: perpetual.name, period: oldPeriod))
-                await subscribeCandles(ChartSubscription(coin: perpetual.name, period: newPeriod))
-                try await fetchCandlesticks()
-            } catch {
-                state = .error(error)
-            }
+            await unsubscribeCandles(ChartSubscription(coin: perpetual.name, period: oldPeriod))
+            await updateCandlesticks()
+            await subscribeCandles(ChartSubscription(coin: perpetual.name, period: newPeriod))
         }
     }
 
@@ -272,13 +285,17 @@ public extension PerpetualSceneViewModel {
 // MARK: - Private
 
 private extension PerpetualSceneViewModel {
-    func fetchCandlesticks() async throws {
+    func updateCandlesticks() async {
         state = .loading
-        let candlesticks = try await perpetualService.candlesticks(
-            symbol: perpetual.name,
-            period: currentPeriod
-        )
-        state = .data(candlesticks)
+        do {
+            let candlesticks = try await perpetualService.candlesticks(
+                symbol: perpetual.name,
+                period: currentPeriod
+            )
+            state = .data(candlesticks)
+        } catch {
+            state = .error(error)
+        }
     }
 
     func subscribeCandles(_ subscription: ChartSubscription) async {
@@ -346,6 +363,14 @@ private extension PerpetualSceneViewModel {
             positionAction: positionAction
         )
         onPerpetualRecipientData?(recipientData)
+    }
+
+    func fetchTransactions() async {
+        do {
+            try await transactionsService.updateForAsset(wallet: wallet, assetId: asset.id)
+        } catch {
+            debugLog("perpetual scene: fetchTransactions error \(error)")
+        }
     }
 }
 

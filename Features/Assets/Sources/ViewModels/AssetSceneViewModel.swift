@@ -24,7 +24,7 @@ public final class AssetSceneViewModel: Sendable {
     private let balanceService: BalanceService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
-    private let priceObserverService: PriceObserverService
+    private let priceUpdater: any PriceUpdater
     private let bannerService: BannerService
 
     private let preferences: ObservablePreferences = .default
@@ -54,7 +54,7 @@ public final class AssetSceneViewModel: Sendable {
         balanceService: BalanceService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
-        priceObserverService: PriceObserverService,
+        priceUpdater: any PriceUpdater,
         priceAlertService: PriceAlertService,
         bannerService: BannerService,
         input: AssetSceneInput,
@@ -64,7 +64,7 @@ public final class AssetSceneViewModel: Sendable {
         self.balanceService = balanceService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
-        self.priceObserverService = priceObserverService
+        self.priceUpdater = priceUpdater
         self.priceAlertService = priceAlertService
         self.bannerService = bannerService
 
@@ -84,14 +84,18 @@ public final class AssetSceneViewModel: Sendable {
     public var title: String { assetModel.name }
 
     var balancesTitle: String { Localized.Asset.balances }
-    var networkTitle: String { Localized.Transfer.network }
 
+    var networkField: ListItemField {
+        ListItemField(title: Localized.Transfer.network, value: assetModel.networkFullName)
+    }
 
     var resourcesTitle: String { Localized.Asset.resources }
-    var energyTitle: String { ResourceViewModel(resource: .energy).title }
-    var bandwidthTitle: String { ResourceViewModel(resource: .bandwidth).title }
-    var energyText: String { feeAssetDataModel.energyText }
-    var bandwidthText: String { feeAssetDataModel.bandwidthText }
+    var energyField: ListItemField {
+        ListItemField(title: ResourceViewModel(resource: .energy).title, value: feeAssetDataModel.energyText)
+    }
+    var bandwidthField: ListItemField {
+        ListItemField(title: ResourceViewModel(resource: .bandwidth).title, value: feeAssetDataModel.bandwidthText)
+    }
 
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
 
@@ -126,8 +130,6 @@ public final class AssetSceneViewModel: Sendable {
     }
     
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
-
-    var networkText: String { assetModel.networkFullName }
 
     var showEarnButton: Bool {
         #if DEBUG
@@ -472,9 +474,9 @@ extension AssetSceneViewModel {
 
         Task {
             do {
-                try await priceObserverService.addAssets(assets: [assetModel.asset.id])
+                try await priceUpdater.addPrices(assetIds: [assetModel.asset.id])
             } catch {
-                debugLog("asset scene: priceObserverService.addAssets error \(error)")
+                debugLog("asset scene: addPrices error \(error)")
             }
         }
     }

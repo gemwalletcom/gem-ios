@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Observation
 import Testing
 import Primitives
 import Keystore
@@ -15,7 +16,7 @@ struct WalletServiceTests {
 
     @Test
     func importSecretPhraseDuplicateSameChain() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum, .aptos])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "First Wallet",
@@ -38,7 +39,7 @@ struct WalletServiceTests {
 
     @Test
     func importSecretPhraseNoDuplicateDifferentWords() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "First Wallet",
@@ -60,7 +61,7 @@ struct WalletServiceTests {
 
     @Test
     func importSingleDuplicateSameChain() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.bitcoin])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "First Single",
@@ -83,7 +84,7 @@ struct WalletServiceTests {
 
     @Test
     func importSingleNoDuplicateDifferentChain() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.bitcoin, .litecoin])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "BTC Single",
@@ -104,7 +105,7 @@ struct WalletServiceTests {
 
     @Test
     func importPrivateKeyDuplicateSameChain() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "First Wallet",
@@ -127,7 +128,7 @@ struct WalletServiceTests {
 
     @Test
     func importPrivateKeyNoDuplicateDifferentChain() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum, .smartChain])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "ETH Wallet",
@@ -148,7 +149,7 @@ struct WalletServiceTests {
 
     @Test
     func importViewOnlyDuplicateSameChain() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "First View",
@@ -171,7 +172,7 @@ struct WalletServiceTests {
 
     @Test
     func importViewOnlyNoDuplicateDifferentChain() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum, .polygon])))
 
         let wallet1 = try await service.loadOrCreateWallet(
             name: "ETH View",
@@ -192,7 +193,7 @@ struct WalletServiceTests {
 
     @Test
     func importTypeMatchingExact() async throws {
-        let service = WalletService.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum, .aptos])))
 
         let mnemonicWallet = try await service.loadOrCreateWallet(
             name: "Mnemonic",
@@ -211,5 +212,27 @@ struct WalletServiceTests {
         #expect(mnemonicWallet.id != privateKeyWallet.id)
         #expect(mnemonicWallet.type == WalletType.multicoin)
         #expect(privateKeyWallet.type == WalletType.privateKey)
+    }
+
+    @Test
+    func deleteLastWalletNotifiesObservers() async throws {
+        let preferences = ObservablePreferences.mock()
+        let service = WalletService.mock(walletStore: .mock(db: .mockWithChains([.ethereum])), preferences: preferences)
+
+        let wallet = try await service.loadOrCreateWallet(
+            name: "Wallet",
+            type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
+            source: .import
+        )
+        try await service.setCurrent(wallet: wallet)
+
+        try await confirmation { confirm in
+            withObservationTracking {
+                _ = preferences.currentWalletId
+            } onChange: {
+                confirm()
+            }
+            try await service.delete(wallet)
+        }
     }
 }

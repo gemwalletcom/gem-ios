@@ -18,7 +18,6 @@ public final class GemSwapperMock: GemSwapperProtocol {
     private let quoteByProvider: SwapperQuote
     private let quoteData: GemSwapQuoteData
     private let providers: [SwapperProviderType]
-    private let transactionStatus: Bool
     private let chains: [Chain]
     private let swapAssetList: SwapperAssetList
     private let swapResult: SwapperSwapResult
@@ -30,7 +29,6 @@ public final class GemSwapperMock: GemSwapperProtocol {
         quoteByProvider: SwapperQuote = .mock(),
         quoteData: GemSwapQuoteData = .mock(),
         providers: [SwapperProviderType] = [.mock()],
-        transactionStatus: Bool = false,
         chains: [Chain] = ["ethereum"],
         swapAssetList: SwapperAssetList = .mock(),
         swapResult: SwapperSwapResult = .mock(),
@@ -41,7 +39,6 @@ public final class GemSwapperMock: GemSwapperProtocol {
         self.quoteByProvider = quoteByProvider
         self.quoteData = quoteData
         self.providers = providers
-        self.transactionStatus = transactionStatus
         self.chains = chains
         self.swapAssetList = swapAssetList
         self.swapResult = swapResult
@@ -49,7 +46,7 @@ public final class GemSwapperMock: GemSwapperProtocol {
         self.fetchQuoteError = fetchQuoteError
     }
 
-    public func fetchPermit2ForQuote(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
+    public func getPermit2ForQuote(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
         permit2ForQuote
     }
 
@@ -63,7 +60,7 @@ public final class GemSwapperMock: GemSwapperProtocol {
         return [quoteByProvider]
     }
 
-    public func fetchQuoteByProvider(provider: SwapperProvider, request: SwapperQuoteRequest) async throws -> SwapperQuote {
+    public func getQuoteByProvider(provider: SwapperProvider, request: SwapperQuoteRequest) async throws -> SwapperQuote {
         if let delay = fetchQuoteDelay {
             try await Task.sleep(for: delay)
         }
@@ -83,10 +80,6 @@ public final class GemSwapperMock: GemSwapperProtocol {
 
     public func getProvidersForRequest(request: SwapperQuoteRequest) throws -> [SwapperProviderType] {
         providers
-    }
-
-    public func getTransactionStatus(chain: Chain, swapProvider: SwapperProvider, transactionHash: String) async throws -> Bool {
-        transactionStatus
     }
 
     public func supportedChains() -> [Chain] {

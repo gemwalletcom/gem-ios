@@ -12,7 +12,7 @@ public struct NFTService: Sendable {
     private let deviceService: any DeviceServiceable
 
     public init(
-        apiService: any GemAPINFTService = GemAPIService(),
+        apiService: any GemAPINFTService,
         nftStore: NFTStore,
         deviceService: any DeviceServiceable
     ) {
@@ -21,8 +21,8 @@ public struct NFTService: Sendable {
         self.deviceService = deviceService
     }
 
+    @discardableResult
     public func updateAssets(wallet: Wallet) async throws -> Int {
-        _ = try await deviceService.getSubscriptionsDeviceId()
         let nfts = try await apiService.getDeviceNFTAssets(walletId: wallet.id)
         try nftStore.save(nfts, for: wallet.walletId)
         return nfts.count

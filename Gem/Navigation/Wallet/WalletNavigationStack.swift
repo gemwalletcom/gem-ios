@@ -15,17 +15,19 @@ import Transfer
 import StakeService
 import PriceAlerts
 import AssetsService
+import PriceService
 
 struct WalletNavigationStack: View {
     @Environment(\.assetsEnabler) private var assetsEnabler
     @Environment(\.balanceService) private var balanceService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
+    @Environment(\.portfolioService) private var portfolioService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.bannerService) private var bannerService
-    @Environment(\.priceObserverService) private var priceObserverService
+    @Environment(\.streamSubscriptionService) private var streamSubscriptionService
     @Environment(\.perpetualService) private var perpetualService
     @Environment(\.hyperliquidObserverService) private var hyperliquidObserverService
     @Environment(\.activityService) private var activityService
@@ -93,7 +95,7 @@ struct WalletNavigationStack: View {
                         balanceService: balanceService,
                         assetsService: assetsService,
                         transactionsService: transactionsService,
-                        priceObserverService: priceObserverService,
+                        priceUpdater: streamSubscriptionService,
                         priceAlertService: priceAlertService,
                         bannerService: bannerService,
                         input: AssetSceneInput(
@@ -119,7 +121,7 @@ struct WalletNavigationStack: View {
                         assetModel: AssetViewModel(asset: $0.asset),
                         priceAlertService: priceAlertService,
                         walletId: model.wallet.walletId,
-                        isPresentingSetPriceAlert: $model.isPresentingSetPriceAlert
+                        onSetPriceAlert: model.presentPriceAlert
                     )
                 )
             }
@@ -129,7 +131,7 @@ struct WalletNavigationStack: View {
                     perpetualService: perpetualService,
                     observerService: hyperliquidObserverService,
                     activityService: activityService,
-                    onSelectAssetType: { model.isPresentingSelectAssetType = $0 },
+                    onSelectAssetType: { model.isPresentingSheet = .selectAsset($0) },
                     onSelectAsset: { navigationState.wallet.append(Scenes.Perpetual($0)) }
                 )
             }
@@ -155,9 +157,9 @@ struct WalletNavigationStack: View {
                     asset: $0.asset,
                     wallet: model.wallet,
                     perpetualService: perpetualService,
+                    transactionsService: transactionsService,
                     observerService: hyperliquidObserverService,
-                    isPresentingTransferData: $model.isPresentingTransferData,
-                    isPresentingPerpetualRecipientData: $model.isPresentingPerpetualRecipientData
+                    isPresentingSheet: $model.isPresentingSheet
                 )
             }
             .navigationDestination(for: Scenes.AssetPriceAlert.self) {
@@ -169,55 +171,55 @@ struct WalletNavigationStack: View {
                     )
                 )
             }
-            .sheet(item: $model.isPresentingSelectAssetType) {
-                SelectAssetSceneNavigationStack(
-                    model: SelectAssetViewModel(
+            .sheet(item: $model.isPresentingSheet) { sheet in
+                switch sheet {
+                case .wallets:
+                    WalletsNavigationStack()
+                case .selectAsset(let type):
+                    SelectAssetSceneNavigationStack(
+                        model: SelectAssetViewModel(
+                            wallet: model.wallet,
+                            selectType: type,
+                            searchService: assetSearchService,
+                            assetsEnabler: assetsEnabler,
+                            priceAlertService: priceAlertService,
+                            activityService: activityService
+                        )
+                    )
+                case .infoSheet(let type):
+                    InfoSheetScene(type: type)
+                case .transferData(let data):
+                    ConfirmTransferNavigationStack(
                         wallet: model.wallet,
-                        selectType: $0,
-                        searchService: assetSearchService,
-                        assetsEnabler: assetsEnabler,
-                        priceAlertService: priceAlertService,
-                        activityService: activityService
-                    ),
-                    isPresentingSelectType: $model.isPresentingSelectAssetType
-                )
-            }
-            .sheet(isPresented: $model.isPresentingWallets) {
-                WalletsNavigationStack(isPresentingWallets: $model.isPresentingWallets)
-            }
-            .sheet(item: $model.isPresentingInfoSheet) {
-                InfoSheetScene(type: $0)
-            }
-            .sheet(item: $model.isPresentingTransferData) {
-                ConfirmTransferNavigationStack(
-                    wallet: model.wallet,
-                    transferData: $0,
-                    onComplete: model.onTransferComplete
-                )
-            }
-            .sheet(item: $model.isPresentingPerpetualRecipientData) {
-                PerpetualPositionNavigationStack(
-                    perpetualRecipientData: $0,
-                    wallet: model.wallet,
-                    onComplete: {
-                        model.isPresentingPerpetualRecipientData = nil
-                    }
-                )
-            }
-            .sheet(item: $model.isPresentingSetPriceAlert) { asset in
-                SetPriceAlertNavigationStack(
-                    model: SetPriceAlertViewModel(
-                        walletId: model.wallet.walletId,
-                        asset: asset,
-                        priceAlertService: priceAlertService
-                    ) { model.onSetPriceAlertComplete(message: $0) }
-                )
-            }
-            .sheet(isPresented: $model.isPresentingAddToken) {
-                AddTokenNavigationStack(
-                    wallet: model.wallet,
-                    isPresenting: $model.isPresentingAddToken
-                )
+                        transferData: data,
+                        onComplete: model.onTransferComplete
+                    )
+                case .perpetualRecipientData(let data):
+                    PerpetualPositionNavigationStack(
+                        perpetualRecipientData: data,
+                        wallet: model.wallet,
+                        onComplete: { model.isPresentingSheet = nil }
+                    )
+                case .setPriceAlert(let asset):
+                    SetPriceAlertNavigationStack(
+                        model: SetPriceAlertViewModel(
+                            walletId: model.wallet.walletId,
+                            asset: asset,
+                            priceAlertService: priceAlertService
+                        ) { model.onSetPriceAlertComplete(message: $0) }
+                    )
+                case .addAsset:
+                    AddAssetNavigationStack(wallet: model.wallet)
+                case .portfolio:
+                    WalletPortfolioScene(
+                        model: WalletPortfolioSceneViewModel(
+                            wallet: model.wallet,
+                            portfolioService: portfolioService,
+                            priceService: priceService,
+                            currencyCode: preferences.preferences.currency
+                        )
+                    )
+                }
             }
             .safariSheet(url: $model.isPresentingUrl)
         }

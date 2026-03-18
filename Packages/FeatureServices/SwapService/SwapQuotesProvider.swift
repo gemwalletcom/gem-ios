@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import BigInt
 import Primitives
 
 import struct Gemstone.SwapperQuote

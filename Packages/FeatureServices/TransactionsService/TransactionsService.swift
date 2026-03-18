@@ -17,7 +17,7 @@ public final class TransactionsService: Sendable {
     private let addressStore: AddressStore
     
     public init(
-        provider: any GemAPITransactionService = GemAPIService(),
+        provider: any GemAPITransactionService,
         transactionStore: TransactionStore,
         assetsService: AssetsService,
         walletStore: WalletStore,
@@ -39,7 +39,6 @@ public final class TransactionsService: Sendable {
         let store = WalletPreferences(walletId: walletId)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
 
-        _ = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getDeviceTransactions(
             walletId: wallet.id,
             fromTimestamp: store.transactionsTimestamp
@@ -55,7 +54,6 @@ public final class TransactionsService: Sendable {
     public func updateForAsset(wallet: Wallet, assetId: AssetId) async throws {
         let store = WalletPreferences(walletId: wallet.walletId)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
-        _ = try await deviceService.getSubscriptionsDeviceId()
         let response = try await provider.getDeviceTransactionsForAsset(
             walletId: wallet.id,
             asset: assetId,

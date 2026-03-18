@@ -60,7 +60,7 @@ public final class SwapService: Sendable, SwappableChainsProvider {
 
     public func getQuoteByProvider(provider: SwapperProvider, input: SwapQuoteInput, walletAddress: String, destinationAddress: String) async throws -> SwapperQuote {
         let request = buildRequest(input: input, walletAddress: walletAddress, destinationAddress: destinationAddress)
-        let quote = try await swapper.fetchQuoteByProvider(provider: provider, request: request)
+        let quote = try await swapper.getQuoteByProvider(provider: provider, request: request)
         try Task.checkCancellation()
         return quote
     }
@@ -89,6 +89,6 @@ public final class SwapService: Sendable, SwappableChainsProvider {
     }
 
     public func getPermit2Approval(quote: SwapperQuote) async throws -> Permit2ApprovalData? {
-        try await swapper.fetchPermit2ForQuote(quote: quote)
+        try await swapper.getPermit2ForQuote(quote: quote)
     }
 }

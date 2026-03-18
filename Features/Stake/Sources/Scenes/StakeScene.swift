@@ -76,7 +76,7 @@ extension StakeScene {
 
     private var delegationsSection: some View {
         Section(model.delegationsSectionTitle) {
-            switch model.delegationsState {
+            switch model.delegationsViewState {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
                     .cleanListRow()
@@ -104,28 +104,19 @@ extension StakeScene {
                 infoAction: model.onAprInfo
             )
             ListItemView(
-                title: model.lockTimeTitle,
-                subtitle: model.lockTimeValue,
+                field: model.lockTimeField,
                 infoAction: model.onLockTimeInfo
             )
-            if let minAmountValue = model.minAmountValue {
-                ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
+            if let minAmountField = model.minAmountField {
+                ListItemView(field: minAmountField)
             }
         }
     }
 
     private var resourcesSection: some View {
         Section(model.resourcesTitle) {
-            ListItemView(
-                title: model.energyTitle,
-                subtitle: model.energyText
-            )
-
-            ListItemView(
-                title: model.bandwidthTitle,
-                subtitle: model.bandwidthText
-            )
+            ListItemView(field: model.energyField)
+            ListItemView(field: model.bandwidthField)
         }
-        
     }
 }
