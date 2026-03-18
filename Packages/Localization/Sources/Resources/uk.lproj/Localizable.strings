@@ -560,7 +560,7 @@
 "transfer.review_request" = "Запит на перегляд";
 "wallet.portfolio.title" = "Портфоліо";
 "wallet.portfolio.footer" = "Оціночна вартість базується на поточних запасах та ринкових цінах.";
-"wallet_connect.permissions.title" = "Запитані дозволи";
+"wallet_connect.permissions.title" = "Дозволи";
 "wallet_connect.permissions.view_balance" = "Перегляд вашого балансу та активності";
 "wallet_connect.permissions.approval_requests" = "Надсилати запити на схвалення";
 "wallet_connect.permissions.move_funds" = "Переміщення коштів без дозволу";

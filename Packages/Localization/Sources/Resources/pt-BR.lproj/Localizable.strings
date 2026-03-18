@@ -560,7 +560,7 @@
 "transfer.review_request" = "Solicitação de revisão";
 "wallet.portfolio.title" = "Portfólio";
 "wallet.portfolio.footer" = "Valor estimado com base nas participações atuais e nos preços de mercado.";
-"wallet_connect.permissions.title" = "Permissões solicitadas";
+"wallet_connect.permissions.title" = "Permissões";
 "wallet_connect.permissions.view_balance" = "Veja seu saldo e atividade";
 "wallet_connect.permissions.approval_requests" = "Enviar solicitações de aprovação";
 "wallet_connect.permissions.move_funds" = "Movimentar fundos sem autorização";

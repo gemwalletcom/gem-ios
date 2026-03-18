@@ -22,7 +22,7 @@ public struct SignMessageScene: View {
     public var body: some View {
         List {
             Section { } header: {
-                AssetPreviewView(model: model.appPreview)
+                AssetPreviewView(model: model.appPreview, subtitleLayout: .vertical)
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, .small)
             }

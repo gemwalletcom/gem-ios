@@ -1647,8 +1647,8 @@ public enum Localized {
       public static let approvalRequests = Localized.tr("Localizable", "wallet_connect.permissions.approval_requests", fallback: "Send approval requests")
       /// Move funds without permission
       public static let moveFunds = Localized.tr("Localizable", "wallet_connect.permissions.move_funds", fallback: "Move funds without permission")
-      /// Requested permissions
-      public static let title = Localized.tr("Localizable", "wallet_connect.permissions.title", fallback: "Requested permissions")
+      /// Permissions
+      public static let title = Localized.tr("Localizable", "wallet_connect.permissions.title", fallback: "Permissions")
       /// View your balance and activity
       public static let viewBalance = Localized.tr("Localizable", "wallet_connect.permissions.view_balance", fallback: "View your balance and activity")
     }
