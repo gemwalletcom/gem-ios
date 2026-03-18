@@ -20,8 +20,7 @@ extension TransactionParticipantViewModel: ItemModelProvidable {
     var itemModel: TransactionItemModel {
         switch transactionViewModel.transaction.transaction.type {
         case .stakeFreeze, .stakeUnfreeze: resourceItemModel
-        case .earnDeposit, .earnWithdraw: earnProviderItemModel
-        case .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate: participantItemModel
+        case .earnDeposit, .earnWithdraw, .transfer, .transferNFT, .tokenApproval, .smartContractCall, .stakeDelegate: participantItemModel
         case .swap, .stakeUndelegate, .stakeRedelegate, .stakeRewards, .stakeWithdraw, .assetActivation, .perpetualOpenPosition, .perpetualClosePosition, .perpetualModifyPosition: .empty
         }
     }
@@ -55,16 +54,6 @@ extension TransactionParticipantViewModel {
                 addressLink: transactionViewModel.addressLink(account: account)
             )
         )
-    }
-
-    private var earnProviderItemModel: TransactionItemModel {
-        let address = transactionViewModel.participant
-        let addressName = transactionViewModel.getAddressName(address: address)
-        let name = addressName?.name ?? address
-        return .listItem(ListItemModel(
-            title: Localized.Common.provider,
-            subtitle: name
-        ))
     }
 
     private var resourceItemModel: TransactionItemModel {

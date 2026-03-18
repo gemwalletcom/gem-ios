@@ -80,8 +80,8 @@ extension ConfirmRecipientViewModel {
             }
         case .account,
                 .swap,
-                .perpetual,
-                .earn: false
+                .perpetual: false
+        case .earn: true
         case .generic:
             switch model.type.outputAction {
             case .sign: false
