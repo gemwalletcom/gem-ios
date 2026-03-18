@@ -134,7 +134,7 @@ extension NavigationHandler {
 
     private func navigateToAsset(_ assetId: AssetId) async throws {
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
-         navigationState.wallet.append(Scenes.Asset(asset: asset))
+        navigationState.wallet.append(Scenes.Asset(asset: asset))
     }
 
     private func navigateToTransaction(walletId: WalletId, assetId: AssetId, transaction: Primitives.Transaction) async throws {
@@ -144,18 +144,20 @@ extension NavigationHandler {
 
         let asset = try await assetsService.getOrFetchAsset(for: assetId)
         try transactionsService.addTransaction(walletId: walletId, transaction: transaction)
-        let transactionExtended = try transactionsService.getTransaction(walletId: walletId, transactionId: transaction.id.identifier)
+        let transaction = try transactionsService.getTransaction(walletId: walletId, transactionId: transaction.id.identifier)
 
         if walletService.currentWalletId != walletId {
             walletService.setCurrent(for: walletId)
             await Task.yield()
         }
 
-        if asset.type == .perpetual {
-            navigationState.wallet.setPath([Scenes.Perpetual(asset), Scenes.Transaction(transaction: transactionExtended)])
-        } else {
-            navigationState.wallet.setPath([Scenes.Asset(asset: asset), Scenes.Transaction(transaction: transactionExtended)])
+        switch asset.type {
+        case .perpetual:
+            navigationState.wallet.setPath([Scenes.Perpetuals(), Scenes.Perpetual(asset), Scenes.Transaction(transaction: transaction)])
+        default:
+            navigationState.wallet.setPath([Scenes.Asset(asset: asset), Scenes.Transaction(transaction: transaction)])
         }
+
         navigationState.selectedTab = .wallet
     }
 
