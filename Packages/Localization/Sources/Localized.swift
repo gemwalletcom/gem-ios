@@ -1642,6 +1642,16 @@ public enum Localized {
       /// Connection
       public static let title = Localized.tr("Localizable", "wallet_connect.connection.title", fallback: "Connection")
     }
+    public enum Permissions {
+      /// Send approval requests
+      public static let approvalRequests = Localized.tr("Localizable", "wallet_connect.permissions.approval_requests", fallback: "Send approval requests")
+      /// Move funds without permission
+      public static let moveFunds = Localized.tr("Localizable", "wallet_connect.permissions.move_funds", fallback: "Move funds without permission")
+      /// Permissions
+      public static let title = Localized.tr("Localizable", "wallet_connect.permissions.title", fallback: "Permissions")
+      /// View your balance and activity
+      public static let viewBalance = Localized.tr("Localizable", "wallet_connect.permissions.view_balance", fallback: "View your balance and activity")
+    }
     public enum State {
       public enum Empty {
         /// Scan or paste code to connect to the DApp

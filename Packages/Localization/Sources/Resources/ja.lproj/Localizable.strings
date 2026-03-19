@@ -558,5 +558,8 @@
 "simulation.warning.nft_collection_approval.title" = "NFTコレクションへのフルアクセスをリクエスト";
 "simulation.warning.unlimited_token_approval.title" = "無制限のトークン承認";
 "transfer.review_request" = "レビューリクエスト";
-"wallet.portfolio.title" = "Portfolio";
-"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";
+"wallet.portfolio.title" = "ポートフォリオ";
+"wallet_connect.permissions.title" = "権限";
+"wallet_connect.permissions.view_balance" = "残高とアクティビティを確認する";
+"wallet_connect.permissions.approval_requests" = "承認依頼を送信する";
+"wallet_connect.permissions.move_funds" = "許可なく資金を移動させる";

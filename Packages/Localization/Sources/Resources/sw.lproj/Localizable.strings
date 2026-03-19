@@ -558,5 +558,8 @@
 "simulation.warning.nft_collection_approval.title" = "Ufikiaji kamili wa ukusanyaji wa NFT umeombwa";
 "simulation.warning.unlimited_token_approval.title" = "Idhini ya tokeni isiyo na kikomo";
 "transfer.review_request" = "Ombi la Uhakiki";
-"wallet.portfolio.title" = "Portfolio";
-"wallet.portfolio.footer" = "Estimated value based on current holdings and market prices.";
+"wallet.portfolio.title" = "Kwingineko";
+"wallet_connect.permissions.title" = "Ruhusa";
+"wallet_connect.permissions.view_balance" = "Tazama salio na shughuli zako";
+"wallet_connect.permissions.approval_requests" = "Tuma maombi ya idhini";
+"wallet_connect.permissions.move_funds" = "Hamisha fedha bila ruhusa";
