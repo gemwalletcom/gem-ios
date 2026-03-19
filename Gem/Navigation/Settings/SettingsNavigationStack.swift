@@ -77,7 +77,7 @@ struct SettingsNavigationStack: View {
                 ),
                 isPresentingWallets: $isPresentingWallets,
                 isPresentingSupport: $isPresentingSupport,
-                deviceId: (try? deviceService.getDeviceId()) ?? ""
+                deviceId: (try? SecurePreferences.standard.getDeviceId()) ?? ""
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
@@ -112,7 +112,7 @@ struct SettingsNavigationStack: View {
                         assetModel: AssetViewModel(asset: scene.asset),
                         priceAlertService: priceAlertService,
                         walletId: walletId,
-                        isPresentingSetPriceAlert: .constant(nil)
+                        onSetPriceAlert: { _ in }
                     )
                 )
             }
@@ -196,7 +196,7 @@ struct SettingsNavigationStack: View {
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {
-                WalletsNavigationStack(isPresentingWallets: $isPresentingWallets)
+                WalletsNavigationStack()
             }
         }
         .onChange(of: currencyModel.selectedCurrencyValue) { _, _ in

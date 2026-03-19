@@ -6,21 +6,17 @@ import BalanceService
 import GemAPI
 import Primitives
 import Preferences
-import DeviceService
 
 public struct AssetDiscoveryService: AssetDiscoverable {
-    private let deviceService: any DeviceServiceable
     private let assetsListService: any GemAPIAssetsListService
     private let assetService: AssetsService
     private let assetsEnabler: any AssetsEnabler
 
     public init(
-        deviceService: any DeviceServiceable,
         assetsListService: any GemAPIAssetsListService,
         assetService: AssetsService,
         assetsEnabler: any AssetsEnabler
     ) {
-        self.deviceService = deviceService
         self.assetsListService = assetsListService
         self.assetService = assetService
         self.assetsEnabler = assetsEnabler
@@ -28,8 +24,7 @@ public struct AssetDiscoveryService: AssetDiscoverable {
 
     public func discoverAssets(wallet: Wallet) async throws {
         let preferences = WalletPreferences(walletId: wallet.walletId)
-        _ = try await deviceService.getSubscriptionsDeviceId()
-
+        
         let assetIds = try await assetsListService.getDeviceAssets(walletId: wallet.id, fromTimestamp: preferences.assetsTimestamp)
 
         if assetIds.isNotEmpty {
