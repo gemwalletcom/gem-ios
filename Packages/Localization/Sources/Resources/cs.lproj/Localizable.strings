@@ -558,3 +558,8 @@
 "simulation.warning.nft_collection_approval.title" = "Požadován plný přístup k NFT kolekci";
 "simulation.warning.unlimited_token_approval.title" = "Neomezené schvalování tokenů";
 "transfer.review_request" = "Žádost o kontrolu";
+"wallet.portfolio.title" = "Portfolio";
+"wallet_connect.permissions.title" = "Oprávnění";
+"wallet_connect.permissions.view_balance" = "Zobrazení zůstatku a aktivity";
+"wallet_connect.permissions.approval_requests" = "Odeslat žádosti o schválení";
+"wallet_connect.permissions.move_funds" = "Převod finančních prostředků bez povolení";
