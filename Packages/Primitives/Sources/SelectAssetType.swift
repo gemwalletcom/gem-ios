@@ -38,12 +38,12 @@ public extension SelectAssetType {
 
 public enum SelectAssetSwapType: Identifiable, Hashable, Sendable {
     case pay
-    case receive(chains: [Chain], assetIds: [AssetId])
-    
+    case receive(chains: [Chain], assetIds: [AssetId], preferredChain: Chain?)
+
     public var id: String {
         switch self {
         case .pay: "pay"
-        case .receive(let chains, let assetIds): "receive_\(chains)_\(assetIds)"
+        case .receive(let chains, let assetIds, let preferredChain): "receive_\(chains)_\(assetIds)_\(preferredChain?.rawValue ?? "")"
         }
     }
 }

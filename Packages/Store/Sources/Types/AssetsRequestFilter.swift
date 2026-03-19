@@ -1,9 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 public enum AssetsRequestFilter {
-    case search(String, hasPriorityAssets: Bool)
+    case search(String, hasPriorityAssets: Bool, preferredChain: Chain? = nil)
     case enabled
     case buyable
     case swappable

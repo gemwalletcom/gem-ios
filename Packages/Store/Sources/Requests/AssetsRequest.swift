@@ -9,24 +9,27 @@ public struct AssetsRequest: DatabaseQueryable {
     public var walletId: WalletId
     public var searchBy: String
     public var filters: [AssetsRequestFilter]
+    public var preferredChain: Chain?
 
     public init(
         walletId: WalletId,
         searchBy: String = "",
-        filters: [AssetsRequestFilter] = []
+        filters: [AssetsRequestFilter] = [],
+        preferredChain: Chain? = nil
     ) {
         self.walletId = walletId
         self.searchBy = searchBy
         self.filters = filters
+        self.preferredChain = preferredChain
     }
 
     public func fetch(_ db: Database) throws -> [AssetData] {
         let searchBy = searchBy.trim()
-        
+
         let filters = if searchBy.isEmpty {
             filters
         } else {
-            filters + [.search(searchBy, hasPriorityAssets: try hasPriorityAssets(db, query: searchBy))]
+            filters + [.search(searchBy, hasPriorityAssets: try hasPriorityAssets(db, query: searchBy), preferredChain: preferredChain)]
         }
         
         if filters.contains(.priceAlerts) {
@@ -73,12 +76,14 @@ extension AssetsRequest {
 
     static private func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {
         switch filter {
-        case .search(let query, let hasPriorityAssets):
+        case .search(let query, let hasPriorityAssets, let preferredChain):
+            let chainOrder = preferredChain.map { (AssetRecord.Columns.chain == $0.rawValue).desc }
             if hasPriorityAssets {
                 return request.joining(required: AssetRecord.search
                     .filter(SearchRecord.Columns.query == query)
                 )
                 .order(
+                    chainOrder,
                     TableAlias(name: SearchRecord.databaseTableName)[SearchRecord.Columns.priority].ascNullsLast,
                     TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.rank].desc
                 )
@@ -90,6 +95,7 @@ extension AssetsRequest {
                     AssetRecord.Columns.tokenId.like("%%\(query)%%")
                 )
                 .order(
+                    chainOrder,
                     AssetRecord.Columns.rank.desc
                 )
         case .hasBalance:

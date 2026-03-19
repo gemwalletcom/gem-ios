@@ -74,7 +74,7 @@ public final class SelectAssetViewModel {
         self.filterModel = filter
         self.searchModel = AssetSearchViewModel(selectType: selectType)
 
-        self.assetsQuery = ObservableQuery(AssetsRequest(walletId: wallet.walletId, filters: filter.filters), initialValue: [])
+        self.assetsQuery = ObservableQuery(AssetsRequest(walletId: wallet.walletId, filters: filter.filters, preferredChain: filter.preferredChain), initialValue: [])
         self.recentsQuery = ObservableQuery(
             RecentActivityRequest(
                 walletId: wallet.walletId,

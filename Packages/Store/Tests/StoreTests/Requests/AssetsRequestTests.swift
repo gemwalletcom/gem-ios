@@ -143,6 +143,20 @@ struct AssetsRequestTests {
         }
     }
     
+    @Test func testSearchPreferredChain() throws {
+        let assets: [AssetBasic] = .mock() + [.mock(asset: .mockTronUSDT())]
+        let db = DB.mockAssets(assets: assets)
+
+        try db.dbQueue.read { db in
+            let result = try AssetsRequest.mock(
+                filters: [.search("USDT", hasPriorityAssets: false)],
+                preferredChain: .tron
+            ).fetch(db)
+
+            #expect(result.first?.asset == .mockTronUSDT())
+        }
+    }
+
     @Test func testOrder() throws {
         let db = DB.mockAssets()
         let priceStore = PriceStore(db: db)
@@ -181,8 +195,9 @@ extension AssetsRequest {
     static func mock(
         walletId: WalletId = .mock(),
         searchBy: String = "",
-        filters: [AssetsRequestFilter] = []
+        filters: [AssetsRequestFilter] = [],
+        preferredChain: Chain? = nil
     ) -> AssetsRequest {
-        AssetsRequest(walletId: walletId, searchBy: searchBy, filters: filters)
+        AssetsRequest(walletId: walletId, searchBy: searchBy, filters: filters, preferredChain: preferredChain)
     }
 }

@@ -108,7 +108,7 @@ extension SwapScene {
     private var swapToSectionView: some View {
         Section {
             SwapTokenView(
-                model: model.swapTokenModel(type: .receive(chains: [], assetIds: [])),
+                model: model.swapTokenModel(type: .receive(chains: [], assetIds: [], preferredChain: nil)),
                 text: $model.toValue,
                 showLoading: model.isLoading,
                 disabledTextField: true,

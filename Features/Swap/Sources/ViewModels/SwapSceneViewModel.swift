@@ -220,7 +220,7 @@ extension SwapSceneViewModel {
     func onSelectAssetReceive() {
         guard let fromAsset = fromAsset else { return }
         let (chains, assetIds) = swapQuotesProvider.supportedAssets(for: fromAsset.asset.id)
-        isPresentingInfoSheet = .selectAsset(.receive(chains: chains, assetIds: assetIds))
+        isPresentingInfoSheet = .selectAsset(.receive(chains: chains, assetIds: assetIds, preferredChain: fromAsset.asset.chain))
     }
 
     func onSelectSwapDetails() {

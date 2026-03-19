@@ -48,7 +48,7 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
         case .swap(let type):
             switch type {
             case .pay: [.enabled, .swappable, .hasBalance]
-            case .receive(let chains, let assetIds):
+            case .receive(let chains, let assetIds, _):
                 [
                     .enabled,
                     .chainsOrAssets(
@@ -62,6 +62,17 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
         case .priceAlert: [.enabled, .priceAlerts]
         case .deposit: [ .chainsOrAssets([], [AssetId(chain: .arbitrum, tokenId: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831").identifier])]
         case .withdraw: [ .chainsOrAssets([], [Asset.hypercoreUSDC().id.identifier])]
+        }
+    }
+
+    var preferredChain: Chain? {
+        switch type {
+        case .swap(let swapType):
+            switch swapType {
+            case .receive(_, _, let chain): chain
+            case .pay: nil
+            }
+        case .send, .receive, .buy, .manage, .priceAlert, .deposit, .withdraw: nil
         }
     }
 
