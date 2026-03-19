@@ -21,10 +21,6 @@ public struct WalletPortfolioScene: View {
                         ForEach(model.allTimeValues, id: \.title) {
                             ListItemView(model: $0)
                         }
-                    } header: {
-                        Text(model.footerText)
-                            .font(.footnote)
-                            .textCase(nil)
                     }
                 }
             }

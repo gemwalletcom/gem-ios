@@ -45,8 +45,6 @@ public final class WalletPortfolioSceneViewModel: ChartListViewable {
     }
 
     var navigationTitle: String { Localized.Wallet.Portfolio.title }
-    var footerText: String { Localized.Wallet.Portfolio.footer }
-    
     private var assets: [AssetData] { assetsQuery.value }
 
     public var periods: [ChartPeriod] { [.day, .week, .month, .year, .all] }
