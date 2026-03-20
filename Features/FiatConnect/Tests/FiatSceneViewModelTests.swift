@@ -6,6 +6,8 @@ import GemAPI
 import Primitives
 import PrimitivesTestKit
 import Formatters
+import FiatTransactionService
+import FiatTransactionServiceTestKit
 import BigInt
 
 @testable import FiatConnect
@@ -14,12 +16,14 @@ import BigInt
 final class FiatSceneViewModelTests {
     private static func mock(
         service: any GemAPIFiatService = GemAPIService(),
+        fiatTransactionService: FiatTransactionService = .mock(),
         currencyFormatter: CurrencyFormatter = .init(locale: Locale.US, currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress = .mock(),
         walletId: WalletId = .mock()
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             fiatService: service,
+            fiatTransactionService: fiatTransactionService,
             currencyFormatter: currencyFormatter,
             assetAddress: assetAddress,
             walletId: walletId

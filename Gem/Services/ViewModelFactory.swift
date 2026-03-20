@@ -28,6 +28,7 @@ import Preferences
 import PrimitivesComponents
 import GemAPI
 import AssetsService
+import FiatTransactionService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -48,6 +49,7 @@ public struct ViewModelFactory: Sendable {
     let activityService: ActivityService
     let eventPresenterService: EventPresenterService
     let fiatService: any GemAPIFiatService
+    let fiatTransactionService: FiatTransactionService
     let assetsService: AssetsService
 
     public init(
@@ -69,6 +71,7 @@ public struct ViewModelFactory: Sendable {
         activityService: ActivityService,
         eventPresenterService: EventPresenterService,
         fiatService: any GemAPIFiatService,
+        fiatTransactionService: FiatTransactionService,
         assetsService: AssetsService
     ) {
         self.keystore = keystore
@@ -89,6 +92,7 @@ public struct ViewModelFactory: Sendable {
         self.activityService = activityService
         self.eventPresenterService = eventPresenterService
         self.fiatService = fiatService
+        self.fiatTransactionService = fiatTransactionService
         self.assetsService = assetsService
     }
     
@@ -124,6 +128,7 @@ public struct ViewModelFactory: Sendable {
             data: data,
             confirmService: confirmService,
             simulationService: simulationService,
+            fiatTransactionService: fiatTransactionService,
             confirmTransferDelegate: confirmTransferDelegate,
             simulation: simulation,
             onComplete: onComplete
@@ -159,6 +164,7 @@ public struct ViewModelFactory: Sendable {
             input: input,
             wallet: wallet,
             service: amountService,
+            fiatTransactionService: fiatTransactionService,
             onTransferAction: onTransferAction
         )
     }
@@ -172,6 +178,7 @@ public struct ViewModelFactory: Sendable {
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             fiatService: fiatService,
+            fiatTransactionService: fiatTransactionService,
             assetAddress: assetAddress,
             walletId: walletId,
             type: type,

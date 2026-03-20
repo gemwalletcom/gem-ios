@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Store
+import FiatConnect
 
 extension View {
     func inject(resolver: AppResolver) -> some View {

@@ -222,4 +222,24 @@ public struct Scenes {
             self.address = address
         }
     }
+
+    public struct FiatTransactions: Hashable, Codable {
+        public let asset: Primitives.Asset
+
+        public init(asset: Primitives.Asset) {
+            self.asset = asset
+        }
+    }
+
+    public struct FiatTransaction: Hashable, Codable {
+        public let walletId: WalletId
+        public let asset: Primitives.Asset
+        public let transaction: Primitives.FiatTransaction
+
+        public init(walletId: WalletId, asset: Primitives.Asset, transaction: Primitives.FiatTransaction) {
+            self.walletId = walletId
+            self.asset = asset
+            self.transaction = transaction
+        }
+    }
 }

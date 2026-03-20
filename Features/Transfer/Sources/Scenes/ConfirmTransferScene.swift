@@ -64,6 +64,7 @@ public struct ConfirmTransferScene: View {
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
                             fiatService: fiatService,
+                            fiatTransactionService: model.fiatTransactionService,
                             assetAddress: assetAddress,
                             walletId: walletId
                         )

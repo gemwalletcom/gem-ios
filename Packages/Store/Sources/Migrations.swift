@@ -72,6 +72,7 @@ struct Migrations {
             try RecentActivityRecord.create(db: db)
             try SearchRecord.create(db: db)
             try NotificationRecord.create(db: db)
+            try FiatTransactionRecord.create(db: db)
         }
         try migrator.migrate(dbQueue)
     }
@@ -441,6 +442,10 @@ struct Migrations {
                     .notNull()
                     .defaults(to: VerificationStatus.unverified.rawValue)
             }
+        }
+
+        migrator.registerMigration("Create \(FiatTransactionRecord.databaseTableName)") { db in
+            try? FiatTransactionRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

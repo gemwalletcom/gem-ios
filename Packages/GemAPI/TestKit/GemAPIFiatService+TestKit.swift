@@ -7,13 +7,16 @@ import Primitives
 public struct GemAPIFiatServiceMock: GemAPIFiatService {
     private let quotes: [FiatQuote]
     private let quoteUrl: FiatQuoteUrl
+    private let fiatTransactions: [FiatTransaction]
 
     public init(
         quotes: [FiatQuote] = [],
-        quoteUrl: FiatQuoteUrl = FiatQuoteUrl(redirectUrl: "")
+        quoteUrl: FiatQuoteUrl = FiatQuoteUrl(redirectUrl: ""),
+        fiatTransactions: [FiatTransaction] = []
     ) {
         self.quotes = quotes
         self.quoteUrl = quoteUrl
+        self.fiatTransactions = fiatTransactions
     }
 
     public func getQuotes(walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest) async throws -> [FiatQuote] {
@@ -22,5 +25,9 @@ public struct GemAPIFiatServiceMock: GemAPIFiatService {
 
     public func getQuoteUrl(walletId: String, quoteId: String) async throws -> FiatQuoteUrl {
         quoteUrl
+    }
+
+    public func getFiatTransactions(walletId: String) async throws -> [FiatTransaction] {
+        fiatTransactions
     }
 }

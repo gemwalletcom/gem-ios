@@ -23,6 +23,7 @@ import AddressNameServiceTestKit
 import ActivityServiceTestKit
 import EventPresenterService
 import EventPresenterServiceTestKit
+import FiatTransactionServiceTestKit
 import Store
 import BigInt
 import Components
@@ -472,6 +473,7 @@ private extension ConfirmTransferSceneViewModel {
                 addressNameService: addressNameService,
                 assetsService: .mock()
             ),
+            fiatTransactionService: .mock(),
             simulation: simulation,
             onComplete: {}
         )
