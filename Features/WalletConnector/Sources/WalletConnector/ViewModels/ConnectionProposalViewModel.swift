@@ -97,11 +97,6 @@ public struct ConnectionProposalViewModel {
                 title: Localized.WalletConnect.Permissions.approvalRequests,
                 imageStyle: .accessory(assetImage: .image(Images.System.checkmark), fontWeight: .semibold)
             ),
-            ListItemModel(
-                title: Localized.WalletConnect.Permissions.moveFunds,
-                titleStyle: TextStyle(font: .body, color: Colors.secondaryText),
-                imageStyle: .accessory(assetImage: .image(Images.System.xmark), foregroundColor: Colors.gray, fontWeight: .semibold)
-            ),
         ]
     }
 
