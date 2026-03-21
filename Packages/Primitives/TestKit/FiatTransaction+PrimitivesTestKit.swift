@@ -28,3 +28,15 @@ extension FiatTransaction {
         )
     }
 }
+
+extension FiatTransactionInfo {
+    public static func mock(
+        transaction: FiatTransaction = .mock(),
+        detailsUrl: String? = nil
+    ) -> FiatTransactionInfo {
+        FiatTransactionInfo(
+            transaction: transaction,
+            detailsUrl: detailsUrl
+        )
+    }
+}

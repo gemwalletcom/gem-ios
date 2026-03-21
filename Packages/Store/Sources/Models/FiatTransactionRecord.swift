@@ -19,6 +19,7 @@ struct FiatTransactionRecord: Codable, FetchableRecord, PersistableRecord, Senda
         static let fiatCurrency = Column("fiatCurrency")
         static let transactionHash = Column("transactionHash")
         static let address = Column("address")
+        static let detailsUrl = Column("detailsUrl")
     }
 
     var walletId: String
@@ -31,6 +32,7 @@ struct FiatTransactionRecord: Codable, FetchableRecord, PersistableRecord, Senda
     var fiatCurrency: String
     var transactionHash: String?
     var address: String?
+    var detailsUrl: String?
 }
 
 extension FiatTransactionRecord: CreateTable {
@@ -55,6 +57,7 @@ extension FiatTransactionRecord: CreateTable {
                 .notNull()
             $0.column(Columns.transactionHash.name, .text)
             $0.column(Columns.address.name, .text)
+            $0.column(Columns.detailsUrl.name, .text)
             $0.primaryKey([
                 Columns.walletId.name,
                 Columns.providerId.name,
@@ -65,34 +68,38 @@ extension FiatTransactionRecord: CreateTable {
 }
 
 extension FiatTransactionRecord {
-    var fiatTransaction: FiatTransaction {
-        FiatTransaction(
-            assetId: assetId,
-            transactionType: transactionType,
-            providerId: providerId,
-            providerTransactionId: providerTransactionId,
-            status: status,
-            fiatAmount: fiatAmount,
-            fiatCurrency: fiatCurrency,
-            transactionHash: transactionHash,
-            address: address
+    var fiatTransactionInfo: FiatTransactionInfo {
+        FiatTransactionInfo(
+            transaction: FiatTransaction(
+                assetId: assetId,
+                transactionType: transactionType,
+                providerId: providerId,
+                providerTransactionId: providerTransactionId,
+                status: status,
+                fiatAmount: fiatAmount,
+                fiatCurrency: fiatCurrency,
+                transactionHash: transactionHash,
+                address: address
+            ),
+            detailsUrl: detailsUrl
         )
     }
 }
 
-extension FiatTransaction {
+extension FiatTransactionInfo {
     func record(walletId: String) -> FiatTransactionRecord {
         FiatTransactionRecord(
             walletId: walletId,
-            assetId: assetId,
-            transactionType: transactionType,
-            providerId: providerId,
-            providerTransactionId: providerTransactionId,
-            status: status,
-            fiatAmount: fiatAmount,
-            fiatCurrency: fiatCurrency,
-            transactionHash: transactionHash,
-            address: address
+            assetId: transaction.assetId,
+            transactionType: transaction.transactionType,
+            providerId: transaction.providerId,
+            providerTransactionId: transaction.providerTransactionId,
+            status: transaction.status,
+            fiatAmount: transaction.fiatAmount,
+            fiatCurrency: transaction.fiatCurrency,
+            transactionHash: transaction.transactionHash,
+            address: transaction.address,
+            detailsUrl: detailsUrl
         )
     }
 }

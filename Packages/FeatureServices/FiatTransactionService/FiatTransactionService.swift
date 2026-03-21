@@ -7,7 +7,7 @@ import Store
 
 public struct FiatTransactionService: Sendable {
     private let apiService: any GemAPIFiatService
-    public let store: FiatTransactionStore
+    private let store: FiatTransactionStore
 
     public init(
         apiService: any GemAPIFiatService,

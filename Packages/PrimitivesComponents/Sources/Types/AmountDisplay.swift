@@ -47,7 +47,6 @@ public struct AmountDisplayStyle: Sendable {
 public enum AmountDisplay: Sendable {
     case numeric(NumericViewModel)
     case symbol(SymbolViewModel)
-    case fiat(FiatAmountDisplay)
 }
 
 extension AmountDisplay: AmountDisplayable {
@@ -55,7 +54,6 @@ extension AmountDisplay: AmountDisplayable {
         switch self {
         case .numeric(let viewModel): viewModel.amount
         case .symbol(let viewModel): viewModel.amount
-        case .fiat(let viewModel): viewModel.amount
         }
     }
 
@@ -63,7 +61,6 @@ extension AmountDisplay: AmountDisplayable {
         switch self {
         case .numeric(let viewModel): viewModel.fiat
         case .symbol(let viewModel): viewModel.fiat
-        case .fiat(let viewModel): viewModel.fiat
         }
     }
 
@@ -71,7 +68,6 @@ extension AmountDisplay: AmountDisplayable {
         switch self {
         case .numeric(let viewModel): viewModel.assetImage
         case .symbol(let viewModel): viewModel.assetImage
-        case .fiat(let viewModel): viewModel.assetImage
         }
     }
 
@@ -93,7 +89,7 @@ extension AmountDisplay: AmountDisplayable {
                     style: style
                 )
             )
-        case .symbol, .fiat:
+        case .symbol:
             return self
         }
     }
@@ -135,7 +131,7 @@ extension AmountDisplay {
         )
     }
 
-    public static func currency(
+    static func currency(
         value: Double,
         currencyCode: String,
         textStyle: TextStyle? = nil,

@@ -12,7 +12,7 @@ public struct FiatTransactionStore: Sendable {
         self.db = db.dbQueue
     }
 
-    public func addTransactions(walletId: WalletId, transactions: [FiatTransaction]) throws {
+    public func addTransactions(walletId: WalletId, transactions: [FiatTransactionInfo]) throws {
         guard transactions.isNotEmpty else { return }
         try db.write { db in
             for transaction in transactions {
@@ -21,9 +21,4 @@ public struct FiatTransactionStore: Sendable {
         }
     }
 
-    public func clear() throws -> Int {
-        try db.write { db in
-            try FiatTransactionRecord.deleteAll(db)
-        }
-    }
 }

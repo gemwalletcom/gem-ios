@@ -12,17 +12,14 @@ import Store
 public final class FiatTransactionsViewModel {
     private let service: FiatTransactionService
     let walletId: WalletId
-    let asset: Asset
 
     public let query: ObservableQuery<FiatTransactionsRequest>
-    var transactions: [FiatTransaction] { query.value }
-    var assetModel: AssetViewModel { AssetViewModel(asset: asset) }
+    var transactions: [FiatTransactionInfo] { query.value }
 
-    public init(walletId: WalletId, asset: Asset, service: FiatTransactionService) {
+    public init(walletId: WalletId, service: FiatTransactionService) {
         self.walletId = walletId
-        self.asset = asset
         self.service = service
-        self.query = ObservableQuery(FiatTransactionsRequest(walletId: walletId, assetId: asset.id), initialValue: [])
+        self.query = ObservableQuery(FiatTransactionsRequest(walletId: walletId), initialValue: [])
     }
 
     var title: String { Localized.Activity.title }

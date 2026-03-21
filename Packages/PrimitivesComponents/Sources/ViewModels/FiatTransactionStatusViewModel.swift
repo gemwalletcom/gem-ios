@@ -18,7 +18,7 @@ public struct FiatTransactionStatusViewModel: Sendable {
         case .complete: Localized.Transaction.Status.confirmed
         case .pending: Localized.Transaction.Status.pending
         case .failed: Localized.Transaction.Status.failed
-        case .unknown(let value): value
+        case .unknown: Localized.Errors.unknown
         }
     }
 

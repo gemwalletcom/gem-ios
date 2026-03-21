@@ -32,26 +32,16 @@ public struct FiatConnectNavigationView: View {
         )
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(value: Scenes.FiatTransactions(asset: model.asset)) {
+                NavigationLink(value: Scenes.FiatTransactions()) {
                     Images.Tabs.activity
                 }
             }
         }
-        .navigationDestination(for: Scenes.FiatTransactions.self) {
+        .navigationDestination(for: Scenes.FiatTransactions.self) { _ in
             FiatTransactionsScene(
                 model: FiatTransactionsViewModel(
                     walletId: model.walletId,
-                    asset: $0.asset,
                     service: model.fiatTransactionService
-                )
-            )
-        }
-        .navigationDestination(for: Scenes.FiatTransaction.self) {
-            FiatTransactionDetailScene(
-                model: FiatTransactionDetailViewModel(
-                    transaction: $0.transaction,
-                    walletId: $0.walletId,
-                    asset: $0.asset
                 )
             )
         }

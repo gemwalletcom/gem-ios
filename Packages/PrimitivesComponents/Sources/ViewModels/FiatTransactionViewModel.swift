@@ -9,25 +9,25 @@ import Style
 import SwiftUI
 
 public struct FiatTransactionViewModel: Sendable {
-    public let transaction: FiatTransaction
+    private let transaction: FiatTransaction
 
-    public init(transaction: FiatTransaction) {
-        self.transaction = transaction
+    public init(info: FiatTransactionInfo) {
+        self.transaction = info.transaction
     }
 
     public var listItemModel: ListItemModel {
         let statusModel = FiatTransactionStatusViewModel(status: transaction.status)
         return ListItemModel(
-            title: title,
+            title: transaction.providerId.displayName,
             titleStyle: TextStyle(font: Font.system(.body, weight: .medium), color: .primary),
             titleTag: titleTag(statusModel),
             titleTagStyle: titleTagStyle(statusModel),
             titleTagType: titleTagType,
-            titleExtra: transaction.providerId.displayName,
+            titleExtra: typeTitle,
             titleStyleExtra: .footnote,
             subtitle: subtitle,
             subtitleStyle: TextStyle(font: .body, color: subtitleColor, fontWeight: .medium),
-            imageStyle: .asset(assetImage: .image(transaction.providerId.image))
+            imageStyle: .asset(assetImage: assetImage)
         )
     }
 }
@@ -35,11 +35,18 @@ public struct FiatTransactionViewModel: Sendable {
 // MARK: - Private
 
 extension FiatTransactionViewModel {
-    private var title: String {
+    private var typeTitle: String {
         switch transaction.transactionType {
         case .buy: Localized.Wallet.buy
         case .sell: Localized.Wallet.sell
         }
+    }
+
+    private var assetImage: AssetImage {
+        guard let assetId = transaction.assetId else {
+            return .init(type: transaction.providerId.displayName)
+        }
+        return AssetIdViewModel(assetId: assetId).assetImage
     }
 
     private var titleTagType: TitleTagType {

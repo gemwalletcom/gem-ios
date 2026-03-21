@@ -16,16 +16,8 @@ public struct FiatTransactionsScene: View {
 
     public var body: some View {
         List {
-            Section { } header: {
-                AssetPreviewView(model: model.assetModel)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, .small)
-            }
-            .cleanListRow()
             ForEach(model.transactions) { transaction in
-                NavigationLink(value: Scenes.FiatTransaction(walletId: model.walletId, asset: model.asset, transaction: transaction)) {
-                    ListItemView(model: FiatTransactionViewModel(transaction: transaction).listItemModel)
-                }
+                ListItemView(model: FiatTransactionViewModel(info: transaction).listItemModel)
             }
             .listRowInsets(.assetListRowInsets)
         }

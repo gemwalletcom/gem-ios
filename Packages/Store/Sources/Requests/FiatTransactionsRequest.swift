@@ -7,18 +7,15 @@ import Primitives
 public struct FiatTransactionsRequest: DatabaseQueryable {
 
     public let walletId: WalletId
-    public let assetId: AssetId
 
-    public init(walletId: WalletId, assetId: AssetId) {
+    public init(walletId: WalletId) {
         self.walletId = walletId
-        self.assetId = assetId
     }
 
-    public func fetch(_ db: Database) throws -> [FiatTransaction] {
+    public func fetch(_ db: Database) throws -> [FiatTransactionInfo] {
         try FiatTransactionRecord
             .filter(FiatTransactionRecord.Columns.walletId == walletId.id)
-            .filter(FiatTransactionRecord.Columns.assetId == assetId.identifier)
             .fetchAll(db)
-            .map { $0.fiatTransaction }
+            .map { $0.fiatTransactionInfo }
     }
 }
