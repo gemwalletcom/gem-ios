@@ -8,6 +8,7 @@ extension Gemstone.PerpetualConfirmData {
     public func map() throws -> Primitives.PerpetualConfirmData {
         Primitives.PerpetualConfirmData(
             direction: direction.map(),
+            marginType: marginType.map(),
             baseAsset: try baseAsset.map(),
             assetIndex: assetIndex,
             price: price,
@@ -29,6 +30,7 @@ extension Primitives.PerpetualConfirmData {
     public func map() -> Gemstone.PerpetualConfirmData {
         Gemstone.PerpetualConfirmData(
             direction: direction.map(),
+            marginType: marginType.map(),
             baseAsset: baseAsset.map(),
             assetIndex: assetIndex,
             price: price,

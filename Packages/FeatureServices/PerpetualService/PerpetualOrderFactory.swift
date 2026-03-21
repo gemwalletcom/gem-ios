@@ -40,6 +40,7 @@ public struct PerpetualOrderFactory {
 
         let data = makePerpetualConfirmData(
             direction: perpetual.direction,
+            marginType: perpetual.marginType,
             baseAsset: perpetual.baseAsset,
             fiatValue: fiatValue,
             assetIndex: Int32(perpetual.assetIndex),
@@ -81,6 +82,7 @@ public struct PerpetualOrderFactory {
 
         return makePerpetualConfirmData(
             direction: position.direction,
+            marginType: position.marginType,
             baseAsset: baseAsset,
             fiatValue: abs(position.size) * positionPrice,
             assetIndex: assetIndex,
@@ -115,6 +117,7 @@ public struct PerpetualOrderFactory {
 
     private func makePerpetualConfirmData(
         direction: PerpetualDirection,
+        marginType: PerpetualMarginType,
         baseAsset: Asset,
         fiatValue: Double,
         assetIndex: Int32,
@@ -143,6 +146,7 @@ public struct PerpetualOrderFactory {
 
         return PerpetualConfirmData(
             direction: direction,
+            marginType: marginType,
             baseAsset: baseAsset,
             assetIndex: assetIndex,
             price: price,

@@ -223,7 +223,8 @@ public extension PerpetualSceneViewModel {
     func onOpenLongPosition() {
         guard let transferData = createTransferData(
             direction: .long,
-            leverage: perpetual.maxLeverage
+            leverage: perpetual.maxLeverage,
+            marginType: perpetual.onlyIsolated ? .isolated : .cross
         ) else {
             return
         }
@@ -233,7 +234,8 @@ public extension PerpetualSceneViewModel {
     func onOpenShortPosition() {
         guard let transferData = createTransferData(
             direction: .short,
-            leverage: perpetual.maxLeverage
+            leverage: perpetual.maxLeverage,
+            marginType: perpetual.onlyIsolated ? .isolated : .cross
         ) else {
             return
         }
@@ -244,7 +246,7 @@ public extension PerpetualSceneViewModel {
         isPresentingModifyAlert = false
 
         guard let position = positions.first?.position,
-              let transferData = createTransferData(direction: position.direction, leverage: position.leverage)
+              let transferData = createTransferData(direction: position.direction, leverage: position.leverage, marginType: position.marginType)
         else { return }
 
         onPositionAction(.increase(transferData))
@@ -264,7 +266,7 @@ public extension PerpetualSceneViewModel {
             }
         }()
 
-        guard let transferData = createTransferData(direction: direction, leverage: position.leverage) else {
+        guard let transferData = createTransferData(direction: direction, leverage: position.leverage, marginType: position.marginType) else {
             return
         }
 
@@ -341,7 +343,7 @@ private extension PerpetualSceneViewModel {
         state = .data(candlesticks)
     }
 
-    func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
+    func createTransferData(direction: PerpetualDirection, leverage: UInt8, marginType: PerpetualMarginType) -> PerpetualTransferData? {
         guard let assetIndex = Int(perpetual.identifier) else {
             return nil
         }
@@ -353,7 +355,8 @@ private extension PerpetualSceneViewModel {
             baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
             price: perpetual.price,
-            leverage: leverage
+            leverage: leverage,
+            marginType: marginType
         )
     }
 

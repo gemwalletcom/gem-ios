@@ -11,7 +11,8 @@ public extension PerpetualTransferData {
         baseAsset: Asset = .mock(),
         assetIndex: Int = 0,
         price: Double = 100.0,
-        leverage: UInt8 = 3
+        leverage: UInt8 = 3,
+        marginType: PerpetualMarginType = .cross
     ) -> PerpetualTransferData {
         PerpetualTransferData(
             provider: provider,
@@ -20,7 +21,8 @@ public extension PerpetualTransferData {
             baseAsset: baseAsset,
             assetIndex: assetIndex,
             price: price,
-            leverage: leverage
+            leverage: leverage,
+            marginType: marginType
         )
     }
 }

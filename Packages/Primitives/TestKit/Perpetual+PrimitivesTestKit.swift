@@ -27,7 +27,8 @@ public extension Perpetual {
             openInterest: openInterest,
             volume24h: volume24h,
             funding: funding,
-            maxLeverage: maxLeverage
+            maxLeverage: maxLeverage,
+            onlyIsolated: false
         )
     }
 }
