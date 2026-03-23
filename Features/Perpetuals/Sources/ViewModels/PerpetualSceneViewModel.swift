@@ -294,7 +294,9 @@ private extension PerpetualSceneViewModel {
             )
             state = .data(candlesticks)
         } catch {
-            state = .error(error)
+            if !error.isCancelled {
+                state = .error(error)
+            }
         }
     }
 

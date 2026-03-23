@@ -121,7 +121,9 @@ extension AddNodeSceneViewModel {
             )
             state = .data(AddNodeResultViewModel(addNodeResult: result))
         } catch {
-            state = .error(error)
+            if !error.isCancelled {
+                state = .error(error)
+            }
         }
     }
 }

@@ -80,7 +80,9 @@ extension AddAssetSceneViewModel {
             let asset = try await service.getTokenData(chain: chain, tokenId: address)
             state = .data(AddAssetViewModel(asset: asset))
         } catch {
-            state = .error(error)
+            if !error.isCancelled {
+                state = .error(error)
+            }
         }
     }
 }
