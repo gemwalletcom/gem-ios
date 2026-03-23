@@ -74,15 +74,15 @@ extension WalletPortfolioSceneViewModel {
         do {
             let rate = try priceService.getRate(currency: currencyCode)
             let portfolio = try await service.getPortfolioAssets(assets: assets, period: selectedPeriod)
-            try Task.checkCancellation()
             let charts = portfolio.values.map {
                 ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
             }
             let chart = ChartValuesViewModel.priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter, showHeaderValue: true)
             state = chart.map { .data(WalletPortfolioData(chart: $0, portfolio: portfolio)) } ?? .noData
         } catch {
-            guard !Task.isCancelled else { return }
-            state = .error(error)
+            if !error.isCancelled {
+                state = .error(error)
+            }
         }
     }
 }

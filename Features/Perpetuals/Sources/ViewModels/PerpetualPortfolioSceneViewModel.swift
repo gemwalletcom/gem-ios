@@ -68,14 +68,14 @@ final class PerpetualPortfolioSceneViewModel: ChartListViewable {
         state = .loading
         do {
             let data = try await perpetualService.portfolio(address: address)
-            try Task.checkCancellation()
             if !data.availablePeriods.contains(selectedPeriod), let first = data.availablePeriods.first {
                 selectedPeriod = first
             }
             state = .data(data)
         } catch {
-            guard !Task.isCancelled else { return }
-            state = .error(error)
+            if !error.isCancelled {
+                state = .error(error)
+            }
         }
     }
 }

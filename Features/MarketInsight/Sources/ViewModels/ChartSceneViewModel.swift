@@ -74,7 +74,6 @@ extension ChartSceneViewModel {
                 assetId: assetModel.asset.id,
                 period: selectedPeriod
             )
-            try Task.checkCancellation()
             if let market = values.market {
                 try priceService.updateMarketPrice(assetId: assetModel.asset.id, market: market, currency: preferences.currency)
             }
@@ -99,8 +98,9 @@ extension ChartSceneViewModel {
             )
             chartState = .data(model)
         } catch {
-            guard !Task.isCancelled else { return }
-            chartState = .error(error)
+            if !error.isCancelled {
+                chartState = .error(error)
+            }
         }
     }
 
