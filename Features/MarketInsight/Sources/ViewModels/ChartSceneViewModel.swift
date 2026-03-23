@@ -74,12 +74,13 @@ extension ChartSceneViewModel {
                 assetId: assetModel.asset.id,
                 period: selectedPeriod
             )
+            try Task.checkCancellation()
             if let market = values.market {
                 try priceService.updateMarketPrice(assetId: assetModel.asset.id, market: market, currency: preferences.currency)
             }
             let price = try priceService.getPrice(for: assetModel.asset.id)
             let rate = try priceService.getRate(currency: preferences.currency)
-            
+
             var charts = values.prices.map {
                 ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
             }
@@ -98,6 +99,7 @@ extension ChartSceneViewModel {
             )
             chartState = .data(model)
         } catch {
+            guard !Task.isCancelled else { return }
             chartState = .error(error)
         }
     }
