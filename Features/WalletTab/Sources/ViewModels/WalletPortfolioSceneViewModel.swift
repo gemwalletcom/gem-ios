@@ -80,9 +80,7 @@ extension WalletPortfolioSceneViewModel {
             let chart = ChartValuesViewModel.priceChange(charts: charts, period: selectedPeriod, formatter: currencyFormatter, showHeaderValue: true)
             state = chart.map { .data(WalletPortfolioData(chart: $0, portfolio: portfolio)) } ?? .noData
         } catch {
-            if !error.isCancelled {
-                state = .error(error)
-            }
+            state.setError(error)
         }
     }
 }

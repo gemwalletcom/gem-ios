@@ -98,9 +98,7 @@ extension ChartSceneViewModel {
             )
             chartState = .data(model)
         } catch {
-            if !error.isCancelled {
-                chartState = .error(error)
-            }
+            chartState.setError(error)
         }
     }
 

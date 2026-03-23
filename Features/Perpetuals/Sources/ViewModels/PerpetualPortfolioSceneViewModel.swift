@@ -73,9 +73,7 @@ final class PerpetualPortfolioSceneViewModel: ChartListViewable {
             }
             state = .data(data)
         } catch {
-            if !error.isCancelled {
-                state = .error(error)
-            }
+            state.setError(error)
         }
     }
 }
