@@ -14,8 +14,10 @@ public struct FiatTransactionsRequest: DatabaseQueryable {
 
     public func fetch(_ db: Database) throws -> [FiatTransactionInfo] {
         try FiatTransactionRecord
+            .including(required: FiatTransactionRecord.asset)
             .filter(FiatTransactionRecord.Columns.walletId == walletId.id)
+            .asRequest(of: FiatTransactionRecordInfo.self)
             .fetchAll(db)
-            .map { $0.fiatTransactionInfo }
+            .map { $0.map() }
     }
 }

@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Components
 import Foundation
 import FiatTransactionService
 import Localization
@@ -15,6 +16,10 @@ public final class FiatTransactionsViewModel {
 
     public let query: ObservableQuery<FiatTransactionsRequest>
     var transactions: [FiatTransactionInfo] { query.value }
+
+    var sections: [ListSection<FiatTransactionInfo>] {
+        DateSectionBuilder(items: transactions, dateKeyPath: \.transaction.createdAt).build()
+    }
 
     public init(walletId: WalletId, service: FiatTransactionService) {
         self.walletId = walletId

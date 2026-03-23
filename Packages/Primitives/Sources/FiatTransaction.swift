@@ -17,17 +17,20 @@ public enum FiatTransactionStatus: String, Codable, Equatable, Hashable, Sendabl
 }
 
 public struct FiatTransaction: Codable, Equatable, Sendable {
-	public let assetId: AssetId?
+	public let assetId: AssetId
 	public let transactionType: FiatQuoteType
 	public let providerId: FiatProviderName
-	public let providerTransactionId: String
+	public let providerTransactionId: String?
 	public let status: FiatTransactionStatus
 	public let fiatAmount: Double
 	public let fiatCurrency: String
+	public let value: String
 	public let transactionHash: String?
 	public let address: String?
+	public let createdAt: Date
+	public let updatedAt: Date
 
-	public init(assetId: AssetId?, transactionType: FiatQuoteType, providerId: FiatProviderName, providerTransactionId: String, status: FiatTransactionStatus, fiatAmount: Double, fiatCurrency: String, transactionHash: String?, address: String?) {
+	public init(assetId: AssetId, transactionType: FiatQuoteType, providerId: FiatProviderName, providerTransactionId: String?, status: FiatTransactionStatus, fiatAmount: Double, fiatCurrency: String, value: String, transactionHash: String?, address: String?, createdAt: Date, updatedAt: Date) {
 		self.assetId = assetId
 		self.transactionType = transactionType
 		self.providerId = providerId
@@ -35,17 +38,22 @@ public struct FiatTransaction: Codable, Equatable, Sendable {
 		self.status = status
 		self.fiatAmount = fiatAmount
 		self.fiatCurrency = fiatCurrency
+		self.value = value
 		self.transactionHash = transactionHash
 		self.address = address
+		self.createdAt = createdAt
+		self.updatedAt = updatedAt
 	}
 }
 
 public struct FiatTransactionInfo: Codable, Equatable, Sendable {
 	public let transaction: FiatTransaction
+	public let asset: Asset
 	public let detailsUrl: String?
 
-	public init(transaction: FiatTransaction, detailsUrl: String?) {
+	public init(transaction: FiatTransaction, asset: Asset, detailsUrl: String?) {
 		self.transaction = transaction
+		self.asset = asset
 		self.detailsUrl = detailsUrl
 	}
 }

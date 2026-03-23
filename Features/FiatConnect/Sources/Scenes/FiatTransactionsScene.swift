@@ -16,8 +16,14 @@ public struct FiatTransactionsScene: View {
 
     public var body: some View {
         List {
-            ForEach(model.transactions) { transaction in
-                ListItemView(model: FiatTransactionViewModel(info: transaction).listItemModel)
+            ForEach(model.sections) { section in
+                Section {
+                    ForEach(section.values) { transaction in
+                        ListItemView(model: FiatTransactionViewModel(info: transaction).listItemModel)
+                    }
+                } header: {
+                    section.title.map { Text($0) }
+                }
             }
             .listRowInsets(.assetListRowInsets)
         }
@@ -30,6 +36,7 @@ public struct FiatTransactionsScene: View {
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listSectionSpacing(.compact)
         .bindQuery(model.query)
+        .refreshable { await model.fetch() }
         .navigationTitle(model.title)
         .task { await model.fetch() }
     }

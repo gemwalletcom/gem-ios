@@ -5,15 +5,18 @@ import Primitives
 
 extension FiatTransaction {
     public static func mock(
-        assetId: AssetId? = .mock(),
+        assetId: AssetId = .mock(),
         transactionType: FiatQuoteType = .buy,
         providerId: FiatProviderName = .moonPay,
-        providerTransactionId: String = "mock_tx_123",
+        providerTransactionId: String? = "mock_tx_123",
         status: FiatTransactionStatus = .complete,
         fiatAmount: Double = 100.0,
         fiatCurrency: String = "USD",
+        value: String = "0",
         transactionHash: String? = nil,
-        address: String? = "0x1234567890abcdef"
+        address: String? = "0x1234567890abcdef",
+        createdAt: Date = .now,
+        updatedAt: Date = .now
     ) -> FiatTransaction {
         FiatTransaction(
             assetId: assetId,
@@ -23,8 +26,11 @@ extension FiatTransaction {
             status: status,
             fiatAmount: fiatAmount,
             fiatCurrency: fiatCurrency,
+            value: value,
             transactionHash: transactionHash,
-            address: address
+            address: address,
+            createdAt: createdAt,
+            updatedAt: updatedAt
         )
     }
 }
@@ -32,10 +38,12 @@ extension FiatTransaction {
 extension FiatTransactionInfo {
     public static func mock(
         transaction: FiatTransaction = .mock(),
+        asset: Asset = .mock(),
         detailsUrl: String? = nil
     ) -> FiatTransactionInfo {
         FiatTransactionInfo(
             transaction: transaction,
+            asset: asset,
             detailsUrl: detailsUrl
         )
     }
