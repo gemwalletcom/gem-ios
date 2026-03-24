@@ -39,6 +39,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
     public let assetIndex: Int
     public let price: Double
     public let leverage: UInt8
+    public let marginType: PerpetualMarginType
 
     public init(
         provider: PerpetualProvider,
@@ -47,7 +48,8 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         baseAsset: Asset,
         assetIndex: Int,
         price: Double,
-        leverage: UInt8
+        leverage: UInt8,
+        marginType: PerpetualMarginType
     ) {
         self.provider = provider
         self.direction = direction
@@ -56,6 +58,7 @@ public struct PerpetualTransferData: Codable, Equatable, Hashable, Sendable {
         self.assetIndex = assetIndex
         self.price = price
         self.leverage = leverage
+        self.marginType = marginType
     }
 }
 

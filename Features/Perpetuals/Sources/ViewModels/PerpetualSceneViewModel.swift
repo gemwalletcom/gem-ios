@@ -122,7 +122,7 @@ public final class PerpetualSceneViewModel {
         }
     }
 
-    private var currentChartSubscription: ChartSubscription { ChartSubscription(coin: perpetual.name, period: currentPeriod) }
+    private var currentChartSubscription: ChartSubscription { ChartSubscription(coin: perpetual.coin, period: currentPeriod) }
 }
 
 // MARK: - Actions
@@ -130,7 +130,7 @@ public final class PerpetualSceneViewModel {
 public extension PerpetualSceneViewModel {
     func fetch() {
         Task { await observerService.update(for: wallet) }
-        Task { try await perpetualService.updateMarket(symbol: perpetual.name) }
+        Task { try await perpetualService.updateMarket(symbol: perpetual.coin) }
         Task { await fetchTransactions() }
         Task { await updateCandlesticks() }
     }
@@ -152,7 +152,7 @@ public extension PerpetualSceneViewModel {
     func onScenePhaseChange(_ oldPhase: ScenePhase, _ newPhase: ScenePhase) {
         switch newPhase {
         case .active:
-            Task { try? await perpetualService.updateMarket(symbol: perpetual.name) }
+            Task { try? await perpetualService.updateMarket(symbol: perpetual.coin) }
             Task { await fetchTransactions() }
             Task { await updateCandlesticks() }
         case .inactive, .background: break
@@ -162,9 +162,9 @@ public extension PerpetualSceneViewModel {
 
     func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
         Task {
-            await unsubscribeCandles(ChartSubscription(coin: perpetual.name, period: oldPeriod))
+            await unsubscribeCandles(ChartSubscription(coin: perpetual.coin, period: oldPeriod))
             await updateCandlesticks()
-            await subscribeCandles(ChartSubscription(coin: perpetual.name, period: newPeriod))
+            await subscribeCandles(ChartSubscription(coin: perpetual.coin, period: newPeriod))
         }
     }
 
@@ -223,7 +223,8 @@ public extension PerpetualSceneViewModel {
     func onOpenLongPosition() {
         guard let transferData = createTransferData(
             direction: .long,
-            leverage: perpetual.maxLeverage
+            leverage: perpetual.maxLeverage,
+            marginType: perpetual.marginType
         ) else {
             return
         }
@@ -233,7 +234,8 @@ public extension PerpetualSceneViewModel {
     func onOpenShortPosition() {
         guard let transferData = createTransferData(
             direction: .short,
-            leverage: perpetual.maxLeverage
+            leverage: perpetual.maxLeverage,
+            marginType: perpetual.marginType
         ) else {
             return
         }
@@ -244,7 +246,7 @@ public extension PerpetualSceneViewModel {
         isPresentingModifyAlert = false
 
         guard let position = positions.first?.position,
-              let transferData = createTransferData(direction: position.direction, leverage: position.leverage)
+              let transferData = createTransferData(direction: position.direction, leverage: position.leverage, marginType: position.marginType)
         else { return }
 
         onPositionAction(.increase(transferData))
@@ -264,7 +266,7 @@ public extension PerpetualSceneViewModel {
             }
         }()
 
-        guard let transferData = createTransferData(direction: direction, leverage: position.leverage) else {
+        guard let transferData = createTransferData(direction: direction, leverage: position.leverage, marginType: position.marginType) else {
             return
         }
 
@@ -289,7 +291,7 @@ private extension PerpetualSceneViewModel {
         state = .loading
         do {
             let candlesticks = try await perpetualService.candlesticks(
-                symbol: perpetual.name,
+                symbol: perpetual.coin,
                 period: currentPeriod
             )
             state = .data(candlesticks)
@@ -341,7 +343,7 @@ private extension PerpetualSceneViewModel {
         state = .data(candlesticks)
     }
 
-    func createTransferData(direction: PerpetualDirection, leverage: UInt8) -> PerpetualTransferData? {
+    func createTransferData(direction: PerpetualDirection, leverage: UInt8, marginType: PerpetualMarginType) -> PerpetualTransferData? {
         guard let assetIndex = Int(perpetual.identifier) else {
             return nil
         }
@@ -353,7 +355,8 @@ private extension PerpetualSceneViewModel {
             baseAsset: .hypercoreUSDC(),
             assetIndex: assetIndex,
             price: perpetual.price,
-            leverage: leverage
+            leverage: leverage,
+            marginType: marginType
         )
     }
 

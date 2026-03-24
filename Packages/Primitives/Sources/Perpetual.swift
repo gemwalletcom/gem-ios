@@ -55,8 +55,9 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 	public let volume24h: Double
 	public let funding: Double
 	public let maxLeverage: UInt8
+	public let onlyIsolated: Bool
 
-	public init(id: String, name: String, provider: PerpetualProvider, assetId: AssetId, identifier: String, price: Double, pricePercentChange24h: Double, openInterest: Double, volume24h: Double, funding: Double, maxLeverage: UInt8) {
+	public init(id: String, name: String, provider: PerpetualProvider, assetId: AssetId, identifier: String, price: Double, pricePercentChange24h: Double, openInterest: Double, volume24h: Double, funding: Double, maxLeverage: UInt8, onlyIsolated: Bool) {
 		self.id = id
 		self.name = name
 		self.provider = provider
@@ -68,6 +69,7 @@ public struct Perpetual: Codable, Equatable, Hashable, Sendable {
 		self.volume24h = volume24h
 		self.funding = funding
 		self.maxLeverage = maxLeverage
+		self.onlyIsolated = onlyIsolated
 	}
 }
 
@@ -97,6 +99,7 @@ public struct PerpetualBasic: Codable, Equatable, Hashable, Sendable {
 
 public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let direction: PerpetualDirection
+	public let marginType: PerpetualMarginType
 	public let baseAsset: Asset
 	public let assetIndex: Int32
 	public let price: String
@@ -111,8 +114,9 @@ public struct PerpetualConfirmData: Codable, Equatable, Hashable, Sendable {
 	public let takeProfit: String?
 	public let stopLoss: String?
 
-	public init(direction: PerpetualDirection, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double, takeProfit: String?, stopLoss: String?) {
+	public init(direction: PerpetualDirection, marginType: PerpetualMarginType, baseAsset: Asset, assetIndex: Int32, price: String, fiatValue: Double, size: String, slippage: Double, leverage: UInt8, pnl: Double?, entryPrice: Double?, marketPrice: Double, marginAmount: Double, takeProfit: String?, stopLoss: String?) {
 		self.direction = direction
+		self.marginType = marginType
 		self.baseAsset = baseAsset
 		self.assetIndex = assetIndex
 		self.price = price

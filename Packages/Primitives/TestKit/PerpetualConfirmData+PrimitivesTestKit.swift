@@ -6,6 +6,7 @@ import Primitives
 public extension PerpetualConfirmData {
     static func mock(
         direction: PerpetualDirection = .long,
+        marginType: PerpetualMarginType = .cross,
         baseAsset: Asset = .mock(),
         assetIndex: Int32 = 0,
         price: String = "100",
@@ -22,6 +23,7 @@ public extension PerpetualConfirmData {
     ) -> PerpetualConfirmData {
         PerpetualConfirmData(
             direction: direction,
+            marginType: marginType,
             baseAsset: baseAsset,
             assetIndex: assetIndex,
             price: price,

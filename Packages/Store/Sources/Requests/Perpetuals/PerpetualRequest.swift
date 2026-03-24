@@ -42,7 +42,8 @@ extension PerpetualData {
                 openInterest: .zero,
                 volume24h: .zero,
                 funding: .zero,
-                maxLeverage: 1
+                maxLeverage: 1,
+                onlyIsolated: false
             ),
             asset: Asset(id: .init(chain: .bitcoin, tokenId: .none), name: "", symbol: "", decimals: 0, type: .native),
             metadata: PerpetualMetadata(isPinned: false)
