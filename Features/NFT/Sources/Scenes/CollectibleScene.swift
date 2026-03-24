@@ -31,6 +31,7 @@ public struct CollectibleScene: View {
         }
         .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)
+        .contentMargins([.top], .small, for: .scrollContent)
         .navigationTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .principal) {
