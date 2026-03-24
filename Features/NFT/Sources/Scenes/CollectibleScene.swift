@@ -1,13 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import Primitives
 import SwiftUI
 import Style
 import Components
 import PrimitivesComponents
 import Localization
-import ImageGalleryService
 import InfoSheet
 
 public struct CollectibleScene: View {
