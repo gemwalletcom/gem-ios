@@ -362,10 +362,8 @@ extension ConfirmTransferSceneViewModel {
             )
         } catch {
             self.simulationState = await nextSimulationState
-            if !error.isCancelled {
-                state = .error(error)
-                debugLog("preload transaction error: \(error)")
-            }
+            state.setError(error)
+            debugLog("preload transaction error: \(error)")
         }
     }
 

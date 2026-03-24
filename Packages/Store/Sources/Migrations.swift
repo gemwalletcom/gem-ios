@@ -444,6 +444,14 @@ struct Migrations {
             }
         }
 
+        migrator.registerMigration("Delete isVerified columns in \(NFTCollectionRecord.databaseTableName)") { db in
+            if try db.columns(in: NFTCollectionRecord.databaseTableName).map(\.name).contains("isVerified") {
+                try db.alter(table: NFTCollectionRecord.databaseTableName) {
+                    $0.drop(column: "isVerified")
+                }
+            }
+        }
+
         migrator.registerMigration("Create \(FiatTransactionRecord.databaseTableName)") { db in
             try? FiatTransactionRecord.create(db: db)
         }
