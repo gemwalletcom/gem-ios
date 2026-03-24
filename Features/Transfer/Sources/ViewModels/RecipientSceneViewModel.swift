@@ -30,6 +30,7 @@ public final class RecipientSceneViewModel {
     private let walletService: WalletService
     private let onRecipientDataAction: RecipientDataAction
     private let formatter = ValueFormatter(style: .full)
+    private let assetImageFormatter: AssetImageFormatter
 
     public var isPresentingScanner: RecipientScene.Field?
     var addressInputModel: AddressInputViewModel
@@ -45,12 +46,14 @@ public final class RecipientSceneViewModel {
         walletService: WalletService,
         nameService: any NameServiceable,
         type: RecipientAssetType,
+        assetImageFormatter: AssetImageFormatter = .shared,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
     ) {
         self.wallet = wallet
         self.asset = asset
         self.walletService = walletService
+        self.assetImageFormatter = assetImageFormatter
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
@@ -75,7 +78,7 @@ public final class RecipientSceneViewModel {
     func nftAssetImage(for nftAsset: NFTAsset) -> AssetImage {
         AssetImage(
             type: "NFT",
-            imageURL: AssetImageFormatter().getNFTUrl(for: nftAsset.id),
+            imageURL: assetImageFormatter.getNFTUrl(for: nftAsset.id),
             placeholder: .none,
             chainPlaceholder: .none
         )
