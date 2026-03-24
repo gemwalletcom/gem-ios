@@ -72,7 +72,14 @@ public final class RecipientSceneViewModel {
     let recipientField = Localized.Transfer.Recipient.addressField
     var memoField: String { Localized.Transfer.memo }
 
-    var assetModel: AssetViewModel { AssetViewModel(asset: asset) }
+    func nftAssetImage(for nftAsset: NFTAsset) -> AssetImage {
+        AssetImage(
+            type: "NFT",
+            imageURL: AssetImageFormatter().getNFTUrl(for: nftAsset.id),
+            placeholder: .none,
+            chainPlaceholder: .none
+        )
+    }
 
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: ButtonState {

@@ -26,9 +26,20 @@ public struct RecipientScene: View {
         @Bindable var model = model
         List {
             Section { } header: {
-                AssetPreviewView(model: model.assetModel)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, .small)
+                Group {
+                    switch model.type {
+                    case .asset(let asset):
+                        AssetPreviewView(model: AssetViewModel(asset: asset))
+                    case .nft(let nftAsset):
+                        NftPreviewView(
+                            assetImage: model.nftAssetImage(for: nftAsset),
+                            name: nftAsset.name,
+                            size: .image.semiLarge
+                        )
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, .small)
             }
             .cleanListRow()
 
