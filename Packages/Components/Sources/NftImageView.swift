@@ -5,47 +5,39 @@ import SwiftUI
 import Style
 
 public struct NftImageView: View {
-    
-    let assetImage: AssetImage
-    
+
+    private let assetImage: AssetImage
+
     public init(assetImage: AssetImage) {
         self.assetImage = assetImage
     }
-    
+
     public var body: some View {
         CachedAsyncImage(url: assetImage.imageURL) { phase in
             switch phase {
             case .empty:
-                ZStack {
-                    Rectangle()
-                        .foregroundStyle(Colors.grayLight)
-                    if assetImage.placeholder != nil {
-                        AssetImageView(assetImage: assetImage, size: .image.large)
-                    } else {
-                        LoadingView()
+                if assetImage.imageURL != nil {
+                    ZStack {
+                        Color(.systemGray5)
+                        if assetImage.placeholder != nil {
+                            AssetImageView(
+                                assetImage: assetImage,
+                                size: .image.large
+                            )
+                        } else {
+                            LoadingView()
+                        }
                     }
+                } else {
+                    NftImagePlaceholderView(name: assetImage.type)
                 }
             case .success(let image):
                 image.resizable()
             case .failure:
-                errorView
+                NftImagePlaceholderView(name: assetImage.type)
             @unknown default:
-                errorView
+                NftImagePlaceholderView(name: assetImage.type)
             }
         }
-    }
-    
-    private var errorView: some View {
-        ZStack {
-            Rectangle()
-                .foregroundStyle(Colors.grayLight)
-            if let type = assetImage.type {
-                Text(type)
-                    .font(.body)
-                    .foregroundStyle(Colors.black.opacity(.strong))
-                    .padding(.small)
-            }
-        }
-        .frame(maxWidth: .infinity)
     }
 }
