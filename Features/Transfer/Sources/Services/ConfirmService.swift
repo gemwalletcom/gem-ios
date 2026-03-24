@@ -8,7 +8,6 @@ import ChainService
 import AddressNameService
 import ActivityService
 import EventPresenterService
-import PrimitivesComponents
 
 public struct ConfirmService: Sendable {
     private let metadataProvider: any TransferMetadataProvidable

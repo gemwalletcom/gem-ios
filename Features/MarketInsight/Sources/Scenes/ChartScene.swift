@@ -14,7 +14,7 @@ public struct ChartScene: View {
     public init(model: ChartSceneViewModel) {
         _model = State(initialValue: model)
     }
-    
+
     public var body: some View {
         ChartListView(model: model) {
             if model.showPriceAlerts, let asset = model.priceData?.asset {
@@ -59,26 +59,31 @@ public struct ChartScene: View {
     private func marketSection(_ items: [MarketValueViewModel]) -> some View {
         Section {
             ForEach(items, id: \.title) { item in
-                if let url = item.url {
-                    SafariNavigationLink(url: url) {
+                switch item.action {
+                case .explorer(let explorerContext):
+                    SafariNavigationLink(url: explorerContext.explorerLink.url) {
                         ListItemView(title: item.title, subtitle: item.subtitle)
                     }
-                    .contextMenu(
-                        item.value.map { [.copy(value: $0)] } ?? []
-                    )
-                } else {
-                    ListItemView(
-                        title: item.title,
-                        titleTag: item.titleTag,
-                        titleTagStyle: item.titleTagStyle ?? .body,
-                        titleExtra: item.titleExtra,
-                        subtitle: item.subtitle,
-                        subtitleExtra: item.subtitleExtra,
-                        subtitleStyleExtra: item.subtitleExtraStyle ?? .calloutSecondary,
-                        infoAction: item.infoSheetType.map { type in { model.isPresentingInfoSheet = type } }
-                    )
+                    .explorerContext(explorerContext)
+                case .info(let type):
+                    marketItemView(item, infoAction: { model.onSelectInfoSheet(type) })
+                case .none:
+                    marketItemView(item)
                 }
             }
         }
+    }
+
+    private func marketItemView(_ item: MarketValueViewModel, infoAction: (() -> Void)? = nil) -> some View {
+        ListItemView(
+            title: item.title,
+            titleTag: item.titleTag,
+            titleTagStyle: item.titleTagStyle ?? .body,
+            titleExtra: item.titleExtra,
+            subtitle: item.subtitle,
+            subtitleExtra: item.subtitleExtra,
+            subtitleStyleExtra: item.subtitleExtraStyle ?? .calloutSecondary,
+            infoAction: infoAction
+        )
     }
 }

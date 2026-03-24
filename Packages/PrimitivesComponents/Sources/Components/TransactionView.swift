@@ -6,7 +6,6 @@ import Primitives
 import Style
 
 public struct TransactionView: View {
-    @State private var isPresentingUrl: URL? = nil
     private let model: TransactionViewModel
 
     public init(model: TransactionViewModel) {
@@ -23,10 +22,7 @@ public struct TransactionView: View {
             subtitleExtra: model.subtitleExtraTextValue,
             imageStyle: .asset(assetImage: model.assetImage)
         )
-        .contextMenu(
-            .url(title: model.viewOnTransactionExplorerText, onOpen: { isPresentingUrl = model.transactionExplorerUrl })
-        )
-        .safariSheet(url: $isPresentingUrl)
+        .explorerContext(model.explorerContext)
     }
 }
 

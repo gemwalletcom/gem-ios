@@ -46,10 +46,15 @@ struct CollectibleViewModelTests {
     }
     
     @Test
-    func tokenExplorerUrl() {
-        #expect(CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234", chain: .ethereum))).tokenExplorerUrl != nil)
+    func tokenExplorerLink() {
+        let model = CollectibleViewModel.mock(assetData: .mock(
+            collection: .mock(contractAddress: "0x47A00fC8590C11bE4c419D9Ae50DEc267B6E24ee"),
+            asset: .mock(tokenId: "11871", chain: .ethereum)
+        ))
+
+        #expect(model.tokenIdExplorerLink?.link == "https://etherscan.io/nft/0x47A00fC8590C11bE4c419D9Ae50DEc267B6E24ee/11871")
     }
-    
+
     @Test
     func showAttributes() {
         #expect(CollectibleViewModel.mock(assetData: .mock(asset: .mock(attributes: []))).showAttributes == false)
@@ -68,15 +73,6 @@ struct CollectibleViewModelTests {
         ]))).showLinks == true)
     }
     
-    @Test
-    func onSelectViewTokenInExplorer() {
-        let model = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234", chain: .ethereum)))
-
-        #expect(model.isPresentingTokenExplorerUrl == nil)
-        model.onSelectViewTokenInExplorer()
-        #expect(model.isPresentingTokenExplorerUrl != nil)
-    }
-
     @Test
     func isSendEnabled() {
         let enabledModel = CollectibleViewModel.mock(

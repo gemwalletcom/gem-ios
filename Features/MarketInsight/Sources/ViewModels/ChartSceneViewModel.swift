@@ -105,4 +105,8 @@ extension ChartSceneViewModel {
     public func onSelectSetPriceAlerts() {
         onSetPriceAlert(assetModel.asset)
     }
+
+    func onSelectInfoSheet(_ type: InfoSheetType) {
+        isPresentingInfoSheet = type
+    }
 }

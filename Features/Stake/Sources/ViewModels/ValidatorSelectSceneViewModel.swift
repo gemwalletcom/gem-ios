@@ -16,7 +16,6 @@ public final class ValidatorSelectSceneViewModel {
     private let validators: [DelegationValidator]
     public var selectValidator: ((DelegationValidator) -> Void)?
     private let exploreService: ExplorerService = .standard
-    public var isPresentingUrl: URL?
     
     private let recommendedValidators = StakeRecommendedValidators()
     
@@ -62,19 +61,14 @@ public final class ValidatorSelectSceneViewModel {
         }
     }
     
-    public func contextMenu(for validator: DelegationValidator) -> [ContextMenuItemType] {
-        guard let explorerLink = exploreService.validatorUrl(chain: validator.chain, address: validator.id) else {
-            return []
+    public func explorerLink(for validator: DelegationValidator) -> BlockExplorerLink? {
+        exploreService.validatorUrl(chain: validator.chain, address: validator.id)
+    }
+
+    public func explorerContext(for validator: DelegationValidator) -> ExplorerContextData? {
+        explorerLink(for: validator).map {
+            ExplorerContextData(copyValue: .address(value: validator.id, chain: validator.chain), explorerLink: $0)
         }
-        return [
-            .copy(value: validator.id),
-            .url(
-                title: Localized.Transaction.viewOn(explorerLink.name),
-                onOpen: { [weak self] in
-                    self?.isPresentingUrl = explorerLink.url
-                }
-            )
-        ]
     }
     
     public func listSection(title: String, validators: [DelegationValidator]) -> ListItemValueSection<DelegationValidator> {
