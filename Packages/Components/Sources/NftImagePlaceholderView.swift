@@ -11,12 +11,19 @@ public struct NftImagePlaceholderView: View {
         self.name = name
     }
 
+    private struct Layout {
+        static let nameVisibilityThreshold: CGFloat = 250
+        static let circleSizeRatioWithText: CGFloat = 0.3
+        static let circleSizeRatioDefault: CGFloat = 0.35
+        static let iconSizeRatio: CGFloat = 0.45
+    }
+
     public var body: some View {
         GeometryReader { geometry in
             let size = min(geometry.size.width, geometry.size.height)
-            let showName = size > 250
-            let circleSize = size * (showName ? 0.3 : 0.35)
-            let iconSize = circleSize * 0.45
+            let showName = size > Layout.nameVisibilityThreshold
+            let circleSize = size * (showName ? Layout.circleSizeRatioWithText : Layout.circleSizeRatioDefault)
+            let iconSize = circleSize * Layout.iconSizeRatio
             ZStack {
                 Color(.systemGray5)
                 VStack(spacing: Spacing.medium) {
