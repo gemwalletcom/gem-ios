@@ -48,7 +48,7 @@ struct AssetMarketViewModel {
         MarketValueViewModel(
             title: Localized.Info.FullyDilutedValuation.title,
             subtitle: formatCurrency(market.marketCapFdv),
-            infoSheetType: .fullyDilutedValuation
+            action: .info(.fullyDilutedValuation)
         )
     }
 
@@ -58,7 +58,7 @@ struct AssetMarketViewModel {
         MarketValueViewModel(
             title: Localized.Asset.circulatingSupply,
             subtitle: formatSupply(market.circulatingSupply),
-            infoSheetType: .circulatingSupply
+            action: .info(.circulatingSupply)
         )
     }
 
@@ -66,7 +66,7 @@ struct AssetMarketViewModel {
         MarketValueViewModel(
             title: Localized.Asset.totalSupply,
             subtitle: formatSupply(market.totalSupply),
-            infoSheetType: .totalSupply
+            action: .info(.totalSupply)
         )
     }
 
@@ -74,7 +74,7 @@ struct AssetMarketViewModel {
         MarketValueViewModel(
             title: Localized.Info.MaxSupply.title,
             subtitle: market.maxSupply == 0 ? "∞ \(assetSymbol)" : formatSupply(market.maxSupply),
-            infoSheetType: .maxSupply
+            action: .info(.maxSupply)
         )
     }
 
