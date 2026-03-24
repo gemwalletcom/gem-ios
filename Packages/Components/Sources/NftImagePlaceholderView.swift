@@ -4,18 +4,17 @@ import SwiftUI
 import Style
 
 public struct NftImagePlaceholderView: View {
-
-    private let name: String?
-
-    public init(name: String? = nil) {
-        self.name = name
-    }
-
     private struct Layout {
         static let nameVisibilityThreshold: CGFloat = 250
         static let circleSizeRatioWithText: CGFloat = 0.3
         static let circleSizeRatioDefault: CGFloat = 0.35
         static let iconSizeRatio: CGFloat = 0.45
+    }
+
+    private let name: String?
+
+    public init(name: String? = nil) {
+        self.name = name
     }
 
     public var body: some View {
