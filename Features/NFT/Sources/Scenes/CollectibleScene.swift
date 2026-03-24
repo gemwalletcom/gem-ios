@@ -36,13 +36,11 @@ public struct CollectibleScene: View {
         .navigationTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                HStack(spacing: Spacing.tiny) {
+                HStack(spacing: .tiny) {
                     Text(model.title)
                         .font(.headline)
                     if model.isVerified {
-                        Images.System.checkmarkSealFill
-                            .font(.footnote)
-                            .foregroundStyle(Colors.blue)
+                        VerifiedBadgeView()
                     }
                 }
             }
