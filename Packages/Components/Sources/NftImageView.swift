@@ -7,9 +7,14 @@ import Style
 public struct NftImageView: View {
 
     private let assetImage: AssetImage
+    @Binding private var isImageLoaded: Bool
 
-    public init(assetImage: AssetImage) {
+    public init(
+        assetImage: AssetImage,
+        isImageLoaded: Binding<Bool> = .constant(false)
+    ) {
         self.assetImage = assetImage
+        _isImageLoaded = isImageLoaded
     }
 
     public var body: some View {
@@ -33,6 +38,7 @@ public struct NftImageView: View {
                 }
             case .success(let image):
                 image.resizable()
+                    .onAppear { isImageLoaded = true }
             case .failure:
                 NftImagePlaceholderView(name: assetImage.type)
             @unknown default:

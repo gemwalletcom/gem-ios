@@ -68,8 +68,11 @@ public struct CollectibleScene: View {
 extension CollectibleScene {
     private var headerSectionView: some View {
         Section {
-            NftImageView(assetImage: model.assetImage)
-                .aspectRatio(1, contentMode: .fill)
+            NftImageView(
+                assetImage: model.assetImage,
+                isImageLoaded: $model.isImageLoaded
+            )
+            .aspectRatio(1, contentMode: .fill)
         } header: {
             Spacer()
         } footer: {
@@ -81,18 +84,7 @@ extension CollectibleScene {
         .textCase(nil)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
-        .contextMenu([
-            .custom(
-                title: Localized.Nft.saveToPhotos,
-                systemImage: SystemImage.gallery,
-                action: model.onSelectSaveToGallery
-            ),
-            .custom(
-                title: Localized.Nft.setAsAvatar,
-                systemImage: SystemImage.emoji,
-                action: model.onSelectSetAsAvatar
-            )
-        ])
+        .contextMenu(model.imageContextMenuItems)
     }
 
     private var statusSectionView: some View {

@@ -31,6 +31,7 @@ public final class CollectibleViewModel {
     var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     var isPresentingReportSheet = false
     var isPresentingInfoSheet: InfoSheetType?
+    var isImageLoaded = false
 
     public init(
         wallet: Wallet,
@@ -50,6 +51,22 @@ public final class CollectibleViewModel {
 
     var title: String { assetData.asset.name }
     var description: String? { assetData.asset.description }
+
+    var imageContextMenuItems: [ContextMenuItemType] {
+        guard isImageLoaded else { return [] }
+        return [
+            .custom(
+                title: Localized.Nft.saveToPhotos,
+                systemImage: SystemImage.gallery,
+                action: onSelectSaveToGallery
+            ),
+            .custom(
+                title: Localized.Nft.setAsAvatar,
+                systemImage: SystemImage.emoji,
+                action: onSelectSetAsAvatar
+            ),
+        ]
+    }
 
     var collectionField: ListItemField {
         ListItemField(title: Localized.Nft.collection, value: assetData.collection.name)
