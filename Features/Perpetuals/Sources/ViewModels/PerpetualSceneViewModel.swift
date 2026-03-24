@@ -122,7 +122,7 @@ public final class PerpetualSceneViewModel {
         }
     }
 
-    private var currentChartSubscription: ChartSubscription { ChartSubscription(coin: perpetual.name, period: currentPeriod) }
+    private var currentChartSubscription: ChartSubscription { ChartSubscription(coin: perpetual.coin, period: currentPeriod) }
 }
 
 // MARK: - Actions
@@ -130,7 +130,7 @@ public final class PerpetualSceneViewModel {
 public extension PerpetualSceneViewModel {
     func fetch() {
         Task { await observerService.update(for: wallet) }
-        Task { try await perpetualService.updateMarket(symbol: perpetual.name) }
+        Task { try await perpetualService.updateMarket(symbol: perpetual.coin) }
         Task { await fetchTransactions() }
         Task { await updateCandlesticks() }
     }
@@ -152,7 +152,7 @@ public extension PerpetualSceneViewModel {
     func onScenePhaseChange(_ oldPhase: ScenePhase, _ newPhase: ScenePhase) {
         switch newPhase {
         case .active:
-            Task { try? await perpetualService.updateMarket(symbol: perpetual.name) }
+            Task { try? await perpetualService.updateMarket(symbol: perpetual.coin) }
             Task { await fetchTransactions() }
             Task { await updateCandlesticks() }
         case .inactive, .background: break
@@ -162,9 +162,9 @@ public extension PerpetualSceneViewModel {
 
     func onPeriodChange(_ oldPeriod: ChartPeriod, _ newPeriod: ChartPeriod) {
         Task {
-            await unsubscribeCandles(ChartSubscription(coin: perpetual.name, period: oldPeriod))
+            await unsubscribeCandles(ChartSubscription(coin: perpetual.coin, period: oldPeriod))
             await updateCandlesticks()
-            await subscribeCandles(ChartSubscription(coin: perpetual.name, period: newPeriod))
+            await subscribeCandles(ChartSubscription(coin: perpetual.coin, period: newPeriod))
         }
     }
 
@@ -224,7 +224,7 @@ public extension PerpetualSceneViewModel {
         guard let transferData = createTransferData(
             direction: .long,
             leverage: perpetual.maxLeverage,
-            marginType: perpetual.onlyIsolated ? .isolated : .cross
+            marginType: perpetual.marginType
         ) else {
             return
         }
@@ -235,7 +235,7 @@ public extension PerpetualSceneViewModel {
         guard let transferData = createTransferData(
             direction: .short,
             leverage: perpetual.maxLeverage,
-            marginType: perpetual.onlyIsolated ? .isolated : .cross
+            marginType: perpetual.marginType
         ) else {
             return
         }
@@ -291,7 +291,7 @@ private extension PerpetualSceneViewModel {
         state = .loading
         do {
             let candlesticks = try await perpetualService.candlesticks(
-                symbol: perpetual.name,
+                symbol: perpetual.coin,
                 period: currentPeriod
             )
             state = .data(candlesticks)

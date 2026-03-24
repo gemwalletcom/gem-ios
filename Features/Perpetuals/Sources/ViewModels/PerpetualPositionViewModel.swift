@@ -30,7 +30,7 @@ public struct PerpetualPositionViewModel {
     }
     
     public var nameText: String {
-        data.asset.name
+        data.perpetual.name
     }
     
     public var symbolText: String {
