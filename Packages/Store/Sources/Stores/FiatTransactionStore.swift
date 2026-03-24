@@ -20,5 +20,4 @@ public struct FiatTransactionStore: Sendable {
             }
         }
     }
-
 }

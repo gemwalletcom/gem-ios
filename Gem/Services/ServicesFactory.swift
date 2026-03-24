@@ -45,7 +45,7 @@ import EarnService
 import Transfer
 import SwiftHTTPClient
 import ContactService
-import FiatTransactionService
+import FiatService
 import WebSocketClient
 
 
@@ -290,7 +290,7 @@ struct ServicesFactory {
         )
 
         let contactService = ContactService(store: storeManager.contactStore, addressStore: storeManager.addressStore)
-        let fiatTransactionService = FiatTransactionService(
+        let fiatService = FiatService(
             apiService: apiService,
             store: storeManager.fiatTransactionStore
         )
@@ -322,8 +322,7 @@ struct ServicesFactory {
             addressNameService: addressNameService,
             activityService: activityService,
             eventPresenterService: eventPresenterService,
-            fiatService: apiService,
-            fiatTransactionService: fiatTransactionService,
+            fiatService: fiatService,
             assetsService: assetsService
         )
 
@@ -376,8 +375,7 @@ struct ServicesFactory {
             appLifecycleService: appLifecycleService,
             inAppNotificationService: inAppNotificationService,
             portfolioService: portfolioService,
-            fiatService: apiService,
-            fiatTransactionService: fiatTransactionService,
+            fiatService: fiatService,
             contactService: contactService
         )
     }

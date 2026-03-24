@@ -41,7 +41,7 @@ public struct FiatConnectNavigationView: View {
             FiatTransactionsScene(
                 model: FiatTransactionsViewModel(
                     walletId: model.walletId,
-                    service: model.fiatTransactionService
+                    service: model.fiatService
                 )
             )
         }

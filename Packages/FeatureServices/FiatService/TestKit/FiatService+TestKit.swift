@@ -1,13 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import FiatTransactionService
+import FiatService
 import GemAPITestKit
 import StoreTestKit
 
-public extension FiatTransactionService {
-    static func mock() -> FiatTransactionService {
-        FiatTransactionService(
+public extension FiatService {
+    static func mock() -> FiatService {
+        FiatService(
             apiService: GemAPIFiatServiceMock(),
             store: .mock()
         )

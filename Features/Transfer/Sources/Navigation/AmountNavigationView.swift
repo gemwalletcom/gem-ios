@@ -13,7 +13,6 @@ import Perpetuals
 import Preferences
 
 public struct AmountNavigationView: View {
-    @Environment(\.fiatService) private var fiatService
     @State private var model: AmountSceneViewModel
 
     public init(model: AmountSceneViewModel) {
@@ -30,7 +29,7 @@ public struct AmountNavigationView: View {
                 case let .fiatConnect(assetAddress, walletId):
                     NavigationStack {
                         FiatConnectNavigationView(
-                            model: FiatSceneViewModel(fiatService: fiatService, fiatTransactionService: model.fiatTransactionService, assetAddress: assetAddress, walletId: walletId)
+                            model: FiatSceneViewModel(fiatService: model.fiatService, assetAddress: assetAddress, walletId: walletId)
                         )
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { ToolbarDismissItem(type: .close, placement: .topBarLeading) }

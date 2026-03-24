@@ -11,13 +11,13 @@ import WalletConnector
 import InfoSheet
 import Validators
 import SwiftUI
-import FiatTransactionService
+import FiatService
 import Swap
 
 @Observable
 @MainActor
 public final class ConfirmTransferSceneViewModel {
-    let fiatTransactionService: FiatTransactionService
+    let fiatService: FiatService
     var feeModel: NetworkFeeSceneViewModel
     var state: StateViewType<TransactionInputViewModel> = .loading {
         didSet {
@@ -58,7 +58,7 @@ public final class ConfirmTransferSceneViewModel {
         data: TransferData,
         confirmService: ConfirmService,
         simulationService: ConfirmSimulationService,
-        fiatTransactionService: FiatTransactionService,
+        fiatService: FiatService,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         simulation: SimulationResult? = nil,
         onComplete: VoidAction
@@ -67,7 +67,7 @@ public final class ConfirmTransferSceneViewModel {
         self.transferData = data
         self.confirmService = confirmService
         self.simulationService = simulationService
-        self.fiatTransactionService = fiatTransactionService
+        self.fiatService = fiatService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.simulation = simulation
         self.onComplete = onComplete

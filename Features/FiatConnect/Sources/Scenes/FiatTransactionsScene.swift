@@ -18,8 +18,18 @@ public struct FiatTransactionsScene: View {
         List {
             ForEach(model.sections) { section in
                 Section {
-                    ForEach(section.values) { transaction in
-                        ListItemView(model: FiatTransactionViewModel(info: transaction).listItemModel)
+                    ForEach(section.values) {
+                        let viewModel = FiatTransactionViewModel(info: $0)
+                        if let url = viewModel.detailsUrl {
+                            SafariNavigationLink(url: url) {
+                                ListItemView(model: viewModel.listItemModel)
+                            }
+                        } else {
+                            NavigationCustomLink(
+                                with: ListItemView(model: viewModel.listItemModel),
+                                action: {}
+                            )
+                        }
                     }
                 } header: {
                     section.title.map { Text($0) }

@@ -22,12 +22,11 @@ public struct FiatTransactionViewModel: Sendable {
     public var listItemModel: ListItemModel {
         let statusModel = FiatTransactionStatusViewModel(status: transaction.status)
         return ListItemModel(
-            title: transaction.providerId.displayName,
+            title: typeTitle,
             titleStyle: TextStyle(font: Font.system(.body, weight: .medium), color: .primary),
             titleTag: titleTag(statusModel),
             titleTagStyle: titleTagStyle(statusModel),
-            titleTagType: titleTagType,
-            titleExtra: typeTitle,
+            titleExtra: transaction.providerId.displayName,
             titleStyleExtra: .footnote,
             subtitle: amount,
             subtitleStyle: TextStyle(font: .callout, color: subtitleColor, fontWeight: .semibold),
@@ -35,6 +34,10 @@ public struct FiatTransactionViewModel: Sendable {
             subtitleStyleExtra: TextStyle(font: .footnote, color: Colors.gray),
             imageStyle: .asset(assetImage: assetImage)
         )
+    }
+    
+    public var detailsUrl: URL? {
+        info.detailsUrl?.asURL
     }
 }
 
@@ -50,13 +53,6 @@ extension FiatTransactionViewModel {
 
     private var assetImage: AssetImage {
         AssetIdViewModel(assetId: info.asset.id).assetImage
-    }
-
-    private var titleTagType: TitleTagType {
-        switch transaction.status {
-        case .pending: .progressView()
-        case .complete, .failed, .unknown: .none
-        }
     }
 
     private func titleTag(_ model: FiatTransactionStatusViewModel) -> String? {

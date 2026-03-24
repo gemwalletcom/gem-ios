@@ -26,9 +26,8 @@ import ActivityService
 import EventPresenterService
 import Preferences
 import PrimitivesComponents
-import GemAPI
 import AssetsService
-import FiatTransactionService
+import FiatService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -48,8 +47,7 @@ public struct ViewModelFactory: Sendable {
     let addressNameService: AddressNameService
     let activityService: ActivityService
     let eventPresenterService: EventPresenterService
-    let fiatService: any GemAPIFiatService
-    let fiatTransactionService: FiatTransactionService
+    let fiatService: FiatService
     let assetsService: AssetsService
 
     public init(
@@ -70,8 +68,7 @@ public struct ViewModelFactory: Sendable {
         addressNameService: AddressNameService,
         activityService: ActivityService,
         eventPresenterService: EventPresenterService,
-        fiatService: any GemAPIFiatService,
-        fiatTransactionService: FiatTransactionService,
+        fiatService: FiatService,
         assetsService: AssetsService
     ) {
         self.keystore = keystore
@@ -92,7 +89,6 @@ public struct ViewModelFactory: Sendable {
         self.activityService = activityService
         self.eventPresenterService = eventPresenterService
         self.fiatService = fiatService
-        self.fiatTransactionService = fiatTransactionService
         self.assetsService = assetsService
     }
     
@@ -128,7 +124,7 @@ public struct ViewModelFactory: Sendable {
             data: data,
             confirmService: confirmService,
             simulationService: simulationService,
-            fiatTransactionService: fiatTransactionService,
+            fiatService: fiatService,
             confirmTransferDelegate: confirmTransferDelegate,
             simulation: simulation,
             onComplete: onComplete
@@ -164,7 +160,7 @@ public struct ViewModelFactory: Sendable {
             input: input,
             wallet: wallet,
             service: amountService,
-            fiatTransactionService: fiatTransactionService,
+            fiatService: fiatService,
             onTransferAction: onTransferAction
         )
     }
@@ -178,7 +174,6 @@ public struct ViewModelFactory: Sendable {
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             fiatService: fiatService,
-            fiatTransactionService: fiatTransactionService,
             assetAddress: assetAddress,
             walletId: walletId,
             type: type,

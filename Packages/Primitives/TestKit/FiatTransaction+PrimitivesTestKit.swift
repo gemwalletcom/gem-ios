@@ -5,6 +5,7 @@ import Primitives
 
 extension FiatTransaction {
     public static func mock(
+        id: String = "mock_id",
         assetId: AssetId = .mock(),
         transactionType: FiatQuoteType = .buy,
         providerId: FiatProviderName = .moonPay,
@@ -19,6 +20,7 @@ extension FiatTransaction {
         updatedAt: Date = .now
     ) -> FiatTransaction {
         FiatTransaction(
+            id: id,
             assetId: assetId,
             transactionType: transactionType,
             providerId: providerId,

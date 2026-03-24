@@ -37,7 +37,7 @@ let package = Package(
                 "Localization",
                 "Store",
                 "PrimitivesComponents",
-                .product(name: "FiatTransactionService", package: "FeatureServices"),
+                .product(name: "FiatService", package: "FeatureServices"),
             ],
             path: "Sources"
         ),
@@ -46,7 +46,7 @@ let package = Package(
             dependencies: [
                 "FiatConnect",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "FiatTransactionServiceTestKit", package: "FeatureServices"),
+                .product(name: "FiatServiceTestKit", package: "FeatureServices"),
             ],
             path: "Tests"
         ),

@@ -141,7 +141,7 @@
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
 		E1B4C7052E85A00000YIELD1 /* EarnService in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C7062E85A00000YIELD1 /* EarnService */; };
 		E1B4C7092E85B00000EARN02 /* Stake in Frameworks */ = {isa = PBXBuildFile; productRef = E1B4C70A2E85B00000EARN03 /* Stake */; };
-		F1A7B80C2F0C000000FIAT01 /* FiatTransactionService in Frameworks */ = {isa = PBXBuildFile; productRef = F1A7B80D2F0C000000FIAT01 /* FiatTransactionService */; };
+		F1A7B80C2F0C000000FIAT01 /* FiatService in Frameworks */ = {isa = PBXBuildFile; productRef = F1A7B80D2F0C000000FIAT01 /* FiatService */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -339,7 +339,7 @@
 				D8F5B86F2CCD639A0007E615 /* StakeService in Frameworks */,
 				E1B4C7052E85A00000YIELD1 /* EarnService in Frameworks */,
 				E1B4C7092E85B00000EARN02 /* Stake in Frameworks */,
-				F1A7B80C2F0C000000FIAT01 /* FiatTransactionService in Frameworks */,
+				F1A7B80C2F0C000000FIAT01 /* FiatService in Frameworks */,
 				D829BF512CBF2C4900DEB2E8 /* NotificationService in Frameworks */,
 				8349F1472D5E4FF4003A0A93 /* ManageWallets in Frameworks */,
 				8361BB612D3FE5F2008D89CF /* Transactions in Frameworks */,
@@ -828,7 +828,7 @@
 				D8F5B86E2CCD639A0007E615 /* StakeService */,
 				E1B4C7062E85A00000YIELD1 /* EarnService */,
 				E1B4C70A2E85B00000EARN03 /* Stake */,
-				F1A7B80D2F0C000000FIAT01 /* FiatTransactionService */,
+				F1A7B80D2F0C000000FIAT01 /* FiatService */,
 				D85AD29C2CD337BE0010DEF8 /* SwapService */,
 				D85AD2A52CD7017E0010DEF8 /* NativeProviderService */,
 				D8D83C832CECFA610083AA53 /* Swap */,
@@ -2256,9 +2256,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = EarnService;
 		};
-		F1A7B80D2F0C000000FIAT01 /* FiatTransactionService */ = {
+		F1A7B80D2F0C000000FIAT01 /* FiatService */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = FiatTransactionService;
+			productName = FiatService;
 		};
 		E1B4C70A2E85B00000EARN03 /* Stake */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -12,7 +12,6 @@ import Preferences
 import Primitives
 
 public struct ConfirmTransferScene: View {
-    @Environment(\.fiatService) private var fiatService
     @State private var model: ConfirmTransferSceneViewModel
 
     public init(model: ConfirmTransferSceneViewModel) {
@@ -63,8 +62,7 @@ public struct ConfirmTransferScene: View {
                 NavigationStack {
                     FiatConnectNavigationView(
                         model: FiatSceneViewModel(
-                            fiatService: fiatService,
-                            fiatTransactionService: model.fiatTransactionService,
+                            fiatService: model.fiatService,
                             assetAddress: assetAddress,
                             walletId: walletId
                         )
