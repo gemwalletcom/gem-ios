@@ -2,10 +2,11 @@
 
 import Foundation
 import Testing
-import GemAPI
 import Primitives
 import PrimitivesTestKit
 import Formatters
+import FiatService
+import FiatServiceTestKit
 import BigInt
 
 @testable import FiatConnect
@@ -13,13 +14,13 @@ import BigInt
 @MainActor
 final class FiatSceneViewModelTests {
     private static func mock(
-        service: any GemAPIFiatService = GemAPIService(),
+        fiatService: FiatService = .mock(),
         currencyFormatter: CurrencyFormatter = .init(locale: Locale.US, currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress = .mock(),
         walletId: WalletId = .mock()
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
-            fiatService: service,
+            fiatService: fiatService,
             currencyFormatter: currencyFormatter,
             assetAddress: assetAddress,
             walletId: walletId

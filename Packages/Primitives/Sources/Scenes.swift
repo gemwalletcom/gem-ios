@@ -222,4 +222,8 @@ public struct Scenes {
             self.address = address
         }
     }
+
+    public struct FiatTransactions: Hashable, Codable {
+        public init() {}
+    }
 }
