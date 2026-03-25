@@ -4,18 +4,15 @@ import SwiftUI
 import Components
 import Style
 import Localization
-import InfoSheet
 import PrimitivesComponents
-import FiatConnect
 import Swap
-import Preferences
 import Primitives
 
 public struct ConfirmTransferScene: View {
-    @State private var model: ConfirmTransferSceneViewModel
+    @Bindable var model: ConfirmTransferSceneViewModel
 
     public init(model: ConfirmTransferSceneViewModel) {
-        _model = State(initialValue: model)
+        self.model = model
     }
 
     public var body: some View {
@@ -36,56 +33,8 @@ public struct ConfirmTransferScene: View {
         )
         .taskOnce { model.fetch() }
         .navigationTitle(model.title)
-        // TODO: - move to navigation view
         .navigationBarTitleDisplayMode(.inline)
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
-        .sheet(item: $model.isPresentingSheet) {
-            switch $0 {
-            case .info(let type):
-                InfoSheetScene(type: type)
-            case .url(let url):
-                SFSafariView(url: url)
-            case .networkFeeSelector:
-                NetworkFeeSheet(model: model.feeModel)
-            case .payloadDetails:
-                NavigationStack {
-                    SimulationPayloadDetailsScene(
-                        primaryFields: model.primaryPayloadFields,
-                        secondaryFields: model.secondaryPayloadFields,
-                        fieldViewModel: model.payloadFieldViewModel(for:),
-                        contextMenuItems: model.contextMenuItems(for:)
-                    )
-                    .presentationDetents([.large])
-                    .presentationBackground(Colors.grayBackground)
-                }
-            case .fiatConnect(let assetAddress, let walletId):
-                NavigationStack {
-                    FiatConnectNavigationView(
-                        model: FiatSceneViewModel(
-                            fiatService: model.fiatService,
-                            assetAddress: assetAddress,
-                            walletId: walletId
-                        )
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbarDismissItem(type: .close, placement: .topBarLeading)
-                }
-            case .swapDetails:
-                if case let .swapDetails(model) = model.detailsViewModel.itemModel {
-                    NavigationStack {
-                        SwapDetailsView(model: Bindable(model))
-                            .presentationDetentsForCurrentDeviceSize(expandable: true)
-                            .presentationBackground(Colors.grayBackground)
-                    }
-                }
-            case .perpetualDetails(let model):
-                NavigationStack {
-                    PerpetualDetailsView(model: model)
-                        .presentationDetentsForCurrentDeviceSize(expandable: true)
-                        .presentationBackground(Colors.grayBackground)
-                }
-            }
-        }
         .alertSheet($model.isPresentingAlertMessage)
     }
 }

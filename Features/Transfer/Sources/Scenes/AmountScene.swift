@@ -8,16 +8,16 @@ import SwiftUI
 import struct Stake.ValidatorViewModel
 import struct Stake.ValidatorView
 
-struct AmountScene: View {
+public struct AmountScene: View {
     @FocusState private var focusedField: Bool
 
     private var model: AmountSceneViewModel
 
-    init(model: AmountSceneViewModel) {
+    public init(model: AmountSceneViewModel) {
         self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         @Bindable var model = model
         List {
             CurrencyInputValidationView(

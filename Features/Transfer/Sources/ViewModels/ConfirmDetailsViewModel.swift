@@ -5,7 +5,7 @@ import PrimitivesComponents
 import Components
 import Swap
 
-struct ConfirmDetailsViewModel {
+public struct ConfirmDetailsViewModel {
     private let type: TransferDataType
     private let metadata: TransferDataMetadata?
 
@@ -18,7 +18,7 @@ struct ConfirmDetailsViewModel {
 // MARK: - ItemModelProvidable
 
 extension ConfirmDetailsViewModel: ItemModelProvidable {
-    var itemModel: ConfirmTransferItemModel {
+    public var itemModel: ConfirmTransferItemModel {
         switch type {
         case let .swap(fromAsset, toAsset, swapData):
                 .swapDetails(

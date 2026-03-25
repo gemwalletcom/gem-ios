@@ -245,7 +245,6 @@ extension FiatSceneViewModel {
 
 extension FiatSceneViewModel {
     private func enableAsset() async {
-        guard type == .buy else { return }
         do {
             try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: true)
         } catch {

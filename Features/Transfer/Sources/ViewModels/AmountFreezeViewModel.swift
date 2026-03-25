@@ -8,7 +8,7 @@ import Primitives
 import PrimitivesComponents
 import Stake
 
-final class AmountFreezeViewModel: AmountDataProvidable {
+public final class AmountFreezeViewModel: AmountDataProvidable {
     enum Action {
         case freeze
         case unfreeze

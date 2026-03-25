@@ -27,7 +27,7 @@ struct AutocloseNavigationStack: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarDismissItem(type: .close, placement: .topBarLeading) }
             .navigationDestination(for: TransferData.self) {
-                ConfirmTransferScene(
+                ConfirmTransferNavigationView(
                     model: viewModelFactory.confirmTransferScene(
                         wallet: wallet,
                         data: $0,

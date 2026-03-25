@@ -6,7 +6,7 @@ import Foundation
 import Localization
 import Primitives
 
-final class AmountEarnViewModel: AmountDataProvidable {
+public final class AmountEarnViewModel: AmountDataProvidable {
     let asset: Asset
     let action: EarnType
     private let earnService: any EarnDataProvidable

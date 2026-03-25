@@ -59,7 +59,7 @@ struct SelectedAssetNavigationStack: View  {
                     FiatConnectNavigationView(
                         model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
-                            walletId: wallet.walletId,
+                            wallet: wallet,
                             type: .buy,
                             amount: amount
                         )
@@ -68,7 +68,7 @@ struct SelectedAssetNavigationStack: View  {
                     FiatConnectNavigationView(
                         model: viewModelFactory.fiatScene(
                             assetAddress: input.assetAddress,
-                            walletId: wallet.walletId,
+                            wallet: wallet,
                             type: .sell,
                             amount: amount
                         )
@@ -112,7 +112,7 @@ struct SelectedAssetNavigationStack: View  {
             .toolbarDismissItem(type: .close, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: TransferData.self) { data in
-                ConfirmTransferScene(
+                ConfirmTransferNavigationView(
                     model: viewModelFactory.confirmTransferScene(
                         wallet: wallet,
                         data: data,

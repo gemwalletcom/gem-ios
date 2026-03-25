@@ -7,13 +7,13 @@ import Components
 import Perpetuals
 import PrimitivesComponents
 
-enum AmountSheetType: Identifiable {
+public enum AmountSheetType: Identifiable {
     case infoAction(InfoSheetType)
-    case fiatConnect(assetAddress: AssetAddress, walletId: WalletId)
+    case fiatConnect(assetAddress: AssetAddress, wallet: Wallet)
     case leverageSelector(selection: SelectionState<LeverageOption>)
     case autoclose(AutocloseOpenData)
 
-    var id: String {
+    public var id: String {
         switch self {
         case let .infoAction(type): "info-action-\(type.id)"
         case .fiatConnect: "fiat-connect"
