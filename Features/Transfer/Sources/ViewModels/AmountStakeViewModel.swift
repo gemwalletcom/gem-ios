@@ -119,7 +119,7 @@ final class AmountStakeViewModel: AmountDataProvidable {
         RecipientData(
             recipient: Recipient(
                 name: validatorSelection.selected.name,
-                address: recipientAddress(validatorId: validatorSelection.selected.id),
+                address: validatorSelection.selected.id,
                 memo: Localized.Stake.viagem
             ),
             amount: nil
@@ -143,14 +143,5 @@ final class AmountStakeViewModel: AmountDataProvidable {
             value: value,
             canChangeValue: canChangeValue
         )
-    }
-
-    private func recipientAddress(validatorId: String) -> String {
-        switch asset.chain.stakeChain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron, .smartChain, .ethereum, .aptos, .monad:
-            validatorId
-        case .none, .hyperCore:
-            ""
-        }
     }
 }
