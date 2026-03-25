@@ -23,7 +23,7 @@ public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
                     LazyVGrid(columns: model.columns) {
                         collectionsView
                     }
-                    .padding(.horizontal, .medium)
+                    .padding(.horizontal, Spacing.medium + Spacing.tiny)
 
                     Spacer(minLength: .medium)
 
@@ -44,6 +44,7 @@ public struct CollectionsScene<ViewModel: CollectionsViewable>: View {
             }
         }
         .bindQuery(model.query)
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .overlay {
             if model.content.items.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)

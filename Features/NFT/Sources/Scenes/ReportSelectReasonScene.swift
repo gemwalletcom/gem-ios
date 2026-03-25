@@ -3,7 +3,6 @@
 import SwiftUI
 import Components
 import Primitives
-import Localization
 
 struct ReportSelectReasonScene: View {
     private let model: ReportNftViewModel

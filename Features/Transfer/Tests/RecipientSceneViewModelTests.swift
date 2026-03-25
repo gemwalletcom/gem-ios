@@ -120,6 +120,12 @@ struct RecipientSceneViewModelTests {
             Issue.record("Expected recipient but got transferData")
         }
     }
+    @Test
+    func nftAssetImage() {
+        let nftAsset = NFTAsset.mock(id: "ethereum_0x123_1")
+        let image = RecipientSceneViewModel.mock().nftAssetImage(for: nftAsset)
+        #expect(image.imageURL?.absoluteString.contains("ethereum_0x123_1") == true)
+    }
 }
 
 // MARK: - Mocks

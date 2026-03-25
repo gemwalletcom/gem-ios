@@ -9,7 +9,6 @@ import Localization
 import SwiftUI
 import PrimitivesComponents
 import WalletService
-import Style
 
 @Observable
 @MainActor

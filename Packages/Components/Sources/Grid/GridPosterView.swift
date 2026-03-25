@@ -31,9 +31,7 @@ public struct GridPosterView: View {
                         .multilineTextAlignment(.leading)
 
                     if model.isVerified {
-                        Images.System.checkmarkSealFill
-                            .font(.callout)
-                            .foregroundStyle(Colors.blue)
+                        VerifiedBadgeView()
                     }
                 }
             }
