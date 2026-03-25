@@ -16,6 +16,7 @@ public struct FiatTransactionsRequest: DatabaseQueryable {
         try FiatTransactionRecord
             .including(required: FiatTransactionRecord.asset)
             .filter(FiatTransactionRecord.Columns.walletId == walletId.id)
+            .order(FiatTransactionRecord.Columns.createdAt.desc)
             .asRequest(of: FiatTransactionRecordInfo.self)
             .fetchAll(db)
             .map { $0.map() }
