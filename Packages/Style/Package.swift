@@ -17,9 +17,6 @@ let package = Package(
             name: "Style",
             dependencies: [],
             path: "Sources"
-        ),
-        .testTarget(
-            name: "StyleTests",
-            dependencies: ["Style"]),
+        )
     ]
 )

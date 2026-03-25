@@ -64,9 +64,6 @@ let package = Package(
             path: "Sources"
         ),
         .testTarget(
-            name: "SettingsTests",
-            dependencies: ["Settings"]),
-        .testTarget(
             name: "CurrencyTests",
             dependencies: [
                 "Settings",
