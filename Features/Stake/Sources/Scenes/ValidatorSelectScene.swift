@@ -24,12 +24,13 @@ public struct ValidatorSelectScene: View {
                             model.selectValidator?($0)
                             dismiss()
                         }
-                        .contextMenu(model.contextMenu(for: value.value))
+                        .ifLet(model.explorerContext(for: value.value)) { view, explorerContext in
+                            view.explorerContext(explorerContext)
+                        }
                     }
                 }
             }
         }
         .navigationTitle(model.title)
-        .safariSheet(url: $model.isPresentingUrl)
     }
 }

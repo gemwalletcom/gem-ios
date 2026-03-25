@@ -52,8 +52,13 @@ struct AssetDetailsInfoViewModel {
         MarketValueViewModel(
             title: Localized.Asset.contract,
             subtitle: contractText,
-            value: contract,
-            url: contractUrl
+            action: contract.flatMap { contract in
+                contractExplorerLink.map {
+                    MarketValueViewModel.Action.explorer(
+                        ExplorerContextData(copyValue: .address(value: contract, chain: priceData.asset.chain), explorerLink: $0)
+                    )
+                }
+            } ?? .none
         )
     }
 
@@ -65,7 +70,7 @@ struct AssetDetailsInfoViewModel {
         contract.map { AddressFormatter(address: $0, chain: priceData.asset.chain).value() }
     }
 
-    private var contractUrl: URL? {
-        contract.flatMap { explorerService.tokenUrl(chain: priceData.asset.chain, address: $0)?.url }
+    private var contractExplorerLink: BlockExplorerLink? {
+        contract.flatMap { explorerService.tokenUrl(chain: priceData.asset.chain, address: $0) }
     }
 }

@@ -46,7 +46,6 @@ public struct CollectibleScene: View {
         }
         .alertSheet($model.isPresentingAlertMessage)
         .toast(message: $model.isPresentingToast)
-        .safariSheet(url: $model.isPresentingTokenExplorerUrl)
         .sheet(isPresented: $model.isPresentingReportSheet) {
             ReportNavigationStack(
                 model: ReportNftViewModel(
@@ -102,12 +101,10 @@ extension CollectibleScene {
                 assetImage: model.networkAssetImage
             )
 
-            if let contractField = model.contractField {
-                ListItemView(field: contractField)
-                    .contextMenu(model.contractContextMenu)
+            if let contractRow = model.contractRow {
+                infoRowView(contractRow)
             }
-            ListItemView(field: model.tokenIdField)
-                .contextMenu(model.tokenIdContextMenu)
+            infoRowView(model.tokenIdRow)
         }
     }
 
@@ -124,5 +121,16 @@ extension CollectibleScene {
             SocialLinksView(model: model.socialLinksViewModel)
         }
     }
-}
 
+    @ViewBuilder
+    private func infoRowView(_ row: CollectibleInfoRow) -> some View {
+        switch row.action {
+        case .explorer(let explorerContext):
+            ListItemView(field: row.field)
+                .explorerContext(explorerContext)
+        case .copy(let copyValue):
+            ListItemView(field: row.field)
+                .contextMenu(.copy(value: copyValue, onCopy: model.onSelectCopyValue))
+        }
+    }
+}

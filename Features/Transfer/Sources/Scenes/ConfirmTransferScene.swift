@@ -109,10 +109,7 @@ extension ConfirmTransferScene {
                 )
         case let .sender(model):
             ListItemImageView(model: model)
-                .contextMenu([
-                    .copy(value: self.model.senderAddress),
-                    .url(title: self.model.senderExplorerText, onOpen: self.model.onSelectOpenSenderAddressURL)
-                ])
+                .explorerContext(self.model.senderExplorerContext)
         case let .recipient(model):
             AddressListItemView(model: model)
         case let .network(model):

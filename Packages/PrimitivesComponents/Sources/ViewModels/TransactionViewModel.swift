@@ -312,13 +312,7 @@ public struct TransactionViewModel: Sendable {
         }
     }
 
-    public var viewOnAddressExplorerText: String { Localized.Transaction.viewOn(addressLink.name) }
-    public var viewOnTransactionExplorerText: String { Localized.Transaction.viewOn(transactionLink.name) }
-
-    public var addressExplorerUrl: URL { addressLink.url }
-    public var transactionExplorerUrl: URL { transactionLink.url }
-
-    private var transactionLink: BlockExplorerLink {
+    public var transactionLink: BlockExplorerLink {
         explorerService.transactionLink(
             chain: assetId.chain,
             provider: transaction.transaction.swapProvider,
@@ -326,6 +320,9 @@ public struct TransactionViewModel: Sendable {
             recipient: transaction.transaction.to
         )
     }
+
+    public var transactionHashCopyValue: CopyValue { .plain(transaction.transaction.id.hash) }
+    public var explorerContext: ExplorerContextData { ExplorerContextData(copyValue: transactionHashCopyValue, explorerLink: transactionLink) }
 
     private var addressLink: BlockExplorerLink { explorerService.addressUrl(chain: assetId.chain, address: participant) }
     private var assetId: AssetId { transaction.transaction.assetId }

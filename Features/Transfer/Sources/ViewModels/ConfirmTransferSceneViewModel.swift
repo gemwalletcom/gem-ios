@@ -87,8 +87,9 @@ public final class ConfirmTransferSceneViewModel {
     var websiteTitle: String { Localized.Settings.website }
 
     var senderAddress: String { (try? wallet.account(for: dataModel.chain).address) ?? "" }
-    var senderAddressExplorerUrl: URL { senderLink.url }
-    var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.name) }
+    var senderCopyValue: CopyValue { .address(value: senderAddress, chain: dataModel.chain) }
+    var senderExplorerLink: BlockExplorerLink { senderLink }
+    var senderExplorerContext: ExplorerContextData { ExplorerContextData(copyValue: senderCopyValue, explorerLink: senderExplorerLink) }
 
     var progressMessage: String { Localized.Common.loading }
 
@@ -295,10 +296,6 @@ extension ConfirmTransferSceneViewModel {
         if let websiteURL {
             isPresentingSheet = .url(websiteURL)
         }
-    }
-
-    func onSelectOpenSenderAddressURL() {
-        isPresentingSheet = .url(senderAddressExplorerUrl)
     }
 
     func onSelectFeePicker() {

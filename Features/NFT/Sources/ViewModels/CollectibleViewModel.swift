@@ -26,7 +26,6 @@ public final class CollectibleViewModel {
 
     var isPresentingAlertMessage: AlertMessage?
     var isPresentingToast: ToastMessage?
-    var isPresentingTokenExplorerUrl: URL?
     var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     var isPresentingReportSheet = false
     var isPresentingInfoSheet: InfoSheetType?
@@ -86,25 +85,47 @@ public final class CollectibleViewModel {
         return ListItemField(title: Localized.Asset.contract, value: text)
     }
 
-    var contractContextMenu: [ContextMenuItemType] {
-        [
-            .copy(value: contractValue, onCopy: { [weak self] value in
-                self?.isPresentingToast = .copied(value)
-            }),
-            contractExplorerUrl.map {
-                .url(title: Localized.Transaction.viewOn($0.name), onOpen: onSelectViewContractInExplorer)
-            }
-        ].compactMap { $0 }
+    var contractExplorerLink: BlockExplorerLink? {
+        explorerService.tokenUrl(chain: assetData.asset.chain, address: contractValue)
+    }
+
+    var contractExplorerContext: ExplorerContextData? {
+        contractExplorerLink.map {
+            ExplorerContextData(copyValue: .address(value: contractValue, chain: assetData.asset.chain), explorerLink: $0)
+        }
+    }
+
+    var contractRow: CollectibleInfoRow? {
+        contractField.map {
+            CollectibleInfoRow(
+                field: $0,
+                action: contractExplorerContext.map { .explorer($0) } ?? .copy(contractValue)
+            )
+        }
     }
 
     var tokenIdValue: String { assetData.asset.tokenId }
     var tokenIdField: ListItemField {
         let text = if assetData.asset.tokenId.count > 16 {
-            assetData.asset.tokenId
+            AddressFormatter(address: assetData.asset.tokenId, chain: assetData.asset.chain).value()
         } else {
             "#\(assetData.asset.tokenId)"
         }
         return ListItemField(title: Localized.Asset.tokenId, value: text)
+    }
+
+    var tokenIdExplorerLink: BlockExplorerLink? {
+        explorerService.nftUrl(
+            chain: assetData.asset.chain,
+            contractAddress: contractValue,
+            tokenId: tokenIdValue
+        )
+    }
+
+    var tokenIdExplorerContext: ExplorerContextData? {
+        tokenIdExplorerLink.map {
+            ExplorerContextData(copyValue: .plain(tokenIdValue), explorerLink: $0)
+        }
     }
 
     var attributesTitle: String { Localized.Nft.properties }
@@ -169,27 +190,25 @@ public final class CollectibleViewModel {
         SocialLinksViewModel(assetLinks: assetData.collection.links)
     }
     
-    var tokenExplorerUrl: BlockExplorerLink? {
-        explorerService.tokenUrl(chain: assetData.asset.chain, address: assetData.asset.tokenId)
-    }
-    
-    var tokenIdContextMenu: [ContextMenuItemType] {
-        let items: [ContextMenuItemType] = [
-            .copy(value: tokenIdValue, onCopy: { [weak self] value in
-                self?.isPresentingToast = .copied(value)
-            }),
-            tokenExplorerUrl.map {
-                .url(title: Localized.Transaction.viewOn($0.name), onOpen: onSelectViewTokenInExplorer)
-            }
-        ].compactMap { $0 }
-        
-        return items
+    var tokenIdRow: CollectibleInfoRow {
+        CollectibleInfoRow(
+            field: tokenIdField,
+            action: tokenIdExplorerContext.map { .explorer($0) } ?? .copy(tokenIdValue)
+        )
     }
 }
 
 // MARK: - Business Logic
 
 extension CollectibleViewModel {
+    func onSelectCopyValue(_ value: CopyValue) {
+        isPresentingToast = .copied(value.displayValue)
+    }
+
+    func onSelectCopyValue(_ value: String) {
+        isPresentingToast = .copied(value)
+    }
+
     func onSelectHeaderButton(type: HeaderButtonType) {
         guard let account = try? wallet.account(for: assetData.asset.chain) else {
             return
@@ -247,14 +266,6 @@ extension CollectibleViewModel {
         }
     }
     
-    func onSelectViewTokenInExplorer() {
-        isPresentingTokenExplorerUrl = tokenExplorerUrl?.url
-    }
-
-    func onSelectViewContractInExplorer() {
-        isPresentingTokenExplorerUrl = contractExplorerUrl?.url
-    }
-
     func onSelectReport() {
         isPresentingReportSheet = true
     }
@@ -274,9 +285,6 @@ extension CollectibleViewModel {
 extension CollectibleViewModel {
     private static let enabledChainTypes: Set<ChainType> = [.ethereum]
     private var contractValue: String { assetData.collection.contractAddress }
-    private var contractExplorerUrl: BlockExplorerLink? {
-        explorerService.tokenUrl(chain: assetData.asset.chain, address: contractValue)
-    }
 
     private func openSettings() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
