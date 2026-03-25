@@ -42,6 +42,7 @@ public enum GemDeviceAPI: TargetType {
     case getFiatAssets(FiatQuoteType)
     case getFiatQuotes(walletId: String, type: FiatQuoteType, assetId: AssetId, request: FiatQuoteRequest)
     case getFiatQuoteUrl(walletId: String, quoteId: String)
+    case getFiatTransactions(walletId: String)
 
     case getNameRecord(name: String, chain: String)
     case getAddressNames(requests: [ChainAddress])
@@ -70,6 +71,7 @@ public enum GemDeviceAPI: TargetType {
             .getFiatAssets,
             .getFiatQuotes,
             .getFiatQuoteUrl,
+            .getFiatTransactions,
             .getNameRecord:
             return .GET
         case .addDevice,
@@ -151,6 +153,8 @@ public enum GemDeviceAPI: TargetType {
             return "/v2/devices/fiat/quotes/\(type.rawValue)/\(assetId.identifier)"
         case .getFiatQuoteUrl(_, let quoteId):
             return "/v2/devices/fiat/quotes/\(quoteId)/url"
+        case .getFiatTransactions:
+            return "/v2/devices/fiat/transactions"
         case .getNameRecord(let name, let chain):
             return "/v2/devices/name/resolve/\(name)?chain=\(chain)"
         case .getAddressNames:
@@ -175,7 +179,8 @@ public enum GemDeviceAPI: TargetType {
             .useDeviceReferralCode(let walletId, _),
             .redeemDeviceRewards(let walletId, _),
             .getFiatQuotes(let walletId, _, _, _),
-            .getFiatQuoteUrl(let walletId, _):
+            .getFiatQuoteUrl(let walletId, _),
+            .getFiatTransactions(let walletId):
             return walletId
         default:
             return nil
@@ -199,6 +204,7 @@ public enum GemDeviceAPI: TargetType {
             .isDeviceRegistered,
             .getFiatAssets,
             .getFiatQuoteUrl,
+            .getFiatTransactions,
             .getNameRecord:
             return .plain
         case .getPriceAlerts(let assetId):

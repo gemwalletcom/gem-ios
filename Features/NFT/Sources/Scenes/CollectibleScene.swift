@@ -1,13 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import Primitives
 import SwiftUI
 import Style
 import Components
 import PrimitivesComponents
 import Localization
-import ImageGalleryService
 import InfoSheet
 
 public struct CollectibleScene: View {
@@ -33,16 +31,15 @@ public struct CollectibleScene: View {
         }
         .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)
+        .contentMargins([.top], .small, for: .scrollContent)
         .navigationTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                HStack(spacing: Spacing.tiny) {
+                HStack(spacing: .tiny) {
                     Text(model.title)
                         .font(.headline)
                     if model.isVerified {
-                        Images.System.checkmarkSealFill
-                            .font(.footnote)
-                            .foregroundStyle(Colors.blue)
+                        VerifiedBadgeView()
                     }
                 }
             }
@@ -69,8 +66,11 @@ public struct CollectibleScene: View {
 extension CollectibleScene {
     private var headerSectionView: some View {
         Section {
-            NftImageView(assetImage: model.assetImage)
-                .aspectRatio(1, contentMode: .fill)
+            NftImageView(
+                assetImage: model.assetImage,
+                isImageLoaded: $model.isImageLoaded
+            )
+            .aspectRatio(1, contentMode: .fill)
         } header: {
             Spacer()
         } footer: {
@@ -82,18 +82,7 @@ extension CollectibleScene {
         .textCase(nil)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
-        .contextMenu([
-            .custom(
-                title: Localized.Nft.saveToPhotos,
-                systemImage: SystemImage.gallery,
-                action: model.onSelectSaveToGallery
-            ),
-            .custom(
-                title: Localized.Nft.setAsAvatar,
-                systemImage: SystemImage.emoji,
-                action: model.onSelectSetAsAvatar
-            )
-        ])
+        .contextMenu(model.imageContextMenuItems)
     }
 
     private var statusSectionView: some View {

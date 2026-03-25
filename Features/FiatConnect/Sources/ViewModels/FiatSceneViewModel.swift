@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import SwiftUI
-import GemAPI
 import Components
 import Style
 import Localization
@@ -12,6 +11,7 @@ import PrimitivesComponents
 import Formatters
 import Validators
 import BigInt
+import FiatService
 
 @MainActor
 @Observable
@@ -22,11 +22,11 @@ public final class FiatSceneViewModel {
         static let suggestedAmounts: [Int] = [100, 250]
     }
 
-    private let fiatService: any GemAPIFiatService
+    let walletId: WalletId
+    let fiatService: FiatService
     private let assetAddress: AssetAddress
     private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
-    private let walletId: WalletId
 
     public let assetQuery: ObservableQuery<AssetRequest>
     var assetData: AssetData { assetQuery.value }
@@ -40,7 +40,7 @@ public final class FiatSceneViewModel {
     let sellViewModel: FiatOperationViewModel
 
     public init(
-        fiatService: any GemAPIFiatService,
+        fiatService: FiatService,
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
         walletId: WalletId,

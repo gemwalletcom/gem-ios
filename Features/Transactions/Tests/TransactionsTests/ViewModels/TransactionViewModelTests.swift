@@ -34,7 +34,7 @@ final class TransactionViewModelTests {
         let outgoingViewModel = TransactionViewModel.mock(
             type: .transfer,
             direction: .outgoing,
-            participant: "to_address",
+            to: "to_address",
             metadata: .encode(TransactionSwapMetadata.mock())
         )
         #expect(outgoingViewModel.participant == "to_address")
@@ -42,7 +42,7 @@ final class TransactionViewModelTests {
         let selfTransferViewModel = TransactionViewModel.mock(
             type: .transfer,
             direction: .selfTransfer,
-            participant: "self_address",
+            to: "self_address",
             metadata: .encode(TransactionSwapMetadata.mock())
         )
         #expect(selfTransferViewModel.participant == "self_address")
@@ -54,7 +54,7 @@ final class TransactionViewModelTests {
         let hyperliquidViewModel = TransactionViewModel.mock(
             type: .transfer,
             direction: .outgoing,
-            participant: "0x742d35cc6327c516e07e17dddaef8b48ca1e8c4a",
+            to: "0x742d35cc6327c516e07e17dddaef8b48ca1e8c4a",
             toAddress: toAddress,
             metadata: .encode(TransactionSwapMetadata.mock())
         )
@@ -64,7 +64,7 @@ final class TransactionViewModelTests {
         let incomingViewModel = TransactionViewModel.mock(
             type: .transfer,
             direction: .incoming,
-            participant: "0x1111111111111111111111111111111111111111",
+            from: "0x1111111111111111111111111111111111111111",
             fromAddress: fromAddress,
             metadata: .encode(TransactionSwapMetadata.mock())
         )
@@ -73,7 +73,7 @@ final class TransactionViewModelTests {
         let unknownViewModel = TransactionViewModel.mock(
             type: .transfer,
             direction: .outgoing,
-            participant: "0x1234567890abcdef1234567890abcdef12345678",
+            to: "0x1234567890abcdef1234567890abcdef12345678",
             metadata: .encode(TransactionSwapMetadata.mock())
         )
         #expect(unknownViewModel.titleExtraTextValue?.text.contains("0x1234") == true)
@@ -174,6 +174,31 @@ final class TransactionViewModelTests {
         #expect(model.titleExtraTextValue == nil)
     }
 
+    @Test
+    func titleExtraHidesEmptyParticipant() {
+        let model = TransactionViewModel.mock(type: .stakeDelegate, direction: .outgoing, to: "")
+
+        #expect(model.titleExtraTextValue == nil)
+    }
+
+    @Test
+    func titleExtraHidesEmptySender() {
+        let model = TransactionViewModel(
+            explorerService: MockExplorerLink(),
+            transaction: .mock(
+                transaction: .mock(
+                    type: .transfer,
+                    direction: .incoming,
+                    from: "",
+                    to: "0x123"
+                )
+            ),
+            currency: "USD"
+        )
+
+        #expect(model.titleExtraTextValue == nil)
+    }
+
     func testTransactionTitle(expectedTitle: String, transaction: Transaction) {
         #expect(TransactionViewModel(explorerService: MockExplorerLink(), transaction: .mock(transaction: transaction), currency: "USD").titleTextValue.text == expectedTitle)
     }
@@ -184,7 +209,8 @@ extension TransactionViewModel {
         type: TransactionType = .swap,
         state: TransactionState = .confirmed,
         direction: TransactionDirection = .incoming,
-        participant: String = "",
+        from: String = "",
+        to: String = "",
         memo: String? = nil,
         fromAddress: AddressName? = nil,
         toAddress: AddressName? = nil,
@@ -197,7 +223,8 @@ extension TransactionViewModel {
             type: type,
             state: state,
             direction: direction,
-            to: participant,
+            from: from,
+            to: to,
             value: value,
             memo: memo,
             metadata: metadata

@@ -181,31 +181,15 @@ public struct TransactionViewModel: Sendable {
             case .transfer, .transferNFT, .tokenApproval, .smartContractCall:
                 switch transaction.transaction.direction {
                 case .incoming:
-                    return String(
-                        format: "%@ %@",
-                        Localized.Transfer.from,
-                        getDisplayName(address: transaction.transaction.from, chain: chain)
-                    )
+                    return participantTitle(prefix: Localized.Transfer.from, address: transaction.transaction.from, chain: chain)
                 case .outgoing, .selfTransfer:
-                    return String(
-                        format: "%@ %@",
-                        Localized.Transfer.to,
-                        getDisplayName(address: transaction.transaction.to, chain: chain)
-                    )
+                    return participantTitle(prefix: Localized.Transfer.to, address: transaction.transaction.to, chain: chain)
                 }
             case .stakeDelegate,
                     .stakeRedelegate:
-                return String(
-                    format: "%@ %@",
-                    Localized.Transfer.to,
-                    getDisplayName(address: transaction.transaction.to, chain: chain)
-                )
+                return participantTitle(prefix: Localized.Transfer.to, address: transaction.transaction.to, chain: chain)
             case .stakeUndelegate:
-                return String(
-                    format: "%@ %@",
-                    Localized.Transfer.from,
-                    getDisplayName(address: transaction.transaction.to, chain: chain)
-                )
+                return participantTitle(prefix: Localized.Transfer.from, address: transaction.transaction.to, chain: chain)
             case .stakeFreeze:
                 guard let title = getResourceTitle() else { return .none }
                 return String(format: "%@ %@", Localized.Transfer.to, title)
@@ -213,9 +197,9 @@ public struct TransactionViewModel: Sendable {
                 guard let title = getResourceTitle() else { return .none }
                 return String(format: "%@ %@", Localized.Transfer.from, title)
             case .earnDeposit:
-                return String(format: "%@ %@", Localized.Transfer.to, getDisplayName(address: transaction.transaction.to, chain: chain))
+                return participantTitle(prefix: Localized.Transfer.to, address: transaction.transaction.to, chain: chain)
             case .earnWithdraw:
-                return String(format: "%@ %@", Localized.Transfer.from, getDisplayName(address: transaction.transaction.to, chain: chain))
+                return participantTitle(prefix: Localized.Transfer.from, address: transaction.transaction.to, chain: chain)
             case .swap,
                     .stakeRewards,
                     .stakeWithdraw,
@@ -362,10 +346,17 @@ public struct TransactionViewModel: Sendable {
     // MARK: - Private methods
     
     private func getDisplayName(address: String, chain: Chain) -> String {
+        guard address.isNotEmpty else { return "" }
         if let name = getAddressName(address: address)?.name {
             return name
         }
         return AddressFormatter(address: address, chain: chain).value()
+    }
+
+    private func participantTitle(prefix: String, address: String, chain: Chain) -> String? {
+        let value = getDisplayName(address: address, chain: chain)
+        guard value.isNotEmpty else { return nil }
+        return String(format: "%@ %@", prefix, value)
     }
 
     private func getResourceTitle() -> String? {

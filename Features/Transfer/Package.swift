@@ -81,7 +81,8 @@ let package = Package(
                 .product(name: "ExplorerService", package: "ChainServices"),
                 .product(name: "NameService", package: "ChainServices"),
                 .product(name: "AddressNameService", package: "FeatureServices"),
-                .product(name: "ActivityService", package: "FeatureServices")
+                .product(name: "ActivityService", package: "FeatureServices"),
+                .product(name: "FiatService", package: "FeatureServices")
             ],
             path: "Sources"
         ),
@@ -120,6 +121,7 @@ let package = Package(
                 .product(name: "NFTServiceTestKit", package: "FeatureServices"),
                 .product(name: "SignerTestKit", package: "Signer"),
                 .product(name: "EarnServiceTestKit", package: "FeatureServices"),
+                .product(name: "FiatServiceTestKit", package: "FeatureServices"),
                 .product(name: "EventPresenterServiceTestKit", package: "EventPresenterService"),
             ],
             path: "Tests"
