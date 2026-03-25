@@ -23,10 +23,10 @@ struct CollectibleViewModelTests {
     @Test
     func tokenIdField() {
         let shortModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "123")))
-        let longModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234567890123456789")))
+        let longModel = CollectibleViewModel.mock(assetData: .mock(asset: .mock(tokenId: "1234567890123456789", chain: .ethereum)))
 
         #expect(shortModel.tokenIdField.value.text == "#123")
-        #expect(longModel.tokenIdField.value.text == "1234567890123456789")
+        #expect(longModel.tokenIdField.value.text == "1234567...56789")
     }
 
     @Test
@@ -52,7 +52,7 @@ struct CollectibleViewModelTests {
             asset: .mock(tokenId: "11871", chain: .ethereum)
         ))
 
-        #expect(model.tokenIdExplorerLink?.link == "https://etherscan.io/nft/0x47A00fC8590C11bE4c419D9Ae50DEc267B6E24ee/11871")
+        #expect(model.tokenIdExplorerLink?.link == "https://opensea.io/item/ethereum/0x47A00fC8590C11bE4c419D9Ae50DEc267B6E24ee/11871")
     }
 
     @Test

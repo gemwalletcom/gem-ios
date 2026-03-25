@@ -93,7 +93,7 @@ public final class CollectibleViewModel {
     var tokenIdValue: String { assetData.asset.tokenId }
     var tokenIdField: ListItemField {
         let text = if assetData.asset.tokenId.count > 16 {
-            assetData.asset.tokenId
+            AddressFormatter(address: assetData.asset.tokenId, chain: assetData.asset.chain).value()
         } else {
             "#\(assetData.asset.tokenId)"
         }
