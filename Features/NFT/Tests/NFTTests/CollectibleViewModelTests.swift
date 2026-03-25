@@ -52,7 +52,7 @@ struct CollectibleViewModelTests {
             asset: .mock(tokenId: "11871", chain: .ethereum)
         ))
 
-        #expect(model.tokenIdExplorerLink?.link == "https://opensea.io/item/ethereum/0x47A00fC8590C11bE4c419D9Ae50DEc267B6E24ee/11871")
+        #expect(model.tokenIdExplorerLink?.link == "https://etherscan.io/nft/0x47A00fC8590C11bE4c419D9Ae50DEc267B6E24ee/11871")
     }
 
     @Test

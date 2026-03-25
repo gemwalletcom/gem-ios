@@ -3,7 +3,6 @@
 import Foundation
 import class Gemstone.Config
 import class Gemstone.Explorer
-import class Gemstone.NftExplorer
 import Primitives
 import GemstonePrimitives
 import Preferences
@@ -19,10 +18,6 @@ public struct ExplorerService {
 
     public static func explorers(chain: Chain) -> [String] {
         Gemstone.Config.shared.getBlockExplorers(chain: chain.id)
-    }
-
-    public static func nftExplorers(chain: Chain) -> [String] {
-        Gemstone.Config.shared.getNftExplorers(chain: chain.id)
     }
 
     public func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink {
@@ -49,11 +44,8 @@ public struct ExplorerService {
     }
 
     public func nftUrl(chain: Chain, contractAddress: String, tokenId: String) -> BlockExplorerLink? {
-        let explorer = Gemstone.NftExplorer(chain: chain.id)
-        guard let name = Self.nftExplorers(chain: chain).first, let url = explorer.getNftUrl(explorerName: name, contractAddress: contractAddress, tokenId: tokenId) else {
-            return nil
-        }
-        return BlockExplorerLink(name: url.name, link: url.url)
+        let (name, explorer) = getExplorer(chain: chain)
+        return makeLink(name: name, url: explorer.getNftUrl(explorerName: name, contractAddress: contractAddress, tokenId: tokenId))
     }
 
     public func validatorUrl(chain: Chain, address: String) -> BlockExplorerLink? {
