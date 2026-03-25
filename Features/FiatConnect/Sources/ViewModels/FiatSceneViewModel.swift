@@ -12,6 +12,7 @@ import Formatters
 import Validators
 import BigInt
 import FiatService
+import BalanceService
 
 @MainActor
 @Observable
@@ -43,15 +44,18 @@ public final class FiatSceneViewModel {
         fiatService: FiatService,
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: WalletId,
+        wallet: Wallet,
+        assetsEnabler: any AssetsEnabler,
         type: FiatQuoteType = .buy,
         amount: Int? = nil
     ) {
         self.fiatService = fiatService
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
-        self.walletId = walletId
+        self.wallet = wallet
+        self.assetsEnabler = assetsEnabler
         self.type = type
+        let walletId = wallet.walletId
         self.assetQuery = ObservableQuery(AssetRequest(walletId: walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
 
         let buyOperation = BuyOperation(
@@ -191,6 +195,7 @@ extension FiatSceneViewModel {
                 }
 
                 urlState = .data(())
+                Task { await enableAsset() }
                 await UIApplication.shared.open(url, options: [:])
             } catch {
                 urlState = .error(error)
@@ -239,6 +244,15 @@ extension FiatSceneViewModel {
 // MARK: - Private
 
 extension FiatSceneViewModel {
+    private func enableAsset() async {
+        guard type == .buy else { return }
+        do {
+            try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: true)
+        } catch {
+            debugLog("FiatSceneViewModel enableAsset error: \(error)")
+        }
+    }
+
     private var balanceModel: BalanceViewModel {
         BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
     }
