@@ -8,7 +8,6 @@ import Localization
 import Components
 import Style
 import ImageGalleryService
-import Photos
 import AvatarService
 import Formatters
 import ExplorerService
@@ -31,6 +30,7 @@ public final class CollectibleViewModel {
     var isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     var isPresentingReportSheet = false
     var isPresentingInfoSheet: InfoSheetType?
+    var isImageLoaded = false
 
     public init(
         wallet: Wallet,
@@ -49,7 +49,22 @@ public final class CollectibleViewModel {
     }
 
     var title: String { assetData.asset.name }
-    var description: String? { assetData.asset.description }
+
+    var imageContextMenuItems: [ContextMenuItemType] {
+        guard isImageLoaded else { return [] }
+        return [
+            .custom(
+                title: Localized.Nft.saveToPhotos,
+                systemImage: SystemImage.gallery,
+                action: onSelectSaveToGallery
+            ),
+            .custom(
+                title: Localized.Nft.setAsAvatar,
+                systemImage: SystemImage.emoji,
+                action: onSelectSetAsAvatar
+            ),
+        ]
+    }
 
     var collectionField: ListItemField {
         ListItemField(title: Localized.Nft.collection, value: assetData.collection.name)
@@ -63,17 +78,12 @@ public final class CollectibleViewModel {
         ListItemField(title: Localized.Transfer.network, value: assetData.asset.chain.asset.name)
     }
 
-    var contractValue: String { assetData.collection.contractAddress }
     var contractField: ListItemField? {
         if contractValue.isEmpty || contractValue == assetData.asset.tokenId {
             return .none
         }
         let text = AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
         return ListItemField(title: Localized.Asset.contract, value: text)
-    }
-
-    var contractExplorerUrl: BlockExplorerLink? {
-        explorerService.tokenUrl(chain: assetData.asset.chain, address: contractValue)
     }
 
     var contractContextMenu: [ContextMenuItemType] {
@@ -112,12 +122,10 @@ public final class CollectibleViewModel {
         )
     }
     
-    let enabledChainTypes: Set<ChainType> = [ChainType.ethereum]
-
     var isSendEnabled: Bool {
         wallet.canSign &&
         assetData.asset.chain.isNFTSupported &&
-        enabledChainTypes .contains(assetData.asset.chain.type)
+        Self.enabledChainTypes.contains(assetData.asset.chain.type)
     }
     
     var headerButtons: [HeaderButton] {
@@ -264,11 +272,17 @@ extension CollectibleViewModel {
 // MARK: - Private
 
 extension CollectibleViewModel {
+    private static let enabledChainTypes: Set<ChainType> = [.ethereum]
+    private var contractValue: String { assetData.collection.contractAddress }
+    private var contractExplorerUrl: BlockExplorerLink? {
+        explorerService.tokenUrl(chain: assetData.asset.chain, address: contractValue)
+    }
+
     private func openSettings() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(settingsURL)
     }
-    
+
     private func setWalletAvatar() async throws {
         guard let url = assetData.asset.images.preview.url.asURL else { return }
         try await avatarService.save(url: url, for: wallet)

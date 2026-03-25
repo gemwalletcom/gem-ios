@@ -21,6 +21,7 @@ public struct StoreManager: Sendable {
     public let searchStore: SearchStore
     public let inAppNotificationStore: InAppNotificationStore
     public let contactStore: ContactStore
+    public let fiatTransactionStore: FiatTransactionStore
 
     public init(db: DB) {
         self.assetStore = AssetStore(db: db)
@@ -41,5 +42,6 @@ public struct StoreManager: Sendable {
         self.searchStore = SearchStore(db: db)
         self.inAppNotificationStore = InAppNotificationStore(db: db)
         self.contactStore = ContactStore(db: db)
+        self.fiatTransactionStore = FiatTransactionStore(db: db)
     }
 }

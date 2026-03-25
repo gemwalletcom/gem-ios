@@ -5,6 +5,7 @@ import Primitives
 import Store
 import Components
 import Localization
+import Style
 
 public struct FiatConnectNavigationView: View {
     @State private var model: FiatSceneViewModel
@@ -29,6 +30,21 @@ public struct FiatConnectNavigationView: View {
                 $0.navigationTitle(model.title)
             }
         )
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(value: Scenes.FiatTransactions()) {
+                    Images.Tabs.activity
+                }
+            }
+        }
+        .navigationDestination(for: Scenes.FiatTransactions.self) { _ in
+            FiatTransactionsScene(
+                model: FiatTransactionsViewModel(
+                    walletId: model.walletId,
+                    service: model.fiatService
+                )
+            )
+        }
         .sheet(isPresented: $model.isPresentingFiatProvider) {
             SelectableListNavigationStack(
                 model: model.fiatProviderViewModel,

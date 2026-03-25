@@ -26,8 +26,8 @@ import ActivityService
 import EventPresenterService
 import Preferences
 import PrimitivesComponents
-import GemAPI
 import AssetsService
+import FiatService
 
 public struct ViewModelFactory: Sendable {
     let keystore: any Keystore
@@ -47,7 +47,7 @@ public struct ViewModelFactory: Sendable {
     let addressNameService: AddressNameService
     let activityService: ActivityService
     let eventPresenterService: EventPresenterService
-    let fiatService: any GemAPIFiatService
+    let fiatService: FiatService
     let assetsService: AssetsService
 
     public init(
@@ -68,7 +68,7 @@ public struct ViewModelFactory: Sendable {
         addressNameService: AddressNameService,
         activityService: ActivityService,
         eventPresenterService: EventPresenterService,
-        fiatService: any GemAPIFiatService,
+        fiatService: FiatService,
         assetsService: AssetsService
     ) {
         self.keystore = keystore
@@ -124,6 +124,7 @@ public struct ViewModelFactory: Sendable {
             data: data,
             confirmService: confirmService,
             simulationService: simulationService,
+            fiatService: fiatService,
             confirmTransferDelegate: confirmTransferDelegate,
             simulation: simulation,
             onComplete: onComplete
@@ -159,6 +160,7 @@ public struct ViewModelFactory: Sendable {
             input: input,
             wallet: wallet,
             service: amountService,
+            fiatService: fiatService,
             onTransferAction: onTransferAction
         )
     }

@@ -16,36 +16,38 @@ public enum FiatTransactionStatus: String, Codable, Equatable, Hashable, Sendabl
 	case unknown
 }
 
-public struct FiatTransaction: Codable, Equatable, Sendable {
-	public let assetId: AssetId?
+public struct FiatTransaction: Codable, Equatable, Hashable, Sendable {
+	public let id: String
+	public let assetId: AssetId
 	public let transactionType: FiatQuoteType
-	public let providerId: FiatProviderName
-	public let providerTransactionId: String
+	public let provider: FiatProviderName
 	public let status: FiatTransactionStatus
 	public let fiatAmount: Double
 	public let fiatCurrency: String
-	public let transactionHash: String?
-	public let address: String?
+	public let value: String
+	public let createdAt: Date
 
-	public init(assetId: AssetId?, transactionType: FiatQuoteType, providerId: FiatProviderName, providerTransactionId: String, status: FiatTransactionStatus, fiatAmount: Double, fiatCurrency: String, transactionHash: String?, address: String?) {
+	public init(id: String, assetId: AssetId, transactionType: FiatQuoteType, provider: FiatProviderName, status: FiatTransactionStatus, fiatAmount: Double, fiatCurrency: String, value: String, createdAt: Date) {
+		self.id = id
 		self.assetId = assetId
 		self.transactionType = transactionType
-		self.providerId = providerId
-		self.providerTransactionId = providerTransactionId
+		self.provider = provider
 		self.status = status
 		self.fiatAmount = fiatAmount
 		self.fiatCurrency = fiatCurrency
-		self.transactionHash = transactionHash
-		self.address = address
+		self.value = value
+		self.createdAt = createdAt
 	}
 }
 
-public struct FiatTransactionInfo: Codable, Equatable, Sendable {
+public struct FiatTransactionInfo: Codable, Equatable, Hashable, Sendable {
 	public let transaction: FiatTransaction
+	public let asset: Asset
 	public let detailsUrl: String?
 
-	public init(transaction: FiatTransaction, detailsUrl: String?) {
+	public init(transaction: FiatTransaction, asset: Asset, detailsUrl: String?) {
 		self.transaction = transaction
+		self.asset = asset
 		self.detailsUrl = detailsUrl
 	}
 }

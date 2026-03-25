@@ -57,6 +57,8 @@ let package = Package(
         .library(name: "ContactService", targets: ["ContactService"]),
         .library(name: "EarnService", targets: ["EarnService"]),
         .library(name: "EarnServiceTestKit", targets: ["EarnServiceTestKit"]),
+        .library(name: "FiatService", targets: ["FiatService"]),
+        .library(name: "FiatServiceTestKit", targets: ["FiatServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -631,6 +633,25 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "EarnService/TestKit"
+        ),
+        .target(
+            name: "FiatService",
+            dependencies: [
+                "Primitives",
+                "GemAPI",
+                "Store",
+            ],
+            path: "FiatService",
+            exclude: ["TestKit"]
+        ),
+        .target(
+            name: "FiatServiceTestKit",
+            dependencies: [
+                "FiatService",
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "StoreTestKit", package: "Store"),
+            ],
+            path: "FiatService/TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

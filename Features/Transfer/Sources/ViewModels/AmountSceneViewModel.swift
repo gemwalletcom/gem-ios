@@ -2,6 +2,7 @@
 
 import BigInt
 import Components
+import FiatService
 import Formatters
 import Foundation
 import InfoSheet
@@ -19,6 +20,7 @@ import Validators
 public final class AmountSceneViewModel {
     private let wallet: Wallet
     private let onTransferAction: TransferDataAction
+    let fiatService: FiatService
 
     private let formatter = ValueFormatter(style: .full)
     private let valueConverter = ValueConverter()
@@ -40,11 +42,13 @@ public final class AmountSceneViewModel {
         input: AmountInput,
         wallet: Wallet,
         service: AmountService,
+        fiatService: FiatService,
         preferences: Preferences = .standard,
         onTransferAction: TransferDataAction
     ) {
         self.wallet = wallet
         self.onTransferAction = onTransferAction
+        self.fiatService = fiatService
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: preferences.currency)
         self.provider = .make(from: input, wallet: wallet, service: service)
         self.assetQuery = ObservableQuery(AssetRequest(walletId: wallet.walletId, assetId: input.asset.id), initialValue: .with(asset: input.asset))

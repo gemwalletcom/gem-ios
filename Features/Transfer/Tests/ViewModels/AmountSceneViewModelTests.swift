@@ -4,6 +4,7 @@ import Testing
 import PrimitivesTestKit
 import Primitives
 import EarnServiceTestKit
+import FiatServiceTestKit
 
 @testable import Transfer
 @testable import Store
@@ -160,6 +161,7 @@ extension AmountSceneViewModel {
             input: AmountInput(type: type, asset: assetData.asset),
             wallet: .mock(),
             service: AmountService(earnDataProvider: MockEarnService()),
+            fiatService: .mock(),
             onTransferAction: { _ in }
         )
         model.assetQuery.value = assetData
