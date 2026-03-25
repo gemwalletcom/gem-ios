@@ -357,7 +357,7 @@ public struct TransactionViewModel: Sendable {
     }
 
     private func participantTitle(prefix: String, address: String, chain: Chain) -> String? {
-        let value = getDisplayName(address: address, chain: chain).trimmingCharacters(in: .whitespacesAndNewlines)
+        let value = getDisplayName(address: address, chain: chain)
         guard value.isNotEmpty else { return nil }
         return String(format: "%@ %@", prefix, value)
     }
