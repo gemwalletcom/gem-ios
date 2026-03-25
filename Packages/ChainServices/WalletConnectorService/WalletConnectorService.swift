@@ -228,6 +228,16 @@ extension WalletConnectorService {
             let transactionId = try await signer.signTransaction(sessionId: sessionId, chain: chain.map(), transaction: transaction.map(), simulation: simulation)
             let response = walletConnect.encodeSignTransaction(chain: chain, transactionId: transactionId)
             return .response(response.map())
+        case .signAllTransactions(let chain, let type, let transactions):
+            var signedTransactions: [String] = []
+            for data in transactions {
+                let simulation = try await simulateSendTransaction(chain: chain, transactionType: type, data: data)
+                let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
+                let signed = try await signer.signTransaction(sessionId: sessionId, chain: chain.map(), transaction: transaction.map(), simulation: simulation)
+                signedTransactions.append(signed)
+            }
+            let response = walletConnect.encodeSignAllTransactions(signedTransactions: signedTransactions)
+            return .response(response.map())
         case .sendTransaction(let chain, let type, let data):
             let simulation = try await simulateSendTransaction(chain: chain, transactionType: type, data: data)
             let transaction = try walletConnect.decodeSendTransaction(transactionType: type, data: data)
