@@ -8,31 +8,23 @@ extension FiatTransaction {
         id: String = "mock_id",
         assetId: AssetId = .mock(),
         transactionType: FiatQuoteType = .buy,
-        providerId: FiatProviderName = .moonPay,
-        providerTransactionId: String? = "mock_tx_123",
+        provider: FiatProviderName = .moonPay,
         status: FiatTransactionStatus = .complete,
         fiatAmount: Double = 100.0,
         fiatCurrency: String = "USD",
         value: String = "0",
-        transactionHash: String? = nil,
-        address: String? = "0x1234567890abcdef",
-        createdAt: Date = .now,
-        updatedAt: Date = .now
+        createdAt: Date = .now
     ) -> FiatTransaction {
         FiatTransaction(
             id: id,
             assetId: assetId,
             transactionType: transactionType,
-            providerId: providerId,
-            providerTransactionId: providerTransactionId,
+            provider: provider,
             status: status,
             fiatAmount: fiatAmount,
             fiatCurrency: fiatCurrency,
             value: value,
-            transactionHash: transactionHash,
-            address: address,
-            createdAt: createdAt,
-            updatedAt: updatedAt
+            createdAt: createdAt
         )
     }
 }

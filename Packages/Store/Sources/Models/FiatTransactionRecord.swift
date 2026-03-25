@@ -84,16 +84,12 @@ extension FiatTransactionRecordInfo {
                 id: fiatTransaction.id,
                 assetId: fiatTransaction.assetId,
                 transactionType: fiatTransaction.transactionType,
-                providerId: fiatTransaction.providerId,
-                providerTransactionId: nil,
+                provider: fiatTransaction.providerId,
                 status: fiatTransaction.status,
                 fiatAmount: fiatTransaction.fiatAmount,
                 fiatCurrency: fiatTransaction.fiatCurrency,
                 value: fiatTransaction.value,
-                transactionHash: nil,
-                address: nil,
-                createdAt: fiatTransaction.createdAt,
-                updatedAt: fiatTransaction.createdAt
+                createdAt: fiatTransaction.createdAt
             ),
             asset: asset.mapToAsset(),
             detailsUrl: fiatTransaction.detailsUrl
@@ -108,7 +104,7 @@ extension FiatTransactionInfo {
             walletId: walletId,
             assetId: transaction.assetId,
             transactionType: transaction.transactionType,
-            providerId: transaction.providerId,
+            providerId: transaction.provider,
             status: transaction.status,
             fiatAmount: transaction.fiatAmount,
             fiatCurrency: transaction.fiatCurrency,

@@ -26,7 +26,7 @@ public struct FiatTransactionViewModel: Sendable {
             titleStyle: TextStyle(font: Font.system(.body, weight: .medium), color: .primary),
             titleTag: titleTag(statusModel),
             titleTagStyle: titleTagStyle(statusModel),
-            titleExtra: transaction.providerId.displayName,
+            titleExtra: transaction.provider.displayName,
             titleStyleExtra: .footnote,
             subtitle: amount,
             subtitleStyle: TextStyle(font: .callout, color: subtitleColor, fontWeight: .semibold),

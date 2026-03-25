@@ -20,31 +20,23 @@ public struct FiatTransaction: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let assetId: AssetId
 	public let transactionType: FiatQuoteType
-	public let providerId: FiatProviderName
-	public let providerTransactionId: String?
+	public let provider: FiatProviderName
 	public let status: FiatTransactionStatus
 	public let fiatAmount: Double
 	public let fiatCurrency: String
 	public let value: String
-	public let transactionHash: String?
-	public let address: String?
 	public let createdAt: Date
-	public let updatedAt: Date
 
-	public init(id: String, assetId: AssetId, transactionType: FiatQuoteType, providerId: FiatProviderName, providerTransactionId: String?, status: FiatTransactionStatus, fiatAmount: Double, fiatCurrency: String, value: String, transactionHash: String?, address: String?, createdAt: Date, updatedAt: Date) {
+	public init(id: String, assetId: AssetId, transactionType: FiatQuoteType, provider: FiatProviderName, status: FiatTransactionStatus, fiatAmount: Double, fiatCurrency: String, value: String, createdAt: Date) {
 		self.id = id
 		self.assetId = assetId
 		self.transactionType = transactionType
-		self.providerId = providerId
-		self.providerTransactionId = providerTransactionId
+		self.provider = provider
 		self.status = status
 		self.fiatAmount = fiatAmount
 		self.fiatCurrency = fiatCurrency
 		self.value = value
-		self.transactionHash = transactionHash
-		self.address = address
 		self.createdAt = createdAt
-		self.updatedAt = updatedAt
 	}
 }
 
