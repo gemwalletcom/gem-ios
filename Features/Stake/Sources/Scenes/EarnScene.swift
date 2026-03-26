@@ -15,6 +15,8 @@ public struct EarnScene: View {
 
     public var body: some View {
         List {
+            ListAssetHeaderView(model: model.assetModel)
+
             switch model.providersState {
             case .noData:
                 Section {
@@ -24,7 +26,7 @@ public struct EarnScene: View {
                 ListItemLoadingView()
                     .id(UUID())
             case .data:
-                Section(model.assetTitle) {
+                Section {
                     ListItemView(
                         title: model.aprModel.title,
                         subtitle: model.aprModel.subtitle

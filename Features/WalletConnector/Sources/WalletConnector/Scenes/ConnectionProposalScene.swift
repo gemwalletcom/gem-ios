@@ -21,12 +21,7 @@ public struct ConnectionProposalScene: View {
 
     public var body: some View {
         List {
-            Section { } header: {
-                AssetPreviewView(model: model.appPreview, subtitleLayout: .vertical)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, .small)
-            }
-            .cleanListRow()
+            ListAssetHeaderView(model: model.appPreview, subtitleLayout: .vertical)
 
             Section {
                 NavigationLink(value: Scenes.SelectWallet()) {
