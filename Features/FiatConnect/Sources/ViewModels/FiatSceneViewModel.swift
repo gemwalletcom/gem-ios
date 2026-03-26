@@ -23,8 +23,8 @@ public final class FiatSceneViewModel {
         static let suggestedAmounts: [Int] = [100, 250]
     }
 
-    let walletId: WalletId
     let fiatService: FiatService
+    var walletId: WalletId { wallet.walletId }
     private let wallet: Wallet
     private let assetsEnabler: any AssetsEnabler
     private let assetAddress: AssetAddress
@@ -57,20 +57,19 @@ public final class FiatSceneViewModel {
         self.wallet = wallet
         self.assetsEnabler = assetsEnabler
         self.type = type
-        self.walletId = wallet.walletId
-        self.assetQuery = ObservableQuery(AssetRequest(walletId: self.walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: wallet.walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
 
         let buyOperation = BuyOperation(
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            walletId: self.walletId
+            walletId: wallet.walletId
         )
         let sellOperation = SellOperation(
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            walletId: self.walletId
+            walletId: wallet.walletId
         )
 
         self.buyViewModel = FiatOperationViewModel(
@@ -191,7 +190,7 @@ extension FiatSceneViewModel {
             urlState = .loading
 
             do {
-                guard let url = try await fiatService.getQuoteUrl(walletId: walletId.id, quoteId: selectedQuote.id).redirectUrl.asURL else {
+                guard let url = try await fiatService.getQuoteUrl(walletId: wallet.walletId.id, quoteId: selectedQuote.id).redirectUrl.asURL else {
                     urlState = .noData
                     return
                 }
