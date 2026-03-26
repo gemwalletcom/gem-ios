@@ -46,6 +46,7 @@ extension ConfirmRecipientViewModel {
     private var addressNameImage: AssetImage? {
         switch addressName?.type {
         case .contact: .image(Images.System.person)
+        case .internalWallet: .image(Images.System.wallet)
         case .address, .contract, .validator, .none: nil
         }
     }

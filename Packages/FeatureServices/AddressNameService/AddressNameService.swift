@@ -20,6 +20,10 @@ public struct AddressNameService: Sendable {
         try addressStore.getAddressName(chain: chain, address: address)
     }
 
+    public func addWalletAddressName(wallet: Wallet, chain: Chain, address: String) throws {
+        try addressStore.addWalletAddressName(wallet: wallet, chain: chain, address: address)
+    }
+
     public func getAddressNames(requests: [ChainAddress]) async throws -> [ChainAddress: AddressName] {
         let requests = uniqueRequests(requests)
         guard !requests.isEmpty else {

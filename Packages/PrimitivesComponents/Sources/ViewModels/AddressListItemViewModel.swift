@@ -46,14 +46,14 @@ public struct AddressListItemViewModel {
 
     public var assetImageStyle: AssetImageView.Style? {
         switch account.addressType {
-        case .contact: AssetImageView.Style(foregroundColor: Colors.secondaryText, cornerRadius: 0)
+        case .contact, .internalWallet: AssetImageView.Style(foregroundColor: Colors.secondaryText, cornerRadius: 0)
         case .address, .contract, .validator, .none: nil
         }
     }
 
     public var assetImageSize: CGFloat {
         switch account.addressType {
-        case .contact: .list.accessory
+        case .contact, .internalWallet: .list.accessory
         case .address, .contract, .validator, .none: .list.image
         }
     }

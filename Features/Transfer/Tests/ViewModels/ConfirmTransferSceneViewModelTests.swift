@@ -464,6 +464,7 @@ private extension ConfirmTransferSceneViewModel {
                 assetsService: .mock(),
                 priceService: .mock(),
                 transactionStateService: .mock(),
+                walletService: .mock(),
                 addressNameService: addressNameService,
                 activityService: .mock(),
                 eventPresenterService: .mock(),

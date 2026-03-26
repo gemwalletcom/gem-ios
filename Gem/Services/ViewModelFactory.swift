@@ -109,6 +109,7 @@ public struct ViewModelFactory: Sendable {
             assetsService: assetsService,
             priceService: priceService,
             transactionStateService: transactionStateService,
+            walletService: walletService,
             addressNameService: addressNameService,
             activityService: activityService,
             eventPresenterService: eventPresenterService,

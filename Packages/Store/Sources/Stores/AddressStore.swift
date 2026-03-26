@@ -6,7 +6,7 @@ import Primitives
 
 public struct AddressStore: Sendable {
     
-    let db: DatabaseQueue
+    private let db: DatabaseQueue
     
     public init(db: DB) {
         self.db = db.dbQueue
@@ -15,23 +15,22 @@ public struct AddressStore: Sendable {
     public func addAddressNames(_ addressNames: [AddressName]) throws {
         try db.write { db in
             for addressName in addressNames {
-                try AddressRecord(
-                    chain: addressName.chain,
-                    address: addressName.address,
-                    name: addressName.name,
-                    type: addressName.type,
-                    status: addressName.status
-                ).save(db, onConflict: .replace)
+                try save(addressName: addressName, walletId: nil, db: db)
             }
         }
     }
-    
-    func deleteAddress(chain: Chain, address: String) throws -> Int {
+
+    public func addWalletAddressName(wallet: Wallet, chain: Chain, address: String) throws {
+        let addressName = AddressName(
+            chain: chain,
+            address: address,
+            name: wallet.name,
+            type: .internalWallet,
+            status: .verified
+        )
+
         try db.write { db in
-            try AddressRecord
-                .filter(AddressRecord.Columns.chain == chain.rawValue)
-                .filter(AddressRecord.Columns.address == address)
-                .deleteAll(db)
+            try save(addressName: addressName, walletId: wallet.id, db: db)
         }
     }
     
@@ -43,5 +42,18 @@ public struct AddressStore: Sendable {
                 .fetchOne(db)?
                 .asPrimitive()
         }
+    }
+    
+    // MARK: - Private
+    
+    private func save(addressName: AddressName, walletId: String?, db: Database) throws {
+        try AddressRecord(
+            chain: addressName.chain,
+            address: addressName.address,
+            walletId: walletId,
+            name: addressName.name,
+            type: addressName.type,
+            status: addressName.status
+        ).save(db, onConflict: .replace)
     }
 }

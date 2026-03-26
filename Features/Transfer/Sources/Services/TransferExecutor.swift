@@ -6,6 +6,8 @@ import Foundation
 import Primitives
 import Signer
 import TransactionStateService
+import WalletService
+import AddressNameService
 
 public protocol TransferExecutable: Sendable {
     func execute(input: TransferConfirmationInput) async throws
@@ -20,19 +22,25 @@ public struct TransferExecutor: TransferExecutable {
     private let assetsEnabler: any AssetsEnabler
     private let balanceService: BalanceService
     private let transactionStateService: TransactionStateService
+    private let walletService: WalletService
+    private let addressNameService: AddressNameService
 
     public init(
         signer: any TransactionSigneable,
         chainService: any ChainServiceable,
         assetsEnabler: any AssetsEnabler,
         balanceService: BalanceService,
-        transactionStateService: TransactionStateService
+        transactionStateService: TransactionStateService,
+        walletService: WalletService,
+        addressNameService: AddressNameService
     ) {
         self.signer = signer
         self.chainService = chainService
         self.assetsEnabler = assetsEnabler
         self.balanceService = balanceService
         self.transactionStateService = transactionStateService
+        self.walletService = walletService
+        self.addressNameService = addressNameService
     }
 
     public func execute(input: TransferConfirmationInput) async throws {
@@ -87,6 +95,7 @@ extension TransferExecutor {
             totalTransactions: totalTransactions
         )
 
+        try saveInternalWalletAddressName(input: input)
         try transactionStateService.addTransactions(wallet: input.wallet, transactions: transactions)
         Task {
             do {
@@ -152,6 +161,25 @@ extension TransferExecutor {
         case .ethereum, .hyperCore: .milliseconds(0)
         case .tron: .milliseconds(500)
         default: .milliseconds(500)
+        }
+    }
+
+    private func saveInternalWalletAddressName(input: TransferConfirmationInput) throws {
+        switch input.data.type {
+        case .transfer, .transferNft:
+            break
+        case .swap, .tokenApprove, .stake, .account, .perpetual, .earn, .generic, .deposit, .withdrawal:
+            return
+        }
+
+        let chain = input.data.chain
+        if let senderAddress = try? input.wallet.account(for: chain).address, senderAddress.isNotEmpty {
+            try addressNameService.addWalletAddressName(wallet: input.wallet, chain: chain, address: senderAddress)
+        }
+
+        let recipientAddress = input.data.recipientData.recipient.address
+        if recipientAddress.isNotEmpty, let recipientWallet = try walletService.getWallet(chain: chain, address: recipientAddress) {
+            try addressNameService.addWalletAddressName(wallet: recipientWallet, chain: chain, address: recipientAddress)
         }
     }
 }

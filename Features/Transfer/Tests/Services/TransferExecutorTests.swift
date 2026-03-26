@@ -10,6 +10,8 @@ import SignerTestKit
 import BalanceServiceTestKit
 import TransactionStateService
 import TransactionStateServiceTestKit
+import AddressNameServiceTestKit
+import WalletServiceTestKit
 import Store
 import StoreTestKit
 import ChainServiceTestKit
@@ -25,7 +27,9 @@ struct TransferExecutorTests {
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1", "hash2", "hash3"]),
             assetsEnabler: .mock(),
             balanceService: .mock(),
-            transactionStateService: .mock(transactionStore: transactionStore)
+            transactionStateService: .mock(transactionStore: transactionStore),
+            walletService: .mock(),
+            addressNameService: .mock()
         )
 
         let input = TransferConfirmationInput(
@@ -51,7 +55,9 @@ struct TransferExecutorTests {
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash0", "hash1"]),
             assetsEnabler: .mock(),
             balanceService: .mock(),
-            transactionStateService: .mock(transactionStore: transactionStore)
+            transactionStateService: .mock(transactionStore: transactionStore),
+            walletService: .mock(),
+            addressNameService: .mock()
         )
 
         let input = TransferConfirmationInput(
@@ -77,7 +83,9 @@ struct TransferExecutorTests {
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash"]),
             assetsEnabler: .mock(),
             balanceService: .mock(),
-            transactionStateService: .mock(transactionStore: transactionStore)
+            transactionStateService: .mock(transactionStore: transactionStore),
+            walletService: .mock(),
+            addressNameService: .mock()
         )
 
         let input = TransferConfirmationInput(
@@ -104,7 +112,9 @@ struct TransferExecutorTests {
             chainService: ChainServiceMock.mock(broadcastResponses: ["hash"]),
             assetsEnabler: .mock(),
             balanceService: .mock(),
-            transactionStateService: .mock(transactionStore: transactionStore)
+            transactionStateService: .mock(transactionStore: transactionStore),
+            walletService: .mock(),
+            addressNameService: .mock()
         )
 
         let input = TransferConfirmationInput(

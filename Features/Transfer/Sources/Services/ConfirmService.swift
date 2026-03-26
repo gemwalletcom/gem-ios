@@ -8,6 +8,7 @@ import ChainService
 import AddressNameService
 import ActivityService
 import EventPresenterService
+import WalletService
 
 public struct ConfirmService: Sendable {
     private let metadataProvider: any TransferMetadataProvidable
@@ -16,6 +17,7 @@ public struct ConfirmService: Sendable {
     private let keystore: any Keystore
     private let chainService: any ChainServiceable
     private let explorerService: any ExplorerLinkFetchable
+    private let walletService: WalletService
     private let addressNameService: AddressNameService
     private let activityService: ActivityService
     private let eventPresenterService: EventPresenterService
@@ -27,6 +29,7 @@ public struct ConfirmService: Sendable {
         transferExecutor: any TransferExecutable,
         keystore: any Keystore,
         chainService: any ChainServiceable,
+        walletService: WalletService,
         addressNameService: AddressNameService,
         activityService: ActivityService,
         eventPresenterService: EventPresenterService
@@ -37,6 +40,7 @@ public struct ConfirmService: Sendable {
         self.transferExecutor = transferExecutor
         self.keystore = keystore
         self.chainService = chainService
+        self.walletService = walletService
         self.addressNameService = addressNameService
         self.activityService = activityService
         self.eventPresenterService = eventPresenterService
@@ -86,6 +90,12 @@ public struct ConfirmService: Sendable {
     }
     
     public func getAddressName(chain: Chain, address: String) throws -> AddressName? {
-        try addressNameService.getAddressName(chain: chain, address: address)
+        if let addressName = try addressNameService.getAddressName(chain: chain, address: address) {
+            return addressName
+        }
+        if let wallet = try walletService.getWallet(chain: chain, address: address) {
+            return AddressName(chain: chain, address: address, name: wallet.name, type: .internalWallet, status: .verified)
+        }
+        return nil
     }
 }
