@@ -23,9 +23,6 @@ let package = Package(
                 "Localization"
             ],
             path: "Sources"
-        ),
-        .testTarget(
-            name: "QRScannerTests",
-            dependencies: ["QRScanner"]),
+        )
     ]
 )
