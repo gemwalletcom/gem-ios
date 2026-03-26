@@ -52,25 +52,27 @@ struct TransactionsNavigationStack: View {
                         )
                     )
                 }
-                .sheet(isPresented: $model.isPresentingFilteringView) {
-                    NavigationStack {
-                        TransactionsFilterScene(model: $model.filterModel)
-                    }
-                    .presentationDetentsForCurrentDeviceSize(expandable: true)
-                    .presentationDragIndicator(.visible)
-                    .presentationBackground(Colors.grayBackground)
-                }
-                .sheet(item: $model.isPresentingSelectAssetType) {
-                    SelectAssetSceneNavigationStack(
-                        model: SelectAssetViewModel(
-                            wallet: model.wallet,
-                            selectType: $0,
-                            searchService: assetSearchService,
-                            assetsEnabler: assetsEnabler,
-                            priceAlertService: priceAlertService,
-                            activityService: activityService
+                .sheet(item: $model.isPresentingSheet) { type in
+                    switch type {
+                    case .filter:
+                        NavigationStack {
+                            TransactionsFilterScene(model: $model.filterModel)
+                        }
+                        .presentationDetentsForCurrentDeviceSize(expandable: true)
+                        .presentationDragIndicator(.visible)
+                        .presentationBackground(Colors.grayBackground)
+                    case .selectAsset(let selectType):
+                        SelectAssetSceneNavigationStack(
+                            model: SelectAssetViewModel(
+                                wallet: model.wallet,
+                                selectType: selectType,
+                                searchService: assetSearchService,
+                                assetsEnabler: assetsEnabler,
+                                priceAlertService: priceAlertService,
+                                activityService: activityService
+                            )
                         )
-                    )
+                    }
                 }
         }
     }

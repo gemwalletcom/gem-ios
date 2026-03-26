@@ -26,9 +26,7 @@ public final class TransactionsViewModel {
     public var transactions: [TransactionExtended] { filterModel.query.value }
     public var filterModel: TransactionsFilterViewModel
 
-    // TODO: - separate presenting sheet state logic to separate type
-    public var isPresentingFilteringView: Bool = false
-    public var isPresentingSelectAssetType: SelectAssetType?
+    public var isPresentingSheet: TransactionsSheetType?
 
     public init(
         transactionsService: TransactionsService,
@@ -70,7 +68,7 @@ extension TransactionsViewModel {
     }
 
     public func onSelectFilterButton() {
-        isPresentingFilteringView.toggle()
+        isPresentingSheet = .filter
     }
 
     public func fetch() async {
@@ -95,10 +93,10 @@ extension TransactionsViewModel {
     }
 
     private func onSelectReceive() {
-        isPresentingSelectAssetType = .receive(.asset)
+        isPresentingSheet = .selectAsset(.receive(.asset))
     }
 
     private func onSelectBuy() {
-        isPresentingSelectAssetType = .buy
+        isPresentingSheet = .selectAsset(.buy)
     }
 }
