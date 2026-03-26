@@ -6,16 +6,16 @@ import Primitives
 import Components
 import PrimitivesComponents
 
-enum ConfirmTransferSheetType: Identifiable, Sendable {
+public enum ConfirmTransferSheetType: Identifiable, Sendable {
     case info(InfoSheetType)
     case networkFeeSelector
     case payloadDetails
     case url(URL)
-    case fiatConnect(assetAddress: AssetAddress, walletId: WalletId)
+    case fiatConnect(assetAddress: AssetAddress, wallet: Wallet)
     case swapDetails
     case perpetualDetails(PerpetualDetailsViewModel)
 
-    var id: String {
+    public var id: String {
         switch self {
         case let .info(type): "info-\(type.id)"
         case let .url(url): "url-\(url)"

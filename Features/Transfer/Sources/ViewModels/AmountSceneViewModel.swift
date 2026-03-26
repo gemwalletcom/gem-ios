@@ -26,13 +26,13 @@ public final class AmountSceneViewModel {
     private let valueConverter = ValueConverter()
     let currencyFormatter: CurrencyFormatter
 
-    let provider: AmountDataProvider
+    public let provider: AmountDataProvider
 
     public let assetQuery: ObservableQuery<AssetRequest>
     var assetData: AssetData { assetQuery.value }
-    var transferState: StateViewType<TransferData> = .noData
+    public var transferState: StateViewType<TransferData> = .noData
     var amountInputModel: InputValidationViewModel
-    var isPresentingSheet: AmountSheetType?
+    public var isPresentingSheet: AmountSheetType?
 
     private var amountInputType: AmountInputType = .asset {
         didSet { amountInputModel.update(validators: inputValidators) }
@@ -60,7 +60,7 @@ public final class AmountSceneViewModel {
         }
     }
 
-    var asset: Asset { provider.asset }
+    public var asset: Asset { provider.asset }
     var title: String { provider.title }
     var canChangeValue: Bool { provider.canChangeValue }
     var isInputDisabled: Bool { !canChangeValue }
@@ -88,8 +88,8 @@ public final class AmountSceneViewModel {
     }
 
     var maxTitle: String { Localized.Transfer.max }
-    var continueTitle: String { Localized.Common.continue }
-    var isNextEnabled: Bool { actionButtonState == .normal }
+    public var continueTitle: String { Localized.Common.continue }
+    public var isNextEnabled: Bool { actionButtonState == .normal }
 
     var inputConfig: any CurrencyInputConfigurable {
         AmountInputConfig(
@@ -113,11 +113,11 @@ extension AmountSceneViewModel {
         }
     }
 
-    func onChangeAssetBalance(_: AssetData, _: AssetData) {
+    public func onChangeAssetBalance(_: AssetData, _: AssetData) {
         amountInputModel.update(validators: inputValidators)
     }
 
-    func onSelectNextButton() {
+    public func onSelectNextButton() {
         Task {
             await fetch()
         }
@@ -148,7 +148,7 @@ extension AmountSceneViewModel {
         isPresentingSheet = .autoclose(perpetual.makeAutocloseData(size: amount))
     }
 
-    func onAutocloseComplete(takeProfit: InputValidationViewModel, stopLoss: InputValidationViewModel) {
+    public func onAutocloseComplete(takeProfit: InputValidationViewModel, stopLoss: InputValidationViewModel) {
         if case let .perpetual(perpetual) = provider {
             perpetual.takeProfit = takeProfit.text.isEmpty ? nil : takeProfit.text
             perpetual.stopLoss = stopLoss.text.isEmpty ? nil : stopLoss.text
@@ -160,11 +160,11 @@ extension AmountSceneViewModel {
         cleanInput()
     }
 
-    func onChangeLeverage(_: LeverageOption, _: LeverageOption) {
+    public func onChangeLeverage(_: LeverageOption, _: LeverageOption) {
         amountInputModel.update(validators: inputValidators)
     }
 
-    func onValidatorSelected(_ validator: DelegationValidator) {
+    public func onValidatorSelected(_ validator: DelegationValidator) {
         if case let .stake(stake) = provider {
             stake.validatorSelection.selected = validator
         }
@@ -214,7 +214,7 @@ private extension AmountSceneViewModel {
     func onSelectBuy() {
         let senderAddress = (try? wallet.account(for: asset.chain).address) ?? ""
         let assetAddress = AssetAddress(asset: asset, address: senderAddress)
-        isPresentingSheet = .fiatConnect(assetAddress: assetAddress, walletId: wallet.walletId)
+        isPresentingSheet = .fiatConnect(assetAddress: assetAddress, wallet: wallet)
     }
 
     var inputValidators: [any TextValidator] {

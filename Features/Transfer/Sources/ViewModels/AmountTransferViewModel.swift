@@ -18,7 +18,7 @@ enum TransferAction {
     }
 }
 
-final class AmountTransferViewModel: AmountDataProvidable {
+public final class AmountTransferViewModel: AmountDataProvidable {
     let asset: Asset
     let action: TransferAction
 

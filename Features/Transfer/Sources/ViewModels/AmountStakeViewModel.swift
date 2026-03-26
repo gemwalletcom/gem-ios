@@ -11,10 +11,10 @@ import PrimitivesComponents
 import Stake
 import Validators
 
-final class AmountStakeViewModel: AmountDataProvidable {
+public final class AmountStakeViewModel: AmountDataProvidable {
     let asset: Asset
     let action: StakeAmountType
-    let validatorSelection: SelectionState<DelegationValidator>
+    public let validatorSelection: SelectionState<DelegationValidator>
 
     init(asset: Asset, action: StakeAmountType) {
         self.asset = asset
@@ -35,7 +35,7 @@ final class AmountStakeViewModel: AmountDataProvidable {
         }
     }
 
-    var validatorSelectType: ValidatorSelectType {
+    public var validatorSelectType: ValidatorSelectType {
         switch action {
         case .stake, .redelegate: .stake
         case .unstake, .withdraw: .unstake

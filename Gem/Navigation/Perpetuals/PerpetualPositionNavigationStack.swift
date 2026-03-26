@@ -46,7 +46,7 @@ struct PerpetualPositionNavigationStack: View {
                 )
             }
             .navigationDestination(for: TransferData.self) {
-                ConfirmTransferScene(
+                ConfirmTransferNavigationView(
                     model: viewModelFactory.confirmTransferScene(
                         wallet: wallet,
                         data: $0,

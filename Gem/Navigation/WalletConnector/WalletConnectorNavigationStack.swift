@@ -28,7 +28,7 @@ struct WalletConnectorNavigationStack: View {
             Group {
                 switch type {
                 case .transferData(let data):
-                    ConfirmTransferScene(
+                    ConfirmTransferNavigationView(
                         model: viewModelFactory.confirmTransferScene(
                             wallet: data.payload.wallet,
                             data: data.payload.tranferData,

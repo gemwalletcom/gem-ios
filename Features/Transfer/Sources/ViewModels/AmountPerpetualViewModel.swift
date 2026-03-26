@@ -18,7 +18,7 @@ struct AmountPerpetualLimits {
 }
 
 @Observable
-final class AmountPerpetualViewModel: AmountDataProvidable {
+public final class AmountPerpetualViewModel: AmountDataProvidable {
     let asset: Asset
     let data: PerpetualRecipientData
     let leverageSelection: SelectionState<LeverageOption>?

@@ -84,7 +84,7 @@ struct SelectAssetSceneNavigationStack: View {
                         FiatConnectNavigationView(
                             model: viewModelFactory.fiatScene(
                                 assetAddress: input.assetAddress,
-                                walletId: model.wallet.walletId
+                                wallet: model.wallet
                             )
                         )
                     case .deposit:
@@ -135,7 +135,7 @@ struct SelectAssetSceneNavigationStack: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: TransferData.self) { data in
-                ConfirmTransferScene(
+                ConfirmTransferNavigationView(
                     model: viewModelFactory.confirmTransferScene(
                         wallet: model.wallet,
                         data: data,

@@ -8,6 +8,7 @@ import Formatters
 import FiatService
 import FiatServiceTestKit
 import BigInt
+import BalanceServiceTestKit
 
 @testable import FiatConnect
 
@@ -17,13 +18,14 @@ final class FiatSceneViewModelTests {
         fiatService: FiatService = .mock(),
         currencyFormatter: CurrencyFormatter = .init(locale: Locale.US, currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress = .mock(),
-        walletId: WalletId = .mock()
+        wallet: Wallet = .mock()
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             fiatService: fiatService,
             currencyFormatter: currencyFormatter,
             assetAddress: assetAddress,
-            walletId: walletId
+            wallet: wallet,
+            assetsEnabler: .mock()
         )
     }
 

@@ -9,7 +9,6 @@ import BannerService
 import NotificationService
 import DeviceService
 import PriceAlertService
-import GemAPI
 import ChainService
 import StakeService
 import NodeService

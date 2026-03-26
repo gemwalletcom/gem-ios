@@ -3,7 +3,7 @@
 import BigInt
 import Primitives
 
-enum AmountDataProvider: AmountDataProvidable, @unchecked Sendable {
+public enum AmountDataProvider: AmountDataProvidable, @unchecked Sendable {
     case transfer(AmountTransferViewModel)
     case stake(AmountStakeViewModel)
     case freeze(AmountFreezeViewModel)

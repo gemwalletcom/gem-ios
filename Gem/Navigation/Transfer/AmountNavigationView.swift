@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import SwiftUI
 import Primitives
 import Stake
@@ -8,28 +7,28 @@ import InfoSheet
 import Components
 import FiatConnect
 import PrimitivesComponents
-import Store
 import Perpetuals
-import Preferences
+import Transfer
 
-public struct AmountNavigationView: View {
+struct AmountNavigationView: View {
+    @Environment(\.viewModelFactory) private var viewModelFactory
     @State private var model: AmountSceneViewModel
 
-    public init(model: AmountSceneViewModel) {
+    init(model: AmountSceneViewModel) {
         _model = State(initialValue: model)
     }
 
-    public var body: some View {
+    var body: some View {
         AmountScene(model: model)
             .onChangeBindQuery(model.assetQuery, action: model.onChangeAssetBalance)
             .sheet(item: $model.isPresentingSheet) {
                 switch $0 {
                 case let .infoAction(type):
                     InfoSheetScene(type: type)
-                case let .fiatConnect(assetAddress, walletId):
+                case let .fiatConnect(assetAddress, wallet):
                     NavigationStack {
                         FiatConnectNavigationView(
-                            model: FiatSceneViewModel(fiatService: model.fiatService, assetAddress: assetAddress, walletId: walletId)
+                            model: viewModelFactory.fiatScene(assetAddress: assetAddress, wallet: wallet)
                         )
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar { ToolbarDismissItem(type: .close, placement: .topBarLeading) }

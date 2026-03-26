@@ -3,13 +3,13 @@
 import Foundation
 
 @Observable
-final class SelectionState<T> {
-    let options: [T]
-    var selected: T
-    let isEnabled: Bool
-    let title: String
+public final class SelectionState<T> {
+    public let options: [T]
+    public var selected: T
+    public let isEnabled: Bool
+    public let title: String
 
-    init(
+    public init(
         options: [T],
         selected: T,
         isEnabled: Bool,

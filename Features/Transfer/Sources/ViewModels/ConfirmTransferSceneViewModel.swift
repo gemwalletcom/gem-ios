@@ -18,7 +18,7 @@ import Swap
 @MainActor
 public final class ConfirmTransferSceneViewModel {
     let fiatService: FiatService
-    var feeModel: NetworkFeeSceneViewModel
+    public var feeModel: NetworkFeeSceneViewModel
     var state: StateViewType<TransactionInputViewModel> = .loading {
         didSet {
             onStateChange(state: state)
@@ -38,8 +38,8 @@ public final class ConfirmTransferSceneViewModel {
         }
     }
 
-    var isPresentingSheet: ConfirmTransferSheetType?
-    var isPresentingAlertMessage: AlertMessage?
+    public var isPresentingSheet: ConfirmTransferSheetType?
+    public var isPresentingAlertMessage: AlertMessage?
 
     private let confirmService: ConfirmService
     private let simulationService: ConfirmSimulationService
@@ -97,11 +97,11 @@ public final class ConfirmTransferSceneViewModel {
         simulationState.warnings
     }
 
-    var primaryPayloadFields: [SimulationPayloadField] {
+    public var primaryPayloadFields: [SimulationPayloadField] {
         simulationState.primaryFields
     }
 
-    var secondaryPayloadFields: [SimulationPayloadField] {
+    public var secondaryPayloadFields: [SimulationPayloadField] {
         simulationState.secondaryFields
     }
 
@@ -129,7 +129,7 @@ public final class ConfirmTransferSceneViewModel {
         )
     }
 
-    var detailsViewModel: ConfirmDetailsViewModel {
+    public var detailsViewModel: ConfirmDetailsViewModel {
         ConfirmDetailsViewModel(type: transferData.type, metadata: metadata)
     }
 
@@ -267,7 +267,7 @@ extension ConfirmTransferSceneViewModel {
         isPresentingSheet = .info(.networkFee(dataModel.chain))
     }
 
-    func contextMenuItems(for field: SimulationPayloadField) -> [ContextMenuItemType] {
+    public func contextMenuItems(for field: SimulationPayloadField) -> [ContextMenuItemType] {
         var items = payloadFieldViewModel(for: field).contextMenuItems
         if field.fieldType == .address {
             let link = confirmService.getExplorerLink(chain: transferData.chain, address: field.value)
@@ -280,7 +280,7 @@ extension ConfirmTransferSceneViewModel {
         return items
     }
 
-    func payloadFieldViewModel(for field: SimulationPayloadField) -> SimulationPayloadFieldViewModel {
+    public func payloadFieldViewModel(for field: SimulationPayloadField) -> SimulationPayloadFieldViewModel {
         SimulationPayloadFieldViewModel(
             field: field,
             chain: transferData.chain,
@@ -382,7 +382,7 @@ extension ConfirmTransferSceneViewModel {
     private func onSelectBuy() {
         isPresentingSheet = .fiatConnect(
             assetAddress: feeAssetAddress,
-            walletId: wallet.walletId
+            wallet: wallet
         )
     }
     private func onSelectConfirmTransfer() {

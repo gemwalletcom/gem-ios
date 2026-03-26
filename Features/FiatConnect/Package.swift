@@ -38,6 +38,7 @@ let package = Package(
                 "Store",
                 "PrimitivesComponents",
                 .product(name: "FiatService", package: "FeatureServices"),
+                .product(name: "BalanceService", package: "FeatureServices"),
             ],
             path: "Sources"
         ),
@@ -47,6 +48,7 @@ let package = Package(
                 "FiatConnect",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "FiatServiceTestKit", package: "FeatureServices"),
+                .product(name: "BalanceServiceTestKit", package: "FeatureServices"),
             ],
             path: "Tests"
         ),

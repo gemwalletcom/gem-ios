@@ -12,6 +12,7 @@ import Formatters
 import Validators
 import BigInt
 import FiatService
+import BalanceService
 
 @MainActor
 @Observable
@@ -22,8 +23,9 @@ public final class FiatSceneViewModel {
         static let suggestedAmounts: [Int] = [100, 250]
     }
 
-    let walletId: WalletId
     let fiatService: FiatService
+    private let wallet: Wallet
+    private let assetsEnabler: any AssetsEnabler
     private let assetAddress: AssetAddress
     private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
@@ -43,28 +45,30 @@ public final class FiatSceneViewModel {
         fiatService: FiatService,
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: WalletId,
+        wallet: Wallet,
+        assetsEnabler: any AssetsEnabler,
         type: FiatQuoteType = .buy,
         amount: Int? = nil
     ) {
         self.fiatService = fiatService
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
-        self.walletId = walletId
+        self.wallet = wallet
+        self.assetsEnabler = assetsEnabler
         self.type = type
-        self.assetQuery = ObservableQuery(AssetRequest(walletId: walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: wallet.walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
 
         let buyOperation = BuyOperation(
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            walletId: walletId
+            walletId: wallet.walletId
         )
         let sellOperation = SellOperation(
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            walletId: walletId
+            walletId: wallet.walletId
         )
 
         self.buyViewModel = FiatOperationViewModel(
@@ -185,12 +189,13 @@ extension FiatSceneViewModel {
             urlState = .loading
 
             do {
-                guard let url = try await fiatService.getQuoteUrl(walletId: walletId.id, quoteId: selectedQuote.id).redirectUrl.asURL else {
+                guard let url = try await fiatService.getQuoteUrl(walletId: wallet.walletId.id, quoteId: selectedQuote.id).redirectUrl.asURL else {
                     urlState = .noData
                     return
                 }
 
                 urlState = .data(())
+                Task { await enableAsset() }
                 await UIApplication.shared.open(url, options: [:])
             } catch {
                 urlState = .error(error)
@@ -239,6 +244,16 @@ extension FiatSceneViewModel {
 // MARK: - Private
 
 extension FiatSceneViewModel {
+    private func enableAsset() async {
+        do {
+            try await assetsEnabler.enableAssets(wallet: wallet, assetIds: [asset.id], enabled: true)
+        } catch {
+            debugLog("FiatSceneViewModel enableAsset error: \(error)")
+        }
+    }
+
+    var walletId: WalletId { wallet.walletId }
+
     private var balanceModel: BalanceViewModel {
         BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
     }

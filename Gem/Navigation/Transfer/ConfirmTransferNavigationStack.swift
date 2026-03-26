@@ -28,7 +28,7 @@ struct ConfirmTransferNavigationStack: View {
     
     var body: some View {
         NavigationStack {
-            ConfirmTransferScene(
+            ConfirmTransferNavigationView(
                 model: viewModelFactory.confirmTransferScene(
                     wallet: wallet,
                     data: transferData,
