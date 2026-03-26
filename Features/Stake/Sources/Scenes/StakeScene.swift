@@ -17,6 +17,7 @@ public struct StakeScene: View {
 
     public var body: some View {
         List {
+            headerSection
             stakeInfoSection
             if model.showManage {
                 stakeSection
@@ -42,6 +43,10 @@ public struct StakeScene: View {
 // MARK: - UI Components
 
 extension StakeScene {
+    private var headerSection: some View {
+        ListAssetHeaderView(model: model.assetModel)
+    }
+
     private var stakeSection: some View {
         Section(Localized.Common.manage) {
             if model.showStake {
@@ -97,7 +102,7 @@ extension StakeScene {
     }
 
     private var stakeInfoSection: some View {
-        Section(model.assetTitle) {
+        Section {
             ListItemView(
                 title: model.stakeAprModel.title,
                 subtitle: model.stakeAprModel.subtitle,

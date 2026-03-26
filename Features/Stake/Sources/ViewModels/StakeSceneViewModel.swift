@@ -59,7 +59,6 @@ public final class StakeSceneViewModel {
 
     var stakeTitle: String { Localized.Transfer.Stake.title }
     var claimRewardsTitle: String { Localized.Transfer.ClaimRewards.title }
-    var assetTitle: String { assetModel.title }
     var delegationsTitle: String { Localized.Stake.delegations }
 
     var stakeAprModel: AprViewModel {
@@ -240,7 +239,7 @@ extension StakeSceneViewModel {
         return formatter
     }()
 
-    private var assetModel: AssetViewModel {
+    var assetModel: AssetViewModel {
         AssetViewModel(asset: asset)
     }
 

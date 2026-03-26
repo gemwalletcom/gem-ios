@@ -49,7 +49,10 @@ public final class EarnSceneViewModel {
     }
 
     var title: String { Localized.Common.earn }
-    var assetTitle: String { AssetViewModel(asset: asset).title }
+
+    var assetModel: AssetViewModel {
+        AssetViewModel(asset: asset)
+    }
 
     private var apr: Double? {
         providers.first.map(\.apr).flatMap { $0 > 0 ? $0 : nil }
