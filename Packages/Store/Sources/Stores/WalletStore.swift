@@ -111,6 +111,17 @@ public struct WalletStore: Sendable {
     public func observer() -> SubscriptionsObserver {
         return SubscriptionsObserver(dbQueue: db)
     }
+
+    public func getWallet(chain: Chain, address: String) throws -> Wallet? {
+        try db.read { db in
+            try WalletRecord
+                .joining(required: WalletRecord.accounts.filter(AccountRecord.Columns.chain == chain.rawValue).filter(AccountRecord.Columns.address == address))
+                .including(all: WalletRecord.accounts)
+                .asRequest(of: WalletRecordInfo.self)
+                .fetchOne(db)?
+                .mapToWallet()
+        }
+    }
     
     public func setWalletAvatar(_ walletId: WalletId, path: String?) throws {
         let _ = try db.write { db in

@@ -456,6 +456,13 @@ struct Migrations {
             try? FiatTransactionRecord.create(db: db)
         }
 
+        migrator.registerMigration("Add walletId to \(AddressRecord.databaseTableName)") { db in
+            try? db.alter(table: AddressRecord.databaseTableName) {
+                $0.add(column: AddressRecord.Columns.walletId.name, .text)
+                    .references(WalletRecord.databaseTableName, onDelete: .cascade, onUpdate: .cascade)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

@@ -14,6 +14,7 @@ import AddressNameService
 import ActivityService
 import EventPresenterService
 import AssetsService
+import WalletService
 
 public struct ConfirmServiceFactory {
     public static func create(
@@ -25,6 +26,7 @@ public struct ConfirmServiceFactory {
         assetsService: AssetsService,
         priceService: PriceService,
         transactionStateService: TransactionStateService,
+        walletService: WalletService,
         addressNameService: AddressNameService,
         activityService: ActivityService,
         eventPresenterService: EventPresenterService,
@@ -47,10 +49,13 @@ public struct ConfirmServiceFactory {
                 chainService: chainService,
                 assetsEnabler: assetsEnabler,
                 balanceService: balanceService,
-                transactionStateService: transactionStateService
+                transactionStateService: transactionStateService,
+                walletService: walletService,
+                addressNameService: addressNameService
             ),
             keystore: keystore,
             chainService: chainService,
+            walletService: walletService,
             addressNameService: addressNameService,
             activityService: activityService,
             eventPresenterService: eventPresenterService
