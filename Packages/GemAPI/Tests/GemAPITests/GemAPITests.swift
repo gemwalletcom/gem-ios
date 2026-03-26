@@ -1,102 +1,121 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import XCTest
+import Testing
 import Primitives
 import SwiftHTTPClient
 @testable import GemAPI
 
-final class GemAPITests: XCTestCase {
+@Suite(.serialized)
+struct GemAPITests {
 
-    override func tearDown() {
-        MockURLProtocol.handler = nil
-        MockURLProtocol.observer = nil
-        super.tearDown()
-    }
-
-    func testWalletScopedRequestWaitsForPreflight() async throws {
+    @Test
+    func walletScopedRequestWaitsForPreflight() async throws {
         let events = RequestEvents()
-        let service = makeService(
+        let assetIds = try await withMockURLProtocol(
             observer: { _ in
                 events.record("request")
-            },
-            walletRequestPreflight: {
-                events.record("preflight-start")
-                try await Task.sleep(for: .milliseconds(20))
-                events.record("preflight-end")
             }
-        )
+        ) {
+            let service = makeService(
+                walletRequestPreflight: {
+                    events.record("preflight-start")
+                    try await Task.sleep(for: .milliseconds(20))
+                    events.record("preflight-end")
+                }
+            )
 
-        let assetIds = try await service.getDeviceAssets(walletId: "wallet", fromTimestamp: 0)
+            return try await service.getDeviceAssets(walletId: "wallet", fromTimestamp: 0)
+        }
 
-        XCTAssertTrue(assetIds.isEmpty)
-        XCTAssertEqual(events.snapshot(), ["preflight-start", "preflight-end", "request"])
+        #expect(assetIds.isEmpty)
+        #expect(events.snapshot() == ["preflight-start", "preflight-end", "request"])
     }
 
-    func testNonWalletScopedRequestSkipsPreflight() async throws {
+    @Test
+    func nonWalletScopedRequestSkipsPreflight() async throws {
         let events = RequestEvents()
-        let service = makeService(
-            responseBody: Data("[]".utf8),
+        let names = try await withMockURLProtocol(
             observer: { _ in
                 events.record("request")
-            },
-            walletRequestPreflight: {
-                events.record("preflight")
             }
-        )
+        ) {
+            let service = makeService(
+                responseBody: Data("[]".utf8),
+                walletRequestPreflight: {
+                    events.record("preflight")
+                }
+            )
 
-        let names = try await service.getAddressNames(requests: [])
+            return try await service.getAddressNames(requests: [])
+        }
 
-        XCTAssertTrue(names.isEmpty)
-        XCTAssertEqual(events.snapshot(), ["request"])
+        #expect(names.isEmpty)
+        #expect(events.snapshot() == ["request"])
     }
 
-    func testWalletScopedPreflightFailurePreventsDispatch() async {
+    @Test
+    func walletScopedPreflightFailurePreventsDispatch() async {
         let events = RequestEvents()
-        let service = makeService(
+        await withMockURLProtocol(
             observer: { _ in
                 events.record("request")
-            },
-            walletRequestPreflight: {
-                throw TestError.failed
             }
-        )
+        ) {
+            let service = makeService(
+                walletRequestPreflight: {
+                    throw TestError.failed
+                }
+            )
 
-        do {
-            _ = try await service.getDeviceAssets(walletId: "wallet", fromTimestamp: 0)
-            XCTFail("Expected preflight to throw")
-        } catch {
-            XCTAssertTrue(events.snapshot().isEmpty)
+            do {
+                _ = try await service.getDeviceAssets(walletId: "wallet", fromTimestamp: 0)
+                Issue.record("Expected preflight to throw")
+            } catch {
+                #expect(events.snapshot().isEmpty)
+            }
         }
     }
 
-    func testGemDeviceAPIWalletIdClassifiesWalletScopedTargets() {
-        XCTAssertNil(GemDeviceAPI.getSubscriptions.walletId)
-        XCTAssertEqual(GemDeviceAPI.getAssetsList(walletId: "wallet", fromTimestamp: 0).walletId, "wallet")
-        XCTAssertEqual(GemDeviceAPI.getTransactions(walletId: "wallet", assetId: nil, fromTimestamp: 0).walletId, "wallet")
-        XCTAssertEqual(GemDeviceAPI.getFiatQuoteUrl(walletId: "wallet", quoteId: "quote").walletId, "wallet")
+    @Test
+    func gemDeviceAPIWalletIdClassifiesWalletScopedTargets() {
+        #expect(GemDeviceAPI.getSubscriptions.walletId == nil)
+        #expect(GemDeviceAPI.getAssetsList(walletId: "wallet", fromTimestamp: 0).walletId == "wallet")
+        #expect(GemDeviceAPI.getTransactions(walletId: "wallet", assetId: nil, fromTimestamp: 0).walletId == "wallet")
+        #expect(GemDeviceAPI.getFiatQuoteUrl(walletId: "wallet", quoteId: "quote").walletId == "wallet")
     }
 }
 
 private extension GemAPITests {
-    func makeService(
+    func withMockURLProtocol<T>(
         responseBody: Data = Data("[]".utf8),
         observer: @escaping @Sendable (URLRequest) -> Void = { _ in },
-        walletRequestPreflight: (@Sendable () async throws -> Void)? = nil
-    ) -> GemAPIService {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [MockURLProtocol.self]
-
+        _ body: () async throws -> T
+    ) async rethrows -> T {
         MockURLProtocol.observer = observer
         MockURLProtocol.handler = { request in
+            let url = try #require(request.url)
             let response = HTTPURLResponse(
-                url: try XCTUnwrap(request.url),
+                url: url,
                 statusCode: 200,
                 httpVersion: nil,
                 headerFields: [:]
             )!
             return (response, responseBody)
         }
+        defer {
+            MockURLProtocol.handler = nil
+            MockURLProtocol.observer = nil
+        }
+        return try await body()
+    }
+
+    func makeService(
+        responseBody: Data = Data("[]".utf8),
+        walletRequestPreflight: (@Sendable () async throws -> Void)? = nil
+    ) -> GemAPIService {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
 
         let session = URLSession(configuration: configuration)
         return GemAPIService(
