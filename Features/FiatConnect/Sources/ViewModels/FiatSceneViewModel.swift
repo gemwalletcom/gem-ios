@@ -25,6 +25,8 @@ public final class FiatSceneViewModel {
 
     let walletId: WalletId
     let fiatService: FiatService
+    private let wallet: Wallet
+    private let assetsEnabler: any AssetsEnabler
     private let assetAddress: AssetAddress
     private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
@@ -55,20 +57,20 @@ public final class FiatSceneViewModel {
         self.wallet = wallet
         self.assetsEnabler = assetsEnabler
         self.type = type
-        let walletId = wallet.walletId
-        self.assetQuery = ObservableQuery(AssetRequest(walletId: walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
+        self.walletId = wallet.walletId
+        self.assetQuery = ObservableQuery(AssetRequest(walletId: self.walletId, assetId: assetAddress.asset.id), initialValue: .with(asset: assetAddress.asset))
 
         let buyOperation = BuyOperation(
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            walletId: walletId
+            walletId: self.walletId
         )
         let sellOperation = SellOperation(
             service: fiatService,
             asset: assetAddress.asset,
             currencyFormatter: currencyFormatter,
-            walletId: walletId
+            walletId: self.walletId
         )
 
         self.buyViewModel = FiatOperationViewModel(
