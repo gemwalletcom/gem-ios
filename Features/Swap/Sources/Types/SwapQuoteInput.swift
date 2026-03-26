@@ -1,17 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
 import BigInt
-
-public struct SwapQuoteInput: Hashable, Sendable {
-    public let fromAsset: Asset
-    public let toAsset: Asset
-    public let value: BigInt
-    public let useMaxAmount: Bool
-}
-
-// MARK: - Identifiable
+import Primitives
+import SwapService
 
 extension SwapQuoteInput: Identifiable {
     public var id: String {

@@ -4,6 +4,7 @@ import Testing
 import BigInt
 import Primitives
 import PrimitivesTestKit
+import SwapService
 @testable import Swap
 
 struct SwapQuoteInputTests {

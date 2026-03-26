@@ -18,6 +18,8 @@ import GemstonePrimitives
 import NativeProviderService
 import Primitives
 import enum Primitives.AnyError
+import enum Gemstone.SwapperProvider
+import struct Gemstone.SwapperProviderType
 import enum Primitives.Chain
 import enum Primitives.EVMChain
 
@@ -51,24 +53,33 @@ public final class SwapService: Sendable, SwappableChainsProvider {
         )
     }
 
-    public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String, useMaxAmount: Bool) async throws -> [SwapperQuote] {
-        let swapRequest = SwapperQuoteRequest(
-            fromAsset: SwapperQuoteAsset(asset: fromAsset),
-            toAsset: SwapperQuoteAsset(asset: toAsset),
+    public func getProvidersForQuote(input: SwapQuoteInput, walletAddress: String, destinationAddress: String) throws -> [SwapperProviderType] {
+        let request = buildRequest(input: input, walletAddress: walletAddress, destinationAddress: destinationAddress)
+        return try swapper.getProvidersForRequest(request: request)
+    }
+
+    public func getQuoteByProvider(provider: SwapperProvider, input: SwapQuoteInput, walletAddress: String, destinationAddress: String) async throws -> SwapperQuote {
+        let request = buildRequest(input: input, walletAddress: walletAddress, destinationAddress: destinationAddress)
+        let quote = try await swapper.getQuoteByProvider(provider: provider, request: request)
+        try Task.checkCancellation()
+        return quote
+    }
+
+    private func buildRequest(input: SwapQuoteInput, walletAddress: String, destinationAddress: String) -> SwapperQuoteRequest {
+        SwapperQuoteRequest(
+            fromAsset: SwapperQuoteAsset(asset: input.fromAsset),
+            toAsset: SwapperQuoteAsset(asset: input.toAsset),
             walletAddress: walletAddress,
             destinationAddress: destinationAddress,
-            value: value,
+            value: input.value.description,
             mode: .exactIn,
             options: SwapperOptions(
-                slippage: getDefaultSlippage(chain: fromAsset.id.chain.rawValue),
+                slippage: getDefaultSlippage(chain: input.fromAsset.id.chain.rawValue),
                 fee: getReferralFees(),
                 preferredProviders: [],
-                useMaxAmount: useMaxAmount
+                useMaxAmount: input.useMaxAmount
             )
         )
-        let quotes = try await swapper.getQuote(request: swapRequest)
-        try Task.checkCancellation()
-        return quotes
     }
 
     public func getQuoteData(_ request: SwapperQuote, data: FetchQuoteData) async throws -> GemSwapQuoteData {
