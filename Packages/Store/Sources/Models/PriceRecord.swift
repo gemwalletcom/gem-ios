@@ -89,11 +89,11 @@ extension PriceRecord: Identifiable {
 }
 
 extension AssetPrice {
-    var record: PriceRecord {
-        return PriceRecord(
+    func record(fiatPrice: Double) -> PriceRecord {
+        PriceRecord(
             assetId: assetId,
-            price: price,
-            priceUsd: price,
+            price: fiatPrice,
+            priceUsd: self.price,
             priceChangePercentage24h: priceChangePercentage24h
         )
     }

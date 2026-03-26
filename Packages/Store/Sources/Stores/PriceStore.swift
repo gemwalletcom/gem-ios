@@ -29,11 +29,12 @@ public struct PriceStore: Sendable {
         let rate = try getRate(currency: currency)
         try db.write { db in
             for assetPrice in prices {
-                let _ = try assetPrice.record.upsertAndFetch(
+                let convertedPrice = assetPrice.price * rate.rate
+                let _ = try assetPrice.record(fiatPrice: convertedPrice).upsertAndFetch(
                     db,
                     onConflict: [],
                     doUpdate: { _ in [
-                        PriceRecord.Columns.price.set(to: assetPrice.price * rate.rate),
+                        PriceRecord.Columns.price.set(to: convertedPrice),
                         PriceRecord.Columns.priceUsd.set(to: assetPrice.price),
                         PriceRecord.Columns.priceChangePercentage24h.set(to: assetPrice.priceChangePercentage24h),
                         PriceRecord.Columns.updatedAt.set(to: Date()),
