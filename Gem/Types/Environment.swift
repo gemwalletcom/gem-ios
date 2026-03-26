@@ -9,7 +9,6 @@ import BannerService
 import NotificationService
 import DeviceService
 import PriceAlertService
-import GemAPI
 import ChainService
 import StakeService
 import NodeService
@@ -45,7 +44,6 @@ extension EnvironmentValues {
     @Entry var streamSubscriptionService: StreamSubscriptionService = AppResolver.main.services.streamSubscriptionService
     @Entry var explorerService: ExplorerService = AppResolver.main.services.explorerService
     @Entry var assetsEnabler: any AssetsEnabler = AppResolver.main.services.assetsEnabler
-    @Entry var fiatService: any GemAPIFiatService = AppResolver.main.services.fiatService
     @Entry var assetDiscoveryService: any AssetDiscoverable = AppResolver.main.services.assetDiscoveryService
     @Entry var walletService: WalletService = AppResolver.main.services.walletService
     @Entry var walletSessionService: any WalletSessionManageable = AppResolver.main.services.walletSessionService

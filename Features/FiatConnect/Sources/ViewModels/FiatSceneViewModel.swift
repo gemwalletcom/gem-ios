@@ -24,7 +24,6 @@ public final class FiatSceneViewModel {
     }
 
     let fiatService: FiatService
-    var walletId: WalletId { wallet.walletId }
     private let wallet: Wallet
     private let assetsEnabler: any AssetsEnabler
     private let assetAddress: AssetAddress
@@ -252,6 +251,8 @@ extension FiatSceneViewModel {
             debugLog("FiatSceneViewModel enableAsset error: \(error)")
         }
     }
+
+    var walletId: WalletId { wallet.walletId }
 
     private var balanceModel: BalanceViewModel {
         BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
