@@ -12,7 +12,8 @@ let package = Package(
         ),
         .library(
             name: "StoreTestKit",
-            targets: ["StoreTestKit"]),
+            targets: ["StoreTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
