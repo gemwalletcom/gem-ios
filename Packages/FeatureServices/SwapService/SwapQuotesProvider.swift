@@ -5,10 +5,11 @@ import BigInt
 import Primitives
 
 import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperProviderType
 
 public protocol SwapQuotesProvidable: Sendable {
     func supportedAssets(for assetId: AssetId) -> ([Primitives.Chain], [Primitives.AssetId])
-    func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt, useMaxAmount: Bool) async throws -> [Gemstone.SwapperQuote]
+    func fetchQuotes(wallet: Wallet, input: SwapQuoteInput) -> AsyncStream<Result<SwapperQuote, Error>>
 }
 
 public struct SwapQuotesProvider: SwapQuotesProvidable {
@@ -22,17 +23,44 @@ public struct SwapQuotesProvider: SwapQuotesProvidable {
         swapService.supportedAssets(for: assetId)
     }
 
-    public func fetchQuotes(wallet: Wallet, fromAsset: Asset, toAsset: Asset, amount: BigInt, useMaxAmount: Bool) async throws -> [Gemstone.SwapperQuote] {
-        let walletAddress = try wallet.account(for: fromAsset.chain).address
-        let destinationAddress = try wallet.account(for: toAsset.chain).address
-        let quotes = try await swapService.getQuotes(
-            fromAsset: fromAsset,
-            toAsset: toAsset,
-            value: amount.description,
-            walletAddress: walletAddress,
-            destinationAddress: destinationAddress,
-            useMaxAmount: useMaxAmount
-        )
-        return try quotes.sorted { try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue) }
+    public func fetchQuotes(wallet: Wallet, input: SwapQuoteInput) -> AsyncStream<Result<SwapperQuote, Error>> {
+        AsyncStream { continuation in
+            let task = Task {
+                do {
+                    let walletAddress = try wallet.account(for: input.fromAsset.chain).address
+                    let destinationAddress = try wallet.account(for: input.toAsset.chain).address
+                    let providers = try swapService.getProvidersForQuote(input: input, walletAddress: walletAddress, destinationAddress: destinationAddress)
+                    await fetchFromProviders(providers, input: input, walletAddress: walletAddress, destinationAddress: destinationAddress, continuation: continuation)
+                } catch {
+                    continuation.yield(.failure(error))
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in
+                task.cancel()
+            }
+        }
+    }
+
+    private func fetchFromProviders(_ providers: [SwapperProviderType], input: SwapQuoteInput, walletAddress: String, destinationAddress: String, continuation: AsyncStream<Result<SwapperQuote, Error>>.Continuation) async {
+        await withTaskGroup(of: Result<SwapperQuote, Error>?.self) { group in
+            for provider in providers {
+                group.addTask { [swapService] in
+                    guard !Task.isCancelled else { return nil }
+                    do {
+                        let quote = try await swapService.getQuoteByProvider(provider: provider.id, input: input, walletAddress: walletAddress, destinationAddress: destinationAddress)
+                        return .success(quote)
+                    } catch {
+                        guard !Task.isCancelled else { return nil }
+                        return .failure(error)
+                    }
+                }
+            }
+            for await result in group {
+                if let result {
+                    continuation.yield(result)
+                }
+            }
+        }
     }
 }

@@ -11,6 +11,8 @@ import SwapServiceTestKit
 import BigInt
 import protocol Gemstone.GemSwapperProtocol
 import enum Gemstone.SwapperError
+import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperProviderType
 import Keystore
 import KeystoreTestKit
 import Primitives
@@ -132,12 +134,42 @@ struct SwapSceneViewModelTests {
         #expect(model.fetchTrigger?.isImmediate == true)
     }
 
+    @Test
+    func preservesProviderSelectionOnRefresh() async {
+        let quoteA = SwapperQuote.mock(toValue: "100", data: .mock(provider: .mock(id: .uniswapV3)))
+        let quoteB = SwapperQuote.mock(toValue: "200", data: .mock(provider: .mock(id: .thorchain)))
+        let model = SwapSceneViewModel.mock(quotesProvider: SwapQuotesProviderMock(results: [.success(quoteA), .success(quoteB)]))
+
+        await model.fetch()
+        model.onFinishSwapProviderSelection(quoteA)
+
+        #expect(model.selectedSwapQuote?.data.provider.id == .uniswapV3)
+
+        await model.fetch()
+
+        #expect(model.selectedSwapQuote?.data.provider.id == .uniswapV3)
+    }
+
+    @Test
+    func minAmountErrorPicksSmallest() async {
+        let model = SwapSceneViewModel.mock(quotesProvider: SwapQuotesProviderMock(results: [
+            .failure(SwapperError.InputAmountError(minAmount: "2000")),
+            .failure(SwapperError.InputAmountError(minAmount: "1000")),
+        ]))
+
+        await model.fetch()
+
+        #expect(model.buttonViewModel.buttonAction == .useMinAmount(amount: "1100", asset: .mockEthereum()))
+    }
+
     // MARK: - Private methods
 
     private func model(
         toValueMock: String = "250000000000"
     ) async -> SwapSceneViewModel {
-        let swapper = GemSwapperMock(quotes: [.mock(toValue: toValueMock)])
+        let swapper = GemSwapperMock(
+            quoteByProvider: .mock(toValue: toValueMock)
+        )
         let model = SwapSceneViewModel.mock(swapper: swapper)
         await model.fetch()
         return model
@@ -145,7 +177,7 @@ struct SwapSceneViewModelTests {
 }
 
 extension SwapSceneViewModel {
-    static func mock(swapper: GemSwapperProtocol = GemSwapperMock()) -> SwapSceneViewModel {
+    static func mock(swapper: GemSwapperProtocol = GemSwapperMock(), quotesProvider: SwapQuotesProvidable? = nil) -> SwapSceneViewModel {
         let model = SwapSceneViewModel(
             preferences: .mock(),
             input: .init(
@@ -154,7 +186,7 @@ extension SwapSceneViewModel {
             ),
             balanceUpdater: .mock(),
             priceUpdater: .mock(),
-            swapQuotesProvider: SwapQuotesProvider(swapService: .mock(swapper: swapper)),
+            swapQuotesProvider: quotesProvider ?? SwapQuotesProvider(swapService: .mock(swapper: swapper)),
             swapQuoteDataProvider: SwapQuoteDataProvider(keystore: LocalKeystore.mock(), swapService: .mock(swapper: swapper))
         )
         model.fromAssetQuery.value = .mock(asset: .mockEthereum(), balance: .mock())
@@ -168,3 +200,4 @@ extension SwapSceneViewModel {
 private struct TestError: Error, RetryableError {
     var isRetryAvailable: Bool = true
 }
+

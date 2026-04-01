@@ -8,7 +8,7 @@ import Primitives
 struct SwapTokenView: View {
     let model: SwapTokenViewModel
     @Binding var text: String
-    var showLoading: Bool = false
+    var isLoading: Bool = false
     var disabledTextField: Bool = false
     var onBalanceAction: (() -> Void)
     var onSelectAssetAction: (() -> Void)
@@ -26,19 +26,14 @@ struct SwapTokenView: View {
             }
         }
     }
-    
+
     private var inputView: some View {
-        HStack {
-            if showLoading {
-                LoadingView()
-            }
-            TextField(showLoading ? "" : String.zero, text: $text)
-                .keyboardType(.decimalPad)
-                .foregroundStyle(Colors.black)
-                .font(.app.title1)
-                .disabled(disabledTextField)
-                .multilineTextAlignment(.leading)
-        }
+        TextField(String.zero, text: $text)
+            .keyboardType(.decimalPad)
+            .foregroundStyle(isLoading ? Colors.gray : Colors.black)
+            .font(.app.title1)
+            .disabled(disabledTextField)
+            .multilineTextAlignment(.leading)
     }
 
     private var fiatBalanceView: some View {

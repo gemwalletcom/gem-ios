@@ -2,12 +2,13 @@
 
 import Foundation
 import struct Gemstone.SwapperProviderData
+import struct Gemstone.SwapperProviderType
 import struct Gemstone.SwapperRoute
 
-extension SwapperProviderData {
-    static func mock() -> SwapperProviderData {
+public extension SwapperProviderData {
+    static func mock(provider: SwapperProviderType = .mock()) -> SwapperProviderData {
         SwapperProviderData(
-            provider: .mock(),
+            provider: provider,
             slippageBps: 50,
             routes: [.mock()]
         )

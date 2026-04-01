@@ -15,6 +15,7 @@ import BalanceService
 import PriceService
 import enum Gemstone.SwapperError
 import struct Gemstone.SwapperQuote
+import struct Gemstone.SwapperProviderType
 import Formatters
 import Validators
 
@@ -29,6 +30,8 @@ public final class SwapSceneViewModel {
 
     public var swapState: SwapState = .init()
     public var isPresentingInfoSheet: SwapSheetType?
+
+    private(set) var isStreaming: Bool = false
 
     public let fromAssetQuery: ObservableQuery<AssetRequestOptional>
     public let toAssetQuery: ObservableQuery<AssetRequestOptional>
@@ -113,7 +116,7 @@ public final class SwapSceneViewModel {
     }
 
     var isLoading: Bool {
-        swapState.quotes.isLoading
+        swapState.quotes.isLoading || isStreaming
     }
 
     var assetIds: [AssetId] {
@@ -336,21 +339,36 @@ extension SwapSceneViewModel {
     }
     private func performFetch(input: SwapQuoteInput) async {
         do {
+            let preferredProvider = selectedSwapQuote?.data.provider
             swapState.swapTransferData = .noData
             swapState.quotes = .loading
+            isStreaming = true
             resetToValue()
-            let swapQuotes = try await swapQuotesProvider.fetchQuotes(
-                wallet: wallet,
-                fromAsset: input.fromAsset,
-                toAsset: input.toAsset,
-                amount: input.value,
-                useMaxAmount: input.useMaxAmount
-            )
 
-            swapState.quotes = .data(swapQuotes)
-            selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
-            if let selectedSwapQuote, let asset = toAsset?.asset {
-                applyQuote(selectedSwapQuote, asset: asset)
+            var quotes: [SwapperQuote] = []
+            var errors: [Error] = []
+
+            for await result in swapQuotesProvider.fetchQuotes(wallet: wallet, input: input) {
+                try Task.checkCancellation()
+
+                switch result {
+                case .success(let quote):
+                    quotes.append(quote)
+                    applyQuotes(&quotes)
+                case .failure(let error):
+                    errors.append(error)
+                }
+            }
+
+            try Task.checkCancellation()
+
+            if quotes.isEmpty {
+                let swapError = minInputAmountError(errors) ?? SwapperError.NoQuoteAvailable
+                swapState.quotes = .error(swapError)
+                selectedSwapQuote = nil
+                amountInputModel.update(error: nil)
+            } else {
+                selectedSwapQuote = quotes.first(where: { $0.data.provider == preferredProvider }) ?? quotes.first
             }
         } catch {
             if !error.isCancelled && !Task.isCancelled {
@@ -360,6 +378,25 @@ extension SwapSceneViewModel {
                 debugLog("SwapScene get quotes error: \(error)")
             }
         }
+        isStreaming = false
+    }
+
+    private func applyQuotes(_ quotes: inout [SwapperQuote]) {
+        quotes.sort { BigInt.fromString($0.toValue) > BigInt.fromString($1.toValue) }
+        swapState.quotes = .data(quotes)
+        selectedSwapQuote = quotes.first
+        if let selectedSwapQuote, let asset = toAsset?.asset {
+            applyQuote(selectedSwapQuote, asset: asset)
+        }
+    }
+
+    private func minInputAmountError(_ errors: [Error]) -> SwapperError? {
+        let minAmounts: [BigInt] = errors.compactMap { error in
+            guard case .InputAmountError(let minAmount) = error as? SwapperError else { return nil }
+            return minAmount.flatMap { BigInt($0) }
+        }
+        guard let min = minAmounts.min() else { return nil }
+        return .InputAmountError(minAmount: String(min.increase(byPercent: 10)))
     }
 
     private func performUpdate(for assetIds: [AssetId]) async {
